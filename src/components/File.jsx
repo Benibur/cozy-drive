@@ -19,6 +19,7 @@ export const splitFilename = filename => {
   }
 }
 
+
 export const getClassFromMime = (attrs) => {
   if (isDirectory(attrs)) {
     return styles['fil-file-folder']
@@ -87,7 +88,7 @@ class File extends Component {
           { [styles['fil-content-row--selectable']]: selectionModeActive }
         )}
       >
-        <div className={classNames(styles['fil-content-cell'], styles['fil-content-file-select'])}>
+        <div className={classNames(styles['fil-content-cell'], styles['fil-content-file-select'])} >
           <span data-input='checkbox'>
             <input
               type='checkbox'
@@ -125,7 +126,18 @@ class File extends Component {
     )
     const { filename, extension } = splitFilename(attributes.name)
     return (
-      <div className={classes}>
+      <div className={classes}
+        // mouseEnter detection for FilInfo (popover) to be displayed
+        onMouseEnter = { (e)=>{
+            console.log('onMouseEnter!')
+            window.filePopover.onEnterLink(e.target)
+        }  }
+        // mouseLeave detection for FilInfo (popover) to be removed
+        onMouseLeave = { (e)=>{
+            console.log('onMouseLeave!')
+            window.filePopover.onExitLink(e.target)
+        }  }
+      >
         {isRenaming
           ? <RenameInput />
           : <div>
@@ -134,6 +146,8 @@ class File extends Component {
             {opening === true && <div className={styles['fil-loading']} />}
           </div>
         }
+
+
       </div>
     )
   }
