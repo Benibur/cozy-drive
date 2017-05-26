@@ -17,7 +17,13 @@ import { I18n } from './lib/I18n'
 import filesApp from './reducers'
 import AppRoute from './components/AppRoute'
 
+import filePopover from './lib/popover-controler.js'
+
 const loggerMiddleware = createLogger()
+
+// reference to the fileInfoControler, using the global object is
+// obviously not the most elegant way to do... TODO : improve
+window.filePopover = filePopover
 
 if (__DEVELOPMENT__) {
   // Enables React dev tools for Preact

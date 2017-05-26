@@ -63,6 +63,13 @@ class FolderView extends Component {
     this.toggleAddFolder()
   }
 
+  componentDidMount =  () =>  {
+    // TODO : the way to detect the position of the column of thumbnails (file icons) if awfull, it *must*
+    // be updated using the correct way to determine it using React.
+    window.filePopover.init()
+
+  }
+
   render () {
     const { isTrashContext, actionMenuActive, selectionModeActive } = this.props
     const { files, selected, actionable, actions, Toolbar } = this.props

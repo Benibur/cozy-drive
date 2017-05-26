@@ -18,6 +18,7 @@ export const splitFilename = filename => {
 
 const isDir = attrs => attrs.type === 'directory'
 
+
 export const getClassFromMime = (attrs) => {
   if (isDir(attrs)) {
     return styles['fil-file-folder']
@@ -64,8 +65,9 @@ class File extends Component {
           { [styles['fil-content-row--selectable']]: selectionModeActive }
         )}
         {...rowListeners}
+
       >
-        <div className={classNames(styles['fil-content-cell'], styles['fil-content-file-select'])}>
+        <div className={classNames(styles['fil-content-cell'], styles['fil-content-file-select'])} >
           <span data-input='checkbox'>
             <input
               type='checkbox'
@@ -103,7 +105,20 @@ class File extends Component {
       { [styles['fil-content-file-openable']]: canOpen }
     )
     return (
-      <div className={classes} onClick={canOpen ? e => this.open(e, attributes) : undefined}>
+      <div
+          className={classes}
+          onClick={canOpen ? e => this.open(e, attributes) : undefined}
+          // mouseEnter detection for FilInfo (popover) to be displayed
+          onMouseEnter = { (e)=>{
+              console.log('onMouseEnter!')
+              window.filePopover.onEnterLink(e.target)
+          }  }
+          // mouseLeave detection for FilInfo (popover) to be removed
+          onMouseLeave = { (e)=>{
+              console.log('onMouseLeave!')
+              window.filePopover.onExitLink(e.target)
+          }  }
+        >
         {filename}
         {extension && <span className={styles['fil-content-ext']}>{extension}</span>}
         {opening === true && <div className={styles['fil-loading']} />}
