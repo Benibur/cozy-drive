@@ -5,7 +5,9 @@
  * For now we only display the thumbnail of files being an image.
  */
 
-const ARROW_TOP_OFFSET       = 17  // top offset in pixels for the arrow of the popover
+const ARROW_TOP_OFFSET       = 15  // top offset in pixels for the arrow of the popover
+const ARROW_HALF_HEIGHT      = 9   // half height of the arrow in px
+const ARROW_PROPORTION       = 1.3 // ratio `width / height` of the arrow
 const POPOVER_DEFAULT_HEIGHT = 110 // height of thumbnails in px
 
 const StateMachine = require('./finite-state-machine.js')
@@ -23,7 +25,7 @@ const filePopover  = {
         elmt.appendChild(this.arrow)
         elmt.classList.add('filePopover')
         // TODO : put the styles in css, not inlined...
-        elmt.setAttribute('style',`background-color:red;
+        elmt.setAttribute('style',`background-color:yellow;
             border:1px solid black;
             height:${POPOVER_DEFAULT_HEIGHT}px;
             width:${POPOVER_DEFAULT_HEIGHT}px;
@@ -32,10 +34,10 @@ const filePopover  = {
             transition: top .2s ease;`)
         elmt.style.display = 'none'
         this.arrow.setAttribute('style',`position: absolute;
-            left: -9px;
-            border-bottom: 9px solid transparent;
-            border-top: 9px solid transparent;
-            border-right: 9px solid black;
+            left: -${ARROW_PROPORTION*ARROW_HALF_HEIGHT}px;
+            border-bottom: ${ARROW_HALF_HEIGHT}px solid transparent;
+            border-top: ${ARROW_HALF_HEIGHT}px solid transparent;
+            border-right: ${ARROW_PROPORTION*ARROW_HALF_HEIGHT}px solid black;
             transition: top .2s ease;`)
         document.body.appendChild(this.el)
         elmt = this.el
@@ -78,71 +80,71 @@ const filePopover  = {
               events: [
                 {
                   from: 'S1_Init',
-                  to: 'S2_WaitingToShow',
+                  to  : 'S2_WaitingToShow',
                   name: 'E1_enterLink'
                 }, {
                   from: 'S1_Init',
-                  to: 'S1_Init',
+                  to  : 'S1_Init',
                   name: 'E4_exitPopo'
                 }, {
                   from: 'S2_WaitingToShow',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E5_showTimer'
                 }, {
                   from: 'S2_WaitingToShow',
-                  to: 'S1_Init',
+                  to  : 'S1_Init',
                   name: 'E8_exitCol'
                 }, {
                   from: 'S2_WaitingToShow',
-                  to: 'S1_Init',
+                  to  : 'S1_Init',
                   name: 'E2_exitLink'
                 }, {
                   from: 'S2_WaitingToShow',
-                  to: 'S2_WaitingToShow',
+                  to  : 'S2_WaitingToShow',
                   name: 'E1_enterLink'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S4_WaitingToHide',
+                  to  : 'S4_WaitingToHide',
                   name: 'E4_exitPopo'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S4_WaitingToHide',
+                  to  : 'S4_WaitingToHide',
                   name: 'E8_exitCol'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S4_WaitingToHide',
+                  to  : 'S4_WaitingToHide',
                   name: 'E9_linkNoData'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E1_enterLink'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E3_enterPopo'
                 }, {
                   from: 'S3_Visible',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E7_enterCol'
                 }, {
                   from: 'S4_WaitingToHide',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E1_enterLink'
                 }, {
                   from: 'S4_WaitingToHide',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E3_enterPopo'
                 }, {
                   from: 'S4_WaitingToHide',
-                  to: 'S3_Visible',
+                  to  : 'S3_Visible',
                   name: 'E7_enterCol'
                 }, {
                   from: 'S4_WaitingToHide',
-                  to: 'S1_Init',
+                  to  : 'S1_Init',
                   name: 'E6_hideTimer'
                 }, {
                   from: 'S4_WaitingToHide',
-                  to: 'S4_WaitingToHide',
+                  to  : 'S4_WaitingToHide',
                   name: 'E4_exitPopo'
                 }
               ],
@@ -235,7 +237,7 @@ const filePopover  = {
     * updates the popover content
     */
     _setNewTarget : function() {
-        var arrowTop, el, popoverBottom, popoverTop, scrollTop, target, topFileInfo, targetDimensions;
+        var arrowTop, arrowHalfHeight, el, popoverBottom, popoverTop, scrollTop, target, topFileInfo, targetDimensions;
 
         /** A] update position (takes care if the thumbnail is too low in the window) */
         target              = this._lastEnteredTarget
@@ -249,18 +251,29 @@ const filePopover  = {
         if (popoverBottom < this.columnDimensions.bottom) {
             if (this.columnDimensions.top < popoverTop ){
                 this.el.style.top = popoverTop + 'px';
-                this.arrow.style.top = ARROW_TOP_OFFSET + 'px';
+                this.arrow.style.top            = ARROW_TOP_OFFSET  + 'px';
+                this.arrow.style.borderTopWidth = ARROW_HALF_HEIGHT + 'px';
             }else{
                 this.el.style.top = this.columnDimensions.top + 'px';
-                arrowTop = - this.columnDimensions.top + popoverTop + ARROW_TOP_OFFSET;
-                arrowTop = Math.max(arrowTop, 0);
-                this.arrow.style.top = arrowTop + 'px';
+                arrowTop = popoverTop - this.columnDimensions.top + ARROW_TOP_OFFSET;
+                if (arrowTop + ARROW_HALF_HEIGHT > ARROW_HALF_HEIGHT){
+                    arrowHalfHeight = ARROW_HALF_HEIGHT
+                } else if (arrowTop + ARROW_HALF_HEIGHT >= 0) {
+                    arrowHalfHeight = arrowTop + ARROW_HALF_HEIGHT
+                    arrowTop = -1
+                } else {
+                    arrowTop = -1
+                    arrowHalfHeight = 0
+                }
+                this.arrow.style.top            = arrowTop + 'px';
+                this.arrow.style.borderTopWidth = arrowHalfHeight + 'px';
             }
         } else {
             this.el.style.top = (this.columnDimensions.bottom - this._previousPopoverHeight) + 'px';
             arrowTop = popoverTop + this._previousPopoverHeight - this.columnDimensions.bottom  + ARROW_TOP_OFFSET;
             arrowTop = Math.min(arrowTop, this._previousPopoverHeight - 12);
-            this.arrow.style.top = arrowTop + 'px';
+            this.arrow.style.top            = arrowTop + 'px';
+            this.arrow.style.borderTopWidth = ARROW_HALF_HEIGHT + 'px';
         }
 
         /** b] update the image displayed in the popover  : TODO  */
@@ -312,16 +325,16 @@ const filePopover  = {
         init: function(filePopover) {
             var computeColAfterResize;
             this.filePopover = filePopover;
-            this._computeColumnWidth();
+            this._computeColumnSize();
             // update the col positions when the window is resized
             // TODO : implement the debounced version (little optimization)
             // computeColAfterResize = _.debounce((function(_this) {
             //   return function() {
-            //     return _this._computeColumnWidth();
+            //     return _this._computeColumnSize();
             //   };
             // })(this), 1000);
             computeColAfterResize = () => {
-                    return this._computeColumnWidth();
+                    return this._computeColumnSize();
                 };
             window.addEventListener("resize", computeColAfterResize, false);
 
@@ -341,11 +354,10 @@ const filePopover  = {
                   }
                   this.isInCol = isInCol
                 }
-                console.log("  = mouseMoved, isInCol:", isInCol)
             };
         },
 
-         _computeColumnWidth: function() {
+         _computeColumnSize: function() {
             var captionWrapper, thumbDim, viewPortDim;
             if (this.columElmt == null) {
                 parent             = document.querySelector('div[role="contentinfo"]').firstChild
@@ -356,8 +368,8 @@ const filePopover  = {
             this.col_left   = thumbDim.left - 10
             this.col_right  = thumbDim.left + thumbDim.width + 10
             viewPortDim     = this.filesViewport.getBoundingClientRect()
-            this.col_top    = viewPortDim.top
-            this.col_bottom = viewPortDim.bottom
+            this.col_top    = viewPortDim.top - 4
+            this.col_bottom = viewPortDim.bottom + 4
             this.filePopover.columnDimensions = {
                 top   : this.col_top,
                 bottom: this.col_bottom,
@@ -365,17 +377,14 @@ const filePopover  = {
                 right : this.col_right
             }
             this.filePopover.el.style.left = (thumbDim.left + thumbDim.width) + 'px'
-            console.log("_columnGardian._computeColumnWidth()", this.col_right, this.col_left);
         },
 
         start: function() {
-            console.log("_columnGardian.start()");
             document.body.addEventListener("mousemove", this.mouseMoved, false)
             this.isInCol = true
         },
 
         stop: function() {
-            console.log("_columnGardian.stop()");
             document.body.removeEventListener("mousemove", this.mouseMoved, false)
         }
 
