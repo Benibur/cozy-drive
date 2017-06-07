@@ -85,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------
   //-- BJA : fort the hacked search-bar
   // insert a hacked search field in the cozy bar
+  // import tata from 'path'
+  // tata(cozy)
   var searchInput   = document.createElement('input')
   searchInput.setAttribute('id',`search-bar`)
   searchInput.setAttribute('style',`background-color:yellow;
@@ -95,7 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
     transition: top .2s ease;`)
   var target = document.querySelector('.coz-nav')
   target.parentElement.insertBefore(searchInput,target)
-
+  cozy.client.files.statByPath('/test')
+  .then(data => {
+    console.log(data)
+    window.location.href = '#/files/' + data._id
+  })
+  console.log(cozy.client)
   autocompleteAlgolia('#search-bar', { hint: true }, [
     {
       source: function (query, cb) {
