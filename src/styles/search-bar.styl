@@ -1,7 +1,46 @@
+#search-bar
+  display:flex
+  align-items: center
+
 .algolia-autocomplete
-    display: flex!important
-    align-items: center!important
-    #search-bar
-        background-color: blue
+    #search-bar-input
+        border:1px solid #dfdfdf
+        background-color: #e9e9e9
         height:20px
-        width:50px
+        cursor:pointer
+        width: 100px
+        transition: width .2s ease
+        padding-left: 20px
+
+    #search-bar-input:focus
+        width: 250px
+        outline-color: #3782e9
+
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint
+  width: 100%
+
+.algolia-autocomplete .aa-hint
+  color: #999
+
+.algolia-autocomplete .aa-dropdown-menu
+  width: 100%
+  background-color: #fff
+  border: 1px solid #c5c7c8
+  border-bottom-left-radius: 6px
+  border-bottom-right-radius: 6px
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion
+  cursor: pointer
+  padding: 5px 4px
+  color: #606060
+  b
+    color: #297ef1
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor
+  background-color: #b2d3ff
+  color: black
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em
+  font-weight: bold
+  font-style: normal
