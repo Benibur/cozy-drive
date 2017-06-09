@@ -19,10 +19,10 @@ import filesApp from './reducers'
 import AppRoute from './components/AppRoute'
 
 // ------------------------------------------------------------------
-//-- BJA : for the hacked search-bar
+// -- BJA : for the hacked search-bar
 import autocompleteAlgolia from 'autocomplete.js'
 import fuzzaldrinPlus from 'fuzzaldrin-plus'
-//-- \BJA
+// -- \BJA
 // ------------------------------------------------------------------
 
 const loggerMiddleware = createLogger()
@@ -80,16 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
     </I18n>
   ), root)
 
-
-
   // ------------------------------------------------------------------
-  //-- BJA : fort the hacked search-bar
+  // -- BJA : fort the hacked search-bar
   // insert a hacked search field in the cozy bar
   // import tata from 'path'
   // tata(cozy)
-  console.log("start algolia");
-  var searchInput   = document.createElement('input')
-  searchInput.setAttribute('id',`search-bar-input`)
+  console.log('start algolia')
+  var searchInput = document.createElement('input')
+  searchInput.setAttribute('id', `search-bar-input`)
   // searchInput.setAttribute('style',`background-color:yellow;
   //   border:1px solid black;
   //   height:20px;
@@ -100,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBar = document.createElement('div')
   searchBar.setAttribute('id', 'search-bar')
   searchBar.appendChild(searchInput)
-  target.parentElement.insertBefore(searchBar,target)
+  target.parentElement.insertBefore(searchBar, target)
   // cozy.client.files.statByPath('/test')
   // .then(data => {
   //   console.log(data)
@@ -110,31 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       source: function (query, cb) {
         cb(fuzzaldrinPlusSearch(query))
-      } ,
+      },
       displayKey: 'path',
       templates: {
-        suggestion: function(suggestion) {
+        suggestion: function (suggestion) {
           return suggestion.html
         }
       }
     }
-  ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-    console.log(suggestion, dataset);
+  ]).on('autocomplete:selected', function (event, suggestion, dataset) {
+    console.log(suggestion, dataset)
     cozy.client.files.statByPath(suggestion.path)
     .then(data => {
       console.log(data)
       window.location.href = '#/files/' + data._id
     })
-  });
+  })
   // ------------------------------------------------------------------
-  // 2] prepare the Search options for fuzzaldrin
+  // prepare the Search options for fuzzaldrin
 
   const fuzzaldrinPlusSearch = function (query) {
-    const results  = fuzzaldrinPlus.filter(list, query, {key: 'path'})
+    const results = fuzzaldrinPlus.filter(list, query, {key: 'path'})
     var n = 0
-    for (let res of results){
+    for (let res of results) {
       res.html = basiqueBolderify(query, res.path)
-      if (n++ > 10){break}
+      if (n++ > 10) { break }
     }
     return results
   }
@@ -143,10 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var words = query.split(' ')
     words = words.filter(function (item) { return (item !== '') })
     var startIndex = 0
-    var nextWordOccurence, html = ''
+    var nextWordOccurence
+    var html = ''
     const lastIndex = path.length
     const pathLC = path.toLowerCase()
-    while (startIndex<lastIndex) {
+    while (startIndex < lastIndex) {
       nextWordOccurence = nextWord(path, pathLC, words, startIndex)
       if (!nextWordOccurence) {
         break
@@ -159,65 +158,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const nextWord = function (path, pathLC, words, startIndex) {
-    const pathLength = pathLC.length
-    var wordFound=''
-    var i, lowestIndexFound = 10000000
+    var wordFound = ''
+    var i
+    var lowestIndexFound = 10000000
 
     for (let w of words) {
-      i = pathLC.indexOf(w.toLowerCase(),startIndex)
-      if (i<lowestIndexFound && -1<i) {
+      i = pathLC.indexOf(w.toLowerCase(), startIndex)
+      if (i < lowestIndexFound && i > -1) {
         lowestIndexFound = i
         wordFound = w
       }
     }
-    if (lowestIndexFound == -1) {
+    if (lowestIndexFound === -1) {
       return undefined
-    }else {
-      return {word:path.slice(lowestIndexFound,lowestIndexFound+wordFound.length), start:lowestIndexFound}
+    } else {
+      return {word: path.slice(lowestIndexFound, lowestIndexFound + wordFound.length), start: lowestIndexFound}
     }
   }
   // const list = [{path:"/Administratif"}]
   const list = [
-    {"type":"folder","path":"Administratif/Finance/Banques"},
-    {"type":"folder","path":"Administratif/Finance/Bulletins de salaires/Française des Jeux"},
-    {"type":"folder","path":"Administratif/Finance/Bulletins de salaires/RATP"},
-    {"type":"folder","path":"Administratif/Finance/Bulletins de salaires"},
-    {"type":"folder","path":"Administratif/Finance/Compta perso"},
-    {"type":"folder","path":"Administratif/Finance/Impôts/2014"},
-    {"type":"folder","path":"Administratif/Finance/Impôts/2015"},
-    {"type":"folder","path":"Administratif/Finance/Impôts/2016/Déclaration revenus"},
-    {"type":"folder","path":"Administratif/Finance/Impôts/2016"},
-    {"type":"folder","path":"Administratif/Finance/Impôts/2017"},
-    {"type":"folder","path":"Administratif/Finance/Impôts"},
-    {"type":"folder","path":"Administratif/Finance"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/CPAM/Relevés de remboursements"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/CPAM"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/Harmonie Mutuelle/Contrats & Cotisatons"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/Harmonie Mutuelle/Relevés de remboursements"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/Harmonie Mutuelle"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/MAIF/Contrats & Cotisatons"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/MAIF/Relevés de remboursements"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances/MAIF"},
-    {"type":"folder","path":"Administratif/Mutuelles & Assurances"},
-    {"type":"folder","path":"Administratif/Opérateurs & Commerçants/Bouygues Telecom"},
-    {"type":"folder","path":"Administratif/Opérateurs & Commerçants/EDF"},
-    {"type":"folder","path":"Administratif/Opérateurs & Commerçants/Free mobile"},
-    {"type":"folder","path":"Administratif/Opérateurs & Commerçants/Orange box"},
-    {"type":"folder","path":"Administratif/Opérateurs & Commerçants"},
-    {"type":"folder","path":"Administratif/Partagé par../Genevieve/Bouygues Telecom"},
-    {"type":"folder","path":"Administratif/Partagé par../Genevieve/MAIF"},
-    {"type":"folder","path":"Administratif/Partagé par../Genevieve"},
-    {"type":"folder","path":"Administratif/Partagé par.."},
-    {"type":"folder","path":"Administratif/Pièces d'identités"},
-    {"type":"folder","path":"Administratif"},
-    {"type":"folder","path":"Ecoles & Formations/Louise"},
-    {"type":"folder","path":"Ecoles & Formations/Moi"},
-    {"type":"folder","path":"Ecoles & Formations"},
-    {"type":"folder","path":"Photos/Partagées avec moi/partagé par Genevieve"},
-    {"type":"folder","path":"Photos/Partagées avec moi"},
-    {"type":"folder","path":"Photos/Provenant de mon mobile"},
-    {"type":"folder","path":"Photos"},
-    {"type":"folder","path":"Voyages & vacances"}]
+    {'type': 'folder', 'path': 'Administratif/Finance/Banques'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Bulletins de salaires/Française des Jeux'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Bulletins de salaires/RATP'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Bulletins de salaires'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Compta perso'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts/2014'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts/2015'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts/2016/Déclaration revenus'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts/2016'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts/2017'},
+    {'type': 'folder', 'path': 'Administratif/Finance/Impôts'},
+    {'type': 'folder', 'path': 'Administratif/Finance'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/CPAM/Relevés de remboursements'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/CPAM'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/Harmonie Mutuelle/Contrats & Cotisatons'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/Harmonie Mutuelle/Relevés de remboursements'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/Harmonie Mutuelle'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/MAIF/Contrats & Cotisatons'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/MAIF/Relevés de remboursements'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances/MAIF'},
+    {'type': 'folder', 'path': 'Administratif/Mutuelles & Assurances'},
+    {'type': 'folder', 'path': 'Administratif/Opérateurs & Commerçants/Bouygues Telecom'},
+    {'type': 'folder', 'path': 'Administratif/Opérateurs & Commerçants/EDF'},
+    {'type': 'folder', 'path': 'Administratif/Opérateurs & Commerçants/Free mobile'},
+    {'type': 'folder', 'path': 'Administratif/Opérateurs & Commerçants/Orange box'},
+    {'type': 'folder', 'path': 'Administratif/Opérateurs & Commerçants'},
+    {'type': 'folder', 'path': 'Administratif/Partagé par../Genevieve/Bouygues Telecom'},
+    {'type': 'folder', 'path': 'Administratif/Partagé par../Genevieve/MAIF'},
+    {'type': 'folder', 'path': 'Administratif/Partagé par../Genevieve'},
+    {'type': 'folder', 'path': 'Administratif/Partagé par..'},
+    {'type': 'folder', 'path': "Administratif/Pièces d'identités"},
+    {'type': 'folder', 'path': 'Administratif'},
+    {'type': 'folder', 'path': 'Ecoles & Formations/Louise'},
+    {'type': 'folder', 'path': 'Ecoles & Formations/Moi'},
+    {'type': 'folder', 'path': 'Ecoles & Formations'},
+    {'type': 'folder', 'path': 'Photos/Partagées avec moi/partagé par Genevieve'},
+    {'type': 'folder', 'path': 'Photos/Partagées avec moi'},
+    {'type': 'folder', 'path': 'Photos/Provenant de mon mobile'},
+    {'type': 'folder', 'path': 'Photos'},
+    {'type': 'folder', 'path': 'Voyages & vacances'}]
   // const list = [
   //   {path:"/Administratif"},
   //   {path:"/Administratif/Bank statements"},
@@ -256,6 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
   //   {path:"/Vacances Périgord"}
   // ]
 
-  //-- \BJA
+  // -- \BJA
   // ------------------------------------------------------------------
 })
