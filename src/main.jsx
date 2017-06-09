@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------
   // -- BJA : fort the hacked search-bar
   // insert a hacked search field in the cozy bar
-  SearchBar.init( cozy.client )
+  SearchBar.init(cozy.client)
   // -- \BJA
   // ------------------------------------------------------------------
 })

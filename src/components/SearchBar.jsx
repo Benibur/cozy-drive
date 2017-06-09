@@ -1,7 +1,6 @@
 import autocompleteAlgolia from 'autocomplete.js'
 import fuzzaldrinPlus from 'fuzzaldrin-plus'
 
-
 const Main = {}
 
 Main.init = function (cozyClient) {
@@ -14,19 +13,19 @@ Main.init = function (cozyClient) {
   searchBar.appendChild(searchInput)
   target.parentElement.insertBefore(searchBar, target)
 
-  searchBar.addEventListener("focusin", () => {
+  searchBar.addEventListener('focusin', () => {
     searchBar.classList.add('focus-in')
-    if(searchInput.previousValue){
+    if (searchInput.previousValue) {
       searchInput.value = searchInput.previousValue
       searchInput.setSelectionRange(0, searchInput.value.length)
     }
-  }, true);
+  }, true)
 
-  searchBar.addEventListener("focusout", function( event ) {
+  searchBar.addEventListener('focusout', function (event) {
     searchBar.classList.remove('focus-in')
     searchInput.previousValue = searchInput.value
-    searchInput.value = ""
-  }, true);
+    searchInput.value = ''
+  }, true)
 
   autocompleteAlgolia('#search-bar-input', { hint: true }, [
     {
@@ -45,18 +44,17 @@ Main.init = function (cozyClient) {
     cozyClient.files.statByPath(suggestion.path)
     .then(data => {
       window.location.href = '#/files/' + data._id
-      searchInput.value = ""
-    }).catch(err=>{
-      searchInput.value = ""
-      console.log(err);
+      searchInput.value = ''
+    }).catch(err => {
+      searchInput.value = ''
+      console.log(err)
     })
   })
 
   // ------------------------------------------------------------------
   // prepare the Search options for fuzzaldrin
   const fuzzaldrinPlusSearch = function (query) {
-    const results = fuzzaldrinPlus.filter(list, query, {key: 'path', maxResults:10})
-    var n = 0
+    const results = fuzzaldrinPlus.filter(list, query, {key: 'path', maxResults: 10})
     for (let res of results) {
       res.html = basiqueBolderify(query, res.path)
     }
@@ -180,7 +178,6 @@ Main.init = function (cozyClient) {
   //   {path:"/Projet appartement à Lyon"},
   //   {path:"/Vacances Périgord"}
   // ]
-
 }
 
 export default Main
