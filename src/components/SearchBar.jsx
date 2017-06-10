@@ -1,9 +1,18 @@
 import autocompleteAlgolia from 'autocomplete.js'
 import fuzzaldrinPlus from 'fuzzaldrin-plus'
 
-const Main = {}
+// ------------------------------------------------------------------
+// -- This module inserts in the Cozy Bar a search input.
+// -- autocomplete component :
+// -- filter and sort  :
+// -- data : static
+// ------------------------------------------------------------------
 
-Main.init = function (cozyClient) {
+const SearchBarCtrler = {}
+
+SearchBarCtrler.init = function (cozyClient) {
+  // ------------------------------------------------------------------
+  // 1/ HTML insertion in the bar
   const searchInput = document.createElement('input')
   searchInput.setAttribute('id', `search-bar-input`)
   searchInput.setAttribute('placeholder', 'Search')
@@ -27,38 +36,14 @@ Main.init = function (cozyClient) {
     searchInput.value = ''
   }, true)
 
-  autocompleteAlgolia('#search-bar-input', { hint: true }, [
-    {
-      source: function (query, cb) {
-        cb(fuzzaldrinPlusSearch(query))
-      },
-      displayKey: 'path',
-      templates: {
-        suggestion: function (suggestion) {
-          return suggestion.html
-        }
-      }
-    }
-  ]).on('autocomplete:selected', function (event, suggestion, dataset) {
-    // console.log(suggestion, dataset)
-    cozyClient.files.statByPath(suggestion.path)
-    .then(data => {
-      window.location.href = '#/files/' + data._id
-      searchInput.value = ''
-    }).catch(err => {
-      searchInput.value = ''
-      console.log(err)
-    })
-  })
-
   // ------------------------------------------------------------------
-  // prepare the Search options for fuzzaldrin
-  const fuzzaldrinPlusSearch = function (query) {
+  // 2/ prepare the Search options for fuzzaldrin
+  const fuzzaldrinPlusSearch = function (query, cb) {
     const results = fuzzaldrinPlus.filter(list, query, {key: 'path', maxResults: 10})
     for (let res of results) {
       res.html = basiqueBolderify(query, res.path)
     }
-    return results
+    cb(results)
   }
 
   const basiqueBolderify = function (query, path) {
@@ -99,7 +84,32 @@ Main.init = function (cozyClient) {
       return {word: path.slice(lowestIndexFound, lowestIndexFound + wordFound.length), start: lowestIndexFound}
     }
   }
-  // const list = [{path:"/Administratif"}]
+
+  // ------------------------------------------------------------------
+  // 3/ initialisation of the autocomplete component
+  autocompleteAlgolia('#search-bar-input', { hint: true }, [
+    {
+      source: fuzzaldrinPlusSearch,
+      displayKey: 'path',
+      templates: {
+        suggestion: function (suggestion) {
+          return suggestion.html
+        }
+      }
+    }
+  ]).on('autocomplete:selected', function (event, suggestion, dataset) {
+    cozyClient.files.statByPath(suggestion.path)
+    .then(data => {
+      window.location.href = '#/files/' + data._id
+      searchInput.value = ''
+    }).catch(err => {
+      searchInput.value = ''
+      console.log(err)
+    })
+  })
+
+  // ------------------------------------------------------------------
+  // 4/ data
   const list = [
     {'type': 'folder', 'path': '/Administratif/Finance/Banques'},
     {'type': 'folder', 'path': '/Administratif/Finance/Bulletins de salaires/Française des Jeux'},
@@ -180,4 +190,4 @@ Main.init = function (cozyClient) {
   // ]
 }
 
-export default Main
+export default SearchBarCtrler
