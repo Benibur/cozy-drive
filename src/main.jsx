@@ -18,6 +18,12 @@ import eventTrackerMiddleware from './middlewares/EventTracker'
 import filesApp from './reducers'
 import AppRoute from './components/AppRoute'
 
+// ------------------------------------------------------------------
+// -- BJA : for the hacked search-bar
+import SearchBar from './components/SearchBar'
+// -- \BJA
+// ------------------------------------------------------------------
+
 const loggerMiddleware = createLogger()
 
 if (__DEVELOPMENT__) {
@@ -73,4 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
       </Provider>
     </I18n>
   ), root)
+
+  // ------------------------------------------------------------------
+  // -- BJA : fort the hacked search-bar
+  // insert a hacked search field in the cozy bar
+  setTimeout(() => { SearchBar.init(cozy.client) }, 200)
+  // -- \BJA
+  // ------------------------------------------------------------------
+
 })
