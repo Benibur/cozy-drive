@@ -20,6 +20,7 @@ export const splitFilename = filename => {
 }
 
 
+
 export const getClassFromMime = (attrs) => {
   if (isDirectory(attrs)) {
     return styles['fil-file-folder']
