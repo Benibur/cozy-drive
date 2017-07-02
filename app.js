@@ -83306,6 +83306,8 @@
 	// -- data : from pouchDB, synchronized with the server
 	// ------------------------------------------------------------------
 	
+	// TODO : deal ellipsis in filename and path displayed in suggestions menu.
+	
 	var SearchBarCtrler = {},
 	    MAX_RESULTS = 15;
 	var cozyClient, T0, T1, T2, T3, T4;
@@ -83435,8 +83437,11 @@
 	            } else if (row.doc.type === 'directory') {
 	              var fullPath = row.doc.path;
 	              dirDictionnary[row.id] = fullPath;
-	              row.doc.path = fullPath.substring(0, fullPath.lastIndexOf("/") // TODO : explain why
-	              );list.push(row.doc);
+	              // in couch, the path of a directory includes the directory name, what is
+	              // inconsistent with the file path wich doesn't include the filename.
+	              // Therefore we harmonize here by removing the dirname from the path.
+	              row.doc.path = fullPath.substring(0, fullPath.lastIndexOf("/"));
+	              list.push(row.doc);
 	            }
 	          }
 	        } catch (err) {
@@ -88671,6 +88676,10 @@
 /***/ (function(module, exports) {
 
 	"use strict";
+	
+	// usage :
+	// func = function(){console.log('done 2s later')}
+	// debounced_func = debounce(func, 2000)
 	
 	module.exports = function debounce(func, wait, immediate) {
 		var timeout;
