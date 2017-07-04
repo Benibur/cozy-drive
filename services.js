@@ -44,7 +44,7 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(661);
+	module.exports = __webpack_require__(679);
 
 
 /***/ }),
@@ -802,15 +802,19 @@
 		
 		var intents = _interopRequireWildcard(_intents);
 		
-		var _offline = __webpack_require__(203);
+		var _jobs = __webpack_require__(203);
+		
+		var jobs = _interopRequireWildcard(_jobs);
+		
+		var _offline = __webpack_require__(204);
 		
 		var offline = _interopRequireWildcard(_offline);
 		
-		var _settings = __webpack_require__(204);
+		var _settings = __webpack_require__(205);
 		
 		var settings = _interopRequireWildcard(_settings);
 		
-		var _relations = __webpack_require__(205);
+		var _relations = __webpack_require__(206);
 		
 		var relations = _interopRequireWildcard(_relations);
 		
@@ -844,6 +848,7 @@
 		  addReferencedFiles: relations.addReferencedFiles,
 		  removeReferencedFiles: relations.removeReferencedFiles,
 		  listReferencedFiles: relations.listReferencedFiles,
+		  fetchReferencedFiles: relations.fetchReferencedFiles,
 		  destroy: function destroy() {
 		    (0, _utils.warn)('destroy is deprecated, use cozy.data.delete instead.');
 		    return data._delete.apply(data, arguments);
@@ -876,8 +881,15 @@
 		  getDownloadLinkById: files.getDownloadLinkById,
 		  getDownloadLink: files.getDownloadLinkByPath, // DEPRECATED, should be removed very soon
 		  getDownloadLinkByPath: files.getDownloadLinkByPath,
-		  getArchiveLink: files.getArchiveLink,
+		  getArchiveLink: function getArchiveLink() {
+		    (0, _utils.warn)('getArchiveLink is deprecated, use cozy.files.getArchiveLinkByPaths instead.');
+		    return files.getArchiveLink.apply(files, arguments);
+		  },
+		  getArchiveLinkByPaths: files.getArchiveLinkByPaths,
+		  getArchiveLinkByIds: files.getArchiveLinkByIds,
 		  getFilePath: files.getFilePath,
+		  getCollectionShareLink: files.getCollectionShareLink,
+		  query: mango.queryFiles,
 		  listTrash: files.listTrash,
 		  clearTrash: files.clearTrash,
 		  restoreById: files.restoreById,
@@ -887,6 +899,11 @@
 		var intentsProto = {
 		  create: intents.create,
 		  createService: intents.createService
+		};
+		
+		var jobsProto = {
+		  create: jobs.create,
+		  count: jobs.count
 		};
 		
 		var offlineProto = {
@@ -926,6 +943,7 @@
 		    this.data = {};
 		    this.files = {};
 		    this.intents = {};
+		    this.jobs = {};
 		    this.offline = {};
 		    this.settings = {};
 		    this.auth = {
@@ -983,6 +1001,7 @@
 		      addToProto(this, this.auth, authProto, disablePromises);
 		      addToProto(this, this.files, filesProto, disablePromises);
 		      addToProto(this, this.intents, intentsProto, disablePromises);
+		      addToProto(this, this.jobs, jobsProto, disablePromises);
 		      addToProto(this, this.offline, offlineProto, disablePromises);
 		      addToProto(this, this.settings, settingsProto, disablePromises);
 		
@@ -7822,6 +7841,7 @@
 		
 		exports.cozyFetch = cozyFetch;
 		exports.cozyFetchJSON = cozyFetchJSON;
+		exports.cozyFetchRawJSON = cozyFetchRawJSON;
 		
 		var _auth_v = __webpack_require__(195);
 		
@@ -7897,6 +7917,20 @@
 		function cozyFetchJSON(cozy, method, path, body) {
 		  var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
 		
+		  return fetchJSON(cozy, method, path, body, options).then(handleJSONResponse);
+		}
+		
+		function cozyFetchRawJSON(cozy, method, path, body) {
+		  var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+		
+		  return fetchJSON(cozy, method, path, body, options).then(function (response) {
+		    return handleJSONResponse(response, false);
+		  });
+		}
+		
+		function fetchJSON(cozy, method, path, body) {
+		  var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+		
 		  options.method = method;
 		
 		  var headers = options.headers = options.headers || {};
@@ -7912,7 +7946,7 @@
 		    }
 		  }
 		
-		  return cozyFetch(cozy, path, options).then(handleJSONResponse);
+		  return cozyFetch(cozy, path, options);
 		}
 		
 		function handleResponse(res) {
@@ -7932,6 +7966,8 @@
 		}
 		
 		function handleJSONResponse(res) {
+		  var processJSONAPI = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+		
 		  var contentType = res.headers.get('content-type');
 		  if (!contentType || contentType.indexOf('json') < 0) {
 		    return res.text(function (data) {
@@ -7940,7 +7976,7 @@
 		  }
 		
 		  var json = res.json();
-		  if (contentType.indexOf('application/vnd.api+json') === 0) {
+		  if (contentType.indexOf('application/vnd.api+json') === 0 && processJSONAPI) {
 		    return json.then(_jsonapi2.default);
 		  } else {
 		    return json;
@@ -8080,8 +8116,10 @@
 		    if (isV2) {
 		      attributes.docType = doctype;
 		    }
-		    var path = (0, _utils.createPath)(cozy, isV2, doctype);
-		    return (0, _fetch.cozyFetchJSON)(cozy, 'POST', path, attributes).then(function (resp) {
+		    var path = (0, _utils.createPath)(cozy, isV2, doctype, attributes._id);
+		    var httpVerb = attributes._id ? 'PUT' : 'POST';
+		    delete attributes._id;
+		    return (0, _fetch.cozyFetchJSON)(cozy, httpVerb, path, attributes).then(function (resp) {
 		      if (isV2) {
 		        return find(cozy, doctype, resp._id);
 		      } else {
@@ -8258,6 +8296,7 @@
 		
 		exports.defineIndex = defineIndex;
 		exports.query = query;
+		exports.queryFiles = queryFiles;
 		exports.parseSelector = parseSelector;
 		exports.normalizeSelector = normalizeSelector;
 		exports.makeMapReduceQuery = makeMapReduceQuery;
@@ -8294,6 +8333,13 @@
 		    } else {
 		      return queryV3(cozy, indexRef, options);
 		    }
+		  });
+		}
+		
+		function queryFiles(cozy, indexRef, options) {
+		  var opts = getV3Options(indexRef, options);
+		  return (0, _fetch.cozyFetchRawJSON)(cozy, 'POST', '/files/_find', opts).then(function (response) {
+		    return options.wholeResponse ? response : response.docs;
 		  });
 		}
 		
@@ -8354,6 +8400,15 @@
 		
 		// queryV3 is equivalent to query but only works for V3
 		function queryV3(cozy, indexRef, options) {
+		  var opts = getV3Options(indexRef, options);
+		
+		  var path = (0, _utils.createPath)(cozy, false, indexRef.doctype, '_find');
+		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', path, opts).then(function (response) {
+		    return options.wholeResponse ? response : response.docs;
+		  });
+		}
+		
+		function getV3Options(indexRef, options) {
 		  if (indexRef.type !== 'mango') {
 		    throw new Error('indexRef should be the return value of defineIndexV3');
 		  }
@@ -8373,10 +8428,7 @@
 		    });
 		  }
 		
-		  var path = (0, _utils.createPath)(cozy, false, indexRef.doctype, '_find');
-		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', path, opts).then(function (response) {
-		    return options.wholeResponse ? response : response.docs;
-		  });
+		  return opts;
 		}
 		
 		// misc
@@ -8561,7 +8613,9 @@
 		exports.getDownloadLinkByPath = getDownloadLinkByPath;
 		exports.getDownloadLinkById = getDownloadLinkById;
 		exports.getFilePath = getFilePath;
-		exports.getArchiveLink = getArchiveLink;
+		exports.getCollectionShareLink = getCollectionShareLink;
+		exports.getArchiveLinkByPaths = getArchiveLinkByPaths;
+		exports.getArchiveLinkByIds = getArchiveLinkByIds;
 		exports.listTrash = listTrash;
 		exports.clearTrash = clearTrash;
 		exports.restoreById = restoreById;
@@ -8841,7 +8895,35 @@
 		  return '' + folderPath + file.name;
 		}
 		
-		function getArchiveLink(cozy, paths) {
+		function getCollectionShareLink(cozy, id, collectionType) {
+		  if (!id) {
+		    return Promise.reject(Error('An id should be provided to create a share link'));
+		  }
+		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', '/permissions?codes=email', {
+		    data: {
+		      type: 'io.cozy.permissions',
+		      attributes: {
+		        permissions: {
+		          files: {
+		            type: 'io.cozy.files',
+		            verbs: ['GET'],
+		            values: [id],
+		            selector: 'referenced_by'
+		          },
+		          collection: {
+		            type: collectionType,
+		            verbs: ['GET'],
+		            values: [id]
+		          }
+		        }
+		      }
+		    }
+		  }).then(function (data) {
+		    return { sharecode: 'sharecode=' + data.attributes.codes.email, id: 'id=' + id };
+		  });
+		}
+		
+		function getArchiveLinkByPaths(cozy, paths) {
 		  var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'files';
 		
 		  var archive = {
@@ -8849,6 +8931,19 @@
 		    attributes: {
 		      name: name,
 		      files: paths
+		    }
+		  };
+		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', '/files/archive', { data: archive }).then(extractResponseLinkRelated);
+		}
+		
+		function getArchiveLinkByIds(cozy, ids) {
+		  var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'files';
+		
+		  var archive = {
+		    type: 'io.cozy.archives',
+		    attributes: {
+		      name: name,
+		      ids: ids
 		    }
 		  };
 		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', '/files/archive', { data: archive }).then(extractResponseLinkRelated);
@@ -8941,8 +9036,30 @@
 		
 		var intentClass = 'coz-intent';
 		
+		// helper to serialize/deserialize an error for/from postMessage
+		var errorSerializer = function () {
+		  function mapErrorProperties(from, to) {
+		    var result = Object.assign(to, from);
+		    var nativeProperties = ['name', 'message'];
+		    return nativeProperties.reduce(function (result, property) {
+		      if (from[property]) {
+		        to[property] = from[property];
+		      }
+		      return result;
+		    }, result);
+		  }
+		  return {
+		    serialize: function serialize(error) {
+		      return mapErrorProperties(error, {});
+		    },
+		    deserialize: function deserialize(data) {
+		      return mapErrorProperties(data, new Error(data.message));
+		    }
+		  };
+		}();
+		
 		// inject iframe for service in given element
-		function injectService(url, element, data) {
+		function injectService(url, element, intent, data) {
 		  var document = element.ownerDocument;
 		  if (!document) throw new Error('Cannot retrieve document object from given element');
 		
@@ -8962,19 +9079,51 @@
 		    var messageHandler = function messageHandler(event) {
 		      if (event.origin !== serviceOrigin) return;
 		
-		      if (event.data === 'intent:ready') {
+		      if (event.data.type === 'load') {
+		        // Safari 9.1 (At least) send a MessageEvent when the iframe loads,
+		        // making the handshake fails.
+		        console.warn && console.warn('Cozy Client ignored MessageEvent having data.type `load`.');
+		        return;
+		      }
+		
+		      if (event.data.type === 'intent-' + intent._id + ':ready') {
 		        handshaken = true;
 		        return event.source.postMessage(data, event.origin);
+		      }
+		
+		      if (handshaken && event.data.type === 'intent-' + intent._id + ':resize') {
+		        ['width', 'height', 'maxWidth', 'maxHeight'].forEach(function (prop) {
+		          if (event.data.dimensions[prop]) element.style[prop] = event.data.dimensions[prop] + 'px';
+		        });
+		
+		        return true;
 		      }
 		
 		      window.removeEventListener('message', messageHandler);
 		      iframe.parentNode.removeChild(iframe);
 		
-		      if (event.data === 'intent:error') {
-		        return reject(new Error('Intent error'));
+		      if (event.data.type === 'intent-' + intent._id + ':error') {
+		        return reject(errorSerializer.deserialize(event.data.error));
 		      }
 		
-		      return handshaken ? resolve(event.data) : reject(new Error('Unexpected handshake message from intent service'));
+		      if (handshaken && event.data.type === 'intent-' + intent._id + ':cancel') {
+		        return resolve(null);
+		      }
+		
+		      if (handshaken && event.data.type === 'intent-' + intent._id + ':done') {
+		        return resolve(event.data.document);
+		      }
+		
+		      if (!handshaken) {
+		        return reject(new Error('Unexpected handshake message from intent service'));
+		      }
+		
+		      // We may be in a state where the messageHandler is still attached to then
+		      // window, but will not be needed anymore. For example, the service failed
+		      // before adding the `unload` listener, so no `intent:cancel` message has
+		      // never been sent.
+		      // So we simply ignore other messages, and this listener will stay here,
+		      // waiting for a message which will never come, forever (almost).
 		    };
 		
 		    window.addEventListener('message', messageHandler);
@@ -9008,7 +9157,7 @@
 		        return Promise.reject(new Error('Unable to find a service'));
 		      }
 		
-		      return injectService(service.href, element, data);
+		      return injectService(service.href, element, intent, data);
 		    });
 		  };
 		
@@ -9025,7 +9174,9 @@
 		    };
 		
 		    window.addEventListener('message', messageEventListener);
-		    window.parent.postMessage('intent:ready', intent.attributes.client);
+		    window.parent.postMessage({
+		      type: 'intent-' + intent._id + ':ready'
+		    }, intent.attributes.client);
 		  });
 		}
 		
@@ -9038,15 +9189,40 @@
 		  if (!intentId) throw new Error('Cannot retrieve intent from URL');
 		
 		  return (0, _fetch.cozyFetchJSON)(cozy, 'GET', '/intents/' + intentId).then(function (intent) {
-		    return listenClientData(intent, serviceWindow).then(function (data) {
-		      var terminated = false;
+		    var terminated = false;
 		
-		      var terminate = function terminate(doc) {
-		        if (terminated) throw new Error('Intent service has already been terminated');
-		        terminated = true;
-		        serviceWindow.parent.postMessage(doc, intent.attributes.client);
+		    var _terminate = function _terminate(message) {
+		      if (terminated) throw new Error('Intent service has already been terminated');
+		      terminated = true;
+		      serviceWindow.parent.postMessage(message, intent.attributes.client);
+		    };
+		
+		    var resizeClient = function resizeClient(dimensions) {
+		      if (terminated) throw new Error('Intent service has been terminated');
+		
+		      var message = {
+		        type: 'intent-' + intent._id + ':resize',
+		        // if a dom element is passed, calculate its size
+		        dimensions: dimensions.element ? Object.assign({}, dimensions, {
+		          maxHeight: dimensions.element.clientHeight,
+		          maxWidth: dimensions.element.clientWidth
+		        }) : dimensions
 		      };
 		
+		      serviceWindow.parent.postMessage(message, intent.attributes.client);
+		    };
+		
+		    var cancel = function cancel() {
+		      _terminate({ type: 'intent-' + intent._id + ':cancel' });
+		    };
+		
+		    // Prevent unfulfilled client promises when this window unloads for a
+		    // reason or another.
+		    serviceWindow.addEventListener('unload', function () {
+		      if (!terminated) cancel();
+		    });
+		
+		    return listenClientData(intent, serviceWindow).then(function (data) {
 		      return {
 		        getData: function getData() {
 		          return data;
@@ -9054,10 +9230,20 @@
 		        getIntent: function getIntent() {
 		          return intent;
 		        },
-		        terminate: terminate,
-		        cancel: function cancel() {
-		          return terminate(null);
-		        }
+		        terminate: function terminate(doc) {
+		          return _terminate({
+		            type: 'intent-' + intent._id + ':done',
+		            document: doc
+		          });
+		        },
+		        throw: function _throw(error) {
+		          return _terminate({
+		            type: 'intent-' + intent._id + ':error',
+		            error: errorSerializer.serialize(error)
+		          });
+		        },
+		        resizeClient: resizeClient,
+		        cancel: cancel
 		      };
 		    });
 		  });
@@ -9065,6 +9251,39 @@
 	
 	/***/ },
 	/* 203 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		'use strict';
+		
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.count = count;
+		exports.create = create;
+		
+		var _fetch = __webpack_require__(196);
+		
+		function count(cozy, workerType) {
+		  return (0, _fetch.cozyFetchJSON)(cozy, 'GET', '/jobs/queue/' + workerType).then(function (data) {
+		    return data.attributes.count;
+		  });
+		}
+		
+		function create(cozy, workerType, args, options) {
+		  console.debug('create', workerType, args, options);
+		  return (0, _fetch.cozyFetchJSON)(cozy, 'POST', '/jobs/queue/' + workerType, {
+		    data: {
+		      type: 'io.cozy.jobs',
+		      attributes: {
+		        arguments: args || {},
+		        options: options || {}
+		      }
+		    }
+		  });
+		}
+	
+	/***/ },
+	/* 204 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		'use strict';
@@ -9386,7 +9605,7 @@
 		}
 	
 	/***/ },
-	/* 204 */
+	/* 205 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		'use strict';
@@ -9431,7 +9650,7 @@
 		}
 	
 	/***/ },
-	/* 205 */
+	/* 206 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		'use strict';
@@ -9441,6 +9660,7 @@
 		});
 		exports.removeReferencedFiles = exports.addReferencedFiles = undefined;
 		exports.listReferencedFiles = listReferencedFiles;
+		exports.fetchReferencedFiles = fetchReferencedFiles;
 		
 		var _fetch = __webpack_require__(196);
 		
@@ -9469,6 +9689,14 @@
 		      return file._id;
 		    });
 		  });
+		}
+		
+		function fetchReferencedFiles(cozy, doc, options) {
+		  if (!doc) throw new Error('missing doc argument');
+		  var params = Object.keys(options).map(function (key) {
+		    return '&page[' + key + ']=' + options[key];
+		  }).join('');
+		  return (0, _fetch.cozyFetchRawJSON)(cozy, 'GET', makeReferencesPath(doc) + '?include=files' + params);
 		}
 		
 		function makeReferencesPath(doc) {
@@ -37171,7 +37399,73 @@
 /* 293 */,
 /* 294 */,
 /* 295 */,
-/* 296 */,
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Similar to invariant but only logs a warning if the condition is not met.
+	 * This can be used to log issues in development environments in critical
+	 * paths. Removing the logging code for production environments will keep the
+	 * same logic and follow the same code paths.
+	 */
+	
+	var warning = function() {};
+	
+	if (process.env.NODE_ENV !== 'production') {
+	  warning = function(condition, format, args) {
+	    var len = arguments.length;
+	    args = new Array(len > 2 ? len - 2 : 0);
+	    for (var key = 2; key < len; key++) {
+	      args[key - 2] = arguments[key];
+	    }
+	    if (format === undefined) {
+	      throw new Error(
+	        '`warning(condition, format, ...args)` requires a warning ' +
+	        'message argument'
+	      );
+	    }
+	
+	    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+	      throw new Error(
+	        'The warning format should be able to uniquely identify this ' +
+	        'warning. Please, use a more descriptive format than: ' + format
+	      );
+	    }
+	
+	    if (!condition) {
+	      var argIndex = 0;
+	      var message = 'Warning: ' +
+	        format.replace(/%s/g, function() {
+	          return args[argIndex++];
+	        });
+	      if (typeof console !== 'undefined') {
+	        console.error(message);
+	      }
+	      try {
+	        // This error was thrown as a convenience so that you can use this stack
+	        // to find the callsite that caused this warning to fire.
+	        throw new Error(message);
+	      } catch(x) {}
+	    }
+	  };
+	}
+	
+	module.exports = warning;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+
+/***/ }),
 /* 297 */,
 /* 298 */,
 /* 299 */,
@@ -37218,142 +37512,9771 @@
 /* 340 */,
 /* 341 */,
 /* 342 */,
-/* 343 */,
-/* 344 */,
-/* 345 */,
-/* 346 */,
-/* 347 */,
-/* 348 */,
-/* 349 */,
-/* 350 */,
-/* 351 */,
-/* 352 */,
-/* 353 */,
-/* 354 */,
-/* 355 */,
-/* 356 */,
-/* 357 */,
-/* 358 */,
-/* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */,
-/* 364 */,
-/* 365 */,
-/* 366 */,
-/* 367 */,
-/* 368 */,
-/* 369 */,
-/* 370 */,
-/* 371 */,
-/* 372 */,
-/* 373 */,
-/* 374 */,
-/* 375 */,
-/* 376 */,
-/* 377 */,
-/* 378 */,
-/* 379 */,
-/* 380 */,
-/* 381 */,
-/* 382 */,
-/* 383 */,
-/* 384 */,
-/* 385 */,
-/* 386 */,
-/* 387 */,
-/* 388 */,
-/* 389 */,
-/* 390 */,
-/* 391 */,
-/* 392 */,
-/* 393 */,
-/* 394 */,
-/* 395 */,
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */,
-/* 400 */,
-/* 401 */,
-/* 402 */,
-/* 403 */,
-/* 404 */,
-/* 405 */,
-/* 406 */,
-/* 407 */,
-/* 408 */,
-/* 409 */,
-/* 410 */,
-/* 411 */,
-/* 412 */,
-/* 413 */,
-/* 414 */,
-/* 415 */,
-/* 416 */,
-/* 417 */,
-/* 418 */,
-/* 419 */,
-/* 420 */,
-/* 421 */,
-/* 422 */,
-/* 423 */,
-/* 424 */,
-/* 425 */,
-/* 426 */,
-/* 427 */,
-/* 428 */,
-/* 429 */,
-/* 430 */,
-/* 431 */,
-/* 432 */,
-/* 433 */,
-/* 434 */,
-/* 435 */,
-/* 436 */,
-/* 437 */,
-/* 438 */,
-/* 439 */,
-/* 440 */,
-/* 441 */,
-/* 442 */,
-/* 443 */,
-/* 444 */,
-/* 445 */,
-/* 446 */,
-/* 447 */,
-/* 448 */,
-/* 449 */,
-/* 450 */,
-/* 451 */,
-/* 452 */,
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */,
-/* 466 */,
-/* 467 */,
-/* 468 */,
-/* 469 */,
-/* 470 */,
-/* 471 */,
-/* 472 */,
-/* 473 */,
-/* 474 */,
-/* 475 */,
-/* 476 */,
-/* 477 */,
-/* 478 */,
+/* 343 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * preact plugin that provides an I18n helper using a Higher Order Component.
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.translate = exports.I18n = exports.DEFAULT_LANG = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(241);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _translation = __webpack_require__(344);
+	
+	var _format = __webpack_require__(367);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DEFAULT_LANG = exports.DEFAULT_LANG = 'en';
+	
+	// Provider root component
+	
+	var I18n = exports.I18n = function (_Component) {
+	  _inherits(I18n, _Component);
+	
+	  function I18n(props) {
+	    _classCallCheck(this, I18n);
+	
+	    var _this = _possibleConstructorReturn(this, (I18n.__proto__ || Object.getPrototypeOf(I18n)).call(this, props));
+	
+	    _this.init(_this.props);
+	    return _this;
+	  }
+	
+	  _createClass(I18n, [{
+	    key: 'init',
+	    value: function init(props) {
+	      var lang = props.lang,
+	          dictRequire = props.dictRequire,
+	          context = props.context,
+	          defaultLang = props.defaultLang;
+	
+	
+	      this.translation = (0, _translation.initTranslation)(lang, dictRequire, context, defaultLang);
+	      this.format = (0, _format.initFormat)(lang, defaultLang);
+	    }
+	  }, {
+	    key: 'getChildContext',
+	    value: function getChildContext() {
+	      return {
+	        t: this.translation.t.bind(this.translation),
+	        f: this.format
+	      };
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(newProps) {
+	      if (newProps.locale !== this.props.locale) {
+	        this.init(newProps);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.props.children && this.props.children[0] || null;
+	    }
+	  }]);
+	
+	  return I18n;
+	}(_react.Component);
+	
+	I18n.propTypes = {
+	  lang: _react2.default.PropTypes.string.isRequired, // current language.
+	  dictRequire: _react2.default.PropTypes.func.isRequired, // A callback to load locales.
+	  context: _react2.default.PropTypes.string, // current context.
+	  defaultLang: _react2.default.PropTypes.string // default language. By default is 'en'
+	};
+	
+	I18n.childContextTypes = {
+	  t: _react2.default.PropTypes.func,
+	  f: _react2.default.PropTypes.func
+	
+	  // higher order decorator for components that need `t` and/or `f`
+	};var translate = exports.translate = function translate() {
+	  return function (WrappedComponent) {
+	    var _translate = function _translate(props, context) {
+	      return _react2.default.createElement(WrappedComponent, _extends({}, props, { t: context.t, f: context.f }));
+	    };
+	    return _translate;
+	  };
+	};
+
+/***/ }),
+/* 344 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.initTranslation = exports._polyglot = undefined;
+	
+	var _nodePolyglot = __webpack_require__(345);
+	
+	var _nodePolyglot2 = _interopRequireDefault(_nodePolyglot);
+	
+	var _ = __webpack_require__(343);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _polyglot = exports._polyglot = void 0;
+	
+	var initTranslation = exports.initTranslation = function initTranslation(lang, dictRequire, context) {
+	  var defaultLang = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _.DEFAULT_LANG;
+	
+	  exports._polyglot = _polyglot = new _nodePolyglot2.default({
+	    phrases: dictRequire(defaultLang),
+	    locale: defaultLang
+	  });
+	
+	  // Load global locales
+	  if (lang && lang !== defaultLang) {
+	    try {
+	      var dict = dictRequire(lang);
+	      _polyglot.extend(dict);
+	      _polyglot.locale(lang);
+	    } catch (e) {
+	      console.warn('The dict phrases for "' + lang + '" can\'t be loaded');
+	    }
+	  }
+	
+	  // Load context locales
+	  if (context) {
+	    var _dict = dictRequire(lang, context);
+	    _polyglot.extend(_dict);
+	  }
+	
+	  return _polyglot;
+	};
+
+/***/ }),
+/* 345 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	//     (c) 2012-2016 Airbnb, Inc.
+	//
+	//     polyglot.js may be freely distributed under the terms of the BSD
+	//     license. For all licensing information, details, and documention:
+	//     http://airbnb.github.com/polyglot.js
+	//
+	//
+	// Polyglot.js is an I18n helper library written in JavaScript, made to
+	// work both in the browser and in Node. It provides a simple solution for
+	// interpolation and pluralization, based off of Airbnb's
+	// experience adding I18n functionality to its Backbone.js and Node apps.
+	//
+	// Polylglot is agnostic to your translation backend. It doesn't perform any
+	// translation; it simply gives you a way to manage translated phrases from
+	// your client- or server-side JavaScript application.
+	//
+	
+	'use strict';
+	
+	var forEach = __webpack_require__(346);
+	var warning = __webpack_require__(296);
+	var has = __webpack_require__(348);
+	var trim = __webpack_require__(351);
+	
+	var warn = function warn(message) {
+	  warning(false, message);
+	};
+	
+	var replace = String.prototype.replace;
+	var split = String.prototype.split;
+	
+	// #### Pluralization methods
+	// The string that separates the different phrase possibilities.
+	var delimeter = '||||';
+	
+	// Mapping from pluralization group plural logic.
+	var pluralTypes = {
+	  arabic: function (n) {
+	    // http://www.arabeyes.org/Plural_Forms
+	    if (n < 3) { return n; }
+	    if (n % 100 >= 3 && n % 100 <= 10) return 3;
+	    return n % 100 >= 11 ? 4 : 5;
+	  },
+	  chinese: function () { return 0; },
+	  german: function (n) { return n !== 1 ? 1 : 0; },
+	  french: function (n) { return n > 1 ? 1 : 0; },
+	  russian: function (n) {
+	    if (n % 10 === 1 && n % 100 !== 11) { return 0; }
+	    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+	  },
+	  czech: function (n) {
+	    if (n === 1) { return 0; }
+	    return (n >= 2 && n <= 4) ? 1 : 2;
+	  },
+	  polish: function (n) {
+	    if (n === 1) { return 0; }
+	    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+	  },
+	  icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
+	};
+	
+	// Mapping from pluralization group to individual locales.
+	var pluralTypeToLanguages = {
+	  arabic: ['ar'],
+	  chinese: ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
+	  german: ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
+	  french: ['fr', 'tl', 'pt-br'],
+	  russian: ['hr', 'ru', 'lt'],
+	  czech: ['cs', 'sk'],
+	  polish: ['pl'],
+	  icelandic: ['is']
+	};
+	
+	function langToTypeMap(mapping) {
+	  var ret = {};
+	  forEach(mapping, function (langs, type) {
+	    forEach(langs, function (lang) {
+	      ret[lang] = type;
+	    });
+	  });
+	  return ret;
+	}
+	
+	function pluralTypeName(locale) {
+	  var langToPluralType = langToTypeMap(pluralTypeToLanguages);
+	  return langToPluralType[locale]
+	    || langToPluralType[split.call(locale, /-/, 1)[0]]
+	    || langToPluralType.en;
+	}
+	
+	function pluralTypeIndex(locale, count) {
+	  return pluralTypes[pluralTypeName(locale)](count);
+	}
+	
+	var dollarRegex = /\$/g;
+	var dollarBillsYall = '$$';
+	var tokenRegex = /%\{(.*?)\}/g;
+	
+	// ### transformPhrase(phrase, substitutions, locale)
+	//
+	// Takes a phrase string and transforms it by choosing the correct
+	// plural form and interpolating it.
+	//
+	//     transformPhrase('Hello, %{name}!', {name: 'Spike'});
+	//     // "Hello, Spike!"
+	//
+	// The correct plural form is selected if substitutions.smart_count
+	// is set. You can pass in a number instead of an Object as `substitutions`
+	// as a shortcut for `smart_count`.
+	//
+	//     transformPhrase('%{smart_count} new messages |||| 1 new message', {smart_count: 1}, 'en');
+	//     // "1 new message"
+	//
+	//     transformPhrase('%{smart_count} new messages |||| 1 new message', {smart_count: 2}, 'en');
+	//     // "2 new messages"
+	//
+	//     transformPhrase('%{smart_count} new messages |||| 1 new message', 5, 'en');
+	//     // "5 new messages"
+	//
+	// You should pass in a third argument, the locale, to specify the correct plural type.
+	// It defaults to `'en'` with 2 plural forms.
+	function transformPhrase(phrase, substitutions, locale) {
+	  if (typeof phrase !== 'string') {
+	    throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
+	  }
+	
+	  if (substitutions == null) {
+	    return phrase;
+	  }
+	
+	  var result = phrase;
+	
+	  // allow number as a pluralization shortcut
+	  var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
+	
+	  // Select plural form: based on a phrase text that contains `n`
+	  // plural forms separated by `delimeter`, a `locale`, and a `substitutions.smart_count`,
+	  // choose the correct plural form. This is only done if `count` is set.
+	  if (options.smart_count != null && result) {
+	    var texts = split.call(result, delimeter);
+	    result = trim(texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]);
+	  }
+	
+	  // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
+	  result = replace.call(result, tokenRegex, function (expression, argument) {
+	    if (!has(options, argument) || options[argument] == null) { return expression; }
+	    // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
+	    return replace.call(options[argument], dollarRegex, dollarBillsYall);
+	  });
+	
+	  return result;
+	}
+	
+	// ### Polyglot class constructor
+	function Polyglot(options) {
+	  var opts = options || {};
+	  this.phrases = {};
+	  this.extend(opts.phrases || {});
+	  this.currentLocale = opts.locale || 'en';
+	  var allowMissing = opts.allowMissing ? transformPhrase : null;
+	  this.onMissingKey = typeof opts.onMissingKey === 'function' ? opts.onMissingKey : allowMissing;
+	  this.warn = opts.warn || warn;
+	}
+	
+	// ### polyglot.locale([locale])
+	//
+	// Get or set locale. Internally, Polyglot only uses locale for pluralization.
+	Polyglot.prototype.locale = function (newLocale) {
+	  if (newLocale) this.currentLocale = newLocale;
+	  return this.currentLocale;
+	};
+	
+	// ### polyglot.extend(phrases)
+	//
+	// Use `extend` to tell Polyglot how to translate a given key.
+	//
+	//     polyglot.extend({
+	//       "hello": "Hello",
+	//       "hello_name": "Hello, %{name}"
+	//     });
+	//
+	// The key can be any string.  Feel free to call `extend` multiple times;
+	// it will override any phrases with the same key, but leave existing phrases
+	// untouched.
+	//
+	// It is also possible to pass nested phrase objects, which get flattened
+	// into an object with the nested keys concatenated using dot notation.
+	//
+	//     polyglot.extend({
+	//       "nav": {
+	//         "hello": "Hello",
+	//         "hello_name": "Hello, %{name}",
+	//         "sidebar": {
+	//           "welcome": "Welcome"
+	//         }
+	//       }
+	//     });
+	//
+	//     console.log(polyglot.phrases);
+	//     // {
+	//     //   'nav.hello': 'Hello',
+	//     //   'nav.hello_name': 'Hello, %{name}',
+	//     //   'nav.sidebar.welcome': 'Welcome'
+	//     // }
+	//
+	// `extend` accepts an optional second argument, `prefix`, which can be used
+	// to prefix every key in the phrases object with some string, using dot
+	// notation.
+	//
+	//     polyglot.extend({
+	//       "hello": "Hello",
+	//       "hello_name": "Hello, %{name}"
+	//     }, "nav");
+	//
+	//     console.log(polyglot.phrases);
+	//     // {
+	//     //   'nav.hello': 'Hello',
+	//     //   'nav.hello_name': 'Hello, %{name}'
+	//     // }
+	//
+	// This feature is used internally to support nested phrase objects.
+	Polyglot.prototype.extend = function (morePhrases, prefix) {
+	  forEach(morePhrases, function (phrase, key) {
+	    var prefixedKey = prefix ? prefix + '.' + key : key;
+	    if (typeof phrase === 'object') {
+	      this.extend(phrase, prefixedKey);
+	    } else {
+	      this.phrases[prefixedKey] = phrase;
+	    }
+	  }, this);
+	};
+	
+	// ### polyglot.unset(phrases)
+	// Use `unset` to selectively remove keys from a polyglot instance.
+	//
+	//     polyglot.unset("some_key");
+	//     polyglot.unset({
+	//       "hello": "Hello",
+	//       "hello_name": "Hello, %{name}"
+	//     });
+	//
+	// The unset method can take either a string (for the key), or an object hash with
+	// the keys that you would like to unset.
+	Polyglot.prototype.unset = function (morePhrases, prefix) {
+	  if (typeof morePhrases === 'string') {
+	    delete this.phrases[morePhrases];
+	  } else {
+	    forEach(morePhrases, function (phrase, key) {
+	      var prefixedKey = prefix ? prefix + '.' + key : key;
+	      if (typeof phrase === 'object') {
+	        this.unset(phrase, prefixedKey);
+	      } else {
+	        delete this.phrases[prefixedKey];
+	      }
+	    }, this);
+	  }
+	};
+	
+	// ### polyglot.clear()
+	//
+	// Clears all phrases. Useful for special cases, such as freeing
+	// up memory if you have lots of phrases but no longer need to
+	// perform any translation. Also used internally by `replace`.
+	Polyglot.prototype.clear = function () {
+	  this.phrases = {};
+	};
+	
+	// ### polyglot.replace(phrases)
+	//
+	// Completely replace the existing phrases with a new set of phrases.
+	// Normally, just use `extend` to add more phrases, but under certain
+	// circumstances, you may want to make sure no old phrases are lying around.
+	Polyglot.prototype.replace = function (newPhrases) {
+	  this.clear();
+	  this.extend(newPhrases);
+	};
+	
+	
+	// ### polyglot.t(key, options)
+	//
+	// The most-used method. Provide a key, and `t` will return the
+	// phrase.
+	//
+	//     polyglot.t("hello");
+	//     => "Hello"
+	//
+	// The phrase value is provided first by a call to `polyglot.extend()` or
+	// `polyglot.replace()`.
+	//
+	// Pass in an object as the second argument to perform interpolation.
+	//
+	//     polyglot.t("hello_name", {name: "Spike"});
+	//     => "Hello, Spike"
+	//
+	// If you like, you can provide a default value in case the phrase is missing.
+	// Use the special option key "_" to specify a default.
+	//
+	//     polyglot.t("i_like_to_write_in_language", {
+	//       _: "I like to write in %{language}.",
+	//       language: "JavaScript"
+	//     });
+	//     => "I like to write in JavaScript."
+	//
+	Polyglot.prototype.t = function (key, options) {
+	  var phrase, result;
+	  var opts = options == null ? {} : options;
+	  if (typeof this.phrases[key] === 'string') {
+	    phrase = this.phrases[key];
+	  } else if (typeof opts._ === 'string') {
+	    phrase = opts._;
+	  } else if (this.onMissingKey) {
+	    var onMissingKey = this.onMissingKey;
+	    result = onMissingKey(key, opts, this.currentLocale);
+	  } else {
+	    this.warn('Missing translation for key: "' + key + '"');
+	    result = key;
+	  }
+	  if (typeof phrase === 'string') {
+	    result = transformPhrase(phrase, opts, this.currentLocale);
+	  }
+	  return result;
+	};
+	
+	
+	// ### polyglot.has(key)
+	//
+	// Check if polyglot has a translation for given key
+	Polyglot.prototype.has = function (key) {
+	  return has(this.phrases, key);
+	};
+	
+	// export transformPhrase
+	Polyglot.transformPhrase = transformPhrase;
+	
+	module.exports = Polyglot;
+
+
+/***/ }),
+/* 346 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isFunction = __webpack_require__(347)
+	
+	module.exports = forEach
+	
+	var toString = Object.prototype.toString
+	var hasOwnProperty = Object.prototype.hasOwnProperty
+	
+	function forEach(list, iterator, context) {
+	    if (!isFunction(iterator)) {
+	        throw new TypeError('iterator must be a function')
+	    }
+	
+	    if (arguments.length < 3) {
+	        context = this
+	    }
+	    
+	    if (toString.call(list) === '[object Array]')
+	        forEachArray(list, iterator, context)
+	    else if (typeof list === 'string')
+	        forEachString(list, iterator, context)
+	    else
+	        forEachObject(list, iterator, context)
+	}
+	
+	function forEachArray(array, iterator, context) {
+	    for (var i = 0, len = array.length; i < len; i++) {
+	        if (hasOwnProperty.call(array, i)) {
+	            iterator.call(context, array[i], i, array)
+	        }
+	    }
+	}
+	
+	function forEachString(string, iterator, context) {
+	    for (var i = 0, len = string.length; i < len; i++) {
+	        // no such thing as a sparse string.
+	        iterator.call(context, string.charAt(i), i, string)
+	    }
+	}
+	
+	function forEachObject(object, iterator, context) {
+	    for (var k in object) {
+	        if (hasOwnProperty.call(object, k)) {
+	            iterator.call(context, object[k], k, object)
+	        }
+	    }
+	}
+
+
+/***/ }),
+/* 347 */
+/***/ (function(module, exports) {
+
+	module.exports = isFunction
+	
+	var toString = Object.prototype.toString
+	
+	function isFunction (fn) {
+	  var string = toString.call(fn)
+	  return string === '[object Function]' ||
+	    (typeof fn === 'function' && string !== '[object RegExp]') ||
+	    (typeof window !== 'undefined' &&
+	     // IE8 and below
+	     (fn === window.setTimeout ||
+	      fn === window.alert ||
+	      fn === window.confirm ||
+	      fn === window.prompt))
+	};
+
+
+/***/ }),
+/* 348 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var bind = __webpack_require__(349);
+	
+	module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
+
+
+/***/ }),
+/* 349 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var implementation = __webpack_require__(350);
+	
+	module.exports = Function.prototype.bind || implementation;
+
+
+/***/ }),
+/* 350 */
+/***/ (function(module, exports) {
+
+	var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
+	var slice = Array.prototype.slice;
+	var toStr = Object.prototype.toString;
+	var funcType = '[object Function]';
+	
+	module.exports = function bind(that) {
+	    var target = this;
+	    if (typeof target !== 'function' || toStr.call(target) !== funcType) {
+	        throw new TypeError(ERROR_MESSAGE + target);
+	    }
+	    var args = slice.call(arguments, 1);
+	
+	    var bound;
+	    var binder = function () {
+	        if (this instanceof bound) {
+	            var result = target.apply(
+	                this,
+	                args.concat(slice.call(arguments))
+	            );
+	            if (Object(result) === result) {
+	                return result;
+	            }
+	            return this;
+	        } else {
+	            return target.apply(
+	                that,
+	                args.concat(slice.call(arguments))
+	            );
+	        }
+	    };
+	
+	    var boundLength = Math.max(0, target.length - args.length);
+	    var boundArgs = [];
+	    for (var i = 0; i < boundLength; i++) {
+	        boundArgs.push('$' + i);
+	    }
+	
+	    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
+	
+	    if (target.prototype) {
+	        var Empty = function Empty() {};
+	        Empty.prototype = target.prototype;
+	        bound.prototype = new Empty();
+	        Empty.prototype = null;
+	    }
+	
+	    return bound;
+	};
+
+
+/***/ }),
+/* 351 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var bind = __webpack_require__(349);
+	var define = __webpack_require__(352);
+	
+	var implementation = __webpack_require__(356);
+	var getPolyfill = __webpack_require__(365);
+	var shim = __webpack_require__(366);
+	
+	var boundTrim = bind.call(Function.call, getPolyfill());
+	
+	define(boundTrim, {
+		getPolyfill: getPolyfill,
+		implementation: implementation,
+		shim: shim
+	});
+	
+	module.exports = boundTrim;
+
+
+/***/ }),
+/* 352 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var keys = __webpack_require__(353);
+	var foreach = __webpack_require__(355);
+	var hasSymbols = typeof Symbol === 'function' && typeof Symbol() === 'symbol';
+	
+	var toStr = Object.prototype.toString;
+	
+	var isFunction = function (fn) {
+		return typeof fn === 'function' && toStr.call(fn) === '[object Function]';
+	};
+	
+	var arePropertyDescriptorsSupported = function () {
+		var obj = {};
+		try {
+			Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+	        /* eslint-disable no-unused-vars, no-restricted-syntax */
+	        for (var _ in obj) { return false; }
+	        /* eslint-enable no-unused-vars, no-restricted-syntax */
+			return obj.x === obj;
+		} catch (e) { /* this is IE 8. */
+			return false;
+		}
+	};
+	var supportsDescriptors = Object.defineProperty && arePropertyDescriptorsSupported();
+	
+	var defineProperty = function (object, name, value, predicate) {
+		if (name in object && (!isFunction(predicate) || !predicate())) {
+			return;
+		}
+		if (supportsDescriptors) {
+			Object.defineProperty(object, name, {
+				configurable: true,
+				enumerable: false,
+				value: value,
+				writable: true
+			});
+		} else {
+			object[name] = value;
+		}
+	};
+	
+	var defineProperties = function (object, map) {
+		var predicates = arguments.length > 2 ? arguments[2] : {};
+		var props = keys(map);
+		if (hasSymbols) {
+			props = props.concat(Object.getOwnPropertySymbols(map));
+		}
+		foreach(props, function (name) {
+			defineProperty(object, name, map[name], predicates[name]);
+		});
+	};
+	
+	defineProperties.supportsDescriptors = !!supportsDescriptors;
+	
+	module.exports = defineProperties;
+
+
+/***/ }),
+/* 353 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	// modified from https://github.com/es-shims/es5-shim
+	var has = Object.prototype.hasOwnProperty;
+	var toStr = Object.prototype.toString;
+	var slice = Array.prototype.slice;
+	var isArgs = __webpack_require__(354);
+	var isEnumerable = Object.prototype.propertyIsEnumerable;
+	var hasDontEnumBug = !isEnumerable.call({ toString: null }, 'toString');
+	var hasProtoEnumBug = isEnumerable.call(function () {}, 'prototype');
+	var dontEnums = [
+		'toString',
+		'toLocaleString',
+		'valueOf',
+		'hasOwnProperty',
+		'isPrototypeOf',
+		'propertyIsEnumerable',
+		'constructor'
+	];
+	var equalsConstructorPrototype = function (o) {
+		var ctor = o.constructor;
+		return ctor && ctor.prototype === o;
+	};
+	var excludedKeys = {
+		$console: true,
+		$external: true,
+		$frame: true,
+		$frameElement: true,
+		$frames: true,
+		$innerHeight: true,
+		$innerWidth: true,
+		$outerHeight: true,
+		$outerWidth: true,
+		$pageXOffset: true,
+		$pageYOffset: true,
+		$parent: true,
+		$scrollLeft: true,
+		$scrollTop: true,
+		$scrollX: true,
+		$scrollY: true,
+		$self: true,
+		$webkitIndexedDB: true,
+		$webkitStorageInfo: true,
+		$window: true
+	};
+	var hasAutomationEqualityBug = (function () {
+		/* global window */
+		if (typeof window === 'undefined') { return false; }
+		for (var k in window) {
+			try {
+				if (!excludedKeys['$' + k] && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+					try {
+						equalsConstructorPrototype(window[k]);
+					} catch (e) {
+						return true;
+					}
+				}
+			} catch (e) {
+				return true;
+			}
+		}
+		return false;
+	}());
+	var equalsConstructorPrototypeIfNotBuggy = function (o) {
+		/* global window */
+		if (typeof window === 'undefined' || !hasAutomationEqualityBug) {
+			return equalsConstructorPrototype(o);
+		}
+		try {
+			return equalsConstructorPrototype(o);
+		} catch (e) {
+			return false;
+		}
+	};
+	
+	var keysShim = function keys(object) {
+		var isObject = object !== null && typeof object === 'object';
+		var isFunction = toStr.call(object) === '[object Function]';
+		var isArguments = isArgs(object);
+		var isString = isObject && toStr.call(object) === '[object String]';
+		var theKeys = [];
+	
+		if (!isObject && !isFunction && !isArguments) {
+			throw new TypeError('Object.keys called on a non-object');
+		}
+	
+		var skipProto = hasProtoEnumBug && isFunction;
+		if (isString && object.length > 0 && !has.call(object, 0)) {
+			for (var i = 0; i < object.length; ++i) {
+				theKeys.push(String(i));
+			}
+		}
+	
+		if (isArguments && object.length > 0) {
+			for (var j = 0; j < object.length; ++j) {
+				theKeys.push(String(j));
+			}
+		} else {
+			for (var name in object) {
+				if (!(skipProto && name === 'prototype') && has.call(object, name)) {
+					theKeys.push(String(name));
+				}
+			}
+		}
+	
+		if (hasDontEnumBug) {
+			var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
+	
+			for (var k = 0; k < dontEnums.length; ++k) {
+				if (!(skipConstructor && dontEnums[k] === 'constructor') && has.call(object, dontEnums[k])) {
+					theKeys.push(dontEnums[k]);
+				}
+			}
+		}
+		return theKeys;
+	};
+	
+	keysShim.shim = function shimObjectKeys() {
+		if (Object.keys) {
+			var keysWorksWithArguments = (function () {
+				// Safari 5.0 bug
+				return (Object.keys(arguments) || '').length === 2;
+			}(1, 2));
+			if (!keysWorksWithArguments) {
+				var originalKeys = Object.keys;
+				Object.keys = function keys(object) {
+					if (isArgs(object)) {
+						return originalKeys(slice.call(object));
+					} else {
+						return originalKeys(object);
+					}
+				};
+			}
+		} else {
+			Object.keys = keysShim;
+		}
+		return Object.keys || keysShim;
+	};
+	
+	module.exports = keysShim;
+
+
+/***/ }),
+/* 354 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var toStr = Object.prototype.toString;
+	
+	module.exports = function isArguments(value) {
+		var str = toStr.call(value);
+		var isArgs = str === '[object Arguments]';
+		if (!isArgs) {
+			isArgs = str !== '[object Array]' &&
+				value !== null &&
+				typeof value === 'object' &&
+				typeof value.length === 'number' &&
+				value.length >= 0 &&
+				toStr.call(value.callee) === '[object Function]';
+		}
+		return isArgs;
+	};
+
+
+/***/ }),
+/* 355 */
+/***/ (function(module, exports) {
+
+	
+	var hasOwn = Object.prototype.hasOwnProperty;
+	var toString = Object.prototype.toString;
+	
+	module.exports = function forEach (obj, fn, ctx) {
+	    if (toString.call(fn) !== '[object Function]') {
+	        throw new TypeError('iterator must be a function');
+	    }
+	    var l = obj.length;
+	    if (l === +l) {
+	        for (var i = 0; i < l; i++) {
+	            fn.call(ctx, obj[i], i, obj);
+	        }
+	    } else {
+	        for (var k in obj) {
+	            if (hasOwn.call(obj, k)) {
+	                fn.call(ctx, obj[k], k, obj);
+	            }
+	        }
+	    }
+	};
+	
+
+
+/***/ }),
+/* 356 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var bind = __webpack_require__(349);
+	var ES = __webpack_require__(357);
+	var replace = bind.call(Function.call, String.prototype.replace);
+	
+	var leftWhitespace = /^[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]+/;
+	var rightWhitespace = /[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]+$/;
+	
+	module.exports = function trim() {
+		var S = ES.ToString(ES.CheckObjectCoercible(this));
+		return replace(replace(S, leftWhitespace, ''), rightWhitespace, '');
+	};
+
+
+/***/ }),
+/* 357 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var $isNaN = __webpack_require__(358);
+	var $isFinite = __webpack_require__(359);
+	
+	var sign = __webpack_require__(360);
+	var mod = __webpack_require__(361);
+	
+	var IsCallable = __webpack_require__(362);
+	var toPrimitive = __webpack_require__(363);
+	
+	// https://es5.github.io/#x9
+	var ES5 = {
+		ToPrimitive: toPrimitive,
+	
+		ToBoolean: function ToBoolean(value) {
+			return Boolean(value);
+		},
+		ToNumber: function ToNumber(value) {
+			return Number(value);
+		},
+		ToInteger: function ToInteger(value) {
+			var number = this.ToNumber(value);
+			if ($isNaN(number)) { return 0; }
+			if (number === 0 || !$isFinite(number)) { return number; }
+			return sign(number) * Math.floor(Math.abs(number));
+		},
+		ToInt32: function ToInt32(x) {
+			return this.ToNumber(x) >> 0;
+		},
+		ToUint32: function ToUint32(x) {
+			return this.ToNumber(x) >>> 0;
+		},
+		ToUint16: function ToUint16(value) {
+			var number = this.ToNumber(value);
+			if ($isNaN(number) || number === 0 || !$isFinite(number)) { return 0; }
+			var posInt = sign(number) * Math.floor(Math.abs(number));
+			return mod(posInt, 0x10000);
+		},
+		ToString: function ToString(value) {
+			return String(value);
+		},
+		ToObject: function ToObject(value) {
+			this.CheckObjectCoercible(value);
+			return Object(value);
+		},
+		CheckObjectCoercible: function CheckObjectCoercible(value, optMessage) {
+			/* jshint eqnull:true */
+			if (value == null) {
+				throw new TypeError(optMessage || 'Cannot call method on ' + value);
+			}
+			return value;
+		},
+		IsCallable: IsCallable,
+		SameValue: function SameValue(x, y) {
+			if (x === y) { // 0 === -0, but they are not identical.
+				if (x === 0) { return 1 / x === 1 / y; }
+				return true;
+			}
+			return $isNaN(x) && $isNaN(y);
+		},
+	
+		// http://www.ecma-international.org/ecma-262/5.1/#sec-8
+		Type: function Type(x) {
+			if (x === null) {
+				return 'Null';
+			}
+			if (typeof x === 'undefined') {
+				return 'Undefined';
+			}
+			if (typeof x === 'function' || typeof x === 'object') {
+				return 'Object';
+			}
+			if (typeof x === 'number') {
+				return 'Number';
+			}
+			if (typeof x === 'boolean') {
+				return 'Boolean';
+			}
+			if (typeof x === 'string') {
+				return 'String';
+			}
+		}
+	};
+	
+	module.exports = ES5;
+
+
+/***/ }),
+/* 358 */
+/***/ (function(module, exports) {
+
+	module.exports = Number.isNaN || function isNaN(a) {
+		return a !== a;
+	};
+
+
+/***/ }),
+/* 359 */
+/***/ (function(module, exports) {
+
+	var $isNaN = Number.isNaN || function (a) { return a !== a; };
+	
+	module.exports = Number.isFinite || function (x) { return typeof x === 'number' && !$isNaN(x) && x !== Infinity && x !== -Infinity; };
+
+
+/***/ }),
+/* 360 */
+/***/ (function(module, exports) {
+
+	module.exports = function sign(number) {
+		return number >= 0 ? 1 : -1;
+	};
+
+
+/***/ }),
+/* 361 */
+/***/ (function(module, exports) {
+
+	module.exports = function mod(number, modulo) {
+		var remain = number % modulo;
+		return Math.floor(remain >= 0 ? remain : remain + modulo);
+	};
+
+
+/***/ }),
+/* 362 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var fnToStr = Function.prototype.toString;
+	
+	var constructorRegex = /^\s*class /;
+	var isES6ClassFn = function isES6ClassFn(value) {
+		try {
+			var fnStr = fnToStr.call(value);
+			var singleStripped = fnStr.replace(/\/\/.*\n/g, '');
+			var multiStripped = singleStripped.replace(/\/\*[.\s\S]*\*\//g, '');
+			var spaceStripped = multiStripped.replace(/\n/mg, ' ').replace(/ {2}/g, ' ');
+			return constructorRegex.test(spaceStripped);
+		} catch (e) {
+			return false; // not a function
+		}
+	};
+	
+	var tryFunctionObject = function tryFunctionObject(value) {
+		try {
+			if (isES6ClassFn(value)) { return false; }
+			fnToStr.call(value);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	};
+	var toStr = Object.prototype.toString;
+	var fnClass = '[object Function]';
+	var genClass = '[object GeneratorFunction]';
+	var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+	
+	module.exports = function isCallable(value) {
+		if (!value) { return false; }
+		if (typeof value !== 'function' && typeof value !== 'object') { return false; }
+		if (hasToStringTag) { return tryFunctionObject(value); }
+		if (isES6ClassFn(value)) { return false; }
+		var strClass = toStr.call(value);
+		return strClass === fnClass || strClass === genClass;
+	};
+
+
+/***/ }),
+/* 363 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var toStr = Object.prototype.toString;
+	
+	var isPrimitive = __webpack_require__(364);
+	
+	var isCallable = __webpack_require__(362);
+	
+	// https://es5.github.io/#x8.12
+	var ES5internalSlots = {
+		'[[DefaultValue]]': function (O, hint) {
+			var actualHint = hint || (toStr.call(O) === '[object Date]' ? String : Number);
+	
+			if (actualHint === String || actualHint === Number) {
+				var methods = actualHint === String ? ['toString', 'valueOf'] : ['valueOf', 'toString'];
+				var value, i;
+				for (i = 0; i < methods.length; ++i) {
+					if (isCallable(O[methods[i]])) {
+						value = O[methods[i]]();
+						if (isPrimitive(value)) {
+							return value;
+						}
+					}
+				}
+				throw new TypeError('No default value');
+			}
+			throw new TypeError('invalid [[DefaultValue]] hint supplied');
+		}
+	};
+	
+	// https://es5.github.io/#x9
+	module.exports = function ToPrimitive(input, PreferredType) {
+		if (isPrimitive(input)) {
+			return input;
+		}
+		return ES5internalSlots['[[DefaultValue]]'](input, PreferredType);
+	};
+
+
+/***/ }),
+/* 364 */
+/***/ (function(module, exports) {
+
+	module.exports = function isPrimitive(value) {
+		return value === null || (typeof value !== 'function' && typeof value !== 'object');
+	};
+
+
+/***/ }),
+/* 365 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var implementation = __webpack_require__(356);
+	
+	var zeroWidthSpace = '\u200b';
+	
+	module.exports = function getPolyfill() {
+		if (String.prototype.trim && zeroWidthSpace.trim() === zeroWidthSpace) {
+			return String.prototype.trim;
+		}
+		return implementation;
+	};
+
+
+/***/ }),
+/* 366 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var define = __webpack_require__(352);
+	var getPolyfill = __webpack_require__(365);
+	
+	module.exports = function shimStringTrim() {
+		var polyfill = getPolyfill();
+		define(String.prototype, { trim: polyfill }, { trim: function () { return String.prototype.trim !== polyfill; } });
+		return polyfill;
+	};
+
+
+/***/ }),
+/* 367 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.initFormat = undefined;
+	
+	var _format = __webpack_require__(368);
+	
+	var _format2 = _interopRequireDefault(_format);
+	
+	var _ = __webpack_require__(343);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var initFormat = exports.initFormat = function initFormat(lang) {
+	  var defaultLang = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _.DEFAULT_LANG;
+	
+	  var locales = _defineProperty({}, defaultLang, __webpack_require__(385)("./" + defaultLang + '/index'));
+	  if (lang && lang !== defaultLang) {
+	    try {
+	      locales[lang] = __webpack_require__(385)("./" + lang + '/index');
+	    } catch (e) {
+	      console.warn('The "' + lang + '" locale isn\'t supported by date-fns');
+	    }
+	  }
+	  return function (date, formatStr) {
+	    return (0, _format2.default)(date, formatStr, { locale: locales[lang] });
+	  };
+	};
+
+/***/ }),
+/* 368 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var getDayOfYear = __webpack_require__(369)
+	var getISOWeek = __webpack_require__(375)
+	var getISOYear = __webpack_require__(379)
+	var parse = __webpack_require__(370)
+	var isValid = __webpack_require__(380)
+	var enLocale = __webpack_require__(381)
+	
+	/**
+	 * @category Common Helpers
+	 * @summary Format the date.
+	 *
+	 * @description
+	 * Return the formatted date string in the given format.
+	 *
+	 * Accepted tokens:
+	 * | Unit                    | Token | Result examples                  |
+	 * |-------------------------|-------|----------------------------------|
+	 * | Month                   | M     | 1, 2, ..., 12                    |
+	 * |                         | Mo    | 1st, 2nd, ..., 12th              |
+	 * |                         | MM    | 01, 02, ..., 12                  |
+	 * |                         | MMM   | Jan, Feb, ..., Dec               |
+	 * |                         | MMMM  | January, February, ..., December |
+	 * | Quarter                 | Q     | 1, 2, 3, 4                       |
+	 * |                         | Qo    | 1st, 2nd, 3rd, 4th               |
+	 * | Day of month            | D     | 1, 2, ..., 31                    |
+	 * |                         | Do    | 1st, 2nd, ..., 31st              |
+	 * |                         | DD    | 01, 02, ..., 31                  |
+	 * | Day of year             | DDD   | 1, 2, ..., 366                   |
+	 * |                         | DDDo  | 1st, 2nd, ..., 366th             |
+	 * |                         | DDDD  | 001, 002, ..., 366               |
+	 * | Day of week             | d     | 0, 1, ..., 6                     |
+	 * |                         | do    | 0th, 1st, ..., 6th               |
+	 * |                         | dd    | Su, Mo, ..., Sa                  |
+	 * |                         | ddd   | Sun, Mon, ..., Sat               |
+	 * |                         | dddd  | Sunday, Monday, ..., Saturday    |
+	 * | Day of ISO week         | E     | 1, 2, ..., 7                     |
+	 * | ISO week                | W     | 1, 2, ..., 53                    |
+	 * |                         | Wo    | 1st, 2nd, ..., 53rd              |
+	 * |                         | WW    | 01, 02, ..., 53                  |
+	 * | Year                    | YY    | 00, 01, ..., 99                  |
+	 * |                         | YYYY  | 1900, 1901, ..., 2099            |
+	 * | ISO week-numbering year | GG    | 00, 01, ..., 99                  |
+	 * |                         | GGGG  | 1900, 1901, ..., 2099            |
+	 * | AM/PM                   | A     | AM, PM                           |
+	 * |                         | a     | am, pm                           |
+	 * |                         | aa    | a.m., p.m.                       |
+	 * | Hour                    | H     | 0, 1, ... 23                     |
+	 * |                         | HH    | 00, 01, ... 23                   |
+	 * |                         | h     | 1, 2, ..., 12                    |
+	 * |                         | hh    | 01, 02, ..., 12                  |
+	 * | Minute                  | m     | 0, 1, ..., 59                    |
+	 * |                         | mm    | 00, 01, ..., 59                  |
+	 * | Second                  | s     | 0, 1, ..., 59                    |
+	 * |                         | ss    | 00, 01, ..., 59                  |
+	 * | 1/10 of second          | S     | 0, 1, ..., 9                     |
+	 * | 1/100 of second         | SS    | 00, 01, ..., 99                  |
+	 * | Millisecond             | SSS   | 000, 001, ..., 999               |
+	 * | Timezone                | Z     | -01:00, +00:00, ... +12:00       |
+	 * |                         | ZZ    | -0100, +0000, ..., +1200         |
+	 * | Seconds timestamp       | X     | 512969520                        |
+	 * | Milliseconds timestamp  | x     | 512969520900                     |
+	 *
+	 * The characters wrapped in square brackets are escaped.
+	 *
+	 * The result may vary by locale.
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @param {String} [format='YYYY-MM-DDTHH:mm:ss.SSSZ'] - the string of tokens
+	 * @param {Object} [options] - the object with options
+	 * @param {Object} [options.locale=enLocale] - the locale object
+	 * @returns {String} the formatted date string
+	 *
+	 * @example
+	 * // Represent 11 February 2014 in middle-endian format:
+	 * var result = format(
+	 *   new Date(2014, 1, 11),
+	 *   'MM/DD/YYYY'
+	 * )
+	 * //=> '02/11/2014'
+	 *
+	 * @example
+	 * // Represent 2 July 2014 in Esperanto:
+	 * var eoLocale = require('date-fns/locale/eo')
+	 * var result = format(
+	 *   new Date(2014, 6, 2),
+	 *   'Do [de] MMMM YYYY',
+	 *   {locale: eoLocale}
+	 * )
+	 * //=> '2-a de julio 2014'
+	 */
+	function format (dirtyDate, dirtyFormatStr, dirtyOptions) {
+	  var formatStr = dirtyFormatStr ? String(dirtyFormatStr) : 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+	  var options = dirtyOptions || {}
+	
+	  var locale = options.locale
+	  var localeFormatters = enLocale.format.formatters
+	  var formattingTokensRegExp = enLocale.format.formattingTokensRegExp
+	  if (locale && locale.format && locale.format.formatters) {
+	    localeFormatters = locale.format.formatters
+	
+	    if (locale.format.formattingTokensRegExp) {
+	      formattingTokensRegExp = locale.format.formattingTokensRegExp
+	    }
+	  }
+	
+	  var date = parse(dirtyDate)
+	
+	  if (!isValid(date)) {
+	    return 'Invalid Date'
+	  }
+	
+	  var formatFn = buildFormatFn(formatStr, localeFormatters, formattingTokensRegExp)
+	
+	  return formatFn(date)
+	}
+	
+	var formatters = {
+	  // Month: 1, 2, ..., 12
+	  'M': function (date) {
+	    return date.getMonth() + 1
+	  },
+	
+	  // Month: 01, 02, ..., 12
+	  'MM': function (date) {
+	    return addLeadingZeros(date.getMonth() + 1, 2)
+	  },
+	
+	  // Quarter: 1, 2, 3, 4
+	  'Q': function (date) {
+	    return Math.ceil((date.getMonth() + 1) / 3)
+	  },
+	
+	  // Day of month: 1, 2, ..., 31
+	  'D': function (date) {
+	    return date.getDate()
+	  },
+	
+	  // Day of month: 01, 02, ..., 31
+	  'DD': function (date) {
+	    return addLeadingZeros(date.getDate(), 2)
+	  },
+	
+	  // Day of year: 1, 2, ..., 366
+	  'DDD': function (date) {
+	    return getDayOfYear(date)
+	  },
+	
+	  // Day of year: 001, 002, ..., 366
+	  'DDDD': function (date) {
+	    return addLeadingZeros(getDayOfYear(date), 3)
+	  },
+	
+	  // Day of week: 0, 1, ..., 6
+	  'd': function (date) {
+	    return date.getDay()
+	  },
+	
+	  // Day of ISO week: 1, 2, ..., 7
+	  'E': function (date) {
+	    return date.getDay() || 7
+	  },
+	
+	  // ISO week: 1, 2, ..., 53
+	  'W': function (date) {
+	    return getISOWeek(date)
+	  },
+	
+	  // ISO week: 01, 02, ..., 53
+	  'WW': function (date) {
+	    return addLeadingZeros(getISOWeek(date), 2)
+	  },
+	
+	  // Year: 00, 01, ..., 99
+	  'YY': function (date) {
+	    return addLeadingZeros(date.getFullYear(), 4).substr(2)
+	  },
+	
+	  // Year: 1900, 1901, ..., 2099
+	  'YYYY': function (date) {
+	    return addLeadingZeros(date.getFullYear(), 4)
+	  },
+	
+	  // ISO week-numbering year: 00, 01, ..., 99
+	  'GG': function (date) {
+	    return String(getISOYear(date)).substr(2)
+	  },
+	
+	  // ISO week-numbering year: 1900, 1901, ..., 2099
+	  'GGGG': function (date) {
+	    return getISOYear(date)
+	  },
+	
+	  // Hour: 0, 1, ... 23
+	  'H': function (date) {
+	    return date.getHours()
+	  },
+	
+	  // Hour: 00, 01, ..., 23
+	  'HH': function (date) {
+	    return addLeadingZeros(date.getHours(), 2)
+	  },
+	
+	  // Hour: 1, 2, ..., 12
+	  'h': function (date) {
+	    var hours = date.getHours()
+	    if (hours === 0) {
+	      return 12
+	    } else if (hours > 12) {
+	      return hours % 12
+	    } else {
+	      return hours
+	    }
+	  },
+	
+	  // Hour: 01, 02, ..., 12
+	  'hh': function (date) {
+	    return addLeadingZeros(formatters['h'](date), 2)
+	  },
+	
+	  // Minute: 0, 1, ..., 59
+	  'm': function (date) {
+	    return date.getMinutes()
+	  },
+	
+	  // Minute: 00, 01, ..., 59
+	  'mm': function (date) {
+	    return addLeadingZeros(date.getMinutes(), 2)
+	  },
+	
+	  // Second: 0, 1, ..., 59
+	  's': function (date) {
+	    return date.getSeconds()
+	  },
+	
+	  // Second: 00, 01, ..., 59
+	  'ss': function (date) {
+	    return addLeadingZeros(date.getSeconds(), 2)
+	  },
+	
+	  // 1/10 of second: 0, 1, ..., 9
+	  'S': function (date) {
+	    return Math.floor(date.getMilliseconds() / 100)
+	  },
+	
+	  // 1/100 of second: 00, 01, ..., 99
+	  'SS': function (date) {
+	    return addLeadingZeros(Math.floor(date.getMilliseconds() / 10), 2)
+	  },
+	
+	  // Millisecond: 000, 001, ..., 999
+	  'SSS': function (date) {
+	    return addLeadingZeros(date.getMilliseconds(), 3)
+	  },
+	
+	  // Timezone: -01:00, +00:00, ... +12:00
+	  'Z': function (date) {
+	    return formatTimezone(date.getTimezoneOffset(), ':')
+	  },
+	
+	  // Timezone: -0100, +0000, ... +1200
+	  'ZZ': function (date) {
+	    return formatTimezone(date.getTimezoneOffset())
+	  },
+	
+	  // Seconds timestamp: 512969520
+	  'X': function (date) {
+	    return Math.floor(date.getTime() / 1000)
+	  },
+	
+	  // Milliseconds timestamp: 512969520900
+	  'x': function (date) {
+	    return date.getTime()
+	  }
+	}
+	
+	function buildFormatFn (formatStr, localeFormatters, formattingTokensRegExp) {
+	  var array = formatStr.match(formattingTokensRegExp)
+	  var length = array.length
+	
+	  var i
+	  var formatter
+	  for (i = 0; i < length; i++) {
+	    formatter = localeFormatters[array[i]] || formatters[array[i]]
+	    if (formatter) {
+	      array[i] = formatter
+	    } else {
+	      array[i] = removeFormattingTokens(array[i])
+	    }
+	  }
+	
+	  return function (date) {
+	    var output = ''
+	    for (var i = 0; i < length; i++) {
+	      if (array[i] instanceof Function) {
+	        output += array[i](date, formatters)
+	      } else {
+	        output += array[i]
+	      }
+	    }
+	    return output
+	  }
+	}
+	
+	function removeFormattingTokens (input) {
+	  if (input.match(/\[[\s\S]/)) {
+	    return input.replace(/^\[|]$/g, '')
+	  }
+	  return input.replace(/\\/g, '')
+	}
+	
+	function formatTimezone (offset, delimeter) {
+	  delimeter = delimeter || ''
+	  var sign = offset > 0 ? '-' : '+'
+	  var absOffset = Math.abs(offset)
+	  var hours = Math.floor(absOffset / 60)
+	  var minutes = absOffset % 60
+	  return sign + addLeadingZeros(hours, 2) + delimeter + addLeadingZeros(minutes, 2)
+	}
+	
+	function addLeadingZeros (number, targetLength) {
+	  var output = Math.abs(number).toString()
+	  while (output.length < targetLength) {
+	    output = '0' + output
+	  }
+	  return output
+	}
+	
+	module.exports = format
+
+
+/***/ }),
+/* 369 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	var startOfYear = __webpack_require__(372)
+	var differenceInCalendarDays = __webpack_require__(373)
+	
+	/**
+	 * @category Day Helpers
+	 * @summary Get the day of the year of the given date.
+	 *
+	 * @description
+	 * Get the day of the year of the given date.
+	 *
+	 * @param {Date|String|Number} date - the given date
+	 * @returns {Number} the day of year
+	 *
+	 * @example
+	 * // Which day of the year is 2 July 2014?
+	 * var result = getDayOfYear(new Date(2014, 6, 2))
+	 * //=> 183
+	 */
+	function getDayOfYear (dirtyDate) {
+	  var date = parse(dirtyDate)
+	  var diff = differenceInCalendarDays(date, startOfYear(date))
+	  var dayOfYear = diff + 1
+	  return dayOfYear
+	}
+	
+	module.exports = getDayOfYear
+
+
+/***/ }),
+/* 370 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isDate = __webpack_require__(371)
+	
+	var MILLISECONDS_IN_HOUR = 3600000
+	var MILLISECONDS_IN_MINUTE = 60000
+	var DEFAULT_ADDITIONAL_DIGITS = 2
+	
+	var parseTokenDateTimeDelimeter = /[T ]/
+	var parseTokenPlainTime = /:/
+	
+	// year tokens
+	var parseTokenYY = /^(\d{2})$/
+	var parseTokensYYY = [
+	  /^([+-]\d{2})$/, // 0 additional digits
+	  /^([+-]\d{3})$/, // 1 additional digit
+	  /^([+-]\d{4})$/ // 2 additional digits
+	]
+	
+	var parseTokenYYYY = /^(\d{4})/
+	var parseTokensYYYYY = [
+	  /^([+-]\d{4})/, // 0 additional digits
+	  /^([+-]\d{5})/, // 1 additional digit
+	  /^([+-]\d{6})/ // 2 additional digits
+	]
+	
+	// date tokens
+	var parseTokenMM = /^-(\d{2})$/
+	var parseTokenDDD = /^-?(\d{3})$/
+	var parseTokenMMDD = /^-?(\d{2})-?(\d{2})$/
+	var parseTokenWww = /^-?W(\d{2})$/
+	var parseTokenWwwD = /^-?W(\d{2})-?(\d{1})$/
+	
+	// time tokens
+	var parseTokenHH = /^(\d{2}([.,]\d*)?)$/
+	var parseTokenHHMM = /^(\d{2}):?(\d{2}([.,]\d*)?)$/
+	var parseTokenHHMMSS = /^(\d{2}):?(\d{2}):?(\d{2}([.,]\d*)?)$/
+	
+	// timezone tokens
+	var parseTokenTimezone = /([Z+-].*)$/
+	var parseTokenTimezoneZ = /^(Z)$/
+	var parseTokenTimezoneHH = /^([+-])(\d{2})$/
+	var parseTokenTimezoneHHMM = /^([+-])(\d{2}):?(\d{2})$/
+	
+	/**
+	 * @category Common Helpers
+	 * @summary Convert the given argument to an instance of Date.
+	 *
+	 * @description
+	 * Convert the given argument to an instance of Date.
+	 *
+	 * If the argument is an instance of Date, the function returns its clone.
+	 *
+	 * If the argument is a number, it is treated as a timestamp.
+	 *
+	 * If an argument is a string, the function tries to parse it.
+	 * Function accepts complete ISO 8601 formats as well as partial implementations.
+	 * ISO 8601: http://en.wikipedia.org/wiki/ISO_8601
+	 *
+	 * If all above fails, the function passes the given argument to Date constructor.
+	 *
+	 * @param {Date|String|Number} argument - the value to convert
+	 * @param {Object} [options] - the object with options
+	 * @param {0 | 1 | 2} [options.additionalDigits=2] - the additional number of digits in the extended year format
+	 * @returns {Date} the parsed date in the local time zone
+	 *
+	 * @example
+	 * // Convert string '2014-02-11T11:30:30' to date:
+	 * var result = parse('2014-02-11T11:30:30')
+	 * //=> Tue Feb 11 2014 11:30:30
+	 *
+	 * @example
+	 * // Parse string '+02014101',
+	 * // if the additional number of digits in the extended year format is 1:
+	 * var result = parse('+02014101', {additionalDigits: 1})
+	 * //=> Fri Apr 11 2014 00:00:00
+	 */
+	function parse (argument, dirtyOptions) {
+	  if (isDate(argument)) {
+	    // Prevent the date to lose the milliseconds when passed to new Date() in IE10
+	    return new Date(argument.getTime())
+	  } else if (typeof argument !== 'string') {
+	    return new Date(argument)
+	  }
+	
+	  var options = dirtyOptions || {}
+	  var additionalDigits = options.additionalDigits
+	  if (additionalDigits == null) {
+	    additionalDigits = DEFAULT_ADDITIONAL_DIGITS
+	  } else {
+	    additionalDigits = Number(additionalDigits)
+	  }
+	
+	  var dateStrings = splitDateString(argument)
+	
+	  var parseYearResult = parseYear(dateStrings.date, additionalDigits)
+	  var year = parseYearResult.year
+	  var restDateString = parseYearResult.restDateString
+	
+	  var date = parseDate(restDateString, year)
+	
+	  if (date) {
+	    var timestamp = date.getTime()
+	    var time = 0
+	    var offset
+	
+	    if (dateStrings.time) {
+	      time = parseTime(dateStrings.time)
+	    }
+	
+	    if (dateStrings.timezone) {
+	      offset = parseTimezone(dateStrings.timezone)
+	    } else {
+	      // get offset accurate to hour in timezones that change offset
+	      offset = new Date(timestamp + time).getTimezoneOffset()
+	      offset = new Date(timestamp + time + offset * MILLISECONDS_IN_MINUTE).getTimezoneOffset()
+	    }
+	
+	    return new Date(timestamp + time + offset * MILLISECONDS_IN_MINUTE)
+	  } else {
+	    return new Date(argument)
+	  }
+	}
+	
+	function splitDateString (dateString) {
+	  var dateStrings = {}
+	  var array = dateString.split(parseTokenDateTimeDelimeter)
+	  var timeString
+	
+	  if (parseTokenPlainTime.test(array[0])) {
+	    dateStrings.date = null
+	    timeString = array[0]
+	  } else {
+	    dateStrings.date = array[0]
+	    timeString = array[1]
+	  }
+	
+	  if (timeString) {
+	    var token = parseTokenTimezone.exec(timeString)
+	    if (token) {
+	      dateStrings.time = timeString.replace(token[1], '')
+	      dateStrings.timezone = token[1]
+	    } else {
+	      dateStrings.time = timeString
+	    }
+	  }
+	
+	  return dateStrings
+	}
+	
+	function parseYear (dateString, additionalDigits) {
+	  var parseTokenYYY = parseTokensYYY[additionalDigits]
+	  var parseTokenYYYYY = parseTokensYYYYY[additionalDigits]
+	
+	  var token
+	
+	  // YYYY or ±YYYYY
+	  token = parseTokenYYYY.exec(dateString) || parseTokenYYYYY.exec(dateString)
+	  if (token) {
+	    var yearString = token[1]
+	    return {
+	      year: parseInt(yearString, 10),
+	      restDateString: dateString.slice(yearString.length)
+	    }
+	  }
+	
+	  // YY or ±YYY
+	  token = parseTokenYY.exec(dateString) || parseTokenYYY.exec(dateString)
+	  if (token) {
+	    var centuryString = token[1]
+	    return {
+	      year: parseInt(centuryString, 10) * 100,
+	      restDateString: dateString.slice(centuryString.length)
+	    }
+	  }
+	
+	  // Invalid ISO-formatted year
+	  return {
+	    year: null
+	  }
+	}
+	
+	function parseDate (dateString, year) {
+	  // Invalid ISO-formatted year
+	  if (year === null) {
+	    return null
+	  }
+	
+	  var token
+	  var date
+	  var month
+	  var week
+	
+	  // YYYY
+	  if (dateString.length === 0) {
+	    date = new Date(0)
+	    date.setUTCFullYear(year)
+	    return date
+	  }
+	
+	  // YYYY-MM
+	  token = parseTokenMM.exec(dateString)
+	  if (token) {
+	    date = new Date(0)
+	    month = parseInt(token[1], 10) - 1
+	    date.setUTCFullYear(year, month)
+	    return date
+	  }
+	
+	  // YYYY-DDD or YYYYDDD
+	  token = parseTokenDDD.exec(dateString)
+	  if (token) {
+	    date = new Date(0)
+	    var dayOfYear = parseInt(token[1], 10)
+	    date.setUTCFullYear(year, 0, dayOfYear)
+	    return date
+	  }
+	
+	  // YYYY-MM-DD or YYYYMMDD
+	  token = parseTokenMMDD.exec(dateString)
+	  if (token) {
+	    date = new Date(0)
+	    month = parseInt(token[1], 10) - 1
+	    var day = parseInt(token[2], 10)
+	    date.setUTCFullYear(year, month, day)
+	    return date
+	  }
+	
+	  // YYYY-Www or YYYYWww
+	  token = parseTokenWww.exec(dateString)
+	  if (token) {
+	    week = parseInt(token[1], 10) - 1
+	    return dayOfISOYear(year, week)
+	  }
+	
+	  // YYYY-Www-D or YYYYWwwD
+	  token = parseTokenWwwD.exec(dateString)
+	  if (token) {
+	    week = parseInt(token[1], 10) - 1
+	    var dayOfWeek = parseInt(token[2], 10) - 1
+	    return dayOfISOYear(year, week, dayOfWeek)
+	  }
+	
+	  // Invalid ISO-formatted date
+	  return null
+	}
+	
+	function parseTime (timeString) {
+	  var token
+	  var hours
+	  var minutes
+	
+	  // hh
+	  token = parseTokenHH.exec(timeString)
+	  if (token) {
+	    hours = parseFloat(token[1].replace(',', '.'))
+	    return (hours % 24) * MILLISECONDS_IN_HOUR
+	  }
+	
+	  // hh:mm or hhmm
+	  token = parseTokenHHMM.exec(timeString)
+	  if (token) {
+	    hours = parseInt(token[1], 10)
+	    minutes = parseFloat(token[2].replace(',', '.'))
+	    return (hours % 24) * MILLISECONDS_IN_HOUR +
+	      minutes * MILLISECONDS_IN_MINUTE
+	  }
+	
+	  // hh:mm:ss or hhmmss
+	  token = parseTokenHHMMSS.exec(timeString)
+	  if (token) {
+	    hours = parseInt(token[1], 10)
+	    minutes = parseInt(token[2], 10)
+	    var seconds = parseFloat(token[3].replace(',', '.'))
+	    return (hours % 24) * MILLISECONDS_IN_HOUR +
+	      minutes * MILLISECONDS_IN_MINUTE +
+	      seconds * 1000
+	  }
+	
+	  // Invalid ISO-formatted time
+	  return null
+	}
+	
+	function parseTimezone (timezoneString) {
+	  var token
+	  var absoluteOffset
+	
+	  // Z
+	  token = parseTokenTimezoneZ.exec(timezoneString)
+	  if (token) {
+	    return 0
+	  }
+	
+	  // ±hh
+	  token = parseTokenTimezoneHH.exec(timezoneString)
+	  if (token) {
+	    absoluteOffset = parseInt(token[2], 10) * 60
+	    return (token[1] === '+') ? -absoluteOffset : absoluteOffset
+	  }
+	
+	  // ±hh:mm or ±hhmm
+	  token = parseTokenTimezoneHHMM.exec(timezoneString)
+	  if (token) {
+	    absoluteOffset = parseInt(token[2], 10) * 60 + parseInt(token[3], 10)
+	    return (token[1] === '+') ? -absoluteOffset : absoluteOffset
+	  }
+	
+	  return 0
+	}
+	
+	function dayOfISOYear (isoYear, week, day) {
+	  week = week || 0
+	  day = day || 0
+	  var date = new Date(0)
+	  date.setUTCFullYear(isoYear, 0, 4)
+	  var fourthOfJanuaryDay = date.getUTCDay() || 7
+	  var diff = week * 7 + day + 1 - fourthOfJanuaryDay
+	  date.setUTCDate(date.getUTCDate() + diff)
+	  return date
+	}
+	
+	module.exports = parse
+
+
+/***/ }),
+/* 371 */
+/***/ (function(module, exports) {
+
+	/**
+	 * @category Common Helpers
+	 * @summary Is the given argument an instance of Date?
+	 *
+	 * @description
+	 * Is the given argument an instance of Date?
+	 *
+	 * @param {*} argument - the argument to check
+	 * @returns {Boolean} the given argument is an instance of Date
+	 *
+	 * @example
+	 * // Is 'mayonnaise' a Date?
+	 * var result = isDate('mayonnaise')
+	 * //=> false
+	 */
+	function isDate (argument) {
+	  return argument instanceof Date
+	}
+	
+	module.exports = isDate
+
+
+/***/ }),
+/* 372 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	
+	/**
+	 * @category Year Helpers
+	 * @summary Return the start of a year for the given date.
+	 *
+	 * @description
+	 * Return the start of a year for the given date.
+	 * The result will be in the local timezone.
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @returns {Date} the start of a year
+	 *
+	 * @example
+	 * // The start of a year for 2 September 2014 11:55:00:
+	 * var result = startOfYear(new Date(2014, 8, 2, 11, 55, 00))
+	 * //=> Wed Jan 01 2014 00:00:00
+	 */
+	function startOfYear (dirtyDate) {
+	  var cleanDate = parse(dirtyDate)
+	  var date = new Date(0)
+	  date.setFullYear(cleanDate.getFullYear(), 0, 1)
+	  date.setHours(0, 0, 0, 0)
+	  return date
+	}
+	
+	module.exports = startOfYear
+
+
+/***/ }),
+/* 373 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var startOfDay = __webpack_require__(374)
+	
+	var MILLISECONDS_IN_MINUTE = 60000
+	var MILLISECONDS_IN_DAY = 86400000
+	
+	/**
+	 * @category Day Helpers
+	 * @summary Get the number of calendar days between the given dates.
+	 *
+	 * @description
+	 * Get the number of calendar days between the given dates.
+	 *
+	 * @param {Date|String|Number} dateLeft - the later date
+	 * @param {Date|String|Number} dateRight - the earlier date
+	 * @returns {Number} the number of calendar days
+	 *
+	 * @example
+	 * // How many calendar days are between
+	 * // 2 July 2011 23:00:00 and 2 July 2012 00:00:00?
+	 * var result = differenceInCalendarDays(
+	 *   new Date(2012, 6, 2, 0, 0),
+	 *   new Date(2011, 6, 2, 23, 0)
+	 * )
+	 * //=> 366
+	 */
+	function differenceInCalendarDays (dirtyDateLeft, dirtyDateRight) {
+	  var startOfDayLeft = startOfDay(dirtyDateLeft)
+	  var startOfDayRight = startOfDay(dirtyDateRight)
+	
+	  var timestampLeft = startOfDayLeft.getTime() -
+	    startOfDayLeft.getTimezoneOffset() * MILLISECONDS_IN_MINUTE
+	  var timestampRight = startOfDayRight.getTime() -
+	    startOfDayRight.getTimezoneOffset() * MILLISECONDS_IN_MINUTE
+	
+	  // Round the number of days to the nearest integer
+	  // because the number of milliseconds in a day is not constant
+	  // (e.g. it's different in the day of the daylight saving time clock shift)
+	  return Math.round((timestampLeft - timestampRight) / MILLISECONDS_IN_DAY)
+	}
+	
+	module.exports = differenceInCalendarDays
+
+
+/***/ }),
+/* 374 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	
+	/**
+	 * @category Day Helpers
+	 * @summary Return the start of a day for the given date.
+	 *
+	 * @description
+	 * Return the start of a day for the given date.
+	 * The result will be in the local timezone.
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @returns {Date} the start of a day
+	 *
+	 * @example
+	 * // The start of a day for 2 September 2014 11:55:00:
+	 * var result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+	 * //=> Tue Sep 02 2014 00:00:00
+	 */
+	function startOfDay (dirtyDate) {
+	  var date = parse(dirtyDate)
+	  date.setHours(0, 0, 0, 0)
+	  return date
+	}
+	
+	module.exports = startOfDay
+
+
+/***/ }),
+/* 375 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	var startOfISOWeek = __webpack_require__(376)
+	var startOfISOYear = __webpack_require__(378)
+	
+	var MILLISECONDS_IN_WEEK = 604800000
+	
+	/**
+	 * @category ISO Week Helpers
+	 * @summary Get the ISO week of the given date.
+	 *
+	 * @description
+	 * Get the ISO week of the given date.
+	 *
+	 * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @param {Date|String|Number} date - the given date
+	 * @returns {Number} the ISO week
+	 *
+	 * @example
+	 * // Which week of the ISO-week numbering year is 2 January 2005?
+	 * var result = getISOWeek(new Date(2005, 0, 2))
+	 * //=> 53
+	 */
+	function getISOWeek (dirtyDate) {
+	  var date = parse(dirtyDate)
+	  var diff = startOfISOWeek(date).getTime() - startOfISOYear(date).getTime()
+	
+	  // Round the number of days to the nearest integer
+	  // because the number of milliseconds in a week is not constant
+	  // (e.g. it's different in the week of the daylight saving time clock shift)
+	  return Math.round(diff / MILLISECONDS_IN_WEEK) + 1
+	}
+	
+	module.exports = getISOWeek
+
+
+/***/ }),
+/* 376 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var startOfWeek = __webpack_require__(377)
+	
+	/**
+	 * @category ISO Week Helpers
+	 * @summary Return the start of an ISO week for the given date.
+	 *
+	 * @description
+	 * Return the start of an ISO week for the given date.
+	 * The result will be in the local timezone.
+	 *
+	 * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @returns {Date} the start of an ISO week
+	 *
+	 * @example
+	 * // The start of an ISO week for 2 September 2014 11:55:00:
+	 * var result = startOfISOWeek(new Date(2014, 8, 2, 11, 55, 0))
+	 * //=> Mon Sep 01 2014 00:00:00
+	 */
+	function startOfISOWeek (dirtyDate) {
+	  return startOfWeek(dirtyDate, {weekStartsOn: 1})
+	}
+	
+	module.exports = startOfISOWeek
+
+
+/***/ }),
+/* 377 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	
+	/**
+	 * @category Week Helpers
+	 * @summary Return the start of a week for the given date.
+	 *
+	 * @description
+	 * Return the start of a week for the given date.
+	 * The result will be in the local timezone.
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @param {Object} [options] - the object with options
+	 * @param {Number} [options.weekStartsOn=0] - the index of the first day of the week (0 - Sunday)
+	 * @returns {Date} the start of a week
+	 *
+	 * @example
+	 * // The start of a week for 2 September 2014 11:55:00:
+	 * var result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0))
+	 * //=> Sun Aug 31 2014 00:00:00
+	 *
+	 * @example
+	 * // If the week starts on Monday, the start of the week for 2 September 2014 11:55:00:
+	 * var result = startOfWeek(new Date(2014, 8, 2, 11, 55, 0), {weekStartsOn: 1})
+	 * //=> Mon Sep 01 2014 00:00:00
+	 */
+	function startOfWeek (dirtyDate, dirtyOptions) {
+	  var weekStartsOn = dirtyOptions ? (Number(dirtyOptions.weekStartsOn) || 0) : 0
+	
+	  var date = parse(dirtyDate)
+	  var day = date.getDay()
+	  var diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn
+	
+	  date.setDate(date.getDate() - diff)
+	  date.setHours(0, 0, 0, 0)
+	  return date
+	}
+	
+	module.exports = startOfWeek
+
+
+/***/ }),
+/* 378 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var getISOYear = __webpack_require__(379)
+	var startOfISOWeek = __webpack_require__(376)
+	
+	/**
+	 * @category ISO Week-Numbering Year Helpers
+	 * @summary Return the start of an ISO week-numbering year for the given date.
+	 *
+	 * @description
+	 * Return the start of an ISO week-numbering year,
+	 * which always starts 3 days before the year's first Thursday.
+	 * The result will be in the local timezone.
+	 *
+	 * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @param {Date|String|Number} date - the original date
+	 * @returns {Date} the start of an ISO year
+	 *
+	 * @example
+	 * // The start of an ISO week-numbering year for 2 July 2005:
+	 * var result = startOfISOYear(new Date(2005, 6, 2))
+	 * //=> Mon Jan 03 2005 00:00:00
+	 */
+	function startOfISOYear (dirtyDate) {
+	  var year = getISOYear(dirtyDate)
+	  var fourthOfJanuary = new Date(0)
+	  fourthOfJanuary.setFullYear(year, 0, 4)
+	  fourthOfJanuary.setHours(0, 0, 0, 0)
+	  var date = startOfISOWeek(fourthOfJanuary)
+	  return date
+	}
+	
+	module.exports = startOfISOYear
+
+
+/***/ }),
+/* 379 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var parse = __webpack_require__(370)
+	var startOfISOWeek = __webpack_require__(376)
+	
+	/**
+	 * @category ISO Week-Numbering Year Helpers
+	 * @summary Get the ISO week-numbering year of the given date.
+	 *
+	 * @description
+	 * Get the ISO week-numbering year of the given date,
+	 * which always starts 3 days before the year's first Thursday.
+	 *
+	 * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @param {Date|String|Number} date - the given date
+	 * @returns {Number} the ISO week-numbering year
+	 *
+	 * @example
+	 * // Which ISO-week numbering year is 2 January 2005?
+	 * var result = getISOYear(new Date(2005, 0, 2))
+	 * //=> 2004
+	 */
+	function getISOYear (dirtyDate) {
+	  var date = parse(dirtyDate)
+	  var year = date.getFullYear()
+	
+	  var fourthOfJanuaryOfNextYear = new Date(0)
+	  fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4)
+	  fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0)
+	  var startOfNextYear = startOfISOWeek(fourthOfJanuaryOfNextYear)
+	
+	  var fourthOfJanuaryOfThisYear = new Date(0)
+	  fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4)
+	  fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0)
+	  var startOfThisYear = startOfISOWeek(fourthOfJanuaryOfThisYear)
+	
+	  if (date.getTime() >= startOfNextYear.getTime()) {
+	    return year + 1
+	  } else if (date.getTime() >= startOfThisYear.getTime()) {
+	    return year
+	  } else {
+	    return year - 1
+	  }
+	}
+	
+	module.exports = getISOYear
+
+
+/***/ }),
+/* 380 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isDate = __webpack_require__(371)
+	
+	/**
+	 * @category Common Helpers
+	 * @summary Is the given date valid?
+	 *
+	 * @description
+	 * Returns false if argument is Invalid Date and true otherwise.
+	 * Invalid Date is a Date, whose time value is NaN.
+	 *
+	 * Time value of Date: http://es5.github.io/#x15.9.1.1
+	 *
+	 * @param {Date} date - the date to check
+	 * @returns {Boolean} the date is valid
+	 * @throws {TypeError} argument must be an instance of Date
+	 *
+	 * @example
+	 * // For the valid date:
+	 * var result = isValid(new Date(2014, 1, 31))
+	 * //=> true
+	 *
+	 * @example
+	 * // For the invalid date:
+	 * var result = isValid(new Date(''))
+	 * //=> false
+	 */
+	function isValid (dirtyDate) {
+	  if (isDate(dirtyDate)) {
+	    return !isNaN(dirtyDate)
+	  } else {
+	    throw new TypeError(toString.call(dirtyDate) + ' is not an instance of Date')
+	  }
+	}
+	
+	module.exports = isValid
+
+
+/***/ }),
+/* 381 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(382)
+	var buildFormatLocale = __webpack_require__(383)
+	
+	/**
+	 * @category Locales
+	 * @summary English locale.
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 382 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'less than a second',
+	      other: 'less than {{count}} seconds'
+	    },
+	
+	    xSeconds: {
+	      one: '1 second',
+	      other: '{{count}} seconds'
+	    },
+	
+	    halfAMinute: 'half a minute',
+	
+	    lessThanXMinutes: {
+	      one: 'less than a minute',
+	      other: 'less than {{count}} minutes'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minute',
+	      other: '{{count}} minutes'
+	    },
+	
+	    aboutXHours: {
+	      one: 'about 1 hour',
+	      other: 'about {{count}} hours'
+	    },
+	
+	    xHours: {
+	      one: '1 hour',
+	      other: '{{count}} hours'
+	    },
+	
+	    xDays: {
+	      one: '1 day',
+	      other: '{{count}} days'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'about 1 month',
+	      other: 'about {{count}} months'
+	    },
+	
+	    xMonths: {
+	      one: '1 month',
+	      other: '{{count}} months'
+	    },
+	
+	    aboutXYears: {
+	      one: 'about 1 year',
+	      other: 'about {{count}} years'
+	    },
+	
+	    xYears: {
+	      one: '1 year',
+	      other: '{{count}} years'
+	    },
+	
+	    overXYears: {
+	      one: 'over 1 year',
+	      other: 'over {{count}} years'
+	    },
+	
+	    almostXYears: {
+	      one: 'almost 1 year',
+	      other: 'almost {{count}} years'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'in ' + result
+	      } else {
+	        return result + ' ago'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 383 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // Note: in English, the names of days of the week and months are capitalized.
+	  // If you are making a new locale based on this one, check if the same is true for the language you're working on.
+	  // Generally, formatted dates should look like they are in the middle of a sentence,
+	  // e.g. in Spanish language the weekdays and months should be in the lowercase.
+	  var months3char = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+	  var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+	  var weekdays2char = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+	  var weekdays3char = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+	  var weekdaysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  var rem100 = number % 100
+	  if (rem100 > 20 || rem100 < 10) {
+	    switch (rem100 % 10) {
+	      case 1:
+	        return number + 'st'
+	      case 2:
+	        return number + 'nd'
+	      case 3:
+	        return number + 'rd'
+	    }
+	  }
+	  return number + 'th'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 384 */
+/***/ (function(module, exports) {
+
+	var commonFormatterKeys = [
+	  'M', 'MM', 'Q', 'D', 'DD', 'DDD', 'DDDD', 'd',
+	  'E', 'W', 'WW', 'YY', 'YYYY', 'GG', 'GGGG',
+	  'H', 'HH', 'h', 'hh', 'm', 'mm',
+	  's', 'ss', 'S', 'SS', 'SSS',
+	  'Z', 'ZZ', 'X', 'x'
+	]
+	
+	function buildFormattingTokensRegExp (formatters) {
+	  var formatterKeys = []
+	  for (var key in formatters) {
+	    if (formatters.hasOwnProperty(key)) {
+	      formatterKeys.push(key)
+	    }
+	  }
+	
+	  var formattingTokens = commonFormatterKeys
+	    .concat(formatterKeys)
+	    .sort()
+	    .reverse()
+	  var formattingTokensRegExp = new RegExp(
+	    '(\\[[^\\[]*\\])|(\\\\)?' + '(' + formattingTokens.join('|') + '|.)', 'g'
+	  )
+	
+	  return formattingTokensRegExp
+	}
+	
+	module.exports = buildFormattingTokensRegExp
+
+
+/***/ }),
+/* 385 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./_lib/build_formatting_tokens_reg_exp/index": 384,
+		"./ar/build_distance_in_words_locale/index": 386,
+		"./ar/build_format_locale/index": 387,
+		"./ar/index": 388,
+		"./bg/build_distance_in_words_locale/index": 389,
+		"./bg/build_format_locale/index": 390,
+		"./bg/index": 391,
+		"./ca/build_distance_in_words_locale/index": 392,
+		"./ca/build_format_locale/index": 393,
+		"./ca/index": 394,
+		"./cs/build_distance_in_words_locale/index": 395,
+		"./cs/build_format_locale/index": 396,
+		"./cs/index": 397,
+		"./da/build_distance_in_words_locale/index": 398,
+		"./da/build_format_locale/index": 399,
+		"./da/index": 400,
+		"./de/build_distance_in_words_locale/index": 401,
+		"./de/build_format_locale/index": 402,
+		"./de/index": 403,
+		"./el/build_distance_in_words_locale/index": 404,
+		"./el/build_format_locale/index": 405,
+		"./el/index": 406,
+		"./en/build_distance_in_words_locale/index": 382,
+		"./en/build_format_locale/index": 383,
+		"./en/index": 381,
+		"./eo/build_distance_in_words_locale/index": 407,
+		"./eo/build_format_locale/index": 408,
+		"./eo/index": 409,
+		"./es/build_distance_in_words_locale/index": 410,
+		"./es/build_format_locale/index": 411,
+		"./es/index": 412,
+		"./fi/build_distance_in_words_locale/index": 413,
+		"./fi/build_format_locale/index": 414,
+		"./fi/index": 415,
+		"./fil/build_distance_in_words_locale/index": 416,
+		"./fil/build_format_locale/index": 417,
+		"./fil/index": 418,
+		"./fr/build_distance_in_words_locale/index": 419,
+		"./fr/build_format_locale/index": 420,
+		"./fr/index": 421,
+		"./hr/build_distance_in_words_locale/index": 422,
+		"./hr/build_format_locale/index": 423,
+		"./hr/index": 424,
+		"./id/build_distance_in_words_locale/index": 425,
+		"./id/build_format_locale/index": 426,
+		"./id/index": 427,
+		"./is/build_distance_in_words_locale/index": 428,
+		"./is/build_format_locale/index": 429,
+		"./is/index": 430,
+		"./it/build_distance_in_words_locale/index": 431,
+		"./it/build_format_locale/index": 432,
+		"./it/index": 433,
+		"./ja/build_distance_in_words_locale/index": 434,
+		"./ja/build_format_locale/index": 435,
+		"./ja/index": 436,
+		"./ko/build_distance_in_words_locale/index": 437,
+		"./ko/build_format_locale/index": 438,
+		"./ko/index": 439,
+		"./mk/build_distance_in_words_locale/index": 440,
+		"./mk/build_format_locale/index": 441,
+		"./mk/index": 442,
+		"./nb/build_distance_in_words_locale/index": 443,
+		"./nb/build_format_locale/index": 444,
+		"./nb/index": 445,
+		"./nl/build_distance_in_words_locale/index": 446,
+		"./nl/build_format_locale/index": 447,
+		"./nl/index": 448,
+		"./pl/build_distance_in_words_locale/index": 449,
+		"./pl/build_format_locale/index": 450,
+		"./pl/index": 451,
+		"./pt/build_distance_in_words_locale/index": 452,
+		"./pt/build_format_locale/index": 453,
+		"./pt/index": 454,
+		"./ro/build_distance_in_words_locale/index": 455,
+		"./ro/build_format_locale/index": 456,
+		"./ro/index": 457,
+		"./ru/build_distance_in_words_locale/index": 458,
+		"./ru/build_format_locale/index": 459,
+		"./ru/index": 460,
+		"./sk/build_distance_in_words_locale/index": 461,
+		"./sk/build_format_locale/index": 462,
+		"./sk/index": 463,
+		"./sv/build_distance_in_words_locale/index": 464,
+		"./sv/build_format_locale/index": 465,
+		"./sv/index": 466,
+		"./th/build_distance_in_words_locale/index": 467,
+		"./th/build_format_locale/index": 468,
+		"./th/index": 469,
+		"./tr/build_distance_in_words_locale/index": 470,
+		"./tr/build_format_locale/index": 471,
+		"./tr/index": 472,
+		"./zh_cn/build_distance_in_words_locale/index": 473,
+		"./zh_cn/build_format_locale/index": 474,
+		"./zh_cn/index": 475,
+		"./zh_tw/build_distance_in_words_locale/index": 476,
+		"./zh_tw/build_format_locale/index": 477,
+		"./zh_tw/index": 478
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 385;
+
+
+/***/ }),
+/* 386 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'أقل من ثانية واحدة',
+	      other: 'أقل من {{count}} ثواني'
+	    },
+	
+	    xSeconds: {
+	      one: 'ثانية واحدة',
+	      other: '{{count}} ثواني'
+	    },
+	
+	    halfAMinute: 'نصف دقيقة',
+	
+	    lessThanXMinutes: {
+	      one: 'أقل من دقيقة',
+	      other: 'أقل من {{count}} دقيقة'
+	    },
+	
+	    xMinutes: {
+	      one: 'دقيقة واحدة',
+	      other: '{{count}} دقائق'
+	    },
+	
+	    aboutXHours: {
+	      one: 'ساعة واحدة تقريباً',
+	      other: '{{count}} ساعات تقريباً'
+	    },
+	
+	    xHours: {
+	      one: 'ساعة واحدة',
+	      other: '{{count}} ساعات'
+	    },
+	
+	    xDays: {
+	      one: 'يوم واحد',
+	      other: '{{count}} أيام'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'شهر واحد تقريباً',
+	      other: '{{count}} أشهر تقريباً'
+	    },
+	
+	    xMonths: {
+	      one: 'شهر واحد',
+	      other: '{{count}} أشهر'
+	    },
+	
+	    aboutXYears: {
+	      one: 'عام واحد تقريباً',
+	      other: '{{count}} أعوام تقريباً'
+	    },
+	
+	    xYears: {
+	      one: 'عام واحد',
+	      other: '{{count}} أعوام'
+	    },
+	
+	    overXYears: {
+	      one: 'أكثر من عام',
+	      other: 'أكثر من {{count}} أعوام'
+	    },
+	
+	    almostXYears: {
+	      one: 'عام واحد تقريباً',
+	      other: '{{count}} أعوام تقريباً'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'في خلال ' + result
+	      } else {
+	        return 'منذ ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 387 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+	  var monthsFull = ['كانون الثاني يناير', 'شباط فبراير', 'آذار مارس', 'نيسان أبريل', 'أيار مايو', 'حزيران يونيو', 'تموز يوليو', 'آب أغسطس', 'أيلول سبتمبر', 'تشرين الأول أكتوبر', 'تشرين الثاني نوفمبر', 'كانون الأول ديسمبر']
+	  var weekdays2char = ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س']
+	  var weekdays3char = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت']
+	  var weekdaysFull = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+	  var meridiemUppercase = ['صباح', 'مساء']
+	  var meridiemLowercase = ['ص', 'م']
+	  var meridiemFull = ['صباحاً', 'مساءاً']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return String(number)
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 388 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(386)
+	var buildFormatLocale = __webpack_require__(387)
+	
+	/**
+	 * @category Locales
+	 * @summary Arabic locale (Modern Standard Arabic - Al-fussha).
+	 * @author Abdallah Hassan [@AbdallahAHO]{@link https://github.com/AbdallahAHO}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 389 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'по-малко от секунда',
+	      other: 'по-малко от {{count}} секунди'
+	    },
+	
+	    xSeconds: {
+	      one: '1 секунда',
+	      other: '{{count}} секунди'
+	    },
+	
+	    halfAMinute: 'половин минута',
+	
+	    lessThanXMinutes: {
+	      one: 'по-малко от минута',
+	      other: 'по-малко от {{count}} минути'
+	    },
+	
+	    xMinutes: {
+	      one: '1 минута',
+	      other: '{{count}} минути'
+	    },
+	
+	    aboutXHours: {
+	      one: 'около час',
+	      other: 'около {{count}} часа'
+	    },
+	
+	    xHours: {
+	      one: '1 час',
+	      other: '{{count}} часа'
+	    },
+	
+	    xDays: {
+	      one: '1 ден',
+	      other: '{{count}} дни'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'около месец',
+	      other: 'около {{count}} месеца'
+	    },
+	
+	    xMonths: {
+	      one: '1 месец',
+	      other: '{{count}} месеца'
+	    },
+	
+	    aboutXYears: {
+	      one: 'около година',
+	      other: 'около {{count}} години'
+	    },
+	
+	    xYears: {
+	      one: '1 година',
+	      other: '{{count}} години'
+	    },
+	
+	    overXYears: {
+	      one: 'над година',
+	      other: 'над {{count}} години'
+	    },
+	
+	    almostXYears: {
+	      one: 'почти година',
+	      other: 'почти {{count}} години'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'след ' + result
+	      } else {
+	        return 'преди ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 390 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['яну', 'фев', 'мар', 'апр', 'май', 'юни', 'юли', 'авг', 'сеп', 'окт', 'ное', 'дек']
+	  var monthsFull = ['януари', 'февруари', 'март', 'април', 'май', 'юни', 'юли', 'август', 'септември', 'октомври', 'ноември', 'декември']
+	  var weekdays2char = ['нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
+	  var weekdays3char = ['нед', 'пон', 'вто', 'сря', 'чет', 'пет', 'съб']
+	  var weekdaysFull = ['неделя', 'понеделник', 'вторник', 'сряда', 'четвъртък', 'петък', 'събота']
+	  var meridiem = ['сутринта', 'на обяд', 'следобед', 'вечерта']
+	
+	  var timeOfDay = function (date) {
+	    var hours = date.getHours()
+	    if (hours >= 4 && hours < 12) {
+	      return meridiem[0]
+	    } else if (hours >= 12 && hours < 14) {
+	      return meridiem[1]
+	    } else if (hours >= 14 && hours < 17) {
+	      return meridiem[2]
+	    } else {
+	      return meridiem[3]
+	    }
+	  }
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': timeOfDay,
+	
+	    // am, pm
+	    'a': timeOfDay,
+	
+	    // a.m., p.m.
+	    'aa': timeOfDay
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  var rem100 = number % 100
+	  if (rem100 > 20 || rem100 < 10) {
+	    switch (rem100 % 10) {
+	      case 1:
+	        return number + '-ви'
+	      case 2:
+	        return number + '-ри'
+	    }
+	  }
+	  return number + '-и'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 391 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(389)
+	var buildFormatLocale = __webpack_require__(390)
+	
+	/**
+	 * @category Locales
+	 * @summary Bulgarian locale.
+	 * @author Nikolay Stoynov [@arvigeus]{@link https://github.com/arvigeus}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 392 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: "menys d'un segon",
+	      other: 'menys de {{count}} segons'
+	    },
+	
+	    xSeconds: {
+	      one: '1 segon',
+	      other: '{{count}} segons'
+	    },
+	
+	    halfAMinute: 'mig minut',
+	
+	    lessThanXMinutes: {
+	      one: "menys d'un minut",
+	      other: 'menys de {{count}} minuts'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minut',
+	      other: '{{count}} minuts'
+	    },
+	
+	    aboutXHours: {
+	      one: 'aproximadament una hora',
+	      other: 'aproximadament {{count}} hores'
+	    },
+	
+	    xHours: {
+	      one: '1 hora',
+	      other: '{{count}} hores'
+	    },
+	
+	    xDays: {
+	      one: '1 dia',
+	      other: '{{count}} dies'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'aproximadament un mes',
+	      other: 'aproximadament {{count}} mesos'
+	    },
+	
+	    xMonths: {
+	      one: '1 mes',
+	      other: '{{count}} mesos'
+	    },
+	
+	    aboutXYears: {
+	      one: 'aproximadament un any',
+	      other: 'aproximadament {{count}} anys'
+	    },
+	
+	    xYears: {
+	      one: '1 any',
+	      other: '{{count}} anys'
+	    },
+	
+	    overXYears: {
+	      one: "més d'un any",
+	      other: 'més de {{count}} anys'
+	    },
+	
+	    almostXYears: {
+	      one: 'gairebé un any',
+	      other: 'gairebé {{count}} anys'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'en ' + result
+	      } else {
+	        return 'fa ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 393 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['gen', 'feb', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'des']
+	  var monthsFull = ['gener', 'febrer', 'març', 'abril', 'maig', 'juny', 'juliol', 'agost', 'setembre', 'octobre', 'novembre', 'desembre']
+	  var weekdays2char = ['dg', 'dl', 'dt', 'dc', 'dj', 'dv', 'ds']
+	  var weekdays3char = ['dge', 'dls', 'dts', 'dcs', 'djs', 'dvs', 'dss']
+	  var weekdaysFull = ['diumenge', 'dilluns', 'dimarts', 'dimecres', 'dijous', 'divendres', 'dissabte']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  switch (number) {
+	    case 1:
+	      return '1r'
+	    case 2:
+	      return '2n'
+	    case 3:
+	      return '3r'
+	    case 4:
+	      return '4t'
+	    default:
+	      return number + 'è'
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 394 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(392)
+	var buildFormatLocale = __webpack_require__(393)
+	
+	/**
+	 * @category Locales
+	 * @summary Catalan locale.
+	 * @author Guillermo Grau [@guigrpa]{@link https://github.com/guigrpa}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 395 */
+/***/ (function(module, exports) {
+
+	function declensionGroup (scheme, count) {
+	  if (count === 1) {
+	    return scheme.one
+	  }
+	
+	  if (count >= 2 && count <= 4) {
+	    return scheme.twoFour
+	  }
+	
+	  // if count === null || count === 0 || count >= 5
+	  return scheme.other
+	}
+	
+	function declension (scheme, count, time) {
+	  var group = declensionGroup(scheme, count)
+	  var finalText = group[time] || group
+	  return finalText.replace('{{count}}', count)
+	}
+	
+	function extractPreposition (token) {
+	  var result = ['lessThan', 'about', 'over', 'almost'].filter(function (preposition) {
+	    return !!token.match(new RegExp('^' + preposition))
+	  })
+	
+	  return result[0]
+	}
+	
+	function prefixPreposition (preposition) {
+	  var translation = ''
+	
+	  if (preposition === 'almost') {
+	    translation = 'skoro'
+	  }
+	
+	  if (preposition === 'about') {
+	    translation = 'přibližně'
+	  }
+	
+	  return translation.length > 0 ? translation + ' ' : ''
+	}
+	
+	function suffixPreposition (preposition) {
+	  var translation = ''
+	
+	  if (preposition === 'lessThan') {
+	    translation = 'méně než'
+	  }
+	
+	  if (preposition === 'over') {
+	    translation = 'více než'
+	  }
+	
+	  return translation.length > 0 ? translation + ' ' : ''
+	}
+	
+	function lowercaseFirstLetter (string) {
+	  return string.charAt(0).toLowerCase() + string.slice(1)
+	}
+	
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    xSeconds: {
+	      one: {
+	        regular: 'vteřina',
+	        past: 'vteřinou',
+	        future: 'vteřinu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} vteřiny',
+	        past: '{{count}} vteřinami',
+	        future: '{{count}} vteřiny'
+	      },
+	      other: {
+	        regular: '{{count}} vteřin',
+	        past: '{{count}} vteřinami',
+	        future: '{{count}} vteřin'
+	      }
+	    },
+	
+	    halfAMinute: {
+	      other: {
+	        regular: 'půl minuty',
+	        past: 'půl minutou',
+	        future: 'půl minuty'
+	      }
+	    },
+	
+	    xMinutes: {
+	      one: {
+	        regular: 'minuta',
+	        past: 'minutou',
+	        future: 'minutu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} minuty',
+	        past: '{{count}} minutami',
+	        future: '{{count}} minuty'
+	      },
+	      other: {
+	        regular: '{{count}} minut',
+	        past: '{{count}} minutami',
+	        future: '{{count}} minut'
+	      }
+	    },
+	
+	    xHours: {
+	      one: {
+	        regular: 'hodina',
+	        past: 'hodinou',
+	        future: 'hodinu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} hodiny',
+	        past: '{{count}} hodinami',
+	        future: '{{count}} hodiny'
+	      },
+	      other: {
+	        regular: '{{count}} hodin',
+	        past: '{{count}} hodinami',
+	        future: '{{count}} hodin'
+	      }
+	    },
+	
+	    xDays: {
+	      one: {
+	        regular: 'den',
+	        past: 'dnem',
+	        future: 'den'
+	      },
+	      twoFour: {
+	        regular: '{{count}} dni',
+	        past: '{{count}} dny',
+	        future: '{{count}} dni'
+	      },
+	      other: {
+	        regular: '{{count}} dní',
+	        past: '{{count}} dny',
+	        future: '{{count}} dní'
+	      }
+	    },
+	
+	    xMonths: {
+	      one: {
+	        regular: 'měsíc',
+	        past: 'měsícem',
+	        future: 'měsíc'
+	      },
+	      twoFour: {
+	        regular: '{{count}} měsíce',
+	        past: '{{count}} měsíci',
+	        future: '{{count}} měsíce'
+	      },
+	      other: {
+	        regular: '{{count}} měsíců',
+	        past: '{{count}} měsíci',
+	        future: '{{count}} měsíců'
+	      }
+	    },
+	
+	    xYears: {
+	      one: {
+	        regular: 'rok',
+	        past: 'rokem',
+	        future: 'rok'
+	      },
+	      twoFour: {
+	        regular: '{{count}} roky',
+	        past: '{{count}} roky',
+	        future: '{{count}} roky'
+	      },
+	      other: {
+	        regular: '{{count}} roků',
+	        past: '{{count}} roky',
+	        future: '{{count}} roků'
+	      }
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var preposition = extractPreposition(token) || ''
+	    var key = lowercaseFirstLetter(token.substring(preposition.length))
+	    var scheme = distanceInWordsLocale[key]
+	
+	    if (!options.addSuffix) {
+	      return prefixPreposition(preposition) + suffixPreposition(preposition) + declension(scheme, count, 'regular')
+	    }
+	
+	    if (options.comparison > 0) {
+	      return prefixPreposition(preposition) + 'za ' + suffixPreposition(preposition) + declension(scheme, count, 'future')
+	    } else {
+	      return prefixPreposition(preposition) + 'před ' + suffixPreposition(preposition) + declension(scheme, count, 'past')
+	    }
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 396 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro']
+	  var monthsFull = ['leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec']
+	  var weekdays2char = ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so']
+	  var weekdays3char = ['ned', 'pon', 'úte', 'stř', 'čtv', 'pát', 'sob']
+	  var weekdaysFull = ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota']
+	  var meridiemUppercase = ['DOP.', 'ODP.']
+	  var meridiemLowercase = ['dop.', 'odp.']
+	  var meridiemFull = ['dopoledne', 'odpoledne']
+	
+	  var formatters = {
+	    // Month: led, úno, ..., pro
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: leden, únor, ..., prosinec
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: ne, po, ..., so
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: ned, pon, ..., sob
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: neděle, pondělí, ..., sobota
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // DOP., ODP.
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // dop., odp.
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // dopoledne, odpoledne
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 397 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(395)
+	var buildFormatLocale = __webpack_require__(396)
+	
+	/**
+	 * @category Locales
+	 * @summary Czech locale.
+	 * @author David Rus [@davidrus]{@link https://github.com/davidrus}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 398 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'mindre end et sekund',
+	      other: 'mindre end {{count}} sekunder'
+	    },
+	
+	    xSeconds: {
+	      one: '1 sekund',
+	      other: '{{count}} sekunder'
+	    },
+	
+	    halfAMinute: 'et halvt minut',
+	
+	    lessThanXMinutes: {
+	      one: 'mindre end et minut',
+	      other: 'mindre end {{count}} minutter'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minut',
+	      other: '{{count}} minutter'
+	    },
+	
+	    aboutXHours: {
+	      one: 'cirka 1 time',
+	      other: 'cirka {{count}} timer'
+	    },
+	
+	    xHours: {
+	      one: '1 time',
+	      other: '{{count}} timer'
+	    },
+	
+	    xDays: {
+	      one: '1 dag',
+	      other: '{{count}} dage'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'cirka 1 måned',
+	      other: 'cirka {{count}} måneder'
+	    },
+	
+	    xMonths: {
+	      one: '1 måned',
+	      other: '{{count}} måneder'
+	    },
+	
+	    aboutXYears: {
+	      one: 'cirka 1 år',
+	      other: 'cirka {{count}} år'
+	    },
+	
+	    xYears: {
+	      one: '1 år',
+	      other: '{{count}} år'
+	    },
+	
+	    overXYears: {
+	      one: 'over 1 år',
+	      other: 'over {{count}} år'
+	    },
+	
+	    almostXYears: {
+	      one: 'næsten 1 år',
+	      other: 'næsten {{count}} år'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'om ' + result
+	      } else {
+	        return result + ' siden'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 399 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+	  var monthsFull = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december']
+	  var weekdays2char = ['sø', 'ma', 'ti', 'on', 'to', 'fr', 'lø']
+	  var weekdays3char = ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør']
+	  var weekdaysFull = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 400 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(398)
+	var buildFormatLocale = __webpack_require__(399)
+	
+	/**
+	 * @category Locales
+	 * @summary Danish locale.
+	 * @author Anders B. Hansen [@Andersbiha]{@link https://github.com/Andersbiha}
+	 * @author [@kgram]{@link https://github.com/kgram}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 401 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      standalone: {
+	        one: 'weniger als eine Sekunde',
+	        other: 'weniger als {{count}} Sekunden'
+	      },
+	      withPreposition: {
+	        one: 'weniger als einer Sekunde',
+	        other: 'weniger als {{count}} Sekunden'
+	      }
+	    },
+	
+	    xSeconds: {
+	      standalone: {
+	        one: 'eine Sekunde',
+	        other: '{{count}} Sekunden'
+	      },
+	      withPreposition: {
+	        one: 'einer Sekunde',
+	        other: '{{count}} Sekunden'
+	      }
+	    },
+	
+	    halfAMinute: {
+	      standalone: 'eine halbe Minute',
+	      withPreposition: 'einer halben Minute'
+	    },
+	
+	    lessThanXMinutes: {
+	      standalone: {
+	        one: 'weniger als eine Minute',
+	        other: 'weniger als {{count}} Minuten'
+	      },
+	      withPreposition: {
+	        one: 'weniger als einer Minute',
+	        other: 'weniger als {{count}} Minuten'
+	      }
+	    },
+	
+	    xMinutes: {
+	      standalone: {
+	        one: 'eine Minute',
+	        other: '{{count}} Minuten'
+	      },
+	      withPreposition: {
+	        one: 'einer Minute',
+	        other: '{{count}} Minuten'
+	      }
+	    },
+	
+	    aboutXHours: {
+	      standalone: {
+	        one: 'etwa eine Stunde',
+	        other: 'etwa {{count}} Stunden'
+	      },
+	      withPreposition: {
+	        one: 'etwa einer Stunde',
+	        other: 'etwa {{count}} Stunden'
+	      }
+	    },
+	
+	    xHours: {
+	      standalone: {
+	        one: 'eine Stunde',
+	        other: '{{count}} Stunden'
+	      },
+	      withPreposition: {
+	        one: 'einer Stunde',
+	        other: '{{count}} Stunden'
+	      }
+	    },
+	
+	    xDays: {
+	      standalone: {
+	        one: 'ein Tag',
+	        other: '{{count}} Tage'
+	      },
+	      withPreposition: {
+	        one: 'einem Tag',
+	        other: '{{count}} Tagen'
+	      }
+	
+	    },
+	
+	    aboutXMonths: {
+	      standalone: {
+	        one: 'etwa ein Monat',
+	        other: 'etwa {{count}} Monate'
+	      },
+	      withPreposition: {
+	        one: 'etwa einem Monat',
+	        other: 'etwa {{count}} Monaten'
+	      }
+	    },
+	
+	    xMonths: {
+	      standalone: {
+	        one: 'ein Monat',
+	        other: '{{count}} Monate'
+	      },
+	      withPreposition: {
+	        one: 'einem Monat',
+	        other: '{{count}} Monaten'
+	      }
+	    },
+	
+	    aboutXYears: {
+	      standalone: {
+	        one: 'etwa ein Jahr',
+	        other: 'etwa {{count}} Jahre'
+	      },
+	      withPreposition: {
+	        one: 'etwa einem Jahr',
+	        other: 'etwa {{count}} Jahren'
+	      }
+	    },
+	
+	    xYears: {
+	      standalone: {
+	        one: 'ein Jahr',
+	        other: '{{count}} Jahre'
+	      },
+	      withPreposition: {
+	        one: 'einem Jahr',
+	        other: '{{count}} Jahren'
+	      }
+	    },
+	
+	    overXYears: {
+	      standalone: {
+	        one: 'mehr als ein Jahr',
+	        other: 'mehr als {{count}} Jahre'
+	      },
+	      withPreposition: {
+	        one: 'mehr als einem Jahr',
+	        other: 'mehr als {{count}} Jahren'
+	      }
+	    },
+	
+	    almostXYears: {
+	      standalone: {
+	        one: 'fast ein Jahr',
+	        other: 'fast {{count}} Jahre'
+	      },
+	      withPreposition: {
+	        one: 'fast einem Jahr',
+	        other: 'fast {{count}} Jahren'
+	      }
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var usageGroup = options.addSuffix
+	      ? distanceInWordsLocale[token].withPreposition
+	      : distanceInWordsLocale[token].standalone
+	
+	    var result
+	    if (typeof usageGroup === 'string') {
+	      result = usageGroup
+	    } else if (count === 1) {
+	      result = usageGroup.one
+	    } else {
+	      result = usageGroup.other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'in ' + result
+	      } else {
+	        return 'vor ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // Note: in German, the names of days of the week and months are capitalized.
+	  // If you are making a new locale based on this one, check if the same is true for the language you're working on.
+	  // Generally, formatted dates should look like they are in the middle of a sentence,
+	  // e.g. in Spanish language the weekdays and months should be in the lowercase.
+	  var months3char = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+	  var monthsFull = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+	  var weekdays2char = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
+	  var weekdays3char = ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam']
+	  var weekdaysFull = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 403 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(401)
+	var buildFormatLocale = __webpack_require__(402)
+	
+	/**
+	 * @category Locales
+	 * @summary German locale.
+	 * @author Thomas Eilmsteiner [@DeMuu]{@link https://github.com/DeMuu}
+	 * @author Asia [@asia-t]{@link https://github.com/asia-t}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 404 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'λιγότερο από ένα δευτερόλεπτο',
+	      other: 'λιγότερο από {{count}} δευτερόλεπτα'
+	    },
+	
+	    xSeconds: {
+	      one: '1 δευτερόλεπτο',
+	      other: '{{count}} δευτερόλεπτα'
+	    },
+	
+	    halfAMinute: 'μισό λεπτό',
+	
+	    lessThanXMinutes: {
+	      one: 'λιγότερο από ένα λεπτό',
+	      other: 'λιγότερο από {{count}} λεπτά'
+	    },
+	
+	    xMinutes: {
+	      one: '1 λεπτό',
+	      other: '{{count}} λεπτά'
+	    },
+	
+	    aboutXHours: {
+	      one: 'περίπου 1 ώρα',
+	      other: 'περίπου {{count}} ώρες'
+	    },
+	
+	    xHours: {
+	      one: '1 ώρα',
+	      other: '{{count}} ώρες'
+	    },
+	
+	    xDays: {
+	      one: '1 ημέρα',
+	      other: '{{count}} ημέρες'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'περίπου 1 μήνας',
+	      other: 'περίπου {{count}} μήνες'
+	    },
+	
+	    xMonths: {
+	      one: '1 μήνας',
+	      other: '{{count}} μήνες'
+	    },
+	
+	    aboutXYears: {
+	      one: 'περίπου 1 χρόνο',
+	      other: 'περίπου {{count}} χρόνια'
+	    },
+	
+	    xYears: {
+	      one: '1 χρόνο',
+	      other: '{{count}} χρόνια'
+	    },
+	
+	    overXYears: {
+	      one: 'πάνω από 1 χρόνο',
+	      other: 'πάνω από {{count}} χρόνια'
+	    },
+	
+	    almostXYears: {
+	      one: 'περίπου 1 χρόνο',
+	      other: 'περίπου {{count}} χρόνια'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'σε ' + result
+	      } else {
+	        return result + ' πρίν'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 405 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαϊ', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ']
+	  var monthsFull = ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος']
+	  var monthsGenitive = ['Ιανουαρίου', 'Φεβρουαρίου', 'Μαρτίου', 'Απριλίου', 'Μαΐου', 'Ιουνίου', 'Ιουλίου', 'Αυγούστου', 'Σεπτεμβρίου', 'Οκτωβρίου', 'Νοεμβρίου', 'Δεκεμβρίου']
+	  var weekdays2char = ['Κυ', 'Δε', 'Τρ', 'Τε', 'Πέ', 'Πα', 'Σά']
+	  var weekdays3char = ['Κυρ', 'Δευ', 'Τρί', 'Τετ', 'Πέμ', 'Παρ', 'Σάβ']
+	  var weekdaysFull = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
+	  var meridiemUppercase = ['ΠΜ', 'ΜΜ']
+	  var meridiemLowercase = ['πμ', 'μμ']
+	  var meridiemFull = ['π.μ.', 'μ.μ.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalGenders = {
+	    'M': 'ος',
+	    'D': 'η',
+	    'DDD': 'η',
+	    'd': 'η',
+	    'Q': 'ο',
+	    'W': 'η'
+	  }
+	  var ordinalKeys = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalKeys.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return formatters[formatterToken](date) + ordinalGenders[formatterToken]
+	    }
+	  })
+	
+	  // Generate genitive variant of full months
+	  var formatsWithGenitive = ['D', 'Do', 'DD']
+	  formatsWithGenitive.forEach(function (formatterToken) {
+	    formatters[formatterToken + ' MMMM'] = function (date, commonFormatters) {
+	      var formatter = formatters[formatterToken] || commonFormatters[formatterToken]
+	      return formatter(date, commonFormatters) + ' ' + monthsGenitive[date.getMonth()]
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 406 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(404)
+	var buildFormatLocale = __webpack_require__(405)
+	
+	/**
+	 * @category Locales
+	 * @summary Greek locale.
+	 * @author Theodoros Orfanidis [@teoulas]{@link https://github.com/teoulas}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 407 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'malpli ol sekundo',
+	      other: 'malpli ol {{count}} sekundoj'
+	    },
+	
+	    xSeconds: {
+	      one: '1 sekundo',
+	      other: '{{count}} sekundoj'
+	    },
+	
+	    halfAMinute: 'duonminuto',
+	
+	    lessThanXMinutes: {
+	      one: 'malpli ol minuto',
+	      other: 'malpli ol {{count}} minutoj'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minuto',
+	      other: '{{count}} minutoj'
+	    },
+	
+	    aboutXHours: {
+	      one: 'proksimume 1 horo',
+	      other: 'proksimume {{count}} horoj'
+	    },
+	
+	    xHours: {
+	      one: '1 horo',
+	      other: '{{count}} horoj'
+	    },
+	
+	    xDays: {
+	      one: '1 tago',
+	      other: '{{count}} tagoj'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'proksimume 1 monato',
+	      other: 'proksimume {{count}} monatoj'
+	    },
+	
+	    xMonths: {
+	      one: '1 monato',
+	      other: '{{count}} monatoj'
+	    },
+	
+	    aboutXYears: {
+	      one: 'proksimume 1 jaro',
+	      other: 'proksimume {{count}} jaroj'
+	    },
+	
+	    xYears: {
+	      one: '1 jaro',
+	      other: '{{count}} jaroj'
+	    },
+	
+	    overXYears: {
+	      one: 'pli ol 1 jaro',
+	      other: 'pli ol {{count}} jaroj'
+	    },
+	
+	    almostXYears: {
+	      one: 'preskaŭ 1 jaro',
+	      other: 'preskaŭ {{count}} jaroj'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'post ' + result
+	      } else {
+	        return 'antaŭ ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 408 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aŭg', 'sep', 'okt', 'nov', 'dec']
+	  var monthsFull = ['januaro', 'februaro', 'marto', 'aprilo', 'majo', 'junio', 'julio', 'aŭgusto', 'septembro', 'oktobro', 'novembro', 'decembro']
+	  var weekdays2char = ['di', 'lu', 'ma', 'me', 'ĵa', 've', 'sa']
+	  var weekdays3char = ['dim', 'lun', 'mar', 'mer', 'ĵaŭ', 'ven', 'sab']
+	  var weekdaysFull = ['dimanĉo', 'lundo', 'mardo', 'merkredo', 'ĵaŭdo', 'vendredo', 'sabato']
+	  var meridiemUppercase = ['A.T.M.', 'P.T.M.']
+	  var meridiemLowercase = ['a.t.m.', 'p.t.m.']
+	  var meridiemFull = ['antaŭtagmeze', 'posttagmeze']
+	
+	  var formatters = {
+	    // Month: jan, feb, ..., deс
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: januaro, februaro, ..., decembro
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: di, lu, ..., sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: dim, lun, ..., sab
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: dimanĉo, lundo, ..., sabato
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // A.T.M., P.T.M.
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // a.t.m., p.t.m.
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // antaŭtagmeze, posttagmeze
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return formatters[formatterToken](date) + '-a'
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 409 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(407)
+	var buildFormatLocale = __webpack_require__(408)
+	
+	/**
+	 * @category Locales
+	 * @summary Esperanto locale.
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 410 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'menos de un segundo',
+	      other: 'menos de {{count}} segundos'
+	    },
+	
+	    xSeconds: {
+	      one: '1 segundo',
+	      other: '{{count}} segundos'
+	    },
+	
+	    halfAMinute: 'medio minuto',
+	
+	    lessThanXMinutes: {
+	      one: 'menos de un minuto',
+	      other: 'menos de {{count}} minutos'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minuto',
+	      other: '{{count}} minutos'
+	    },
+	
+	    aboutXHours: {
+	      one: 'alrededor de 1 hora',
+	      other: 'alrededor de {{count}} horas'
+	    },
+	
+	    xHours: {
+	      one: '1 hora',
+	      other: '{{count}} horas'
+	    },
+	
+	    xDays: {
+	      one: '1 día',
+	      other: '{{count}} días'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'alrededor de 1 mes',
+	      other: 'alrededor de {{count}} meses'
+	    },
+	
+	    xMonths: {
+	      one: '1 mes',
+	      other: '{{count}} meses'
+	    },
+	
+	    aboutXYears: {
+	      one: 'alrededor de 1 año',
+	      other: 'alrededor de {{count}} años'
+	    },
+	
+	    xYears: {
+	      one: '1 año',
+	      other: '{{count}} años'
+	    },
+	
+	    overXYears: {
+	      one: 'más de 1 año',
+	      other: 'más de {{count}} años'
+	    },
+	
+	    almostXYears: {
+	      one: 'casi 1 año',
+	      other: 'casi {{count}} años'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'en ' + result
+	      } else {
+	        return 'hace ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 411 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+	  var monthsFull = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+	  var weekdays2char = ['do', 'lu', 'ma', 'mi', 'ju', 'vi', 'sa']
+	  var weekdays3char = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb']
+	  var weekdaysFull = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + 'º'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 412 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(410)
+	var buildFormatLocale = __webpack_require__(411)
+	
+	/**
+	 * @category Locales
+	 * @summary Spanish locale.
+	 * @author Juan Angosto [@juanangosto]{@link https://github.com/juanangosto}
+	 * @author Guillermo Grau [@guigrpa]{@link https://github.com/guigrpa}
+	 * @author Fernando Agüero [@fjaguero]{@link https://github.com/fjaguero}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 413 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  function futureSeconds (text) {
+	    return text.replace(/sekuntia?/, 'sekunnin')
+	  }
+	
+	  function futureMinutes (text) {
+	    return text.replace(/minuuttia?/, 'minuutin')
+	  }
+	
+	  function futureHours (text) {
+	    return text.replace(/tuntia?/, 'tunnin')
+	  }
+	
+	  function futureDays (text) {
+	    return text.replace(/päivää?/, 'päivän')
+	  }
+	
+	  function futureMonths (text) {
+	    return text.replace(/(kuukausi|kuukautta)/, 'kuukauden')
+	  }
+	
+	  function futureYears (text) {
+	    return text.replace(/(vuosi|vuotta)/, 'vuoden')
+	  }
+	
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'alle sekunti',
+	      other: 'alle {{count}} sekuntia',
+	      futureTense: futureSeconds
+	    },
+	
+	    xSeconds: {
+	      one: 'sekunti',
+	      other: '{{count}} sekuntia',
+	      futureTense: futureSeconds
+	    },
+	
+	    halfAMinute: {
+	      one: 'puoli minuuttia',
+	      other: 'puoli minuuttia',
+	      futureTense: function (text) {
+	        return 'puolen minuutin'
+	      }
+	    },
+	
+	    lessThanXMinutes: {
+	      one: 'alle minuutti',
+	      other: 'alle {{count}} minuuttia',
+	      futureTense: futureMinutes
+	    },
+	
+	    xMinutes: {
+	      one: 'minuutti',
+	      other: '{{count}} minuuttia',
+	      futureTense: futureMinutes
+	    },
+	
+	    aboutXHours: {
+	      one: 'noin tunti',
+	      other: 'noin {{count}} tuntia',
+	      futureTense: futureHours
+	    },
+	
+	    xHours: {
+	      one: 'tunti',
+	      other: '{{count}} tuntia',
+	      futureTense: futureHours
+	    },
+	
+	    xDays: {
+	      one: 'päivä',
+	      other: '{{count}} päivää',
+	      futureTense: futureDays
+	    },
+	
+	    aboutXMonths: {
+	      one: 'noin kuukausi',
+	      other: 'noin {{count}} kuukautta',
+	      futureTense: futureMonths
+	    },
+	
+	    xMonths: {
+	      one: 'kuukausi',
+	      other: '{{count}} kuukautta',
+	      futureTense: futureMonths
+	    },
+	
+	    aboutXYears: {
+	      one: 'noin vuosi',
+	      other: 'noin {{count}} vuotta',
+	      futureTense: futureYears
+	    },
+	
+	    xYears: {
+	      one: 'vuosi',
+	      other: '{{count}} vuotta',
+	      futureTense: futureYears
+	    },
+	
+	    overXYears: {
+	      one: 'yli vuosi',
+	      other: 'yli {{count}} vuotta',
+	      futureTense: futureYears
+	    },
+	
+	    almostXYears: {
+	      one: 'lähes vuosi',
+	      other: 'lähes {{count}} vuotta',
+	      futureTense: futureYears
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var distance = distanceInWordsLocale[token]
+	    var result = count === 1 ? distance.one : distance.other.replace('{{count}}', count)
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return distance.futureTense(result) + ' kuluttua'
+	      } else {
+	        return result + ' sitten'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 414 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['tammi', 'helmi', 'maalis', 'huhti', 'touko', 'kesä', 'heinä', 'elo', 'syys', 'loka', 'marras', 'joulu']
+	  var monthsFull = ['tammikuu', 'helmikuu', 'maaliskuu', 'huhtikuu', 'toukokuu', 'kesäkuu', 'heinäkuu', 'elokuu', 'syyskuu', 'lokakuu', 'marraskuu', 'joulukuu']
+	  var weekdays2char = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la']
+	  var weekdaysFull = ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai']
+	
+	  // In Finnish `a.m.` / `p.m.` are virtually never used, but it seems `AP` (aamupäivä) / `IP` (iltapäivä) are acknowleded terms:
+	  // https://fi.wikipedia.org/wiki/24_tunnin_kello
+	  function meridiem (date) {
+	    return date.getHours() < 12 ? 'AP' : 'IP'
+	  }
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      // Finnish doesn't use two-char weekdays
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': meridiem,
+	
+	    // am, pm
+	    'a': meridiem,
+	
+	    // a.m., p.m.
+	    'aa': meridiem
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return formatters[formatterToken](date).toString() + '.'
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 415 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(413)
+	var buildFormatLocale = __webpack_require__(414)
+	
+	/**
+	 * @category Locales
+	 * @summary Finnish locale.
+	 * @author Pyry-Samuli Lahti [@Pyppe]{@link https://github.com/Pyppe}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 416 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'mas maliit sa isang segundo',
+	      other: 'mas maliit sa {{count}} segundo'
+	    },
+	
+	    xSeconds: {
+	      one: '1 segundo',
+	      other: '{{count}} segundo'
+	    },
+	
+	    halfAMinute: 'kalahating minuto',
+	
+	    lessThanXMinutes: {
+	      one: 'mas maliit sa isang minuto',
+	      other: 'mas maliit sa {{count}} minuto'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minuto',
+	      other: '{{count}} minuto'
+	    },
+	
+	    aboutXHours: {
+	      one: 'mga 1 oras',
+	      other: 'mga {{count}} oras'
+	    },
+	
+	    xHours: {
+	      one: '1 oras',
+	      other: '{{count}} oras'
+	    },
+	
+	    xDays: {
+	      one: '1 araw',
+	      other: '{{count}} araw'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'mga 1 buwan',
+	      other: 'mga {{count}} buwan'
+	    },
+	
+	    xMonths: {
+	      one: '1 buwan',
+	      other: '{{count}} buwan'
+	    },
+	
+	    aboutXYears: {
+	      one: 'mga 1 taon',
+	      other: 'mga {{count}} taon'
+	    },
+	
+	    xYears: {
+	      one: '1 taon',
+	      other: '{{count}} taon'
+	    },
+	
+	    overXYears: {
+	      one: 'higit sa 1 taon',
+	      other: 'higit sa {{count}} taon'
+	    },
+	
+	    almostXYears: {
+	      one: 'halos 1 taon',
+	      other: 'halos {{count}} taon'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'sa loob ng ' + result
+	      } else {
+	        return result + ' ang nakalipas'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 417 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['Ene', 'Peb', 'Mar', 'Abr', 'May', 'Hun', 'Hul', 'Ago', 'Set', 'Okt', 'Nob', 'Dis']
+	  var monthsFull = ['Enero', 'Pebrero', 'Marso', 'Abril', 'Mayo', 'Hunyo', 'Hulyo', 'Agosto', 'Setyembre', 'Oktubre', 'Nobyembre', 'Disyembre']
+	  var weekdays2char = ['Li', 'Lu', 'Ma', 'Mi', 'Hu', 'Bi', 'Sa']
+	  var weekdays3char = ['Lin', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab']
+	  var weekdaysFull = ['Linggo', 'Lunes', 'Martes', 'Miyerkules', 'Huwebes', 'Biyernes', 'Sabado']
+	  var meridiemUppercase = ['NU', 'NT', 'NH', 'NG']
+	  var meridiemLowercase = ['nu', 'nt', 'nh', 'ng']
+	  var meridiemFull = ['ng umaga', 'ng tanghali', 'ng hapon', 'ng gabi']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      if (date.getHours() > 12) {
+	        var modulo = date.getHours() % 12
+	        if (modulo < 6) {
+	          return meridiemUppercase[2]
+	        } else {
+	          return meridiemUppercase[3]
+	        }
+	      } else if (date.getHours() < 12) {
+	        return meridiemUppercase[0]
+	      } else {
+	        return meridiemUppercase[1]
+	      }
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      if (date.getHours() > 12) {
+	        var modulo = date.getHours() % 12
+	        if (modulo < 6) {
+	          return meridiemLowercase[2]
+	        } else {
+	          return meridiemLowercase[3]
+	        }
+	      } else if (date.getHours() < 12) {
+	        return meridiemLowercase[0]
+	      } else {
+	        return meridiemLowercase[1]
+	      }
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      if (date.getHours() > 12) {
+	        var modulo = date.getHours() % 12
+	        if (modulo < 6) {
+	          return meridiemFull[2]
+	        } else {
+	          return meridiemFull[3]
+	        }
+	      } else if (date.getHours() < 12) {
+	        return meridiemFull[0]
+	      } else {
+	        return meridiemFull[1]
+	      }
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return 'ika-' + number
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 418 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(416)
+	var buildFormatLocale = __webpack_require__(417)
+	
+	/**
+	 * @category Locales
+	 * @summary Filipino locale.
+	 * @author Ian De La Cruz [@RIanDeLaCruz]{@link https://github.com/RIanDeLaCruz}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 419 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'moins d’une seconde',
+	      other: 'moins de {{count}} secondes'
+	    },
+	
+	    xSeconds: {
+	      one: '1 seconde',
+	      other: '{{count}} secondes'
+	    },
+	
+	    halfAMinute: '30 secondes',
+	
+	    lessThanXMinutes: {
+	      one: 'moins d’une minute',
+	      other: 'moins de {{count}} minutes'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minute',
+	      other: '{{count}} minutes'
+	    },
+	
+	    aboutXHours: {
+	      one: 'environ 1 heure',
+	      other: 'environ {{count}} heures'
+	    },
+	
+	    xHours: {
+	      one: '1 heure',
+	      other: '{{count}} heures'
+	    },
+	
+	    xDays: {
+	      one: '1 jour',
+	      other: '{{count}} jours'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'environ 1 mois',
+	      other: 'environ {{count}} mois'
+	    },
+	
+	    xMonths: {
+	      one: '1 mois',
+	      other: '{{count}} mois'
+	    },
+	
+	    aboutXYears: {
+	      one: 'environ 1 an',
+	      other: 'environ {{count}} ans'
+	    },
+	
+	    xYears: {
+	      one: '1 an',
+	      other: '{{count}} ans'
+	    },
+	
+	    overXYears: {
+	      one: 'plus d’un an',
+	      other: 'plus de {{count}} ans'
+	    },
+	
+	    almostXYears: {
+	      one: 'presqu’un an',
+	      other: 'presque {{count}} ans'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'dans ' + result
+	      } else {
+	        return 'il y a ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 420 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
+	  var monthsFull = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+	  var weekdays2char = ['di', 'lu', 'ma', 'me', 'je', 've', 'sa']
+	  var weekdays3char = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.']
+	  var weekdaysFull = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['du matin', 'de l’après-midi', 'du soir']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, …, Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, …, December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, …, Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, …, Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, …, Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      var hours = date.getHours()
+	
+	      if (hours <= 12) {
+	        return meridiemFull[0]
+	      }
+	
+	      if (hours <= 16) {
+	        return meridiemFull[1]
+	      }
+	
+	      return meridiemFull[2]
+	    },
+	
+	    // ISO week, ordinal version: 1st, 2nd, …, 53rd
+	    // NOTE: Week has feminine grammatical gender in French: semaine
+	    'Wo': function (date, formatters) {
+	      return feminineOrdinal(formatters.W(date))
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M → Mo, D → Do, etc.
+	  // NOTE: For words with masculine grammatical gender in French: mois, jour, trimestre
+	  var formatterTokens = ['M', 'D', 'DDD', 'd', 'Q']
+	  formatterTokens.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return masculineOrdinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  // Special case for day of month ordinals in long date format context:
+	  // 1er mars, 2 mars, 3 mars, …
+	  // See https://github.com/date-fns/date-fns/issues/437
+	  //
+	  // NOTE: The below implementation works because parsing of tokens inside a
+	  // format string is done by a greedy regular expression, i.e. longer tokens
+	  // have priority. E.g. formatter for "Do MMMM" has priority over individual
+	  // formatters for "Do" and "MMMM".
+	  var monthsTokens = ['MMM', 'MMMM']
+	  monthsTokens.forEach(function (monthToken) {
+	    formatters['Do ' + monthToken] = function (date, commonFormatters) {
+	      var dayOfMonthToken = date.getDate() === 1
+	        ? 'Do'
+	        : 'D'
+	      var dayOfMonthFormatter = formatters[dayOfMonthToken] || commonFormatters[dayOfMonthToken]
+	
+	      return dayOfMonthFormatter(date, commonFormatters) + ' ' + formatters[monthToken](date)
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function masculineOrdinal (number) {
+	  if (number === 1) {
+	    return '1er'
+	  }
+	
+	  return number + 'e'
+	}
+	
+	function feminineOrdinal (number) {
+	  if (number === 1) {
+	    return '1re'
+	  }
+	
+	  return number + 'e'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 421 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(419)
+	var buildFormatLocale = __webpack_require__(420)
+	
+	/**
+	 * @category Locales
+	 * @summary French locale.
+	 * @author Jean Dupouy [@izeau]{@link https://github.com/izeau}
+	 * @author François B [@fbonzon]{@link https://github.com/fbonzon}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 422 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: {
+	        standalone: 'manje od 1 sekunde',
+	        withPrepositionAgo: 'manje od 1 sekunde',
+	        withPrepositionIn: 'manje od 1 sekundu'
+	      },
+	      dual: 'manje od {{count}} sekunde',
+	      other: 'manje od {{count}} sekundi'
+	    },
+	
+	    xSeconds: {
+	      one: {
+	        standalone: '1 sekunda',
+	        withPrepositionAgo: '1 sekunde',
+	        withPrepositionIn: '1 sekundu'
+	      },
+	      dual: '{{count}} sekunde',
+	      other: '{{count}} sekundi'
+	    },
+	
+	    halfAMinute: 'pola minute',
+	
+	    lessThanXMinutes: {
+	      one: {
+	        standalone: 'manje od 1 minute',
+	        withPrepositionAgo: 'manje od 1 minute',
+	        withPrepositionIn: 'manje od 1 minutu'
+	      },
+	      dual: 'manje od {{count}} minute',
+	      other: 'manje od {{count}} minuta'
+	    },
+	
+	    xMinutes: {
+	      one: {
+	        standalone: '1 minuta',
+	        withPrepositionAgo: '1 minute',
+	        withPrepositionIn: '1 minutu'
+	      },
+	      dual: '{{count}} minute',
+	      other: '{{count}} minuta'
+	    },
+	
+	    aboutXHours: {
+	      one: {
+	        standalone: 'oko 1 sat',
+	        withPrepositionAgo: 'oko 1 sat',
+	        withPrepositionIn: 'oko 1 sat'
+	      },
+	      dual: 'oko {{count}} sata',
+	      other: 'oko {{count}} sati'
+	    },
+	
+	    xHours: {
+	      one: {
+	        standalone: '1 sat',
+	        withPrepositionAgo: '1 sat',
+	        withPrepositionIn: '1 sat'
+	      },
+	      dual: '{{count}} sata',
+	      other: '{{count}} sati'
+	    },
+	
+	    xDays: {
+	      one: {
+	        standalone: '1 dan',
+	        withPrepositionAgo: '1 dan',
+	        withPrepositionIn: '1 dan'
+	      },
+	      dual: '{{count}} dana',
+	      other: '{{count}} dana'
+	    },
+	
+	    aboutXMonths: {
+	      one: {
+	        standalone: 'oko 1 mjesec',
+	        withPrepositionAgo: 'oko 1 mjesec',
+	        withPrepositionIn: 'oko 1 mjesec'
+	      },
+	      dual: 'oko {{count}} mjeseca',
+	      other: 'oko {{count}} mjeseci'
+	    },
+	
+	    xMonths: {
+	      one: {
+	        standalone: '1 mjesec',
+	        withPrepositionAgo: '1 mjesec',
+	        withPrepositionIn: '1 mjesec'
+	      },
+	      dual: '{{count}} mjeseca',
+	      other: '{{count}} mjeseci'
+	    },
+	
+	    aboutXYears: {
+	      one: {
+	        standalone: 'oko 1 godinu',
+	        withPrepositionAgo: 'oko 1 godinu',
+	        withPrepositionIn: 'oko 1 godinu'
+	      },
+	      dual: 'oko {{count}} godine',
+	      other: 'oko {{count}} godina'
+	    },
+	
+	    xYears: {
+	      one: {
+	        standalone: '1 godina',
+	        withPrepositionAgo: '1 godine',
+	        withPrepositionIn: '1 godinu'
+	      },
+	      dual: '{{count}} godine',
+	      other: '{{count}} godina'
+	    },
+	
+	    overXYears: {
+	      one: {
+	        standalone: 'preko 1 godinu',
+	        withPrepositionAgo: 'preko 1 godinu',
+	        withPrepositionIn: 'preko 1 godinu'
+	      },
+	      dual: 'preko {{count}} godine',
+	      other: 'preko {{count}} godina'
+	    },
+	
+	    almostXYears: {
+	      one: {
+	        standalone: 'gotovo 1 godinu',
+	        withPrepositionAgo: 'gotovo 1 godinu',
+	        withPrepositionIn: 'gotovo 1 godinu'
+	      },
+	      dual: 'gotovo {{count}} godine',
+	      other: 'gotovo {{count}} godina'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      if (options.addSuffix) {
+	        if (options.comparison > 0) {
+	          result = distanceInWordsLocale[token].one.withPrepositionIn
+	        } else {
+	          result = distanceInWordsLocale[token].one.withPrepositionAgo
+	        }
+	      } else {
+	        result = distanceInWordsLocale[token].one.standalone
+	      }
+	    } else if (
+	      count % 10 > 1 && count % 10 < 5 && // if last digit is between 2 and 4
+	      String(count).substr(-2, 1) !== '1' // unless the 2nd to last digit is "1"
+	    ) {
+	      result = distanceInWordsLocale[token].dual.replace('{{count}}', count)
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'za ' + result
+	      } else {
+	        return 'prije ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 423 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['sij', 'velj', 'ožu', 'tra', 'svi', 'lip', 'srp', 'kol', 'ruj', 'lis', 'stu', 'pro']
+	  var monthsFull = ['siječanj', 'veljača', 'ožujak', 'travanj', 'svibanj', 'lipanj', 'srpanj', 'kolovoz', 'rujan', 'listopad', 'studeni', 'prosinac']
+	  var monthsGenitive = ['siječnja', 'veljače', 'ožujka', 'travnja', 'svibnja', 'lipnja', 'srpnja', 'kolovoza', 'rujna', 'listopada', 'studenog', 'prosinca']
+	  var weekdays2char = ['ne', 'po', 'ut', 'sr', 'če', 'pe', 'su']
+	  var weekdays3char = ['ned', 'pon', 'uto', 'sri', 'čet', 'pet', 'sub']
+	  var weekdaysFull = ['nedjelja', 'ponedjeljak', 'utorak', 'srijeda', 'četvrtak', 'petak', 'subota']
+	  var meridiemUppercase = ['ujutro', 'popodne']
+	  var meridiemLowercase = ['ujutro', 'popodne']
+	  var meridiemFull = ['ujutro', 'popodne']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  // Generate formatters like 'D MMMM', where the month is in the genitive case
+	  var monthsGenitiveFormatters = ['D', 'Do', 'DD']
+	  monthsGenitiveFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + ' MMM'] = function (date, commonFormatters) {
+	      var formatter = formatters[formatterToken] || commonFormatters[formatterToken]
+	      return formatter(date, commonFormatters) + ' ' + monthsGenitive[date.getMonth()]
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 424 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(422)
+	var buildFormatLocale = __webpack_require__(423)
+	
+	/**
+	 * @category Locales
+	 * @summary Croatian locale.
+	 * @author Matija Marohnić [@silvenon]{@link https://github.com/silvenon}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 425 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'kurang dari 1 detik',
+	      other: 'kurang dari {{count}} detik'
+	    },
+	
+	    xSeconds: {
+	      one: '1 detik',
+	      other: '{{count}} detik'
+	    },
+	
+	    halfAMinute: 'setengah menit',
+	
+	    lessThanXMinutes: {
+	      one: 'kurang dari 1 menit',
+	      other: 'kurang dari {{count}} menit'
+	    },
+	
+	    xMinutes: {
+	      one: '1 menit',
+	      other: '{{count}} menit'
+	    },
+	
+	    aboutXHours: {
+	      one: 'sekitar 1 jam',
+	      other: 'sekitar {{count}} jam'
+	    },
+	
+	    xHours: {
+	      one: '1 jam',
+	      other: '{{count}} jam'
+	    },
+	
+	    xDays: {
+	      one: '1 hari',
+	      other: '{{count}} hari'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'sekitar 1 bulan',
+	      other: 'sekitar {{count}} bulan'
+	    },
+	
+	    xMonths: {
+	      one: '1 bulan',
+	      other: '{{count}} bulan'
+	    },
+	
+	    aboutXYears: {
+	      one: 'sekitar 1 tahun',
+	      other: 'sekitar {{count}} tahun'
+	    },
+	
+	    xYears: {
+	      one: '1 tahun',
+	      other: '{{count}} tahun'
+	    },
+	
+	    overXYears: {
+	      one: 'lebih dari 1 tahun',
+	      other: 'lebih dari {{count}} tahun'
+	    },
+	
+	    almostXYears: {
+	      one: 'hampir 1 tahun',
+	      other: 'hampir {{count}} tahun'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'dalam waktu ' + result
+	      } else {
+	        return result + ' yang lalu'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 426 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // Note: in Indonesian, the names of days of the week and months are capitalized.
+	  // If you are making a new locale based on this one, check if the same is true for the language you're working on.
+	  // Generally, formatted dates should look like they are in the middle of a sentence,
+	  // e.g. in Spanish language the weekdays and months should be in the lowercase.
+	  var months3char = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
+	  var monthsFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+	  var weekdays2char = ['Mi', 'Sn', 'Sl', 'Ra', 'Ka', 'Ju', 'Sa']
+	  var weekdays3char = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
+	  var weekdaysFull = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  switch (number) {
+	    case 1:
+	      return 'pertama'
+	    case 2:
+	      return 'kedua'
+	    case 3:
+	      return 'ketiga'
+	    default:
+	      return 'ke-' + number
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 427 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(425)
+	var buildFormatLocale = __webpack_require__(426)
+	
+	/**
+	 * @category Locales
+	 * @summary Indonesian locale.
+	 * @author Rahmat Budiharso [@rbudiharso]{@link https://github.com/rbudiharso}
+	 * @author Benget Nata [@bentinata]{@link https://github.com/bentinata}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 428 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'minna en 1 sekúnda',
+	      other: 'minna en {{count}} sekúndur'
+	    },
+	
+	    xSeconds: {
+	      one: '1 sekúnda',
+	      other: '{{count}} sekúndur'
+	    },
+	
+	    halfAMinute: 'hálf mínúta',
+	
+	    lessThanXMinutes: {
+	      one: 'minna en 1 mínúta',
+	      other: 'minna en {{count}} mínútur'
+	    },
+	
+	    xMinutes: {
+	      one: '1 mínúta',
+	      other: '{{count}} mínútur'
+	    },
+	
+	    aboutXHours: {
+	      one: 'u.þ.b. 1 klukkustund',
+	      other: 'u.þ.b. {{count}} klukkustundir'
+	    },
+	
+	    xHours: {
+	      one: '1 klukkustund',
+	      other: '{{count}} klukkustundir'
+	    },
+	
+	    xDays: {
+	      one: '1 dagur',
+	      other: '{{count}} dagar'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'u.þ.b. 1 mánuður',
+	      other: 'u.þ.b. {{count}} mánuðir'
+	    },
+	
+	    xMonths: {
+	      one: '1 mánuður',
+	      other: '{{count}} mánuðir'
+	    },
+	
+	    aboutXYears: {
+	      one: 'u.þ.b. 1 ár',
+	      other: 'u.þ.b. {{count}} ár'
+	    },
+	
+	    xYears: {
+	      one: '1 ár',
+	      other: '{{count}} ár'
+	    },
+	
+	    overXYears: {
+	      one: 'meira en 1 ár',
+	      other: 'meira en {{count}} ár'
+	    },
+	
+	    almostXYears: {
+	      one: 'næstum 1 ár',
+	      other: 'næstum {{count}} ár'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'í ' + result
+	      } else {
+	        return result + ' síðan'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 429 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'maí', 'jún', 'júl', 'ágú', 'sep', 'okt', 'nóv', 'des']
+	  var monthsFull = ['janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember']
+	  var weekdays2char = ['su', 'má', 'þr', 'mi', 'fi', 'fö', 'la']
+	  var weekdays3char = ['sun', 'mán', 'þri', 'mið', 'fim', 'fös', 'lau']
+	  var weekdaysFull = ['sunnudaginn', 'mánudaginn', 'þriðjudaginn', 'miðvikudaginn', 'fimmtudaginn', 'föstudaginn', 'laugardaginn']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return '' + number
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 430 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(428)
+	var buildFormatLocale = __webpack_require__(429)
+	
+	/**
+	 * @category Locales
+	 * @summary Icelandic locale.
+	 * @author Derek Blank [@derekblank]{@link https://github.com/derekblank}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 431 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'meno di un secondo',
+	      other: 'meno di {{count}} secondi'
+	    },
+	
+	    xSeconds: {
+	      one: 'un secondo',
+	      other: '{{count}} secondi'
+	    },
+	
+	    halfAMinute: 'alcuni secondi',
+	
+	    lessThanXMinutes: {
+	      one: 'meno di un minuto',
+	      other: 'meno di {{count}} minuti'
+	    },
+	
+	    xMinutes: {
+	      one: 'un minuto',
+	      other: '{{count}} minuti'
+	    },
+	
+	    aboutXHours: {
+	      one: 'circa un\'ora',
+	      other: 'circa {{count}} ore'
+	    },
+	
+	    xHours: {
+	      one: 'un\'ora',
+	      other: '{{count}} ore'
+	    },
+	
+	    xDays: {
+	      one: 'un giorno',
+	      other: '{{count}} giorni'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'circa un mese',
+	      other: 'circa {{count}} mesi'
+	    },
+	
+	    xMonths: {
+	      one: 'un mese',
+	      other: '{{count}} mesi'
+	    },
+	
+	    aboutXYears: {
+	      one: 'circa un anno',
+	      other: 'circa {{count}} anni'
+	    },
+	
+	    xYears: {
+	      one: 'un anno',
+	      other: '{{count}} anni'
+	    },
+	
+	    overXYears: {
+	      one: 'piú di un anno',
+	      other: 'piú di {{count}} anni'
+	    },
+	
+	    almostXYears: {
+	      one: 'quasi un anno',
+	      other: 'quasi {{count}} anni'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'in ' + result
+	      } else {
+	        return result + ' fa'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 432 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic']
+	  var monthsFull = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
+	  var weekdays2char = ['do', 'lu', 'ma', 'me', 'gi', 've', 'sa']
+	  var weekdays3char = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab']
+	  var weekdaysFull = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + 'º'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 433 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(431)
+	var buildFormatLocale = __webpack_require__(432)
+	
+	/**
+	 * @category Locales
+	 * @summary Italian locale.
+	 * @author Alberto Restifo [@albertorestifo]{@link https://github.com/albertorestifo}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 434 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: '1秒以下',
+	      other: '{{count}}秒以下'
+	    },
+	
+	    xSeconds: {
+	      one: '1秒',
+	      other: '{{count}}秒'
+	    },
+	
+	    halfAMinute: '30秒ぐらい',
+	
+	    lessThanXMinutes: {
+	      one: '1分以下',
+	      other: '{{count}}分以下'
+	    },
+	
+	    xMinutes: {
+	      one: '1分',
+	      other: '{{count}}分'
+	    },
+	
+	    aboutXHours: {
+	      one: '1時間ぐらい',
+	      other: '{{count}}時間ぐらい'
+	    },
+	
+	    xHours: {
+	      one: '1時間',
+	      other: '{{count}}時間'
+	    },
+	
+	    xDays: {
+	      one: '1日',
+	      other: '{{count}}日'
+	    },
+	
+	    aboutXMonths: {
+	      one: '1ヶ月ぐらい',
+	      other: '{{count}}ヶ月ぐらい'
+	    },
+	
+	    xMonths: {
+	      one: '1ヶ月',
+	      other: '{{count}}ヶ月'
+	    },
+	
+	    aboutXYears: {
+	      one: '1年ぐらい',
+	      other: '{{count}}年ぐらい'
+	    },
+	
+	    xYears: {
+	      one: '1年',
+	      other: '{{count}}年'
+	    },
+	
+	    overXYears: {
+	      one: '1年以上',
+	      other: '{{count}}年以上'
+	    },
+	
+	    almostXYears: {
+	      one: '1年以下',
+	      other: '{{count}}年以下'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return result + '後'
+	      } else {
+	        return result + '前'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 435 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+	  var monthsFull = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+	  var weekdays2char = ['日', '月', '火', '水', '木', '金', '土']
+	  var weekdays3char = ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜']
+	  var weekdaysFull = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
+	  var meridiemUppercase = ['午前', '午後']
+	  var meridiemLowercase = ['午前', '午後']
+	  var meridiemFull = ['午前', '午後']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '日'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 436 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(434)
+	var buildFormatLocale = __webpack_require__(435)
+	
+	/**
+	 * @category Locales
+	 * @summary Japanese locale.
+	 * @author Thomas Eilmsteiner [@DeMuu]{@link https://github.com/DeMuu}
+	 * @author Yamagishi Kazutoshi [@ykzts]{@link https://github.com/ykzts}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 437 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: '1초 미만',
+	      other: '{{count}}초 미만'
+	    },
+	
+	    xSeconds: {
+	      one: '1초',
+	      other: '{{count}}초'
+	    },
+	
+	    halfAMinute: '30초',
+	
+	    lessThanXMinutes: {
+	      one: '1분 미만',
+	      other: '{{count}}분 미만'
+	    },
+	
+	    xMinutes: {
+	      one: '1분',
+	      other: '{{count}}분'
+	    },
+	
+	    aboutXHours: {
+	      one: '약 1시간',
+	      other: '약 {{count}}시간'
+	    },
+	
+	    xHours: {
+	      one: '1시간',
+	      other: '{{count}}시간'
+	    },
+	
+	    xDays: {
+	      one: '1일',
+	      other: '{{count}}일'
+	    },
+	
+	    aboutXMonths: {
+	      one: '약 1개월',
+	      other: '약 {{count}}개월'
+	    },
+	
+	    xMonths: {
+	      one: '1개월',
+	      other: '{{count}}개월'
+	    },
+	
+	    aboutXYears: {
+	      one: '약 1년',
+	      other: '약 {{count}}년'
+	    },
+	
+	    xYears: {
+	      one: '1년',
+	      other: '{{count}}년'
+	    },
+	
+	    overXYears: {
+	      one: '1년 이상',
+	      other: '{{count}}년 이상'
+	    },
+	
+	    almostXYears: {
+	      one: '거의 1년',
+	      other: '거의 {{count}}년'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return result + ' 후'
+	      } else {
+	        return result + ' 전'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 438 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+	  var monthsFull = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+	  var weekdays2char = ['일', '월', '화', '수', '목', '금', '토']
+	  var weekdays3char = ['일', '월', '화', '수', '목', '금', '토']
+	  var weekdaysFull = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
+	  var meridiemUppercase = ['오전', '오후']
+	  var meridiemLowercase = ['오전', '오후']
+	  var meridiemFull = ['오전', '오후']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '일'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 439 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(437)
+	var buildFormatLocale = __webpack_require__(438)
+	
+	/**
+	 * @category Locales
+	 * @summary Korean locale.
+	 * @author Hong Chulju [@angdev]{@link https://github.com/angdev}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 440 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'помалку од секунда',
+	      other: 'помалку од {{count}} секунди'
+	    },
+	
+	    xSeconds: {
+	      one: '1 секунда',
+	      other: '{{count}} секунди'
+	    },
+	
+	    halfAMinute: 'половина минута',
+	
+	    lessThanXMinutes: {
+	      one: 'помалку од минута',
+	      other: 'помалку од {{count}} минути'
+	    },
+	
+	    xMinutes: {
+	      one: '1 минута',
+	      other: '{{count}} минути'
+	    },
+	
+	    aboutXHours: {
+	      one: 'околу 1 час',
+	      other: 'околу {{count}} часа'
+	    },
+	
+	    xHours: {
+	      one: '1 час',
+	      other: '{{count}} часа'
+	    },
+	
+	    xDays: {
+	      one: '1 ден',
+	      other: '{{count}} дена'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'околу 1 месец',
+	      other: 'околу {{count}} месеци'
+	    },
+	
+	    xMonths: {
+	      one: '1 месец',
+	      other: '{{count}} месеци'
+	    },
+	
+	    aboutXYears: {
+	      one: 'околу 1 година',
+	      other: 'околу {{count}} години'
+	    },
+	
+	    xYears: {
+	      one: '1 година',
+	      other: '{{count}} години'
+	    },
+	
+	    overXYears: {
+	      one: 'повеќе од 1 година',
+	      other: 'повеќе од {{count}} години'
+	    },
+	
+	    almostXYears: {
+	      one: 'безмалку 1 година',
+	      other: 'безмалку {{count}} години'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'за ' + result
+	      } else {
+	        return 'пред ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 441 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['јан', 'фев', 'мар', 'апр', 'мај', 'јун', 'јул', 'авг', 'сеп', 'окт', 'ное', 'дек']
+	  var monthsFull = ['јануари', 'февруари', 'март', 'април', 'мај', 'јуни', 'јули', 'август', 'септември', 'октомври', 'ноември', 'декември']
+	  var weekdays2char = ['не', 'по', 'вт', 'ср', 'че', 'пе', 'са']
+	  var weekdays3char = ['нед', 'пон', 'вто', 'сре', 'чет', 'пет', 'саб']
+	  var weekdaysFull = ['недела', 'понеделник', 'вторник', 'среда', 'четврток', 'петок', 'сабота']
+	  var meridiem = ['претпладне', 'попладне']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiem[1] : meridiem[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiem[1] : meridiem[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiem[1] : meridiem[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  var rem100 = number % 100
+	  if (rem100 > 20 || rem100 < 10) {
+	    switch (rem100 % 10) {
+	      case 1:
+	        return number + '-ви'
+	      case 2:
+	        return number + '-ри'
+	      case 7:
+	      case 8:
+	        return number + '-ми'
+	    }
+	  }
+	  return number + '-ти'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 442 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(440)
+	var buildFormatLocale = __webpack_require__(441)
+	
+	/**
+	 * @category Locales
+	 * @summary Macedonian locale.
+	 * @author Petar Vlahu [@vlahupetar]{@link https://github.com/vlahupetar}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 443 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'mindre enn ett sekund',
+	      other: 'mindre enn {{count}} sekunder'
+	    },
+	
+	    xSeconds: {
+	      one: 'ett sekund',
+	      other: '{{count}} sekunder'
+	    },
+	
+	    halfAMinute: 'et halvt minutt',
+	
+	    lessThanXMinutes: {
+	      one: 'mindre enn ett minutt',
+	      other: 'mindre enn {{count}} minutter'
+	    },
+	
+	    xMinutes: {
+	      one: 'ett minutt',
+	      other: '{{count}} minutter'
+	    },
+	
+	    aboutXHours: {
+	      one: 'rundt en time',
+	      other: 'rundt {{count}} timer'
+	    },
+	
+	    xHours: {
+	      one: 'en time',
+	      other: '{{count}} timer'
+	    },
+	
+	    xDays: {
+	      one: 'en dag',
+	      other: '{{count}} dager'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'rundt en måned',
+	      other: 'rundt {{count}} måneder'
+	    },
+	
+	    xMonths: {
+	      one: 'en måned',
+	      other: '{{count}} måneder'
+	    },
+	
+	    aboutXYears: {
+	      one: 'rundt ett år',
+	      other: 'rundt {{count}} år'
+	    },
+	
+	    xYears: {
+	      one: 'ett år',
+	      other: '{{count}} år'
+	    },
+	
+	    overXYears: {
+	      one: 'over ett år',
+	      other: 'over {{count}} år'
+	    },
+	
+	    almostXYears: {
+	      one: 'nesten ett år',
+	      other: 'nesten {{count}} år'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'om ' + result
+	      } else {
+	        return result + ' siden'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 444 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan.', 'feb.', 'mars', 'april', 'mai', 'juni', 'juli', 'aug.', 'sep.', 'okt.', 'nov.', 'des.']
+	  var monthsFull = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
+	  var weekdays2char = ['sø', 'ma', 'ti', 'on', 'to', 'fr', 'lø']
+	  var weekdays3char = ['sø.', 'ma.', 'ti.', 'on.', 'to.', 'fr.', 'lø.']
+	  var weekdaysFull = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 445 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(443)
+	var buildFormatLocale = __webpack_require__(444)
+	
+	/**
+	 * @category Locales
+	 * @summary Norwegian Bokmål locale.
+	 * @author Hans-Kristian Koren [@Hanse]{@link https://github.com/Hanse}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 446 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'minder dan een seconde',
+	      other: 'minder dan {{count}} seconden'
+	    },
+	
+	    xSeconds: {
+	      one: '1 seconde',
+	      other: '{{count}} seconden'
+	    },
+	
+	    halfAMinute: 'een halve minuut',
+	
+	    lessThanXMinutes: {
+	      one: 'minder dan een minuut',
+	      other: 'minder dan {{count}} minuten'
+	    },
+	
+	    xMinutes: {
+	      one: 'een minuut',
+	      other: '{{count}} minuten'
+	    },
+	
+	    aboutXHours: {
+	      one: 'ongeveer 1 uur',
+	      other: 'ongeveer {{count}} uur'
+	    },
+	
+	    xHours: {
+	      one: '1 uur',
+	      other: '{{count}} uur'
+	    },
+	
+	    xDays: {
+	      one: '1 dag',
+	      other: '{{count}} dagen'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'ongeveer 1 maand',
+	      other: 'ongeveer {{count}} maanden'
+	    },
+	
+	    xMonths: {
+	      one: '1 maand',
+	      other: '{{count}} maanden'
+	    },
+	
+	    aboutXYears: {
+	      one: 'ongeveer 1 jaar',
+	      other: 'ongeveer {{count}} jaar'
+	    },
+	
+	    xYears: {
+	      one: '1 jaar',
+	      other: '{{count}} jaar'
+	    },
+	
+	    overXYears: {
+	      one: 'meer dan 1 jaar',
+	      other: 'meer dan {{count}} jaar'
+	    },
+	
+	    almostXYears: {
+	      one: 'bijna 1 jaar',
+	      other: 'bijna {{count}} jaar'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'over ' + result
+	      } else {
+	        return result + ' geleden'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 447 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+	  var monthsFull = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december']
+	  var weekdays2char = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']
+	  var weekdays3char = ['zon', 'maa', 'din', 'woe', 'don', 'vri', 'zat']
+	  var weekdaysFull = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + 'e'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 448 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(446)
+	var buildFormatLocale = __webpack_require__(447)
+	
+	/**
+	 * @category Locales
+	 * @summary Dutch locale.
+	 * @author Jorik Tangelder [@jtangelder]{@link https://github.com/jtangelder}
+	 * @author Ruben Stolk [@rubenstolk]{@link https://github.com/rubenstolk}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 449 */
+/***/ (function(module, exports) {
+
+	function declensionGroup (scheme, count) {
+	  if (count === 1) {
+	    return scheme.one
+	  }
+	
+	  var rem100 = count % 100
+	
+	  // ends with 11-20
+	  if (rem100 <= 20 && rem100 > 10) {
+	    return scheme.other
+	  }
+	
+	  var rem10 = rem100 % 10
+	
+	  // ends with 2, 3, 4
+	  if (rem10 >= 2 && rem10 <= 4) {
+	    return scheme.twoFour
+	  }
+	
+	  return scheme.other
+	}
+	
+	function declension (scheme, count, time) {
+	  time = time || 'regular'
+	  var group = declensionGroup(scheme, count)
+	  var finalText = group[time] || group
+	  return finalText.replace('{{count}}', count)
+	}
+	
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: {
+	        regular: 'mniej niż sekunda',
+	        past: 'mniej niż sekundę',
+	        future: 'mniej niż sekundę'
+	      },
+	      twoFour: 'mniej niż {{count}} sekundy',
+	      other: 'mniej niż {{count}} sekund'
+	    },
+	
+	    xSeconds: {
+	      one: {
+	        regular: 'sekunda',
+	        past: 'sekundę',
+	        future: 'sekundę'
+	      },
+	      twoFour: '{{count}} sekundy',
+	      other: '{{count}} sekund'
+	    },
+	
+	    halfAMinute: {
+	      one: 'pół minuty',
+	      twoFour: 'pół minuty',
+	      other: 'pół minuty'
+	    },
+	
+	    lessThanXMinutes: {
+	      one: {
+	        regular: 'mniej niż minuta',
+	        past: 'mniej niż minutę',
+	        future: 'mniej niż minutę'
+	      },
+	      twoFour: 'mniej niż {{count}} minuty',
+	      other: 'mniej niż {{count}} minut'
+	    },
+	
+	    xMinutes: {
+	      one: {
+	        regular: 'minuta',
+	        past: 'minutę',
+	        future: 'minutę'
+	      },
+	      twoFour: '{{count}} minuty',
+	      other: '{{count}} minut'
+	    },
+	
+	    aboutXHours: {
+	      one: {
+	        regular: 'około godzina',
+	        past: 'około godziny',
+	        future: 'około godzinę'
+	      },
+	      twoFour: 'około {{count}} godziny',
+	      other: 'około {{count}} godzin'
+	    },
+	
+	    xHours: {
+	      one: {
+	        regular: 'godzina',
+	        past: 'godzinę',
+	        future: 'godzinę'
+	      },
+	      twoFour: '{{count}} godziny',
+	      other: '{{count}} godzin'
+	    },
+	
+	    xDays: {
+	      one: {
+	        regular: 'dzień',
+	        past: 'dzień',
+	        future: '1 dzień'
+	      },
+	      twoFour: '{{count}} dni',
+	      other: '{{count}} dni'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'około miesiąc',
+	      twoFour: 'około {{count}} miesiące',
+	      other: 'około {{count}} miesięcy'
+	    },
+	
+	    xMonths: {
+	      one: 'miesiąc',
+	      twoFour: '{{count}} miesiące',
+	      other: '{{count}} miesięcy'
+	    },
+	
+	    aboutXYears: {
+	      one: 'około rok',
+	      twoFour: 'około {{count}} lata',
+	      other: 'około {{count}} lat'
+	    },
+	
+	    xYears: {
+	      one: 'rok',
+	      twoFour: '{{count}} lata',
+	      other: '{{count}} lat'
+	    },
+	
+	    overXYears: {
+	      one: 'ponad rok',
+	      twoFour: 'ponad {{count}} lata',
+	      other: 'ponad {{count}} lat'
+	    },
+	
+	    almostXYears: {
+	      one: 'prawie rok',
+	      twoFour: 'prawie {{count}} lata',
+	      other: 'prawie {{count}} lat'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var scheme = distanceInWordsLocale[token]
+	    if (!options.addSuffix) {
+	      return declension(scheme, count)
+	    }
+	
+	    if (options.comparison > 0) {
+	      return 'za ' + declension(scheme, count, 'future')
+	    } else {
+	      return declension(scheme, count, 'past') + ' temu'
+	    }
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 450 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru']
+	  var monthsFull = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień']
+	  var weekdays2char = ['nd', 'pn', 'wt', 'śr', 'cz', 'pt', 'sb']
+	  var weekdays3char = ['niedz.', 'pon.', 'wt.', 'śr.', 'czw.', 'piąt.', 'sob.']
+	  var weekdaysFull = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota']
+	  var meridiem = ['w nocy', 'rano', 'po południu', 'wieczorem']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // Time of day
+	    'A': function (date) {
+	      var hours = date.getHours()
+	      if (hours >= 17) {
+	        return meridiem[3]
+	      } else if (hours >= 12) {
+	        return meridiem[2]
+	      } else if (hours >= 4) {
+	        return meridiem[1]
+	      } else {
+	        return meridiem[0]
+	      }
+	    }
+	  }
+	
+	  formatters.a = formatters.A
+	  formatters.aa = formatters.A
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      // Well, it should be just a number without any suffix
+	      return formatters[formatterToken](date).toString()
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 451 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(449)
+	var buildFormatLocale = __webpack_require__(450)
+	
+	/**
+	 * @category Locales
+	 * @summary Polish locale.
+	 * @author Mateusz Derks [@ertrzyiks]{@link https://github.com/ertrzyiks}
+	 * @author Just RAG [@justrag]{@link https://github.com/justrag}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 452 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'menos de um segundo',
+	      other: 'menos de {{count}} segundos'
+	    },
+	
+	    xSeconds: {
+	      one: '1 segundo',
+	      other: '{{count}} segundos'
+	    },
+	
+	    halfAMinute: 'meio minuto',
+	
+	    lessThanXMinutes: {
+	      one: 'menos de um minuto',
+	      other: 'menos de {{count}} minutos'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minuto',
+	      other: '{{count}} minutos'
+	    },
+	
+	    aboutXHours: {
+	      one: 'aproximadamente 1 hora',
+	      other: 'aproximadamente {{count}} horas'
+	    },
+	
+	    xHours: {
+	      one: '1 hora',
+	      other: '{{count}} horas'
+	    },
+	
+	    xDays: {
+	      one: '1 dia',
+	      other: '{{count}} dias'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'aproximadamente 1 mês',
+	      other: 'aproximadamente {{count}} meses'
+	    },
+	
+	    xMonths: {
+	      one: '1 mês',
+	      other: '{{count}} meses'
+	    },
+	
+	    aboutXYears: {
+	      one: 'aproximadamente 1 ano',
+	      other: 'aproximadamente {{count}} anos'
+	    },
+	
+	    xYears: {
+	      one: '1 ano',
+	      other: '{{count}} anos'
+	    },
+	
+	    overXYears: {
+	      one: 'mais de 1 ano',
+	      other: 'mais de {{count}} anos'
+	    },
+	
+	    almostXYears: {
+	      one: 'quase 1 ano',
+	      other: 'quase {{count}} anos'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'daqui a ' + result
+	      } else {
+	        return 'há ' + result
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 453 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+	  var monthsFull = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+	  var weekdays2char = ['do', 'se', 'te', 'qa', 'qi', 'se', 'sa']
+	  var weekdays3char = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']
+	  var weekdaysFull = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + 'º'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 454 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(452)
+	var buildFormatLocale = __webpack_require__(453)
+	
+	/**
+	 * @category Locales
+	 * @summary Portuguese locale.
+	 * @author Dário Freire [@dfreire]{@link https://github.com/dfreire}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 455 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'mai puțin de o secundă',
+	      other: 'mai puțin de {{count}} secunde'
+	    },
+	
+	    xSeconds: {
+	      one: '1 secundă',
+	      other: '{{count}} secunde'
+	    },
+	
+	    halfAMinute: 'jumătate de minut',
+	
+	    lessThanXMinutes: {
+	      one: 'mai puțin de un minut',
+	      other: 'mai puțin de {{count}} minute'
+	    },
+	
+	    xMinutes: {
+	      one: '1 minut',
+	      other: '{{count}} minute'
+	    },
+	
+	    aboutXHours: {
+	      one: 'circa 1 oră',
+	      other: 'circa {{count}} ore'
+	    },
+	
+	    xHours: {
+	      one: '1 oră',
+	      other: '{{count}} ore'
+	    },
+	
+	    xDays: {
+	      one: '1 zi',
+	      other: '{{count}} zile'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'circa 1 lună',
+	      other: 'circa {{count}} luni'
+	    },
+	
+	    xMonths: {
+	      one: '1 lună',
+	      other: '{{count}} luni'
+	    },
+	
+	    aboutXYears: {
+	      one: 'circa 1 an',
+	      other: 'circa {{count}} ani'
+	    },
+	
+	    xYears: {
+	      one: '1 an',
+	      other: '{{count}} ani'
+	    },
+	
+	    overXYears: {
+	      one: 'peste 1 an',
+	      other: 'peste {{count}} ani'
+	    },
+	
+	    almostXYears: {
+	      one: 'aproape 1 an',
+	      other: 'aproape {{count}} ani'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'în ' + result
+	      } else {
+	        return result + ' în urmă'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 456 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // Note: in Romanian language the weekdays and months should be in the lowercase.
+	  var months3char = ['ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sep', 'oct', 'noi', 'dec']
+	  var monthsFull = ['ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie', 'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie']
+	  var weekdays2char = ['du', 'lu', 'ma', 'mi', 'jo', 'vi', 'sâ']
+	  var weekdays3char = ['dum', 'lun', 'mar', 'mie', 'joi', 'vin', 'sâm']
+	  var weekdaysFull = ['duminică', 'luni', 'marți', 'miercuri', 'joi', 'vineri', 'sâmbăta']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number.toString()
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 457 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(455)
+	var buildFormatLocale = __webpack_require__(456)
+	
+	/**
+	 * @category Locales
+	 * @summary Romanian locale.
+	 * @author Sergiu Munteanu [@jsergiu]{@link https://github.com/jsergiu}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 458 */
+/***/ (function(module, exports) {
+
+	function declension (scheme, count) {
+	  // scheme for count=1 exists
+	  if (scheme.one !== undefined && count === 1) {
+	    return scheme.one
+	  }
+	
+	  var rem10 = count % 10
+	  var rem100 = count % 100
+	
+	  // 1, 21, 31, ...
+	  if (rem10 === 1 && rem100 !== 11) {
+	    return scheme.singularNominative.replace('{{count}}', count)
+	
+	  // 2, 3, 4, 22, 23, 24, 32 ...
+	  } else if ((rem10 >= 2 && rem10 <= 4) && (rem100 < 10 || rem100 > 20)) {
+	    return scheme.singularGenitive.replace('{{count}}', count)
+	
+	  // 5, 6, 7, 8, 9, 10, 11, ...
+	  } else {
+	    return scheme.pluralGenitive.replace('{{count}}', count)
+	  }
+	}
+	
+	function buildLocalizeTokenFn (scheme) {
+	  return function (count, options) {
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        if (scheme.future) {
+	          return declension(scheme.future, count)
+	        } else {
+	          return 'через ' + declension(scheme.regular, count)
+	        }
+	      } else {
+	        if (scheme.past) {
+	          return declension(scheme.past, count)
+	        } else {
+	          return declension(scheme.regular, count) + ' назад'
+	        }
+	      }
+	    } else {
+	      return declension(scheme.regular, count)
+	    }
+	  }
+	}
+	
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: buildLocalizeTokenFn({
+	      regular: {
+	        one: 'меньше секунды',
+	        singularNominative: 'меньше {{count}} секунды',
+	        singularGenitive: 'меньше {{count}} секунд',
+	        pluralGenitive: 'меньше {{count}} секунд'
+	      },
+	      future: {
+	        one: 'меньше, чем через секунду',
+	        singularNominative: 'меньше, чем через {{count}} секунду',
+	        singularGenitive: 'меньше, чем через {{count}} секунды',
+	        pluralGenitive: 'меньше, чем через {{count}} секунд'
+	      }
+	    }),
+	
+	    xSeconds: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} секунда',
+	        singularGenitive: '{{count}} секунды',
+	        pluralGenitive: '{{count}} секунд'
+	      },
+	      past: {
+	        singularNominative: '{{count}} секунду назад',
+	        singularGenitive: '{{count}} секунды назад',
+	        pluralGenitive: '{{count}} секунд назад'
+	      },
+	      future: {
+	        singularNominative: 'через {{count}} секунду',
+	        singularGenitive: 'через {{count}} секунды',
+	        pluralGenitive: 'через {{count}} секунд'
+	      }
+	    }),
+	
+	    halfAMinute: function (_, options) {
+	      if (options.addSuffix) {
+	        if (options.comparison > 0) {
+	          return 'через полминуты'
+	        } else {
+	          return 'полминуты назад'
+	        }
+	      }
+	
+	      return 'полминуты'
+	    },
+	
+	    lessThanXMinutes: buildLocalizeTokenFn({
+	      regular: {
+	        one: 'меньше минуты',
+	        singularNominative: 'меньше {{count}} минуты',
+	        singularGenitive: 'меньше {{count}} минут',
+	        pluralGenitive: 'меньше {{count}} минут'
+	      },
+	      future: {
+	        one: 'меньше, чем через минуту',
+	        singularNominative: 'меньше, чем через {{count}} минуту',
+	        singularGenitive: 'меньше, чем через {{count}} минуты',
+	        pluralGenitive: 'меньше, чем через {{count}} минут'
+	      }
+	    }),
+	
+	    xMinutes: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} минута',
+	        singularGenitive: '{{count}} минуты',
+	        pluralGenitive: '{{count}} минут'
+	      },
+	      past: {
+	        singularNominative: '{{count}} минуту назад',
+	        singularGenitive: '{{count}} минуты назад',
+	        pluralGenitive: '{{count}} минут назад'
+	      },
+	      future: {
+	        singularNominative: 'через {{count}} минуту',
+	        singularGenitive: 'через {{count}} минуты',
+	        pluralGenitive: 'через {{count}} минут'
+	      }
+	    }),
+	
+	    aboutXHours: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: 'около {{count}} часа',
+	        singularGenitive: 'около {{count}} часов',
+	        pluralGenitive: 'около {{count}} часов'
+	      },
+	      future: {
+	        singularNominative: 'приблизительно через {{count}} час',
+	        singularGenitive: 'приблизительно через {{count}} часа',
+	        pluralGenitive: 'приблизительно через {{count}} часов'
+	      }
+	    }),
+	
+	    xHours: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} час',
+	        singularGenitive: '{{count}} часа',
+	        pluralGenitive: '{{count}} часов'
+	      }
+	    }),
+	
+	    xDays: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} день',
+	        singularGenitive: '{{count}} дня',
+	        pluralGenitive: '{{count}} дней'
+	      }
+	    }),
+	
+	    aboutXMonths: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: 'около {{count}} месяца',
+	        singularGenitive: 'около {{count}} месяцев',
+	        pluralGenitive: 'около {{count}} месяцев'
+	      },
+	      future: {
+	        singularNominative: 'приблизительно через {{count}} месяц',
+	        singularGenitive: 'приблизительно через {{count}} месяца',
+	        pluralGenitive: 'приблизительно через {{count}} месяцев'
+	      }
+	    }),
+	
+	    xMonths: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} месяц',
+	        singularGenitive: '{{count}} месяца',
+	        pluralGenitive: '{{count}} месяцев'
+	      }
+	    }),
+	
+	    aboutXYears: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: 'около {{count}} года',
+	        singularGenitive: 'около {{count}} лет',
+	        pluralGenitive: 'около {{count}} лет'
+	      },
+	      future: {
+	        singularNominative: 'приблизительно через {{count}} год',
+	        singularGenitive: 'приблизительно через {{count}} года',
+	        pluralGenitive: 'приблизительно через {{count}} лет'
+	      }
+	    }),
+	
+	    xYears: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: '{{count}} год',
+	        singularGenitive: '{{count}} года',
+	        pluralGenitive: '{{count}} лет'
+	      }
+	    }),
+	
+	    overXYears: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: 'больше {{count}} года',
+	        singularGenitive: 'больше {{count}} лет',
+	        pluralGenitive: 'больше {{count}} лет'
+	      },
+	      future: {
+	        singularNominative: 'больше, чем через {{count}} год',
+	        singularGenitive: 'больше, чем через {{count}} года',
+	        pluralGenitive: 'больше, чем через {{count}} лет'
+	      }
+	    }),
+	
+	    almostXYears: buildLocalizeTokenFn({
+	      regular: {
+	        singularNominative: 'почти {{count}} год',
+	        singularGenitive: 'почти {{count}} года',
+	        pluralGenitive: 'почти {{count}} лет'
+	      },
+	      future: {
+	        singularNominative: 'почти через {{count}} год',
+	        singularGenitive: 'почти через {{count}} года',
+	        pluralGenitive: 'почти через {{count}} лет'
+	      }
+	    })
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	    return distanceInWordsLocale[token](count, options)
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 459 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // http://new.gramota.ru/spravka/buro/search-answer?s=242637
+	  var monthsShort = ['янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.']
+	  var monthsFull = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
+	  var monthsGenitive = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+	  var weekdays2char = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
+	  var weekdays3char = ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'суб']
+	  var weekdaysFull = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота']
+	  var meridiem = ['ночи', 'утра', 'дня', 'вечера']
+	
+	  var formatters = {
+	    // Month: янв., фев., ..., дек.
+	    'MMM': function (date) {
+	      return monthsShort[date.getMonth()]
+	    },
+	
+	    // Month: январь, февраль, ..., декабрь
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: вс, пн, ..., сб
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: вск, пнд, ..., суб
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: воскресенье, понедельник, ..., суббота
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // Time of day: ночи, утра, дня, вечера
+	    'A': function (date) {
+	      var hours = date.getHours()
+	      if (hours >= 17) {
+	        return meridiem[3]
+	      } else if (hours >= 12) {
+	        return meridiem[2]
+	      } else if (hours >= 4) {
+	        return meridiem[1]
+	      } else {
+	        return meridiem[0]
+	      }
+	    },
+	
+	    'Do': function (date, formatters) {
+	      return formatters.D(date) + '-е'
+	    },
+	
+	    'Wo': function (date, formatters) {
+	      return formatters.W(date) + '-я'
+	    }
+	  }
+	
+	  formatters.a = formatters.A
+	  formatters.aa = formatters.A
+	
+	  // Generate ordinal version of formatters: M -> Mo, DDD -> DDDo, etc.
+	  var ordinalFormatters = ['M', 'DDD', 'd', 'Q']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return formatters[formatterToken](date) + '-й'
+	    }
+	  })
+	
+	  // Generate formatters like 'D MMMM',
+	  // where month is in the genitive case: января, февраля, ..., декабря
+	  var monthsGenitiveFormatters = ['D', 'Do', 'DD']
+	  monthsGenitiveFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + ' MMMM'] = function (date, commonFormatters) {
+	      var formatter = formatters[formatterToken] || commonFormatters[formatterToken]
+	      return formatter(date, commonFormatters) + ' ' + monthsGenitive[date.getMonth()]
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 460 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(458)
+	var buildFormatLocale = __webpack_require__(459)
+	
+	/**
+	 * @category Locales
+	 * @summary Russian locale.
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 461 */
+/***/ (function(module, exports) {
+
+	function declensionGroup (scheme, count) {
+	  if (count === 1) {
+	    return scheme.one
+	  }
+	
+	  if (count >= 2 && count <= 4) {
+	    return scheme.twoFour
+	  }
+	
+	  // if count === null || count === 0 || count >= 5
+	  return scheme.other
+	}
+	
+	function declension (scheme, count, time) {
+	  var group = declensionGroup(scheme, count)
+	  var finalText = group[time] || group
+	  return finalText.replace('{{count}}', count)
+	}
+	
+	function extractPreposition (token) {
+	  var result = ['lessThan', 'about', 'over', 'almost'].filter(function (preposition) {
+	    return !!token.match(new RegExp('^' + preposition))
+	  })
+	
+	  return result[0]
+	}
+	
+	function prefixPreposition (preposition) {
+	  var translation = ''
+	
+	  if (preposition === 'almost') {
+	    translation = 'takmer'
+	  }
+	
+	  if (preposition === 'about') {
+	    translation = 'približne'
+	  }
+	
+	  return translation.length > 0 ? translation + ' ' : ''
+	}
+	
+	function suffixPreposition (preposition) {
+	  var translation = ''
+	
+	  if (preposition === 'lessThan') {
+	    translation = 'menej než'
+	  }
+	
+	  if (preposition === 'over') {
+	    translation = 'viac než'
+	  }
+	
+	  return translation.length > 0 ? translation + ' ' : ''
+	}
+	
+	function lowercaseFirstLetter (string) {
+	  return string.charAt(0).toLowerCase() + string.slice(1)
+	}
+	
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    xSeconds: {
+	      one: {
+	        regular: 'sekunda',
+	        past: 'sekundou',
+	        future: 'sekundu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} sekundy',
+	        past: '{{count}} sekundami',
+	        future: '{{count}} sekundy'
+	      },
+	      other: {
+	        regular: '{{count}} sekúnd',
+	        past: '{{count}} sekundami',
+	        future: '{{count}} sekúnd'
+	      }
+	    },
+	
+	    halfAMinute: {
+	      other: {
+	        regular: 'pol minúty',
+	        past: 'pol minútou',
+	        future: 'pol minúty'
+	      }
+	    },
+	
+	    xMinutes: {
+	      one: {
+	        regular: 'minúta',
+	        past: 'minútou',
+	        future: 'minútu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} minúty',
+	        past: '{{count}} minútami',
+	        future: '{{count}} minúty'
+	      },
+	      other: {
+	        regular: '{{count}} minút',
+	        past: '{{count}} minútami',
+	        future: '{{count}} minút'
+	      }
+	    },
+	
+	    xHours: {
+	      one: {
+	        regular: 'hodina',
+	        past: 'hodinou',
+	        future: 'hodinu'
+	      },
+	      twoFour: {
+	        regular: '{{count}} hodiny',
+	        past: '{{count}} hodinami',
+	        future: '{{count}} hodiny'
+	      },
+	      other: {
+	        regular: '{{count}} hodín',
+	        past: '{{count}} hodinami',
+	        future: '{{count}} hodín'
+	      }
+	    },
+	
+	    xDays: {
+	      one: {
+	        regular: 'deň',
+	        past: 'dňom',
+	        future: 'deň'
+	      },
+	      twoFour: {
+	        regular: '{{count}} dni',
+	        past: '{{count}} dňami',
+	        future: '{{count}} dni'
+	      },
+	      other: {
+	        regular: '{{count}} dní',
+	        past: '{{count}} dňami',
+	        future: '{{count}} dní'
+	      }
+	    },
+	
+	    xMonths: {
+	      one: {
+	        regular: 'mesiac',
+	        past: 'mesiacom',
+	        future: 'mesiac'
+	      },
+	      twoFour: {
+	        regular: '{{count}} mesiace',
+	        past: '{{count}} mesiacmi',
+	        future: '{{count}} mesiace'
+	      },
+	      other: {
+	        regular: '{{count}} mesiacov',
+	        past: '{{count}} mesiacmi',
+	        future: '{{count}} mesiacov'
+	      }
+	    },
+	
+	    xYears: {
+	      one: {
+	        regular: 'rok',
+	        past: 'rokom',
+	        future: 'rok'
+	      },
+	      twoFour: {
+	        regular: '{{count}} roky',
+	        past: '{{count}} rokmi',
+	        future: '{{count}} roky'
+	      },
+	      other: {
+	        regular: '{{count}} rokov',
+	        past: '{{count}} rokmi',
+	        future: '{{count}} rokov'
+	      }
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var preposition = extractPreposition(token) || ''
+	    var key = lowercaseFirstLetter(token.substring(preposition.length))
+	    var scheme = distanceInWordsLocale[key]
+	
+	    if (!options.addSuffix) {
+	      return prefixPreposition(preposition) + suffixPreposition(preposition) + declension(scheme, count, 'regular')
+	    }
+	
+	    if (options.comparison > 0) {
+	      return prefixPreposition(preposition) + 'za ' + suffixPreposition(preposition) + declension(scheme, count, 'future')
+	    } else {
+	      return prefixPreposition(preposition) + 'pred ' + suffixPreposition(preposition) + declension(scheme, count, 'past')
+	    }
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 462 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'máj', 'jún', 'júl', 'aug', 'sep', 'okt', 'nov', 'dec']
+	  var monthsFull = ['január', 'február', 'marec', 'apríl', 'máj', 'jún', 'júl', 'august', 'september', 'október', 'november', 'december']
+	  var weekdays2char = ['ne', 'po', 'ut', 'st', 'št', 'pi', 'so']
+	  var weekdays3char = ['neď', 'pon', 'uto', 'str', 'štv', 'pia', 'sob']
+	  var weekdaysFull = ['nedeľa', 'pondelok', 'utorok', 'streda', 'štvrtok', 'piatok', 'sobota']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['a.m.', 'p.m.']
+	
+	  var formatters = {
+	    // Month: jan, feb, ..., dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: január, február, ..., december
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: ne, po, ..., so
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: neď, pon, ..., sob
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: neďeľa, pondelok, ..., sobota
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number + '.'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 463 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(461)
+	var buildFormatLocale = __webpack_require__(462)
+	
+	/**
+	 * @category Locales
+	 * @summary Slovak locale.
+	 * @author Marek Suscak [@mareksuscak]{@link https://github.com/mareksuscak}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 464 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      singular: 'mindre än en sekund',
+	      plural: 'mindre än {{count}} sekunder'
+	    },
+	
+	    xSeconds: {
+	      singular: 'en sekund',
+	      plural: '{{count}} sekunder'
+	    },
+	
+	    halfAMinute: 'en halv minut',
+	
+	    lessThanXMinutes: {
+	      singular: 'mindre än en minut',
+	      plural: 'mindre än {{count}} minuter'
+	    },
+	
+	    xMinutes: {
+	      singular: 'en minut',
+	      plural: '{{count}} minuter'
+	    },
+	
+	    aboutXHours: {
+	      singular: 'ungefär en timme',
+	      plural: 'ungefär {{count}} timmar'
+	    },
+	
+	    xHours: {
+	      singular: 'en timme',
+	      plural: '{{count}} timmar'
+	    },
+	
+	    xDays: {
+	      singular: 'en dag',
+	      plural: '{{count}} dagar'
+	    },
+	
+	    aboutXMonths: {
+	      singular: 'ungefär en månad',
+	      plural: 'ungefär {{count}} månader'
+	    },
+	
+	    xMonths: {
+	      singular: 'en månad',
+	      plural: '{{count}} månader'
+	    },
+	
+	    aboutXYears: {
+	      singular: 'ungefär ett år',
+	      plural: 'ungefär {{count}} år'
+	    },
+	
+	    xYears: {
+	      singular: 'ett år',
+	      plural: '{{count}} år'
+	    },
+	
+	    overXYears: {
+	      singular: 'över ett år',
+	      plural: 'över {{count}} år'
+	    },
+	
+	    almostXYears: {
+	      singular: 'nästan ett år',
+	      plural: 'nästan {{count}} år'
+	    }
+	  }
+	
+	  var wordMapping = [
+	    'noll',
+	    'en',
+	    'två',
+	    'tre',
+	    'fyra',
+	    'fem',
+	    'sex',
+	    'sju',
+	    'åtta',
+	    'nio',
+	    'tio',
+	    'elva',
+	    'tolv'
+	  ]
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var translation = distanceInWordsLocale[token]
+	    var result
+	    if (typeof translation === 'string') {
+	      result = translation
+	    } else if (count === 0 || count > 1) {
+	      result = translation.plural.replace('{{count}}', count < 13 ? wordMapping[count] : count)
+	    } else {
+	      result = translation.singular
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return 'om ' + result
+	      } else {
+	        return result + ' sedan'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 465 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+	  var monthsFull = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december']
+	  var weekdays2char = ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö']
+	  var weekdays3char = ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör']
+	  var weekdaysFull = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag']
+	  var meridiemFull = ['f.m.', 'e.m.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  formatters.A = formatters.aa
+	  formatters.a = formatters.aa
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  var rem100 = number % 100
+	  if (rem100 > 20 || rem100 < 10) {
+	    switch (rem100 % 10) {
+	      case 1:
+	      case 2:
+	        return number + ':a'
+	    }
+	  }
+	  return number + ':e'
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 466 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(464)
+	var buildFormatLocale = __webpack_require__(465)
+	
+	/**
+	 * @category Locales
+	 * @summary Swedish locale.
+	 * @author Johannes Ulén [@ejulen]{@link https://github.com/ejulen}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 467 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'น้อยกว่า 1 วินาที',
+	      other: 'น้อยกว่า {{count}} วินาที'
+	    },
+	
+	    xSeconds: {
+	      one: '1 วินาที',
+	      other: '{{count}} วินาที'
+	    },
+	
+	    halfAMinute: 'ครึ่งนาที',
+	
+	    lessThanXMinutes: {
+	      one: 'น้อยกว่า 1 นาที',
+	      other: 'น้อยกว่า {{count}} นาที'
+	    },
+	
+	    xMinutes: {
+	      one: '1 นาที',
+	      other: '{{count}} นาที'
+	    },
+	
+	    aboutXHours: {
+	      one: 'ประมาณ 1 ชั่วโมง',
+	      other: 'ประมาณ {{count}} ชั่วโมง'
+	    },
+	
+	    xHours: {
+	      one: '1 ชั่วโมง',
+	      other: '{{count}} ชั่วโมง'
+	    },
+	
+	    xDays: {
+	      one: '1 วัน',
+	      other: '{{count}} วัน'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'ประมาณ 1 เดือน',
+	      other: 'ประมาณ {{count}} เดือน'
+	    },
+	
+	    xMonths: {
+	      one: '1 เดือน',
+	      other: '{{count}} เดือน'
+	    },
+	
+	    aboutXYears: {
+	      one: 'ประมาณ 1 ปี',
+	      other: 'ประมาณ {{count}} ปี'
+	    },
+	
+	    xYears: {
+	      one: '1 ปี',
+	      other: '{{count}} ปี'
+	    },
+	
+	    overXYears: {
+	      one: 'มากกว่า 1 ปี',
+	      other: 'มากกว่า {{count}} ปี'
+	    },
+	
+	    almostXYears: {
+	      one: 'เกือบ 1 ปี',
+	      other: 'เกือบ {{count}} ปี'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        if (token === 'halfAMinute') {
+	          return 'ใน' + result
+	        } else {
+	          return 'ใน ' + result
+	        }
+	      } else {
+	        return result + 'ที่ผ่านมา'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 468 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+	  var monthsFull = ['มกราคาม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
+	  var weekdays2char = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.']
+	  var weekdays3char = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.']
+	  var weekdaysFull = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']
+	  var meridiemUppercase = ['น.']
+	  var meridiemLowercase = ['น.']
+	  var meridiemFull = ['นาฬิกา']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return meridiemFull[0]
+	    }
+	  }
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 469 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(467)
+	var buildFormatLocale = __webpack_require__(468)
+	
+	/**
+	 * @category Locales
+	 * @summary Thai locale.
+	 * @author Athiwat Hirunworawongkun [@athivvat]{@link https://github.com/athivvat}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 470 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: 'bir saniyeden az',
+	      other: '{{count}} saniyeden az'
+	    },
+	
+	    xSeconds: {
+	      one: '1 saniye',
+	      other: '{{count}} saniye'
+	    },
+	
+	    halfAMinute: 'yarım dakika',
+	
+	    lessThanXMinutes: {
+	      one: 'bir dakikadan az',
+	      other: '{{count}} dakikadan az'
+	    },
+	
+	    xMinutes: {
+	      one: '1 dakika',
+	      other: '{{count}} dakika'
+	    },
+	
+	    aboutXHours: {
+	      one: 'yaklaşık 1 saat',
+	      other: 'yaklaşık {{count}} saat'
+	    },
+	
+	    xHours: {
+	      one: '1 saat',
+	      other: '{{count}} saat'
+	    },
+	
+	    xDays: {
+	      one: '1 gün',
+	      other: '{{count}} gün'
+	    },
+	
+	    aboutXMonths: {
+	      one: 'yaklaşık 1 ay',
+	      other: 'yaklaşık {{count}} ay'
+	    },
+	
+	    xMonths: {
+	      one: '1 ay',
+	      other: '{{count}} ay'
+	    },
+	
+	    aboutXYears: {
+	      one: 'yaklaşık 1 yıl',
+	      other: 'yaklaşık {{count}} yıl'
+	    },
+	
+	    xYears: {
+	      one: '1 yıl',
+	      other: '{{count}} yıl'
+	    },
+	
+	    overXYears: {
+	      one: '1 yıldan fazla',
+	      other: '{{count}} yıldan fazla'
+	    },
+	
+	    almostXYears: {
+	      one: 'neredeyse 1 yıl',
+	      other: 'neredeyse {{count}} yıl'
+	    }
+	  }
+	
+	  var extraWordTokens = [
+	    'lessThanXSeconds',
+	    'lessThanXMinutes',
+	    'overXYears'
+	  ]
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      var extraWord = ''
+	      if (extraWordTokens.indexOf(token) > -1) {
+	        extraWord = ' bir süre'
+	      }
+	
+	      if (options.comparison > 0) {
+	        return result + extraWord + ' içinde'
+	      } else {
+	        return result + extraWord + ' önce'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 471 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  // Note: in Turkish, the names of days of the week and months are capitalized.
+	  // If you are making a new locale based on this one, check if the same is true for the language you're working on.
+	  // Generally, formatted dates should look like they are in the middle of a sentence,
+	  // e.g. in Spanish language the weekdays and months should be in the lowercase.
+	  var months3char = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+	  var monthsFull = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+	  var weekdays2char = ['Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct']
+	  var weekdays3char = ['Paz', 'Pts', 'Sal', 'Çar', 'Per', 'Cum', 'Cts']
+	  var weekdaysFull = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi']
+	  var meridiemUppercase = ['ÖÖ', 'ÖS']
+	  var meridiemLowercase = ['öö', 'ös']
+	  var meridiemFull = ['ö.ö.', 'ö.s.']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  var suffixes = {
+	    1: '\'inci',
+	    2: '\'inci',
+	    3: '\'üncü',
+	    4: '\'üncü',
+	    5: '\'inci',
+	    6: '\'ıncı',
+	    7: '\'inci',
+	    8: '\'inci',
+	    9: '\'uncu',
+	    10: '\'uncu',
+	    20: '\'inci',
+	    30: '\'uncu',
+	    50: '\'inci',
+	    60: '\'ıncı',
+	    70: '\'inci',
+	    80: '\'inci',
+	    90: '\'ıncı',
+	    100: '\'üncü'
+	  }
+	
+	  if (number === 0) {
+	    return '0\'ıncı'
+	  }
+	
+	  var x = number % 10
+	  var y = number % 100 - x
+	  var z = number >= 100 ? 100 : null
+	
+	  return number + (suffixes[x] || suffixes[y] || suffixes[z])
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 472 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(470)
+	var buildFormatLocale = __webpack_require__(471)
+	
+	/**
+	 * @category Locales
+	 * @summary Turkish locale.
+	 * @author Alpcan Aydın [@alpcanaydin]{@link https://github.com/alpcanaydin}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 473 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: '不到 1 秒',
+	      other: '不到 {{count}} 秒'
+	    },
+	
+	    xSeconds: {
+	      one: '1 秒',
+	      other: '{{count}} 秒'
+	    },
+	
+	    halfAMinute: '半分钟',
+	
+	    lessThanXMinutes: {
+	      one: '不到 1 分钟',
+	      other: '不到 {{count}} 分钟'
+	    },
+	
+	    xMinutes: {
+	      one: '1 分钟',
+	      other: '{{count}} 分钟'
+	    },
+	
+	    xHours: {
+	      one: '1 小时',
+	      other: '{{count}} 小时'
+	    },
+	
+	    aboutXHours: {
+	      one: '大约 1 小时',
+	      other: '大约 {{count}} 小时'
+	    },
+	
+	    xDays: {
+	      one: '1 天',
+	      other: '{{count}} 天'
+	    },
+	
+	    aboutXMonths: {
+	      one: '大约 1 个月',
+	      other: '大约 {{count}} 个月'
+	    },
+	
+	    xMonths: {
+	      one: '1 个月',
+	      other: '{{count}} 个月'
+	    },
+	
+	    aboutXYears: {
+	      one: '大约 1 年',
+	      other: '大约 {{count}} 年'
+	    },
+	
+	    xYears: {
+	      one: '1 年',
+	      other: '{{count}} 年'
+	    },
+	
+	    overXYears: {
+	      one: '超过 1 年',
+	      other: '超过 {{count}} 年'
+	    },
+	
+	    almostXYears: {
+	      one: '将近 1 年',
+	      other: '将近 {{count}} 年'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return result + '内'
+	      } else {
+	        return result + '前'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 474 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+	  var monthsFull = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+	  var weekdays2char = ['日', '一', '二', '三', '四', '五', '六']
+	  var weekdays3char = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+	  var weekdaysFull = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+	  var meridiemFull = ['上午', '下午']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    }
+	  }
+	
+	  // AM, PM / am, pm / a.m., p.m. all translates to 上午, 下午
+	  formatters.a = formatters.aa = formatters.A = function (date) {
+	    return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number.toString()
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 475 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(473)
+	var buildFormatLocale = __webpack_require__(474)
+	
+	/**
+	 * @category Locales
+	 * @summary Chinese Simplified locale.
+	 * @author Changyu Geng [@KingMario]{@link https://github.com/KingMario}
+	 * @author Song Shuoyun [@fnlctrl]{@link https://github.com/fnlctrl}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
+/* 476 */
+/***/ (function(module, exports) {
+
+	function buildDistanceInWordsLocale () {
+	  var distanceInWordsLocale = {
+	    lessThanXSeconds: {
+	      one: '少於 1 秒',
+	      other: '少於 {{count}} 秒'
+	    },
+	
+	    xSeconds: {
+	      one: '1 秒',
+	      other: '{{count}} 秒'
+	    },
+	
+	    halfAMinute: '半分鐘',
+	
+	    lessThanXMinutes: {
+	      one: '少於 1 分鐘',
+	      other: '少於 {{count}} 分鐘'
+	    },
+	
+	    xMinutes: {
+	      one: '1 分鐘',
+	      other: '{{count}} 分鐘'
+	    },
+	
+	    xHours: {
+	      one: '1 小時',
+	      other: '{{count}} 小時'
+	    },
+	
+	    aboutXHours: {
+	      one: '大約 1 小時',
+	      other: '大約 {{count}} 小時'
+	    },
+	
+	    xDays: {
+	      one: '1 天',
+	      other: '{{count}} 天'
+	    },
+	
+	    aboutXMonths: {
+	      one: '大約 1 個月',
+	      other: '大約 {{count}} 個月'
+	    },
+	
+	    xMonths: {
+	      one: '1 個月',
+	      other: '{{count}} 個月'
+	    },
+	
+	    aboutXYears: {
+	      one: '大約 1 年',
+	      other: '大約 {{count}} 年'
+	    },
+	
+	    xYears: {
+	      one: '1 年',
+	      other: '{{count}} 年'
+	    },
+	
+	    overXYears: {
+	      one: '超過 1 年',
+	      other: '超過 {{count}} 年'
+	    },
+	
+	    almostXYears: {
+	      one: '將近 1 年',
+	      other: '將近 {{count}} 年'
+	    }
+	  }
+	
+	  function localize (token, count, options) {
+	    options = options || {}
+	
+	    var result
+	    if (typeof distanceInWordsLocale[token] === 'string') {
+	      result = distanceInWordsLocale[token]
+	    } else if (count === 1) {
+	      result = distanceInWordsLocale[token].one
+	    } else {
+	      result = distanceInWordsLocale[token].other.replace('{{count}}', count)
+	    }
+	
+	    if (options.addSuffix) {
+	      if (options.comparison > 0) {
+	        return result + '內'
+	      } else {
+	        return result + '前'
+	      }
+	    }
+	
+	    return result
+	  }
+	
+	  return {
+	    localize: localize
+	  }
+	}
+	
+	module.exports = buildDistanceInWordsLocale
+
+
+/***/ }),
+/* 477 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildFormattingTokensRegExp = __webpack_require__(384)
+	
+	function buildFormatLocale () {
+	  var months3char = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+	  var monthsFull = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+	  var weekdays2char = ['日', '一', '二', '三', '四', '五', '六']
+	  var weekdays3char = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+	  var weekdaysFull = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+	  var meridiemUppercase = ['AM', 'PM']
+	  var meridiemLowercase = ['am', 'pm']
+	  var meridiemFull = ['上午', '下午']
+	
+	  var formatters = {
+	    // Month: Jan, Feb, ..., Dec
+	    'MMM': function (date) {
+	      return months3char[date.getMonth()]
+	    },
+	
+	    // Month: January, February, ..., December
+	    'MMMM': function (date) {
+	      return monthsFull[date.getMonth()]
+	    },
+	
+	    // Day of week: Su, Mo, ..., Sa
+	    'dd': function (date) {
+	      return weekdays2char[date.getDay()]
+	    },
+	
+	    // Day of week: Sun, Mon, ..., Sat
+	    'ddd': function (date) {
+	      return weekdays3char[date.getDay()]
+	    },
+	
+	    // Day of week: Sunday, Monday, ..., Saturday
+	    'dddd': function (date) {
+	      return weekdaysFull[date.getDay()]
+	    },
+	
+	    // AM, PM
+	    'A': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemUppercase[1] : meridiemUppercase[0]
+	    },
+	
+	    // am, pm
+	    'a': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemLowercase[1] : meridiemLowercase[0]
+	    },
+	
+	    // a.m., p.m.
+	    'aa': function (date) {
+	      return (date.getHours() / 12) >= 1 ? meridiemFull[1] : meridiemFull[0]
+	    }
+	  }
+	
+	  // Generate ordinal version of formatters: M -> Mo, D -> Do, etc.
+	  var ordinalFormatters = ['M', 'D', 'DDD', 'd', 'Q', 'W']
+	  ordinalFormatters.forEach(function (formatterToken) {
+	    formatters[formatterToken + 'o'] = function (date, formatters) {
+	      return ordinal(formatters[formatterToken](date))
+	    }
+	  })
+	
+	  return {
+	    formatters: formatters,
+	    formattingTokensRegExp: buildFormattingTokensRegExp(formatters)
+	  }
+	}
+	
+	function ordinal (number) {
+	  return number.toString()
+	}
+	
+	module.exports = buildFormatLocale
+
+
+/***/ }),
+/* 478 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var buildDistanceInWordsLocale = __webpack_require__(476)
+	var buildFormatLocale = __webpack_require__(477)
+	
+	/**
+	 * @category Locales
+	 * @summary Chinese Simplified locale.
+	 * @author tonypai [@tpai]{@link https://github.com/tpai}
+	 */
+	module.exports = {
+	  distanceInWords: buildDistanceInWordsLocale(),
+	  format: buildFormatLocale()
+	}
+
+
+/***/ }),
 /* 479 */,
 /* 480 */,
 /* 481 */,
@@ -37361,16 +47284,200 @@
 /* 483 */,
 /* 484 */,
 /* 485 */,
-/* 486 */,
+/* 486 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ }),
 /* 487 */,
 /* 488 */,
 /* 489 */,
 /* 490 */,
 /* 491 */,
 /* 492 */,
-/* 493 */,
-/* 494 */,
-/* 495 */,
+/* 493 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Spinner = undefined;
+	
+	var _react = __webpack_require__(241);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _i18n = __webpack_require__(494);
+	
+	var _classnames = __webpack_require__(486);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _styles = __webpack_require__(495);
+	
+	var _styles2 = _interopRequireDefault(_styles);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var Spinner = exports.Spinner = function Spinner(_ref) {
+	  var _classNames;
+	
+	  var t = _ref.t,
+	      loadingType = _ref.loadingType,
+	      middle = _ref.middle,
+	      noMargin = _ref.noMargin,
+	      color = _ref.color,
+	      size = _ref.size;
+	
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      className: (0, _classnames2.default)(_styles2.default['coz-spinner'], (_classNames = {}, _defineProperty(_classNames, _styles2.default['coz-spinner--middle'], middle), _defineProperty(_classNames, _styles2.default['coz-spinner--no-margin'], noMargin), _defineProperty(_classNames, _styles2.default['coz-spinner--' + color], color), _defineProperty(_classNames, _styles2.default['coz-spinner--' + size], size), _classNames))
+	    },
+	    loadingType && _react2.default.createElement(
+	      'p',
+	      null,
+	      t('loading.' + loadingType)
+	    )
+	  );
+	};
+	
+	exports.default = (0, _i18n.translate)()(Spinner);
+
+/***/ }),
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/**
+	 * preact plugin that provides an I18n helper using a Higher Order Component.
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.translate = exports.I18nProvider = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(241);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// Provider root component
+	var I18nProvider = exports.I18nProvider = function (_Component) {
+	  _inherits(I18nProvider, _Component);
+	
+	  function I18nProvider() {
+	    _classCallCheck(this, I18nProvider);
+	
+	    return _possibleConstructorReturn(this, (I18nProvider.__proto__ || Object.getPrototypeOf(I18nProvider)).apply(this, arguments));
+	  }
+	
+	  _createClass(I18nProvider, [{
+	    key: 'getChildContext',
+	    value: function getChildContext() {
+	      return {
+	        t: this.props.i18n.t.bind(this.props.i18n),
+	        f: this.props.i18nDate.bind(this.props.i18nDate)
+	      };
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.props.children && this.props.children[0] || null;
+	    }
+	  }]);
+	
+	  return I18nProvider;
+	}(_react.Component);
+	
+	I18nProvider.childContextTypes = {
+	  t: _react2.default.PropTypes.func,
+	  f: _react2.default.PropTypes.func
+	
+	  // higher order decorator for components that need `t` and/or `f`
+	};var translate = exports.translate = function translate() {
+	  return function (WrappedComponent) {
+	    var _translate = function _translate(props, context) {
+	      return _react2.default.createElement(WrappedComponent, _extends({}, props, { t: context.t, f: context.f }));
+	    };
+	    return _translate;
+	  };
+	};
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"coz-spinner":"coz-spinner--6cG0u","coz-spinner--blue":"coz-spinner--blue--1fL-n","coz-spinner--grey":"coz-spinner--grey--1Nk96","coz-spinner--white":"coz-spinner--white--2AN8H","coz-spinner--red":"coz-spinner--red--TAJ8V","coz-spinner--tiny":"coz-spinner--tiny--3X4-A","coz-spinner--small":"coz-spinner--small--AWitf","coz-spinner--medium":"coz-spinner--medium--JCb_v","coz-spinner--large":"coz-spinner--large--2QW6o","coz-spinner--xlarge":"coz-spinner--xlarge--1oC3p","coz-spinner--xxlarge":"coz-spinner--xxlarge--3rzJm","spin":"spin--3DZqI","coz-spinner--middle":"coz-spinner--middle--3u_lQ","coz-spinner--nomargin":"coz-spinner--nomargin--3KjGZ"};
+
+/***/ }),
 /* 496 */,
 /* 497 */,
 /* 498 */,
@@ -37386,49 +47493,8 @@
 /* 508 */,
 /* 509 */,
 /* 510 */,
-/* 511 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _loading = __webpack_require__(512);
-	
-	var _loading2 = _interopRequireDefault(_loading);
-	
-	var _react = __webpack_require__(241);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Loading = function Loading(_ref) {
-	  var message = _ref.message;
-	
-	  return _react2.default.createElement(
-	    'div',
-	    { className: _loading2.default['fil-loading'] },
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      message
-	    )
-	  );
-	};
-	
-	exports.default = Loading;
-
-/***/ }),
-/* 512 */
-/***/ (function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"fil-loading":"fil-loading--1vW3D","spin":"spin--1OEM5"};
-
-/***/ }),
+/* 511 */,
+/* 512 */,
 /* 513 */,
 /* 514 */,
 /* 515 */,
@@ -37574,7 +47640,25 @@
 /* 655 */,
 /* 656 */,
 /* 657 */,
-/* 658 */
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */,
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	(function (global, factory) {
@@ -38081,9 +48165,279 @@
 
 
 /***/ }),
-/* 659 */,
-/* 660 */,
-/* 661 */
+/* 677 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./en": 678,
+		"./en.json": 678
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 677;
+
+
+/***/ }),
+/* 678 */
+/***/ (function(module, exports) {
+
+	module.exports = {
+		"nav": {
+			"item_drive": "Drive",
+			"item_recent": "Recent",
+			"item_shared": "Shared by me",
+			"item_activity": "Activity",
+			"item_trash": "Trash",
+			"item_settings": "Settings",
+			"btn-client": "Get Cozy for desktop",
+			"btn-client-mobile": "Get Cozy Drive on your mobile!",
+			"link-client": "https://docs.cozy.io/en/download/"
+		},
+		"breadcrumb": {
+			"title_drive": "Drive",
+			"title_recent": "Recent",
+			"title_shared": "Shared by me",
+			"title_activity": "Activity",
+			"title_trash": "Trash"
+		},
+		"toolbar": {
+			"item_upload": "Upload",
+			"item_more": "More",
+			"menu_upload": "Upload files",
+			"menu_new_folder": "New folder",
+			"menu_select": "Select items",
+			"empty_trash": "Empty trash",
+			"share": "Share"
+		},
+		"share": {
+			"title": "Share with others",
+			"shareByLink": {
+				"title": "By public link",
+				"subtitle": "Share by link",
+				"desc": "Anyone with the provided link can see and download your files."
+			},
+			"sharingLink": {
+				"title": "Link to share",
+				"copy": "Copy",
+				"copied": "Copied"
+			},
+			"creatingLink": "Creating your link..."
+		},
+		"table": {
+			"head_name": "Name",
+			"head_update": "Last update",
+			"head_size": "Size",
+			"head_status": "Status",
+			"row_update_format": "MMM D, YYYY",
+			"row_read_only": "Share (Read only)",
+			"row_read_write": "Share (Read & Write)",
+			"row_size_symbols": {
+				"B": "B",
+				"KB": "KB",
+				"MB": "MB",
+				"GB": "GB",
+				"TB": "TB",
+				"PB": "PB",
+				"EB": "EB",
+				"ZB": "ZB",
+				"YB": "YB"
+			}
+		},
+		"SelectionBar": {
+			"selected_count": "item selected |||| items selected",
+			"share": "Share",
+			"download": "Download",
+			"trash": "Remove",
+			"destroy": "Delete permanently",
+			"moveto": "Move",
+			"rename": "Rename",
+			"restore": "Restore",
+			"close": "Close",
+			"openWith": "Open with"
+		},
+		"deleteconfirmation": {
+			"title": "Delete this element? |||| Delete these elements?",
+			"trash": "It will be moved to the Trash. |||| They will be moved to the Trash.",
+			"restore": "You can still restore it whenever you want. |||| You can still restore them whenever you want.",
+			"shared": "If you have shared it, people won't be able to access it. |||| If you have shared them, people won't be able to access them.",
+			"cancel": "Cancel",
+			"delete": "Remove"
+		},
+		"emptytrashconfirmation": {
+			"title": "Permanently delete?",
+			"forbidden": "You won't be able to access these files anymore.",
+			"restore": "You won't be able to restore these files if you didn't make a backup.",
+			"cancel": "Cancel",
+			"delete": "Delete all"
+		},
+		"destroyconfirmation": {
+			"title": "Permanently delete?",
+			"forbidden": "You won't be able to access this file anymore. |||| You won't be able to access these files anymore.",
+			"restore": "You won't be able to restore this file if you didn't make a backup. |||| You won't be able to restore these files if you didn't make a backup.",
+			"cancel": "Cancel",
+			"delete": "Delete permanently"
+		},
+		"quotaalert": {
+			"title": "Your disk space is full :(",
+			"desc": " Please remove files and empty your trash before uploading files again.",
+			"confirm": "OK"
+		},
+		"loading": {
+			"message": "Loading"
+		},
+		"empty": {
+			"title": "You don’t have any files in this folder.",
+			"text": "Click the \"upload\" button to add files to this folder.",
+			"trash": {
+				"title": "You don’t have any deleted files.",
+				"text": "Move files you don't need anymore to the Trash and permanently delete items to free up storage page."
+			}
+		},
+		"error": {
+			"open_folder": "Something went wrong when opening the folder.",
+			"button": {
+				"reload": "Refresh now"
+			},
+			"download_file": {
+				"offline": "You should be connected to download this file",
+				"missing": "This file is missing"
+			}
+		},
+		"alert": {
+			"try_again": "An error has occurred, please try again in a moment.",
+			"restore_file_success": "The selection has been successfully restored.",
+			"trash_file_success": "The selection has been moved to the Trash.",
+			"destroy_file_success": "The selection has been deleted permanently.",
+			"empty_trash_success": "The trash has been emptied.",
+			"folder_name": "The element %{folderName} already exists, please choose a new name.",
+			"folder_generic": "An error occurred, please try again.",
+			"folder_abort": "You need to add a name to your new folder if you would like to save it. Your information has not been saved.",
+			"offline": "This feature is not available offline."
+		},
+		"mobile": {
+			"onboarding": {
+				"welcome": {
+					"title1": "Welcome to Cozy",
+					"title2": "Your own personal cloud",
+					"button": "Sign in to your Cozy",
+					"no_account_link": "Don’t have an account? Request one here."
+				},
+				"server_selection": {
+					"description": "This is the web address you use to access your Cozy.",
+					"cozy_address_placeholder": "tonystark.mycozy.cloud",
+					"button": "Next",
+					"wrong_address_with_email": "You typed an email address. To connect on your cozy you must type its url, something like https://tonystark.mycozy.cloud",
+					"wrong_address_v2": "You have just entered the address of old Cozy version. This application is only compatible with the latest version. Please refer to our site for more information.",
+					"wrong_address": "This address doesn’t seem to a cozy. Please check the address you provide."
+				},
+				"files": {
+					"title": "Access your drive",
+					"description": "In order to save your Cozy Drive on your device, the application must access your files."
+				},
+				"photos": {
+					"title": "Backup your photos and videos",
+					"description": "Automatically backup the photos taken with your phone to your Cozy, so you never lose them."
+				},
+				"step": {
+					"button": "Enable now",
+					"skip": "Later",
+					"next": "Next"
+				},
+				"analytics": {
+					"title": "Help us improve Cozy",
+					"description": "The application will automatically provide data (mainly errors) to Cozy Cloud. It will allow us to resolve problems faster."
+				}
+			},
+			"settings": {
+				"title": "Settings",
+				"about": {
+					"title": "About",
+					"app_version": "App Version",
+					"account": "Account"
+				},
+				"unlink": {
+					"title": "Reset this application",
+					"description": "By clicking Reset, you will be able to start your application over, and will only lose the data saved on your smartphone.",
+					"button": "Reset",
+					"confirmation": {
+						"title": "Reset this application?",
+						"description": "By logging out of your Cozy, you will erase all data synchronized locally by your mobile application.",
+						"cancel": "Cancel",
+						"unlink": "Reset"
+					}
+				},
+				"media_backup": {
+					"media_folder": "/Photos/Backuped from my mobile",
+					"title": "Media Backup",
+					"images": {
+						"title": "Backup images",
+						"label": "Backup your images automatically to your Cozy not to ever lose them and share them easily."
+					},
+					"launch": "Launch Backup",
+					"stop": "Stop Backup",
+					"wifi": {
+						"title": "Backup on WIFI only",
+						"label": "If the option is enabled, your device will only backup photos when it's on WIFI in order to save your package."
+					},
+					"media_upload": "Backing up %{upload_counter} of %{total_upload} photos"
+				},
+				"support": {
+					"title": "Support",
+					"analytics": {
+						"title": "Help us improve Cozy",
+						"label": "The application will automatically provide data (mainly errors) to Cozy Cloud. It will allow us to resolve problems faster."
+					},
+					"logs": {
+						"title": "Help us to understand your problem",
+						"description": "Send the application log to help us improve its quality and stability.",
+						"button": "Send my logs",
+						"success": "Thanks, we will investigate your problem and contact you soon.",
+						"error": "A problem happened, logs couldn't be sent, please try again."
+					}
+				}
+			},
+			"error": {
+				"open_with": {
+					"offline": "You should be connected to open this file",
+					"noapp": "No application can open this file"
+				}
+			},
+			"revoked": {
+				"title": "Access revoked",
+				"description": "It appears you revoked this device from your Cozy. If you didn't, please let us know at contact@cozycloud.cc. All your local data related to your Cozy will be removed.",
+				"loginagain": "Log in again",
+				"logout": "Log out"
+			}
+		},
+		"upload": {
+			"alert": {
+				"success": "%{smart_count} file uploaded with success. |||| %{smart_count} files uploaded with success.",
+				"success_conflicts": "%{smart_count} file uploaded with %{conflictNumber} conflict(s). |||| %{smart_count} files uploaded with %{conflictNumber} conflict(s).",
+				"errors": "Errors occurred during the file upload."
+			}
+		},
+		"UploadQueue": {
+			"header": "Uploading %{smart_count} photo to Cozy Drive |||| Uploading %{smart_count} photos to Cozy Drive",
+			"header_mobile": "%{done} of %{total} uploading…",
+			"header_done": "Uploaded %{done} out of %{total} successfully",
+			"close": "close",
+			"item": {
+				"pending": "Pending"
+			}
+		}
+	};
+
+/***/ }),
+/* 679 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_provided_cozy_dot_client) {'use strict';
@@ -38266,21 +48620,25 @@
 	
 	var _reactDom = __webpack_require__(241);
 	
-	var _IntentHandler = __webpack_require__(662);
+	var _IntentHandler = __webpack_require__(680);
 	
 	var _IntentHandler2 = _interopRequireDefault(_IntentHandler);
 	
+	var _I18n = __webpack_require__(343);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* global __DEVELOPMENT__ */
+	/* global cozy */
 	
 	if (true) {
 	  // Enables React dev tools for Preact
 	  // Cannot use import as we are in a condition
-	  __webpack_require__(658
+	  __webpack_require__(676
 	
 	  // Export React to window for the devtools
 	  );window.React = _react2.default;
-	} /* global __DEVELOPMENT__ */
-	/* global cozy */
+	}
 	
 	var arrToObj = function arrToObj() {
 	  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -38308,12 +48666,18 @@
 	    token: data.cozyToken
 	  });
 	
-	  (0, _reactDom.render)(_react2.default.createElement(_IntentHandler2.default, { intentId: intent }), root);
+	  (0, _reactDom.render)(_react2.default.createElement(
+	    _I18n.I18n,
+	    { lang: data.cozyLocale, dictRequire: function dictRequire(lang) {
+	        return __webpack_require__(677)("./" + lang);
+	      } },
+	    _react2.default.createElement(_IntentHandler2.default, { intentId: intent })
+	  ), root);
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 662 */
+/* 680 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_provided_cozy_dot_client) {'use strict';
@@ -38324,7 +48688,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _utils = __webpack_require__(663);
+	var _utils = __webpack_require__(681);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -38332,9 +48696,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Loading = __webpack_require__(511);
+	var _Spinner = __webpack_require__(493);
 	
-	var _Loading2 = _interopRequireDefault(_Loading);
+	var _Spinner2 = _interopRequireDefault(_Spinner);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -38440,7 +48804,11 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        this.state.loading && _react2.default.createElement(_Loading2.default, null),
+	        this.state.loading && _react2.default.createElement(_Spinner2.default, {
+	          size: 'xxlarge',
+	          loadingType: 'message',
+	          middle: 'true'
+	        }),
 	        this.state.error && _react2.default.createElement(
 	          'pre',
 	          { className: 'coz-error' },
@@ -38458,7 +48826,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 663 */
+/* 681 */
 /***/ (function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
