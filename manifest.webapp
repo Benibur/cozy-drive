@@ -1,6 +1,6 @@
 {
   "name": "Drive",
-  "slug": "app",
+  "slug": "cozy-drive",
   "icon": "app-icon.svg",
   "description": "File manager for Cozy v3",
   "category": "cozy",
@@ -31,16 +31,12 @@
   "intents": [
     {
       "action": "OPEN",
-      "type": [
-        "io.cozy.files"
-      ],
+      "type": ["io.cozy.files"],
       "href": "/services"
     },
     {
       "action": "GET_URL",
-      "type": [
-        "io.cozy.files"
-      ],
+      "type": ["io.cozy.files"],
       "href": "/services"
     }
   ],
@@ -54,16 +50,12 @@
     "apps": {
       "description": "Required by the cozy-bar to display the icons of the apps",
       "type": "io.cozy.apps",
-      "verbs": [
-        "GET"
-      ]
+      "verbs": ["GET"]
     },
     "settings": {
       "description": "Required by the cozy-bar to display Claudy and know which applications are coming soon",
       "type": "io.cozy.settings",
-      "verbs": [
-        "GET"
-      ]
+      "verbs": ["GET"]
     }
   }
 }
