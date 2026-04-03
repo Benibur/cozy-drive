@@ -78,7 +78,7 @@ exports.activate = function (options) {
 }),
 "./node_modules/highlight.js/lib/core.js!lazy-compilation-proxy": (function (module, __unused_webpack_exports, __webpack_require__) {
 var client = __webpack_require__("./node_modules/@rspack/core/hot/lazy-compilation-web.js?%2Flazy-compilation-using-__2");
-var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive/node_modules/highlight.js/lib/core.js";
+var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/highlight.js/lib/core.js";
         var resolveSelf, onError;
         module.exports = new Promise(function(resolve, reject) { resolveSelf = resolve; onError = reject; });
         if (module.hot) {
@@ -92,7 +92,7 @@ var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive/node_modules/h
 }),
 "./node_modules/highlight.js/lib/languages/markdown.js!lazy-compilation-proxy": (function (module, __unused_webpack_exports, __webpack_require__) {
 var client = __webpack_require__("./node_modules/@rspack/core/hot/lazy-compilation-web.js?%2Flazy-compilation-using-__2");
-var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive/node_modules/highlight.js/lib/languages/markdown.js";
+var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/highlight.js/lib/languages/markdown.js";
         var resolveSelf, onError;
         module.exports = new Promise(function(resolve, reject) { resolveSelf = resolve; onError = reject; });
         if (module.hot) {
@@ -106,7 +106,7 @@ var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive/node_modules/h
 }),
 "./node_modules/highlight.js/lib/languages/xml.js!lazy-compilation-proxy": (function (module, __unused_webpack_exports, __webpack_require__) {
 var client = __webpack_require__("./node_modules/@rspack/core/hot/lazy-compilation-web.js?%2Flazy-compilation-using-__2");
-var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive/node_modules/highlight.js/lib/languages/xml.js";
+var data = "lazy-compilation-proxy|/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/highlight.js/lib/languages/xml.js";
         var resolveSelf, onError;
         module.exports = new Promise(function(resolve, reject) { resolveSelf = resolve; onError = reject; });
         if (module.hot) {

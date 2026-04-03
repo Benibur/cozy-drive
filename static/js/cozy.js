@@ -7,7 +7,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132902167
+        // 1775186583062
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -36,7 +36,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132903669
+        // 1775186582002
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -65,7 +65,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132903275
+        // 1775186582545
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132902777
+        // 1775186582850
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -123,7 +123,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132902502
+        // 1775186583472
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -152,7 +152,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132902976
+        // 1775186583683
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -181,7 +181,7 @@ __webpack_require__.r(__webpack_exports__);
     if(true) {
       (function() {
         var localsJsonString = undefined;
-        // 1775132901794
+        // 1775186582249
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -230030,7 +230030,7 @@ const SvgIlluGenericNewPage = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__W
                 fill: "#B3D3FF",
                 d: "M0 4a4 4 0 0 1 4-4h25.333a2.667 2.667 0 1 1 0 5.333h-24v24a2.667 2.667 0 1 1-5.333 0zM0 124a4 4 0 0 0 4 4h25.333a2.667 2.667 0 0 0 0-5.333h-24v-24a2.667 2.667 0 1 0-5.333 0zM124 0a4 4 0 0 1 4 4v25.333a2.667 2.667 0 0 1-5.333 0v-24h-24a2.667 2.667 0 1 1 0-5.333zM128 98.667V124a4 4 0 0 1-4 4H98.667a2.667 2.667 0 0 1 0-5.333h24v-24a2.667 2.667 0 1 1 5.333 0M30.088 89.146c-.579 2.734-1.012 5.325-.579 7.772.723 4.318 4.192 6.045 8.528 7.052 1.88.432 4.047.72 5.782.864 8.672 1.007 23.27 1.439 32.087 2.302 2.746.432 5.492.576 8.094.72h3.18c1.012.144 2.023.144 3.035.144 4.914 0 6.504-3.022 7.083-7.052.144-.576.289-1.152.433-1.871v-1.008c0-.432 0-.863.145-1.151.578-2.735 1.011-5.47 1.445-8.204 0-.288.145-.72.145-1.007.867-4.318 4.191-22.885 5.637-36.845 1.011-5.182 3.758-14.825-1.879-17.847-3.325-1.727-55.503-6.189-57.67-6.333-2.747-.144-4.337.72-5.204 2.303-.723.72-1.012 1.727-1.301 3.022-1.156 3.31-8.672 50.518-8.961 57.139"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
                 lineNumber: 2,
                 columnNumber: 150
             }, undefined),
@@ -230038,7 +230038,7 @@ const SvgIlluGenericNewPage = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__W
                 fill: "#297EF2",
                 d: "M28.255 88.63c-.291 2.716-.437 5.289.146 7.719 1.166 4.144 4.955 5.574 9.328 6.002 2.04.286 4.08.286 5.83.286 8.745.143 20.696-.286 29.587-.286 2.769.143 5.538.143 8.307-.142 1.166 0 2.332 0 3.207-.143 1.02 0 2.04 0 3.06-.143 4.956-.429 6.122-3.716 6.268-7.576.145-.714.291-1.286.291-2.143 0-.286 0-.715-.146-1 0-.43 0-.858.146-1.144.292-2.716.437-5.431.583-8.29v-1c.437-4.288 1.895-23.012 1.895-37.019.437-5.002 2.186-14.864-3.79-17.294-3.498-1.43-53.49-1.143-55.821-1-2.77.142-4.227 1.143-5.102 2.715-.582.715-.874 1.858-1.02 3.145-.437 3.43-3.352 50.739-2.769 57.313"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
                 lineNumber: 2,
                 columnNumber: 1108
             }, undefined),
@@ -230046,7 +230046,7 @@ const SvgIlluGenericNewPage = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__W
                 fill: "#B3D3FF",
                 d: "M27.35 89.02c.142 2.718.429 5.292 1.288 7.58 1.72 4.004 5.586 4.862 9.884 4.719 2.005 0 4.01-.286 5.729-.572 8.594-1.144 17.475-1.43 26.069-2.717a72 72 0 0 0 8.02-1.287c1.147-.286 2.15-.43 3.009-.715 1.002-.143 2.005-.286 2.864-.572 4.727-1.144 5.444-4.434 5.014-8.438v-2.002c0-.286-.144-.715-.287-.858 0-.429 0-.858-.143-1.144-.143-2.717-.286-5.434-.716-8.294 0-.286 0-.715-.143-1.001-.287-4.29-1.576-23.024-3.581-36.895-.287-5.149 0-15.16-6.16-16.732-3.58-.858-49.559 4.576-51.85 5.005-2.579.572-4.011 1.716-4.44 3.432-.574.858-.574 1.86-.574 3.29.43 3.431 4.584 50.766 6.016 57.201"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
                 lineNumber: 2,
                 columnNumber: 1705
             }, undefined),
@@ -230056,13 +230056,13 @@ const SvgIlluGenericNewPage = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__W
                 d: "M35.796 40.772c5.385-.575 10.805-1.113 16.226-1.652s10.841-1.077 16.226-1.651c2.297-.287 2.01-3.877-.287-3.59-10.77 1.005-21.683 2.154-32.452 3.303-2.441.143-2.01 3.733.287 3.59m10.777 6.616c-1.413.18-3.85.489-9.629 1.138-2.297.287-2.584-3.303-.43-3.59 1.99-.257 3.573-.463 4.85-.63 3.76-.488 4.88-.634 6.005-.727.477-.04.955-.07 1.635-.113.826-.052 1.95-.123 3.736-.253 2.297-.144 2.728 3.446.43 3.59l-.53.038c-2.793.203-3.693.268-4.59.367-.425.046-.85.1-1.477.18m-3.085 7.938c3.77-.315 7.578-.633 11.262-1.2 2.298-.287 1.867-3.877-.43-3.59-3.101.477-6.29.734-9.469.99-2.563.206-5.12.412-7.62.733-2.44.144-1.866 3.877.431 3.59 1.916-.197 3.866-.36 5.826-.523m18.729 11.867c-7.898.43-9.62.574-23.693 1.866-2.297.288-2.585-3.302-.287-3.59 10.557-1.248 14.294-1.42 19.298-1.65h.002c1.325-.06 2.74-.126 4.393-.216 2.297-.144 2.584 3.446.287 3.59m-20.78 13.915-1.19.157c-2.297.287-1.867 3.877.431 3.59 8.503-.868 10.348-1.107 12.472-1.381 1.391-.18 2.902-.376 6.482-.773 2.298-.287 2.01-3.877-.43-3.59-8.828.815-11.105 1.116-17.765 1.996m-2.626-7.597c10.77-1.149 21.683-2.298 32.452-3.303 2.298-.287 2.728 3.303.287 3.59-5.384.574-10.805 1.113-16.226 1.651-5.42.539-10.84 1.077-16.226 1.652-2.297.287-2.584-3.303-.287-3.59",
                 clipRule: "evenodd"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
                 lineNumber: 2,
                 columnNumber: 2317
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/node_modules/cozy-viewer/dist/assets/IlluGenericNewPage.svg",
         lineNumber: 2,
         columnNumber: 40
     }, undefined);

@@ -11,7 +11,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"oops\":\"src-components-Error-oops__oops-tmW_k0\"}";
-        // 1775132904406
+        // 1775186584281
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -43,7 +43,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"pho-viewer-noviewer-cta\":\"src-modules-viewer-styles__pho-viewer-noviewer-cta-YqkcnE\",\"phoViewerNoviewerCta\":\"src-modules-viewer-styles__pho-viewer-noviewer-cta-YqkcnE\",\"pho-viewer-noviewer-cta-cross\":\"src-modules-viewer-styles__pho-viewer-noviewer-cta-cross-ZF5bcZ\",\"phoViewerNoviewerCtaCross\":\"src-modules-viewer-styles__pho-viewer-noviewer-cta-cross-ZF5bcZ\"}";
-        // 1775132904542
+        // 1775186584349
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -75,7 +75,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"scribe-result-panel\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-panel-sWhzC7\",\"scribeResultPanel\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-panel-sWhzC7\",\"scribe-result-header\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-header-F2vrio\",\"scribeResultHeader\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-header-F2vrio\",\"scribe-result-text\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-text-EOKa1c\",\"scribeResultText\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-text-EOKa1c\",\"scribe-result-actions\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-actions-GjVK1r\",\"scribeResultActions\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-result-actions-GjVK1r\",\"scribe-resize-handle\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-resize-handle-fRZ_mV\",\"scribeResizeHandle\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-resize-handle-fRZ_mV\",\"scribe-md-preview\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-md-preview-SEgGig\",\"scribeMdPreview\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-md-preview-SEgGig\",\"scribe-loading-panel\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-loading-panel-T4bxRC\",\"scribeLoadingPanel\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-loading-panel-T4bxRC\",\"scribe-loading-message\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-loading-message-oA__nT\",\"scribeLoadingMessage\":\"src-modules-views-OnlyOffice-Scribe-scribe__scribe-loading-message-oA__nT\"}";
-        // 1775132904017
+        // 1775186583941
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -107,7 +107,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"separator\":\"src-modules-views-OnlyOffice-Toolbar-styles__separator-ffrmrr\",\"fileName\":\"src-modules-views-OnlyOffice-Toolbar-styles__fileName-Zx_7SQ\",\"filename-renameInput\":\"src-modules-views-OnlyOffice-Toolbar-styles__filename-renameInput-ce_3bJ\",\"filenameRenameInput\":\"src-modules-views-OnlyOffice-Toolbar-styles__filename-renameInput-ce_3bJ\"}";
-        // 1775132904195
+        // 1775186584164
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -139,7 +139,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"ai-assistant-panel\":\"src-modules-views-OnlyOffice-styles__ai-assistant-panel-uAZnud\",\"aiAssistantPanel\":\"src-modules-views-OnlyOffice-styles__ai-assistant-panel-uAZnud\"}";
-        // 1775132903842
+        // 1775186583875
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -171,7 +171,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"fil-content-row-selected\":\"src-styles-filelist__fil-content-row-selected-NCUdFl\",\"filContentRowSelected\":\"src-styles-filelist__fil-content-row-selected-NCUdFl\",\"fil-content-column-selected\":\"src-styles-filelist__fil-content-column-selected-fP4zEq\",\"filContentColumnSelected\":\"src-styles-filelist__fil-content-column-selected-fP4zEq\",\"fil-file-list-container\":\"src-styles-filelist__fil-file-list-container-U34Psk\",\"filFileListContainer\":\"src-styles-filelist__fil-file-list-container-U34Psk\",\"fil-content-cell\":\"src-styles-filelist__fil-content-cell-ZXKNDz\",\"filContentCell\":\"src-styles-filelist__fil-content-cell-ZXKNDz\",\"fil-content-row\":\"src-styles-filelist__fil-content-row-WbMkV0\",\"filContentRow\":\"src-styles-filelist__fil-content-row-WbMkV0\",\"fil-content-file-select\":\"src-styles-filelist__fil-content-file-select-R1SsnF\",\"filContentFileSelect\":\"src-styles-filelist__fil-content-file-select-R1SsnF\",\"fil-content-row--center\":\"src-styles-filelist__fil-content-row--center-wh4_tE\",\"filContentRowCenter\":\"src-styles-filelist__fil-content-row--center-wh4_tE\",\"fil-content-row-actioned\":\"src-styles-filelist__fil-content-row-actioned-svyW32\",\"filContentRowActioned\":\"src-styles-filelist__fil-content-row-actioned-svyW32\",\"fil-content-row-disabled\":\"src-styles-filelist__fil-content-row-disabled-RsrFh9\",\"filContentRowDisabled\":\"src-styles-filelist__fil-content-row-disabled-RsrFh9\",\"fil-content-row-bigger\":\"src-styles-filelist__fil-content-row-bigger-vYPd5W\",\"filContentRowBigger\":\"src-styles-filelist__fil-content-row-bigger-vYPd5W\",\"fil-content-head-grid-view\":\"src-styles-filelist__fil-content-head-grid-view-QVt0Zo\",\"filContentHeadGridView\":\"src-styles-filelist__fil-content-head-grid-view-QVt0Zo\",\"fil-content-column\":\"src-styles-filelist__fil-content-column-zvhV6P\",\"filContentColumn\":\"src-styles-filelist__fil-content-column-zvhV6P\",\"fil-content-file-action\":\"src-styles-filelist__fil-content-file-action-Vjb5wW\",\"filContentFileAction\":\"src-styles-filelist__fil-content-file-action-Vjb5wW\",\"fil-content-column-virtualized\":\"src-styles-filelist__fil-content-column-virtualized-snn5dT\",\"filContentColumnVirtualized\":\"src-styles-filelist__fil-content-column-virtualized-snn5dT\",\"fil-content-column--center\":\"src-styles-filelist__fil-content-column--center-IdWreC\",\"filContentColumnCenter\":\"src-styles-filelist__fil-content-column--center-IdWreC\",\"fil-content-grid-item\":\"src-styles-filelist__fil-content-grid-item-Dl6arl\",\"filContentGridItem\":\"src-styles-filelist__fil-content-grid-item-Dl6arl\",\"fil-content-column-disabled\":\"src-styles-filelist__fil-content-column-disabled-GTZSVk\",\"filContentColumnDisabled\":\"src-styles-filelist__fil-content-column-disabled-GTZSVk\",\"fil-content-column-actioned\":\"src-styles-filelist__fil-content-column-actioned-fr7pq7\",\"filContentColumnActioned\":\"src-styles-filelist__fil-content-column-actioned-fr7pq7\",\"fil-content-ext\":\"src-styles-filelist__fil-content-ext-BGBCPR\",\"filContentExt\":\"src-styles-filelist__fil-content-ext-BGBCPR\",\"fil-content-header\":\"src-styles-filelist__fil-content-header-dS5Zie\",\"filContentHeader\":\"src-styles-filelist__fil-content-header-dS5Zie\",\"fil-content-header--capitalize\":\"src-styles-filelist__fil-content-header--capitalize-AJkmls\",\"filContentHeaderCapitalize\":\"src-styles-filelist__fil-content-header--capitalize-AJkmls\",\"fil-content-mobile-head\":\"src-styles-filelist__fil-content-mobile-head-fz7lsM\",\"filContentMobileHead\":\"src-styles-filelist__fil-content-mobile-head-fz7lsM\",\"fil-content-mobile-header\":\"src-styles-filelist__fil-content-mobile-header-S8lq5j\",\"filContentMobileHeader\":\"src-styles-filelist__fil-content-mobile-header-S8lq5j\",\"fil-content-header-sortableasc\":\"src-styles-filelist__fil-content-header-sortableasc-rwsr0v\",\"filContentHeaderSortableasc\":\"src-styles-filelist__fil-content-header-sortableasc-rwsr0v\",\"fil-content-header-sortabledesc\":\"src-styles-filelist__fil-content-header-sortabledesc-lYA0Lo\",\"filContentHeaderSortabledesc\":\"src-styles-filelist__fil-content-header-sortabledesc-lYA0Lo\",\"fil-content-header-sortasc\":\"src-styles-filelist__fil-content-header-sortasc-O3WruI\",\"filContentHeaderSortasc\":\"src-styles-filelist__fil-content-header-sortasc-O3WruI\",\"fil-content-header-sortdesc\":\"src-styles-filelist__fil-content-header-sortdesc-rOhhgT\",\"filContentHeaderSortdesc\":\"src-styles-filelist__fil-content-header-sortdesc-rOhhgT\",\"fil-content-file\":\"src-styles-filelist__fil-content-file-PjsoJV\",\"filContentFile\":\"src-styles-filelist__fil-content-file-PjsoJV\",\"fil-content-file-openable\":\"src-styles-filelist__fil-content-file-openable-w4fSbg\",\"filContentFileOpenable\":\"src-styles-filelist__fil-content-file-openable-w4fSbg\",\"fil-content-grid-view\":\"src-styles-filelist__fil-content-grid-view-IcpmNR\",\"filContentGridView\":\"src-styles-filelist__fil-content-grid-view-IcpmNR\",\"fil-content-status\":\"src-styles-filelist__fil-content-status-mlUIFz\",\"filContentStatus\":\"src-styles-filelist__fil-content-status-mlUIFz\",\"fil-file-filename-and-ext\":\"src-styles-filelist__fil-file-filename-and-ext-OiCHoH\",\"filFileFilenameAndExt\":\"src-styles-filelist__fil-file-filename-and-ext-OiCHoH\",\"fil-file-path\":\"src-styles-filelist__fil-file-path-QpjKUQ\",\"filFilePath\":\"src-styles-filelist__fil-file-path-QpjKUQ\",\"fil-file-description\":\"src-styles-filelist__fil-file-description-b0n8tl\",\"filFileDescription\":\"src-styles-filelist__fil-file-description-b0n8tl\",\"fil-file-thumbnail\":\"src-styles-filelist__fil-file-thumbnail-rpHzt4\",\"filFileThumbnail\":\"src-styles-filelist__fil-file-thumbnail-rpHzt4\",\"fil-file-thumbnail--spinner\":\"src-styles-filelist__fil-file-thumbnail--spinner-O6sI3a\",\"filFileThumbnailSpinner\":\"src-styles-filelist__fil-file-thumbnail--spinner-O6sI3a\",\"fil-file-thumbnail-image\":\"src-styles-filelist__fil-file-thumbnail-image-aSwcGt\",\"filFileThumbnailImage\":\"src-styles-filelist__fil-file-thumbnail-image-aSwcGt\",\"fil-content-shared\":\"src-styles-filelist__fil-content-shared-zvv5t8\",\"filContentShared\":\"src-styles-filelist__fil-content-shared-zvv5t8\",\"fil-content-shared-grid\":\"src-styles-filelist__fil-content-shared-grid-_MKlcj\",\"filContentSharedGrid\":\"src-styles-filelist__fil-content-shared-grid-_MKlcj\",\"fil-content-shared-vz\":\"src-styles-filelist__fil-content-shared-vz-KeE43d\",\"filContentSharedVz\":\"src-styles-filelist__fil-content-shared-vz-KeE43d\",\"fil-content-date\":\"src-styles-filelist__fil-content-date-HtLOvl\",\"filContentDate\":\"src-styles-filelist__fil-content-date-HtLOvl\",\"fil-content-size\":\"src-styles-filelist__fil-content-size-g8UdsX\",\"filContentSize\":\"src-styles-filelist__fil-content-size-g8UdsX\",\"fil-content-narrow\":\"src-styles-filelist__fil-content-narrow-_7PCcR\",\"filContentNarrow\":\"src-styles-filelist__fil-content-narrow-_7PCcR\",\"fil-content-header-status\":\"src-styles-filelist__fil-content-header-status-Zu9sRa\",\"filContentHeaderStatus\":\"src-styles-filelist__fil-content-header-status-Zu9sRa\",\"fil-content-offline\":\"src-styles-filelist__fil-content-offline-BQezVT\",\"filContentOffline\":\"src-styles-filelist__fil-content-offline-BQezVT\",\"fil-content-header-sharing-shortcut\":\"src-styles-filelist__fil-content-header-sharing-shortcut-uJBLGr\",\"filContentHeaderSharingShortcut\":\"src-styles-filelist__fil-content-header-sharing-shortcut-uJBLGr\",\"fil-content-sharing-shortcut\":\"src-styles-filelist__fil-content-sharing-shortcut-n0_0Cc\",\"filContentSharingShortcut\":\"src-styles-filelist__fil-content-sharing-shortcut-n0_0Cc\",\"fil-content-header-action\":\"src-styles-filelist__fil-content-header-action-DaVBEb\",\"filContentHeaderAction\":\"src-styles-filelist__fil-content-header-action-DaVBEb\",\"fil-content-body--selectable\":\"src-styles-filelist__fil-content-body--selectable-ysGYEP\",\"filContentBodySelectable\":\"src-styles-filelist__fil-content-body--selectable-ysGYEP\",\"fil-file\":\"src-styles-filelist__fil-file-uCZ8mV\",\"filFile\":\"src-styles-filelist__fil-file-uCZ8mV\",\"fil-file-filename\":\"src-styles-filelist__fil-file-filename-hp04pN\",\"filFileFilename\":\"src-styles-filelist__fil-file-filename-hp04pN\",\"fil-file-filename-wrapper\":\"src-styles-filelist__fil-file-filename-wrapper-Zw5My2\",\"filFileFilenameWrapper\":\"src-styles-filelist__fil-file-filename-wrapper-Zw5My2\",\"fil-file-filename-spinner\":\"src-styles-filelist__fil-file-filename-spinner-SOjBXM\",\"filFileFilenameSpinner\":\"src-styles-filelist__fil-file-filename-spinner-SOjBXM\",\"fil-file-description--path\":\"src-styles-filelist__fil-file-description--path-CEAtUK\",\"filFileDescriptionPath\":\"src-styles-filelist__fil-file-description--path-CEAtUK\",\"fil-file-certifications\":\"src-styles-filelist__fil-file-certifications-dSxenJ\",\"filFileCertifications\":\"src-styles-filelist__fil-file-certifications-dSxenJ\",\"fil-file-certifications--separator\":\"src-styles-filelist__fil-file-certifications--separator-J9D6MP\",\"filFileCertificationsSeparator\":\"src-styles-filelist__fil-file-certifications--separator-J9D6MP\",\"fil-file-certifications--icon\":\"src-styles-filelist__fil-file-certifications--icon-jdevT6\",\"filFileCertificationsIcon\":\"src-styles-filelist__fil-file-certifications--icon-jdevT6\",\"fil-file-infos\":\"src-styles-filelist__fil-file-infos-p_2xRT\",\"filFileInfos\":\"src-styles-filelist__fil-file-infos-p_2xRT\",\"fil-file-shared\":\"src-styles-filelist__fil-file-shared-fz8CXG\",\"filFileShared\":\"src-styles-filelist__fil-file-shared-fz8CXG\",\"fil-file-shared-icon\":\"src-styles-filelist__fil-file-shared-icon-zuB17W\",\"filFileSharedIcon\":\"src-styles-filelist__fil-file-shared-icon-zuB17W\",\"fil-content-file-placeholder\":\"src-styles-filelist__fil-content-file-placeholder-KfCMho\",\"filContentFilePlaceholder\":\"src-styles-filelist__fil-content-file-placeholder-KfCMho\",\"placeHolderShimmer\":\"src-styles-filelist__placeHolderShimmer-Lwg8Ym\",\"fil-content-sharestatus\":\"src-styles-filelist__fil-content-sharestatus-ubp7Lv\",\"filContentSharestatus\":\"src-styles-filelist__fil-content-sharestatus-ubp7Lv\",\"fil-content-sharestatus--disabled\":\"src-styles-filelist__fil-content-sharestatus--disabled-PVHJb7\",\"filContentSharestatusDisabled\":\"src-styles-filelist__fil-content-sharestatus--disabled-PVHJb7\",\"fil-content-file-action--disabled\":\"src-styles-filelist__fil-content-file-action--disabled-fxhBHH\",\"filContentFileActionDisabled\":\"src-styles-filelist__fil-content-file-action--disabled-fxhBHH\",\"fil-content-body\":\"src-styles-filelist__fil-content-body-PUmIfq\",\"filContentBody\":\"src-styles-filelist__fil-content-body-PUmIfq\",\"fil-content-table-selection\":\"src-styles-filelist__fil-content-table-selection-ZXNxNb\",\"filContentTableSelection\":\"src-styles-filelist__fil-content-table-selection-ZXNxNb\",\"fil-content-body--withFabActive\":\"src-styles-filelist__fil-content-body--withFabActive-mG7JmE\",\"filContentBodyWithFabActive\":\"src-styles-filelist__fil-content-body--withFabActive-mG7JmE\",\"fil-content-head\":\"src-styles-filelist__fil-content-head-R_tm8i\",\"filContentHead\":\"src-styles-filelist__fil-content-head-R_tm8i\"}";
-        // 1775132904587
+        // 1775186584417
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -203,7 +203,7 @@ __webpack_require__.d(__webpack_exports__, {
     if(true) {
       (function() {
         var localsJsonString = "{\"fil-file-name-input\":\"src-styles-filenameinput__fil-file-name-input-G5Eytm\",\"filFileNameInput\":\"src-styles-filenameinput__fil-file-name-input-G5Eytm\",\"error\":\"src-styles-filenameinput__error-M9EoFM\"}";
-        // 1775132904524
+        // 1775186584325
         var cssReload = (__webpack_require__("./node_modules/@rspack/core/dist/cssExtractHmr.js")/* .cssReload */.cssReload)(module.id, {});
         // only invalidate when locals change
         if (
@@ -350,17 +350,17 @@ const MoreButton = (param)=>{
             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 icon: cozy_ui_transpiled_react_Icons_Dots__WEBPACK_IMPORTED_MODULE_5__["default"]
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/components/Button/MoreButton.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/Button/MoreButton.jsx",
                 lineNumber: 21,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/components/Button/MoreButton.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/Button/MoreButton.jsx",
             lineNumber: 13,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/components/Button/MoreButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/Button/MoreButton.jsx",
         lineNumber: 12,
         columnNumber: 5
     }, undefined);
@@ -450,12 +450,12 @@ const Oops = (param)=>{
             onClick: reload,
             label: t('error.button.reload')
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/components/Error/Oops.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/Error/Oops.jsx",
             lineNumber: 25,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/components/Error/Oops.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/Error/Oops.jsx",
         lineNumber: 20,
         columnNumber: 5
     }, undefined);
@@ -828,7 +828,7 @@ const RightClickProvider = (param)=>{
         value: value,
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/components/RightClick/RightClickProvider.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/RightClick/RightClickProvider.jsx",
         lineNumber: 54,
         columnNumber: 5
     }, undefined);
@@ -940,7 +940,7 @@ const TrashedBanner = (param)=>{
                     icon: cozy_ui_transpiled_react_Icons_TrashDuotone__WEBPACK_IMPORTED_MODULE_12__["default"],
                     size: 32
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/components/TrashedBanner.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/TrashedBanner.jsx",
                     lineNumber: 67,
                     columnNumber: 15
                 }, void 0),
@@ -954,7 +954,7 @@ const TrashedBanner = (param)=>{
                             onClick: restore,
                             busy: isBusy
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/components/TrashedBanner.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/TrashedBanner.jsx",
                             lineNumber: 72,
                             columnNumber: 15
                         }, void 0),
@@ -965,7 +965,7 @@ const TrashedBanner = (param)=>{
                             onClick: destroy,
                             disabled: isBusy
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/components/TrashedBanner.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/TrashedBanner.jsx",
                             lineNumber: 79,
                             columnNumber: 15
                         }, void 0)
@@ -973,7 +973,7 @@ const TrashedBanner = (param)=>{
                 }, void 0, true) : null,
                 children: t('TrashedBanner.text')
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/components/TrashedBanner.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/TrashedBanner.jsx",
                 lineNumber: 64,
                 columnNumber: 7
             }, undefined),
@@ -985,7 +985,7 @@ const TrashedBanner = (param)=>{
                 onConfirm: handleDestroyConfirm,
                 onClose: navigate(`/trash/${fileResult.data.dir_id}`)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/components/TrashedBanner.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/components/TrashedBanner.jsx",
                 lineNumber: 93,
                 columnNumber: 9
             }, undefined) : null
@@ -1654,7 +1654,7 @@ const DriveProvider = (param)=>{
                                         children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_providers_Alert__WEBPACK_IMPORTED_MODULE_14__["default"], {
                                             children: [
                                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_keys_lib__WEBPACK_IMPORTED_MODULE_4__.VaultUnlockPlaceholder, {}, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                                     lineNumber: 36,
                                                     columnNumber: 25
                                                 }, undefined),
@@ -1662,63 +1662,63 @@ const DriveProvider = (param)=>{
                                                     children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_RightClick_RightClickProvider__WEBPACK_IMPORTED_MODULE_6__["default"], {
                                                         children: children
                                                     }, void 0, false, {
-                                                        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                                         lineNumber: 38,
                                                         columnNumber: 27
                                                     }, undefined)
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                                     lineNumber: 37,
                                                     columnNumber: 25
                                                 }, undefined)
                                             ]
                                         }, void 0, true, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                             lineNumber: 35,
                                             columnNumber: 23
                                         }, undefined)
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                         lineNumber: 34,
                                         columnNumber: 21
                                     }, undefined)
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                     lineNumber: 33,
                                     columnNumber: 19
                                 }, undefined)
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                                 lineNumber: 32,
                                 columnNumber: 17
                             }, undefined)
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                             lineNumber: 31,
                             columnNumber: 15
                         }, undefined)
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                         lineNumber: 30,
                         columnNumber: 13
                     }, undefined)
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                     lineNumber: 29,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
                 lineNumber: 28,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
             lineNumber: 27,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
         lineNumber: 26,
         columnNumber: 5
     }, undefined);
@@ -1745,7 +1745,7 @@ const DataProxyWrapper = (param)=>{
         },
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/DriveProvider.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/DriveProvider.jsx",
         lineNumber: 59,
         columnNumber: 5
     }, undefined);
@@ -1800,7 +1800,7 @@ const FabProvider = (param)=>{
         },
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/lib/FabProvider.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/lib/FabProvider.jsx",
         lineNumber: 9,
         columnNumber: 5
     }, undefined);
@@ -3136,7 +3136,7 @@ const RenameInput = (param)=>{
         },
         onAbort: onAbort
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/drive/RenameInput.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/drive/RenameInput.jsx",
         lineNumber: 58,
         columnNumber: 5
     }, undefined);
@@ -3524,12 +3524,12 @@ class FilenameInput extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                     className: error ? _styles_filenameinput_styl__WEBPACK_IMPORTED_MODULE_4__["default"].error : null,
                     autoFocus: "autofocus"
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
                     lineNumber: 148,
                     columnNumber: 9
                 }, this),
                 working && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_7__["default"], {}, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
                     lineNumber: 160,
                     columnNumber: 21
                 }, this),
@@ -3545,7 +3545,7 @@ class FilenameInput extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                                 onClick: this.abort,
                                 label: t('RenameModal.cancel')
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
                                 lineNumber: 168,
                                 columnNumber: 15
                             }, void 0),
@@ -3554,7 +3554,7 @@ class FilenameInput extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                                 label: t('RenameModal.continue'),
                                 onClick: this.save
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
                                 lineNumber: 173,
                                 columnNumber: 15
                             }, void 0)
@@ -3562,13 +3562,13 @@ class FilenameInput extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                     }, void 0, true),
                     actionsLayout: "row"
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
                     lineNumber: 161,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/filelist/FilenameInput.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/filelist/FilenameInput.jsx",
             lineNumber: 143,
             columnNumber: 7
         }, this);
@@ -3762,7 +3762,7 @@ const PublicProvider = (param)=>{
         value: value,
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/public/PublicProvider.tsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/public/PublicProvider.tsx",
         lineNumber: 25,
         columnNumber: 5
     }, undefined);
@@ -3847,12 +3847,12 @@ const PublicToolbarMoreMenu = (param)=>{
                 children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_Button__WEBPACK_IMPORTED_MODULE_3__.MoreButton, {
                     onClick: toggleMenu
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/public/PublicToolbarMoreMenu.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/public/PublicToolbarMoreMenu.jsx",
                     lineNumber: 33,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/public/PublicToolbarMoreMenu.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/public/PublicToolbarMoreMenu.jsx",
                 lineNumber: 26,
                 columnNumber: 7
             }, undefined),
@@ -3863,7 +3863,7 @@ const PublicToolbarMoreMenu = (param)=>{
                 docs: files,
                 actions: actions
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/public/PublicToolbarMoreMenu.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/public/PublicToolbarMoreMenu.jsx",
                 lineNumber: 36,
                 columnNumber: 9
             }, undefined)
@@ -3948,7 +3948,7 @@ class Embeder extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
                     noMargin: true,
                     color: "white"
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                     lineNumber: 44,
                     columnNumber: 11
                 }, this),
@@ -3956,7 +3956,7 @@ class Embeder extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
                     className: "u-error",
                     children: this.state.error.toString()
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                     lineNumber: 47,
                     columnNumber: 11
                 }, this),
@@ -3969,46 +3969,46 @@ class Embeder extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
                                     service: service,
                                     fileId: this.state.fileId
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                                     lineNumber: 55,
                                     columnNumber: 19
                                 }, void 0)
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                                 lineNumber: 52,
                                 columnNumber: 15
                             }, this),
                             (0,_modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_4__.isOfficeEnabled)(isDesktop) && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
                                 path: "onlyoffice/:fileId",
                                 element: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice__WEBPACK_IMPORTED_MODULE_3__["default"], {}, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                                     lineNumber: 62,
                                     columnNumber: 59
                                 }, void 0)
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                                 lineNumber: 62,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                         lineNumber: 51,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                     lineNumber: 50,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon_Sprite__WEBPACK_IMPORTED_MODULE_8__["default"], {}, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
                     lineNumber: 67,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/Embeder.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/Embeder.jsx",
             lineNumber: 42,
             columnNumber: 7
         }, this);
@@ -4100,13 +4100,13 @@ const IntentHandler = (param)=>{
         service: state.service,
         intent: state.intent
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/IntentHandler.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/IntentHandler.jsx",
         lineNumber: 52,
         columnNumber: 5
     }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
         className: "u-w-100 u-bg-charcoalGrey"
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/services/components/IntentHandler.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/services/components/IntentHandler.jsx",
         lineNumber: 54,
         columnNumber: 5
     }, undefined);
@@ -4303,12 +4303,12 @@ const DestroyConfirm = (param)=>{
                             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_10__["default"], {
                                 icon: cozy_ui_transpiled_react_Icons_Forbidden__WEBPACK_IMPORTED_MODULE_11__["default"]
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                                 lineNumber: 83,
                                 columnNumber: 15
                             }, void 0)
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                             lineNumber: 82,
                             columnNumber: 13
                         }, void 0),
@@ -4318,13 +4318,13 @@ const DestroyConfirm = (param)=>{
                                 type: entriesType
                             })
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                             lineNumber: 85,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                     lineNumber: 81,
                     columnNumber: 11
                 }, void 0),
@@ -4337,12 +4337,12 @@ const DestroyConfirm = (param)=>{
                             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_10__["default"], {
                                 icon: cozy_ui_transpiled_react_Icons_Restore__WEBPACK_IMPORTED_MODULE_13__["default"]
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                                 lineNumber: 94,
                                 columnNumber: 15
                             }, void 0)
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                             lineNumber: 93,
                             columnNumber: 13
                         }, void 0),
@@ -4352,19 +4352,19 @@ const DestroyConfirm = (param)=>{
                                 type: entriesType
                             })
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                             lineNumber: 96,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                     lineNumber: 92,
                     columnNumber: 11
                 }, void 0)
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
             lineNumber: 80,
             columnNumber: 9
         }, void 0),
@@ -4375,7 +4375,7 @@ const DestroyConfirm = (param)=>{
                     onClick: onClose,
                     label: t('DestroyConfirm.cancel')
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                     lineNumber: 107,
                     columnNumber: 11
                 }, void 0),
@@ -4386,14 +4386,14 @@ const DestroyConfirm = (param)=>{
                     color: "error",
                     busy: isBusy
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
                     lineNumber: 112,
                     columnNumber: 11
                 }, void 0)
             ]
         }, void 0, true)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/trash/components/DestroyConfirm.tsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/trash/components/DestroyConfirm.tsx",
         lineNumber: 71,
         columnNumber: 5
     }, undefined);
@@ -4485,14 +4485,14 @@ class CallToAction extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                     icon: cozy_ui_transpiled_react_Icons_Cross__WEBPACK_IMPORTED_MODULE_7__["default"],
                     onClick: this.markAsSeen
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                     lineNumber: 52,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("h3", {
                     children: t('Viewer.noviewer.cta.saveTime')
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                     lineNumber: 58,
                     columnNumber: 9
                 }, this),
@@ -4506,31 +4506,31 @@ class CallToAction extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
                                 rel: "noreferrer",
                                 children: t('Viewer.noviewer.cta.installDesktop')
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                                 lineNumber: 61,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                             lineNumber: 60,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("li", {
                             children: t('Viewer.noviewer.cta.accessFiles')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                             lineNumber: 70,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
                     lineNumber: 59,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/CallToAction.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/CallToAction.jsx",
             lineNumber: 51,
             columnNumber: 7
         }, this);
@@ -4589,14 +4589,14 @@ const Fallback = (param)=>{
                 file: file,
                 t: t
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/Fallback.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/Fallback.jsx",
                 lineNumber: 10,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_CallToAction__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 t: t
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/Fallback.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/Fallback.jsx",
                 lineNumber: 11,
                 columnNumber: 7
             }, undefined)
@@ -4673,7 +4673,7 @@ const FileNotFoundError = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_2__.translate)(
         className: "u-error",
         children: t('FileOpenerExternal.fileNotFoundError')
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
         lineNumber: 33,
         columnNumber: 3
     }, undefined);
@@ -4739,12 +4739,12 @@ const FileOpener = (props)=>{
                 noMargin: true,
                 color: "white"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                 lineNumber: 81,
                 columnNumber: 19
             }, undefined),
             fileNotFound && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(FileNotFoundError, {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                 lineNumber: 82,
                 columnNumber: 24
             }, undefined),
@@ -4760,7 +4760,7 @@ const FileOpener = (props)=>{
                             file: file,
                             t: t
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                             lineNumber: 90,
                             columnNumber: 49
                         }, void 0),
@@ -4775,49 +4775,49 @@ const FileOpener = (props)=>{
                             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_3__.SharingButton, {
                                 variant: "iconButton"
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                                 lineNumber: 99,
                                 columnNumber: 15
                             }, undefined)
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                             lineNumber: 98,
                             columnNumber: 13
                         }, undefined),
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_3__.FooterActionButtons, {
                             children: [
                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_3__.SharingButton, {}, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                                     lineNumber: 102,
                                     columnNumber: 15
                                 }, undefined),
                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_3__.ForwardOrDownloadButton, {
                                     variant: "buttonIcon"
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                                     lineNumber: 103,
                                     columnNumber: 15
                                 }, undefined)
                             ]
                         }, void 0, true, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                             lineNumber: 101,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                     lineNumber: 85,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
                 lineNumber: 84,
                 columnNumber: 9
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/FileOpenerExternal.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/FileOpenerExternal.jsx",
         lineNumber: 80,
         columnNumber: 5
     }, undefined);
@@ -4883,7 +4883,7 @@ const NoViewerButton = (param)=>{
             }),
         label: t('Viewer.noviewer.download')
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/viewer/NoViewerButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/viewer/NoViewerButton.jsx",
         lineNumber: 13,
         columnNumber: 5
     }, undefined);
@@ -5013,12 +5013,12 @@ const Editor = ()=>{
     const { config, status } = (0,_modules_views_OnlyOffice_useConfig__WEBPACK_IMPORTED_MODULE_17__["default"])();
     const { isEditorModeView, hasFileDiverged, hasFileDeleted, file, isReadOnly, isPublic } = (0,_modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_11__.useOnlyOfficeContext)();
     if (status === 'error') return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxDEV)(_modules_views_OnlyOffice_Error__WEBPACK_IMPORTED_MODULE_9__["default"], {}, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
         lineNumber: 42,
         columnNumber: 34
     }, undefined);
     if (status !== 'loaded' || !config) return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxDEV)(_modules_views_OnlyOffice_Loading__WEBPACK_IMPORTED_MODULE_10__["default"], {}, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
         lineNumber: 43,
         columnNumber: 46
     }, undefined);
@@ -5030,7 +5030,7 @@ const Editor = ()=>{
         isReadOnly: isReadOnly,
         children: [
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxDEV)(_modules_views_OnlyOffice_Title__WEBPACK_IMPORTED_MODULE_12__["default"], {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
                 lineNumber: 52,
                 columnNumber: 7
             }, undefined),
@@ -5045,29 +5045,29 @@ const Editor = ()=>{
                         apiUrl: apiUrl,
                         docEditorConfig: docEditorConfig
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
                         lineNumber: 63,
                         columnNumber: 9
                     }, undefined),
                     hasFileDiverged ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxDEV)(_modules_views_OnlyOffice_components_FileDivergedModal__WEBPACK_IMPORTED_MODULE_15__.FileDivergedModal, {}, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
                         lineNumber: 68,
                         columnNumber: 28
                     }, undefined) : null,
                     hasFileDeleted ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxDEV)(_modules_views_OnlyOffice_components_FileDeletedModal__WEBPACK_IMPORTED_MODULE_14__.FileDeletedModal, {}, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
                         lineNumber: 69,
                         columnNumber: 27
                     }, undefined) : null
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
                 lineNumber: 53,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Editor.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Editor.jsx",
         lineNumber: 51,
         columnNumber: 5
     }, undefined);
@@ -5151,7 +5151,7 @@ const Error = ()=>{
             className: "u-flex u-flex-items-center u-flex-justify-center u-flex-grow-1",
             size: "xxlarge"
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
             lineNumber: 30,
             columnNumber: 7
         }, undefined);
@@ -5160,7 +5160,7 @@ const Error = ()=>{
         return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(_components_Error_Oops__WEBPACK_IMPORTED_MODULE_5__["default"], {
             title: t('error.open_file')
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
             lineNumber: 38,
             columnNumber: 12
         }, undefined);
@@ -5175,43 +5175,43 @@ const Error = ()=>{
                     children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_4__.SharingButton, {
                         variant: "iconButton"
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
                         lineNumber: 45,
                         columnNumber: 11
                     }, undefined)
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
                     lineNumber: 44,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_4__.FooterActionButtons, {
                     children: [
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_4__.SharingButton, {}, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
                             lineNumber: 48,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(cozy_viewer__WEBPACK_IMPORTED_MODULE_4__.ForwardOrDownloadButton, {
                             variant: "buttonIcon"
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
                             lineNumber: 49,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
                     lineNumber: 47,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
             lineNumber: 43,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Error.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Error.jsx",
         lineNumber: 42,
         columnNumber: 5
     }, undefined);
@@ -5266,17 +5266,17 @@ const Loading = ()=>{
             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_3__["default"], {
                 size: "xxlarge"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Loading.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Loading.jsx",
                 lineNumber: 10,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Loading.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Loading.jsx",
             lineNumber: 9,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Loading.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Loading.jsx",
         lineNumber: 8,
         columnNumber: 5
     }, undefined);
@@ -5326,12 +5326,12 @@ const OnlyOfficeAIAssistantPanel = ()=>{
         children: isOpenAiAssistant ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
             className: _styles_styl__WEBPACK_IMPORTED_MODULE_5__["default"]["ai-assistant-panel"],
             children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_viewer_dist_Panel_AI_AIAssistantPanel__WEBPACK_IMPORTED_MODULE_2__["default"], {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel.tsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel.tsx",
                 lineNumber: 16,
                 columnNumber: 11
             }, undefined)
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel.tsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel.tsx",
             lineNumber: 15,
             columnNumber: 9
         }, undefined) : null
@@ -5491,7 +5491,7 @@ const OnlyOfficeProvider = (param)=>{
         },
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/OnlyOfficeProvider.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/OnlyOfficeProvider.jsx",
         lineNumber: 112,
         columnNumber: 5
     }, undefined);
@@ -5598,14 +5598,14 @@ const ReadOnlyFab = ()=>{
                 className: !isMobile ? 'u-mr-half' : '',
                 "aria-hidden": "true"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/ReadOnlyFab.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/ReadOnlyFab.jsx",
                 lineNumber: 48,
                 columnNumber: 7
             }, undefined),
             !isMobile && label
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/ReadOnlyFab.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/ReadOnlyFab.jsx",
         lineNumber: 42,
         columnNumber: 5
     }, undefined);
@@ -5624,6 +5624,636 @@ _c = ReadOnlyFab;
 var _c, _c1;
 $RefreshReg$(_c, "ReadOnlyFab");
 $RefreshReg$(_c1, "%default%");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/ChatInput.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  ChatInput: () => (ChatInput)
+});
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* ESM import */var twake_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/twake-i18n/dist/index.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_SelectionChip__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+var _s = $RefreshSig$();
+
+
+
+
+
+const SCRIBE_PURPLE = '#7C3AED';
+const MAX_ROWS = 4;
+const LINE_HEIGHT = 20;
+const ChatInput = ()=>{
+    _s();
+    const [text, setText] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('');
+    const { sendMessage, isLoading, currentSelection, dismissSelection } = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__.useScribe)();
+    const { t } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_2__.useI18n)();
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__["default"])();
+    const textareaRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+    const handleSend = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        const trimmed = text.trim();
+        if (!trimmed || isLoading) return;
+        if (currentSelection) {
+            sendMessage(trimmed, {
+                text: currentSelection.text,
+                markdown: currentSelection.markdown
+            });
+        } else {
+            sendMessage(trimmed);
+        }
+        setText('');
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+        }
+    }, [
+        text,
+        isLoading,
+        sendMessage,
+        currentSelection
+    ]);
+    const handleKeyDown = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((e)=>{
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    }, [
+        handleSend
+    ]);
+    const handleChange = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((e)=>{
+        setText(e.target.value);
+        // Auto-grow textarea
+        const el = e.target;
+        el.style.height = 'auto';
+        const maxHeight = LINE_HEIGHT * MAX_ROWS + 16 // padding
+        ;
+        el.style.height = Math.min(el.scrollHeight, maxHeight) + 'px';
+    }, []);
+    // Focus guard: OO editor aggressively reclaims focus to its iframe.
+    // When the textarea is focused and loses focus unexpectedly (relatedTarget is
+    // null/iframe = cross-origin steal), refocus it on the next frame.
+    const userFocusedRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const handleFocus = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        userFocusedRef.current = true;
+    }, []);
+    const handleBlur = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((e)=>{
+        // If focus moved to another element inside our panel, that's intentional
+        if (e.relatedTarget) {
+            userFocusedRef.current = false;
+            return;
+        }
+        // relatedTarget is null → focus went to an iframe or outside the document.
+        // OO stole it. Reclaim on next frame so the browser settles first.
+        requestAnimationFrame(()=>{
+            if (userFocusedRef.current && textareaRef.current) {
+                textareaRef.current.focus();
+            }
+        });
+    }, []);
+    // Clear the guard when the component unmounts or user clicks elsewhere intentionally
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        const handlePointerDown = (e)=>{
+            // If the click is outside the panel, let focus go naturally
+            if (textareaRef.current && !e.target.closest('[data-scribe-panel]')) {
+                userFocusedRef.current = false;
+            }
+        };
+        document.addEventListener('pointerdown', handlePointerDown, true);
+        return ()=>document.removeEventListener('pointerdown', handlePointerDown, true);
+    }, []);
+    const canSend = text.trim().length > 0 && !isLoading;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+        style: {
+            flexShrink: 0,
+            borderTop: `1px solid ${theme.palette.divider}`,
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        children: [
+            currentSelection && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_SelectionChip__WEBPACK_IMPORTED_MODULE_4__.SelectionChip, {
+                selection: currentSelection,
+                onDismiss: dismissSelection
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                lineNumber: 95,
+                columnNumber: 9
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+                style: {
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    gap: 8
+                },
+                children: [
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("textarea", {
+                        ref: textareaRef,
+                        value: text,
+                        onChange: handleChange,
+                        onKeyDown: handleKeyDown,
+                        onFocus: handleFocus,
+                        onBlur: handleBlur,
+                        placeholder: t('Scribe.prompt.placeholder'),
+                        disabled: isLoading,
+                        rows: 1,
+                        style: {
+                            flex: 1,
+                            border: 'none',
+                            background: 'transparent',
+                            color: theme.palette.text.primary,
+                            fontFamily: 'inherit',
+                            fontSize: 14,
+                            lineHeight: `${LINE_HEIGHT}px`,
+                            resize: 'none',
+                            outline: 'none',
+                            padding: '8px 0',
+                            minHeight: LINE_HEIGHT + 16,
+                            maxHeight: LINE_HEIGHT * MAX_ROWS + 16
+                        }
+                    }, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                        lineNumber: 98,
+                        columnNumber: 7
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("button", {
+                        onClick: handleSend,
+                        disabled: !canSend,
+                        style: {
+                            width: 32,
+                            height: 32,
+                            borderRadius: '50%',
+                            border: 'none',
+                            background: canSend ? SCRIBE_PURPLE : theme.palette.action.disabledBackground,
+                            color: canSend ? '#fff' : theme.palette.action.disabled,
+                            cursor: canSend ? 'pointer' : 'default',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            fontSize: 16,
+                            lineHeight: 1,
+                            padding: 0,
+                            transition: 'background 150ms ease'
+                        },
+                        "aria-label": "Send",
+                        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
+                            width: "16",
+                            height: "16",
+                            viewBox: "0 0 16 16",
+                            fill: "none",
+                            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                                d: "M2 14l12-6L2 2v5l8 1-8 1v5z",
+                                fill: "currentColor"
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                                lineNumber: 146,
+                                columnNumber: 11
+                            }, undefined)
+                        }, void 0, false, {
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                            lineNumber: 145,
+                            columnNumber: 9
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                        lineNumber: 123,
+                        columnNumber: 7
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+                lineNumber: 97,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatInput.jsx",
+        lineNumber: 85,
+        columnNumber: 5
+    }, undefined);
+};
+_s(ChatInput, "L4FGzwA02VnpbFKdxNtNyr3zFf8=", false, function() {
+    return [
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__.useScribe,
+        twake_i18n__WEBPACK_IMPORTED_MODULE_2__.useI18n,
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__["default"]
+    ];
+});
+_c = ChatInput;
+var _c;
+$RefreshReg$(_c, "ChatInput");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  ChatMessageList: () => (ChatMessageList)
+});
+/* ESM import */var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/core-js/modules/es.iterator.constructor.js");
+/* ESM import */var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* ESM import */var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/core-js/modules/es.iterator.map.js");
+/* ESM import */var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* ESM import */var cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Spinner/index.js");
+/* ESM import */var cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Typography/index.js");
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* ESM import */var twake_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/twake-i18n/dist/index.js");
+/* ESM import */var react_markdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./node_modules/react-markdown/lib/index.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_MessageActions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/MessageActions.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+
+
+var _s = $RefreshSig$();
+
+
+
+
+
+
+
+
+const SCRIBE_PURPLE = '#7C3AED';
+const SparkleSvg = (param)=>{
+    let { size = 20 } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("svg", {
+        width: size,
+        height: size,
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("path", {
+                d: "M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z",
+                fill: SCRIBE_PURPLE,
+                stroke: SCRIBE_PURPLE,
+                strokeWidth: "0.5"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 22,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("path", {
+                d: "M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z",
+                fill: SCRIBE_PURPLE,
+                stroke: SCRIBE_PURPLE,
+                strokeWidth: "0.3"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 28,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 15,
+        columnNumber: 3
+    }, undefined);
+};
+_c = SparkleSvg;
+const SCRIBE_PURPLE_08 = 'rgba(124, 58, 237, 0.08)';
+const SelectionQuote = (param)=>{
+    let { selection } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        style: {
+            borderLeft: `3px solid ${SCRIBE_PURPLE}`,
+            background: SCRIBE_PURPLE_08,
+            padding: '4px 8px',
+            marginBottom: 6,
+            borderRadius: '0 4px 4px 0',
+            fontStyle: 'italic',
+            fontSize: 12,
+            lineHeight: 1.4,
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            wordBreak: 'break-word'
+        },
+        children: selection.text
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 40,
+        columnNumber: 3
+    }, undefined);
+};
+_c1 = SelectionQuote;
+const UserBubble = (param)=>{
+    let { content, selection, theme } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        style: {
+            alignSelf: 'flex-end',
+            background: theme.palette.action.selected,
+            padding: '8px 12px',
+            borderRadius: '12px 4px 12px 12px',
+            maxWidth: '85%',
+            wordBreak: 'break-word',
+            fontSize: 14,
+            lineHeight: 1.5
+        },
+        children: [
+            selection && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(SelectionQuote, {
+                selection: selection
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 74,
+                columnNumber: 19
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+                style: {
+                    whiteSpace: 'pre-wrap'
+                },
+                children: content
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 75,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 62,
+        columnNumber: 3
+    }, undefined);
+};
+_c2 = UserBubble;
+const AssistantBubble = (param)=>{
+    let { content, theme } = param;
+    const isDark = (theme.palette.type || theme.palette.mode) === 'dark';
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        style: {
+            alignSelf: 'flex-start',
+            background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
+            padding: '8px 12px',
+            borderRadius: '4px 12px 12px 12px',
+            maxWidth: '85%',
+            fontSize: 14,
+            lineHeight: 1.5,
+            wordBreak: 'break-word'
+        },
+        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(react_markdown__WEBPACK_IMPORTED_MODULE_7__.Markdown, {
+            children: content
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+            lineNumber: 95,
+            columnNumber: 7
+        }, undefined)
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 83,
+        columnNumber: 5
+    }, undefined);
+};
+_c3 = AssistantBubble;
+const ErrorBubble = (param)=>{
+    let { content, theme, t } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        style: {
+            alignSelf: 'flex-start',
+            background: `${theme.palette.error.main}1A`,
+            color: theme.palette.error.main,
+            padding: '8px 12px',
+            borderRadius: '4px 12px 12px 12px',
+            maxWidth: '85%',
+            fontSize: 13,
+            lineHeight: 1.5,
+            wordBreak: 'break-word'
+        },
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("strong", {
+                children: [
+                    t('Scribe.chat.error_prefix'),
+                    ":"
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 114,
+                columnNumber: 5
+            }, undefined),
+            " ",
+            content
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 101,
+        columnNumber: 3
+    }, undefined);
+};
+_c4 = ErrorBubble;
+const WelcomeMessage = (param)=>{
+    let { t } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        style: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.6
+        },
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(SparkleSvg, {
+                size: 48
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 129,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                variant: "body2",
+                color: "textSecondary",
+                style: {
+                    marginTop: 16
+                },
+                children: t('Scribe.chat.welcome')
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 130,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 119,
+        columnNumber: 3
+    }, undefined);
+};
+_c5 = WelcomeMessage;
+const ChatMessageList = ()=>{
+    _s();
+    const { messages, isLoading, currentSelection } = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_6__.useScribe)();
+    const { t } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_4__.useI18n)();
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_9__["default"])();
+    const containerRef = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        if (containerRef.current) {
+            containerRef.current.scrollTo({
+                top: containerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }, [
+        messages.length,
+        isLoading
+    ]);
+    if (messages.length === 0 && !isLoading) {
+        return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(WelcomeMessage, {
+            t: t
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+            lineNumber: 156,
+            columnNumber: 12
+        }, undefined);
+    }
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+        ref: containerRef,
+        style: {
+            flex: 1,
+            overflowY: 'auto',
+            padding: 16,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8
+        },
+        children: [
+            messages.map((msg)=>{
+                if (msg.role === 'user') {
+                    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(UserBubble, {
+                        content: msg.content,
+                        selection: msg.selection,
+                        theme: theme
+                    }, msg.id, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                        lineNumber: 173,
+                        columnNumber: 18
+                    }, undefined);
+                }
+                if (msg.role === 'error') {
+                    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(ErrorBubble, {
+                        content: msg.content,
+                        theme: theme,
+                        t: t
+                    }, msg.id, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                        lineNumber: 176,
+                        columnNumber: 18
+                    }, undefined);
+                }
+                return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+                    style: {
+                        alignSelf: 'flex-start',
+                        maxWidth: '85%'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(AssistantBubble, {
+                            content: msg.content,
+                            theme: theme
+                        }, void 0, false, {
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                            lineNumber: 180,
+                            columnNumber: 13
+                        }, undefined),
+                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_MessageActions__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            content: msg.content,
+                            hasSelection: !!currentSelection
+                        }, void 0, false, {
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                            lineNumber: 181,
+                            columnNumber: 13
+                        }, undefined)
+                    ]
+                }, msg.id, true, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                    lineNumber: 179,
+                    columnNumber: 11
+                }, undefined);
+            }),
+            isLoading && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
+                style: {
+                    alignSelf: 'flex-start',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '8px 12px',
+                    opacity: 0.7,
+                    fontSize: 13
+                },
+                children: [
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                        size: "small"
+                    }, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                        lineNumber: 198,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("span", {
+                        children: t('Scribe.chat.typing')
+                    }, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                        lineNumber: 199,
+                        columnNumber: 11
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+                lineNumber: 187,
+                columnNumber: 9
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx",
+        lineNumber: 160,
+        columnNumber: 5
+    }, undefined);
+};
+_s(ChatMessageList, "i0PVlkeXM/XP9ZCjwag7mpGyZWk=", false, function() {
+    return [
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_6__.useScribe,
+        twake_i18n__WEBPACK_IMPORTED_MODULE_4__.useI18n,
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_9__["default"]
+    ];
+});
+_c6 = ChatMessageList;
+var _c, _c1, _c2, _c3, _c4, _c5, _c6;
+$RefreshReg$(_c, "SparkleSvg");
+$RefreshReg$(_c1, "SelectionQuote");
+$RefreshReg$(_c2, "UserBubble");
+$RefreshReg$(_c3, "AssistantBubble");
+$RefreshReg$(_c4, "ErrorBubble");
+$RefreshReg$(_c5, "WelcomeMessage");
+$RefreshReg$(_c6, "ChatMessageList");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -5690,12 +6320,12 @@ var _s = $RefreshSig$();
                     },
                     children: tableChildren
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                     lineNumber: 27,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 26,
                 columnNumber: 7
             }, undefined);
@@ -5711,7 +6341,7 @@ var _s = $RefreshSig$();
                 },
                 children: thChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 39,
                 columnNumber: 7
             }, undefined);
@@ -5725,7 +6355,7 @@ var _s = $RefreshSig$();
                 },
                 children: tdChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 53,
                 columnNumber: 7
             }, undefined);
@@ -5739,7 +6369,7 @@ var _s = $RefreshSig$();
                 ...props,
                 children: aChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 63,
                 columnNumber: 7
             }, undefined);
@@ -5755,7 +6385,7 @@ var _s = $RefreshSig$();
                 },
                 children: bqChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 68,
                 columnNumber: 7
             }, undefined);
@@ -5768,7 +6398,7 @@ var _s = $RefreshSig$();
                 },
                 children: pChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 80,
                 columnNumber: 7
             }, undefined);
@@ -5781,7 +6411,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 83,
                 columnNumber: 7
             }, undefined);
@@ -5794,7 +6424,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 86,
                 columnNumber: 7
             }, undefined);
@@ -5807,7 +6437,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 89,
                 columnNumber: 7
             }, undefined);
@@ -5820,7 +6450,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 92,
                 columnNumber: 7
             }, undefined);
@@ -5833,7 +6463,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 95,
                 columnNumber: 7
             }, undefined);
@@ -5846,7 +6476,7 @@ var _s = $RefreshSig$();
                 },
                 children: hChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 98,
                 columnNumber: 7
             }, undefined);
@@ -5860,7 +6490,7 @@ var _s = $RefreshSig$();
                 },
                 children: ulChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 101,
                 columnNumber: 7
             }, undefined);
@@ -5874,7 +6504,7 @@ var _s = $RefreshSig$();
                 },
                 children: olChildren
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 104,
                 columnNumber: 7
             }, undefined);
@@ -5901,7 +6531,7 @@ var _s = $RefreshSig$();
                             },
                             children: "\uD83D\uDDBC"
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                             lineNumber: 125,
                             columnNumber: 13
                         }, undefined),
@@ -5911,13 +6541,13 @@ var _s = $RefreshSig$();
                             },
                             children: alt.replace('IMG:', '')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                             lineNumber: 126,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                     lineNumber: 111,
                     columnNumber: 11
                 }, undefined);
@@ -5927,7 +6557,7 @@ var _s = $RefreshSig$();
                 src: src,
                 ...props
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
                 lineNumber: 130,
                 columnNumber: 14
             }, undefined);
@@ -5956,12 +6586,12 @@ var _s = $RefreshSig$();
             components: components,
             children: preprocessed
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
             lineNumber: 156,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MarkdownPreview.jsx",
         lineNumber: 144,
         columnNumber: 5
     }, undefined);
@@ -5975,6 +6605,459 @@ _c = MarkdownPreview;
 
 var _c;
 $RefreshReg$(_c, "MarkdownPreview");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/MessageActions.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+});
+/* ESM import */var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/core-js/modules/es.array.includes.js");
+/* ESM import */var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0__);
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+
+var _s = $RefreshSig$();
+
+
+
+
+// Inline SVG icons (small, 16x16)
+const CopyIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("rect", {
+                x: "5.5",
+                y: "5.5",
+                width: "8",
+                height: "8",
+                rx: "1.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 11,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("path", {
+                d: "M10.5 5.5V3.5C10.5 2.67 9.83 2 9 2H3.5C2.67 2 2 2.67 2 3.5V9C2 9.83 2.67 10.5 3.5 10.5H5.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 12,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+        lineNumber: 10,
+        columnNumber: 3
+    }, undefined);
+_c = CopyIcon;
+const InsertIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("path", {
+            d: "M8 3v10M3 8h10",
+            stroke: "currentColor",
+            strokeWidth: "1.5",
+            strokeLinecap: "round"
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+            lineNumber: 18,
+            columnNumber: 5
+        }, undefined)
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+        lineNumber: 17,
+        columnNumber: 3
+    }, undefined);
+_c1 = InsertIcon;
+const ReplaceIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("path", {
+                d: "M4 6l2-2 2 2M6 4v6",
+                stroke: "currentColor",
+                strokeWidth: "1.2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 24,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("path", {
+                d: "M12 10l-2 2-2-2M10 12V6",
+                stroke: "currentColor",
+                strokeWidth: "1.2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 25,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+        lineNumber: 23,
+        columnNumber: 3
+    }, undefined);
+_c2 = ReplaceIcon;
+const CheckIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("path", {
+            d: "M3 8.5l3 3 7-7",
+            stroke: "#22c55e",
+            strokeWidth: "1.8",
+            strokeLinecap: "round",
+            strokeLinejoin: "round"
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+            lineNumber: 31,
+            columnNumber: 5
+        }, undefined)
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+        lineNumber: 30,
+        columnNumber: 3
+    }, undefined);
+_c3 = CheckIcon;
+const stripParagraphWrapper = (html)=>{
+    const match = html.match(/^<p>(.*)<\/p>$/s);
+    if (match && !match[1].includes('<p>')) return match[1];
+    return html;
+};
+const MessageActions = (param)=>{
+    let { content, hasSelection } = param;
+    _s();
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__["default"])();
+    const { panelActions } = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__.useScribe)();
+    const [confirmedAction, setConfirmedAction] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+    const timeoutRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
+    const showConfirmation = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)((action)=>{
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setConfirmedAction(action);
+        timeoutRef.current = setTimeout(()=>setConfirmedAction(null), 1500);
+    }, []);
+    const handleCopy = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(async ()=>{
+        try {
+            const html = stripParagraphWrapper((0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_4__.markdownToHtml)(content).trim());
+            if (typeof ClipboardItem !== 'undefined') {
+                const htmlBlob = new Blob([
+                    html
+                ], {
+                    type: 'text/html'
+                });
+                const textBlob = new Blob([
+                    content
+                ], {
+                    type: 'text/plain'
+                });
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        'text/html': htmlBlob,
+                        'text/plain': textBlob
+                    })
+                ]);
+            } else {
+                await navigator.clipboard.writeText(content);
+            }
+            showConfirmation('copy');
+        } catch (e) {
+        // Clipboard write failed silently
+        }
+    }, [
+        content,
+        showConfirmation
+    ]);
+    const handleInsert = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(()=>{
+        if (panelActions && panelActions.insert) {
+            panelActions.insert(content);
+            showConfirmation('insert');
+        }
+    }, [
+        content,
+        panelActions,
+        showConfirmation
+    ]);
+    const handleReplace = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(()=>{
+        if (panelActions && panelActions.replace) {
+            panelActions.replace(content);
+            showConfirmation('replace');
+        }
+    }, [
+        content,
+        panelActions,
+        showConfirmation
+    ]);
+    const btnStyle = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 24,
+        height: 24,
+        borderRadius: 4,
+        border: 'none',
+        background: 'transparent',
+        color: theme.palette.text.secondary,
+        cursor: 'pointer',
+        padding: 0
+    };
+    const hoverProps = {
+        onMouseEnter: (e)=>{
+            e.currentTarget.style.background = theme.palette.action.hover;
+        },
+        onMouseLeave: (e)=>{
+            e.currentTarget.style.background = 'transparent';
+        }
+    };
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("div", {
+        style: {
+            display: 'flex',
+            gap: 4,
+            marginTop: 4
+        },
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("button", {
+                style: btnStyle,
+                onClick: handleCopy,
+                title: "Copy",
+                "aria-label": "Copy",
+                ...hoverProps,
+                children: confirmedAction === 'copy' ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(CheckIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 117,
+                    columnNumber: 39
+                }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(CopyIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 117,
+                    columnNumber: 55
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 110,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("button", {
+                style: btnStyle,
+                onClick: handleInsert,
+                title: "Insert",
+                "aria-label": "Insert",
+                ...hoverProps,
+                children: confirmedAction === 'insert' ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(CheckIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 126,
+                    columnNumber: 41
+                }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(InsertIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 126,
+                    columnNumber: 57
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 119,
+                columnNumber: 7
+            }, undefined),
+            hasSelection && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)("button", {
+                style: btnStyle,
+                onClick: handleReplace,
+                title: "Replace",
+                "aria-label": "Replace",
+                ...hoverProps,
+                children: confirmedAction === 'replace' ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(CheckIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 136,
+                    columnNumber: 44
+                }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(ReplaceIcon, {}, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                    lineNumber: 136,
+                    columnNumber: 60
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+                lineNumber: 129,
+                columnNumber: 9
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/MessageActions.jsx",
+        lineNumber: 109,
+        columnNumber: 5
+    }, undefined);
+};
+_s(MessageActions, "ZwChoBX4PYYEcEJXVHNqNKfEDRs=", false, function() {
+    return [
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_5__["default"],
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_3__.useScribe
+    ];
+});
+_c4 = MessageActions;
+/* ESM default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MessageActions);
+var _c, _c1, _c2, _c3, _c4;
+$RefreshReg$(_c, "CopyIcon");
+$RefreshReg$(_c1, "InsertIcon");
+$RefreshReg$(_c2, "ReplaceIcon");
+$RefreshReg$(_c3, "CheckIcon");
+$RefreshReg$(_c4, "MessageActions");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/ResizeHandle.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  ResizeHandle: () => (ResizeHandle)
+});
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+var _s = $RefreshSig$();
+
+
+
+const ResizeHandle = ()=>{
+    _s();
+    const { setPanelWidth } = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__.useScribe)();
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_3__["default"])();
+    const [isDragging, setIsDragging] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+    const [isHovered, setIsHovered] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+    const isDraggingRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const primaryColor = theme.palette.primary.main;
+    const onMouseMove = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((e)=>{
+        if (!isDraggingRef.current) return;
+        const newWidth = window.innerWidth - e.clientX;
+        setPanelWidth(newWidth);
+    }, [
+        setPanelWidth
+    ]);
+    const onMouseUp = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        isDraggingRef.current = false;
+        setIsDragging(false);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    }, [
+        onMouseMove
+    ]);
+    const onMouseDown = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((e)=>{
+        e.preventDefault();
+        isDraggingRef.current = true;
+        setIsDragging(true);
+        document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'col-resize';
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    }, [
+        onMouseMove,
+        onMouseUp
+    ]);
+    // Clean up listeners on unmount
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        return ()=>{
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+        };
+    }, [
+        onMouseMove,
+        onMouseUp
+    ]);
+    const showAccent = isHovered || isDragging;
+    const accentOpacity = isDragging ? 0.8 : 0.4;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+        onMouseDown: onMouseDown,
+        onMouseEnter: ()=>setIsHovered(true),
+        onMouseLeave: ()=>setIsHovered(false),
+        style: {
+            width: 6,
+            flexShrink: 0,
+            cursor: 'col-resize',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative'
+        },
+        children: showAccent && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+            style: {
+                width: 2,
+                height: '100%',
+                borderRadius: 1,
+                backgroundColor: primaryColor,
+                opacity: accentOpacity,
+                transition: 'opacity 150ms ease'
+            }
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ResizeHandle.jsx",
+            lineNumber: 70,
+            columnNumber: 9
+        }, undefined)
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ResizeHandle.jsx",
+        lineNumber: 55,
+        columnNumber: 5
+    }, undefined);
+};
+_s(ResizeHandle, "RBPaGrSxgKKwEVWZJ0TK8ALbRxU=", false, function() {
+    return [
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__.useScribe,
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_3__["default"]
+    ];
+});
+_c = ResizeHandle;
+var _c;
+$RefreshReg$(_c, "ResizeHandle");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -6052,9 +7135,47 @@ const DEV_MD_ACTION = {
     prompt: null,
     mockResult: null
 };
-const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.forwardRef)(_c = _s((param, ref)=>{
-    let { onSelect, onClose, selectedText: _selectedText } = param;
-    var _activeParent_children;
+const PanelIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("rect", {
+                x: "1.5",
+                y: "2.5",
+                width: "13",
+                height: "11",
+                rx: "1.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                lineNumber: 33,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("line", {
+                x1: "10",
+                y1: "2.5",
+                x2: "10",
+                y2: "13.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                lineNumber: 34,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+        lineNumber: 32,
+        columnNumber: 3
+    }, undefined);
+_c = PanelIcon;
+const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.forwardRef)(_c1 = _s((param, ref)=>{
+    let { onSelect, onClose, onOpenPanel, selectedText: _selectedText } = param;
     _s();
     const { t, lang } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_5__.useI18n)();
     const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_10__["default"])();
@@ -6096,6 +7217,7 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
         lang
     ]);
     const PROMPT_INDEX = actions.length;
+    const activeParent = isMobile && activeSubmenu ? actions.find((a)=>a.id === activeSubmenu) : null;
     // Expose focus() to parent via ref
     (0,react__WEBPACK_IMPORTED_MODULE_4__.useImperativeHandle)(ref, ()=>({
             focus: ()=>{
@@ -6463,21 +7585,101 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
         focusPrompt,
         isMobile
     ]);
-    // Active submenu parent (used for mobile submenu rendering and prompt highlight)
-    const activeParent = activeSubmenu ? actions.find((a)=>a.id === activeSubmenu) : null;
-    // Prompt highlight: in mobile submenu mode, track via submenuFocusIndex; otherwise via focusIndex
-    const isPromptHighlighted = isMobile && activeParent ? submenuFocusIndex === (((_activeParent_children = activeParent.children) === null || _activeParent_children === void 0 ? void 0 : _activeParent_children.length) ?? 0) : focusIndex === PROMPT_INDEX;
+    const [hoveredPanelBtn, setHoveredPanelBtn] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("div", {
         style: {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: isMobile ? 'stretch' : 'flex-start',
-            gap: 8,
-            ...isMobile ? {
-                width: '100%'
-            } : {}
+            alignItems: 'flex-start',
+            gap: 8
         },
         children: [
+            onOpenPanel && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("div", {
+                style: {
+                    alignSelf: 'flex-end',
+                    position: 'relative'
+                },
+                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("button", {
+                    type: "button",
+                    onClick: onOpenPanel,
+                    onMouseEnter: ()=>setHoveredPanelBtn(true),
+                    onMouseLeave: ()=>setHoveredPanelBtn(false),
+                    style: {
+                        cursor: 'pointer',
+                        borderRadius: 8,
+                        padding: '6px 10px',
+                        background: (theme.palette.type || theme.palette.mode) === 'dark' ? '#2d2d2d' : 'white',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        fontSize: 13,
+                        fontFamily: 'inherit',
+                        color: (theme.palette.type || theme.palette.mode) === 'dark' ? '#e0e0e0' : '#333',
+                        opacity: hoveredPanelBtn ? 1 : 0.7,
+                        transition: 'opacity 200ms ease'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(PanelIcon, {}, void 0, false, {
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                            lineNumber: 454,
+                            columnNumber: 13
+                        }, undefined),
+                        hoveredPanelBtn && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("span", {
+                            style: {
+                                position: 'absolute',
+                                bottom: '100%',
+                                right: 0,
+                                marginBottom: 6,
+                                padding: '5px 8px',
+                                background: (theme.palette.type || theme.palette.mode) === 'dark' ? '#555' : '#333',
+                                borderRadius: 6,
+                                fontSize: 12,
+                                whiteSpace: 'nowrap',
+                                pointerEvents: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 4
+                            },
+                            children: [
+                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("span", {
+                                    style: {
+                                        color: 'white'
+                                    },
+                                    children: t('Scribe.button.open_panel')
+                                }, void 0, false, {
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                    lineNumber: 471,
+                                    columnNumber: 17
+                                }, undefined),
+                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("span", {
+                                    style: {
+                                        color: '#999'
+                                    },
+                                    children: "(Ctrl+Shift+I)"
+                                }, void 0, false, {
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                    lineNumber: 472,
+                                    columnNumber: 17
+                                }, undefined)
+                            ]
+                        }, void 0, true, {
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                            lineNumber: 456,
+                            columnNumber: 15
+                        }, undefined)
+                    ]
+                }, void 0, true, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                    lineNumber: 432,
+                    columnNumber: 11
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                lineNumber: 431,
+                columnNumber: 9
+            }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Paper__WEBPACK_IMPORTED_MODULE_12__["default"], {
                 ref: paperRef,
                 tabIndex: -1,
@@ -6505,26 +7707,26 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                     children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                                         icon: cozy_ui_transpiled_react_Icons_Left__WEBPACK_IMPORTED_MODULE_16__["default"]
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 444,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 494,
                                         columnNumber: 17
                                     }, undefined)
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                    lineNumber: 443,
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                    lineNumber: 493,
                                     columnNumber: 15
                                 }, undefined),
                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItemText__WEBPACK_IMPORTED_MODULE_17__["default"], {
                                     primary: t(activeParent.labelKey)
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                    lineNumber: 446,
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                    lineNumber: 496,
                                     columnNumber: 15
                                 }, undefined)
                             ]
                         }, void 0, true, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                            lineNumber: 438,
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                            lineNumber: 488,
                             columnNumber: 13
                         }, undefined),
                         activeParent.children.map((child, childIndex)=>child.type === 'input' ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItem__WEBPACK_IMPORTED_MODULE_13__["default"], {
@@ -6556,13 +7758,13 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                         fontSize: 14
                                     }
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                    lineNumber: 458,
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                    lineNumber: 508,
                                     columnNumber: 19
                                 }, undefined)
                             }, child.id, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                lineNumber: 450,
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                lineNumber: 500,
                                 columnNumber: 17
                             }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItem__WEBPACK_IMPORTED_MODULE_13__["default"], {
                                 button: true,
@@ -6588,8 +7790,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                     stroke: "currentColor",
                                                     strokeWidth: "1.5"
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 495,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 545,
                                                     columnNumber: 27
                                                 }, undefined),
                                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("circle", {
@@ -6598,8 +7800,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                     r: "1",
                                                     fill: "currentColor"
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 496,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 546,
                                                     columnNumber: 27
                                                 }, undefined),
                                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("circle", {
@@ -6608,8 +7810,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                     r: "1",
                                                     fill: "currentColor"
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 497,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 547,
                                                     columnNumber: 27
                                                 }, undefined),
                                                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("path", {
@@ -6618,38 +7820,38 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                     strokeWidth: "1.2",
                                                     strokeLinecap: "round"
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 498,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 548,
                                                     columnNumber: 27
                                                 }, undefined)
                                             ]
                                         }, void 0, true, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                            lineNumber: 494,
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                            lineNumber: 544,
                                             columnNumber: 25
                                         }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                                             icon: child.icon
                                         }, void 0, false, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                            lineNumber: 501,
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                            lineNumber: 551,
                                             columnNumber: 25
                                         }, undefined)
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 492,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 542,
                                         columnNumber: 21
                                     }, undefined),
                                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItemText__WEBPACK_IMPORTED_MODULE_17__["default"], {
                                         primary: child.labelKey ? t(child.labelKey) : child.label
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 505,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 555,
                                         columnNumber: 19
                                     }, undefined)
                                 ]
                             }, child.id, true, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                lineNumber: 481,
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                lineNumber: 531,
                                 columnNumber: 17
                             }, undefined))
                     ]
@@ -6694,34 +7896,34 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                         children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                                             icon: action.icon
                                         }, void 0, false, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                            lineNumber: 543,
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                            lineNumber: 593,
                                             columnNumber: 19
                                         }, undefined)
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 542,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 592,
                                         columnNumber: 17
                                     }, undefined),
                                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItemText__WEBPACK_IMPORTED_MODULE_17__["default"], {
                                         primary: action.labelKey ? t(action.labelKey) : action.label
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 545,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 595,
                                         columnNumber: 17
                                     }, undefined),
                                     action.children && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                                         icon: cozy_ui_transpiled_react_Icons_Right__WEBPACK_IMPORTED_MODULE_19__["default"],
                                         size: 16
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 546,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 596,
                                         columnNumber: 37
                                     }, undefined)
                                 ]
                             }, void 0, true, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                lineNumber: 526,
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                lineNumber: 576,
                                 columnNumber: 15
                             }, undefined),
                             action.children && activeSubmenu === action.id && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Paper__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -6772,13 +7974,13 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                 fontSize: 14
                                             }
                                         }, void 0, false, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                            lineNumber: 572,
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                            lineNumber: 622,
                                             columnNumber: 25
                                         }, undefined)
                                     }, child.id, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 556,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 606,
                                         columnNumber: 23
                                     }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItem__WEBPACK_IMPORTED_MODULE_13__["default"], {
                                         button: true,
@@ -6816,8 +8018,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                             stroke: "currentColor",
                                                             strokeWidth: "1.5"
                                                         }, void 0, false, {
-                                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                            lineNumber: 614,
+                                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                            lineNumber: 664,
                                                             columnNumber: 33
                                                         }, undefined),
                                                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("circle", {
@@ -6826,8 +8028,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                             r: "1",
                                                             fill: "currentColor"
                                                         }, void 0, false, {
-                                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                            lineNumber: 615,
+                                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                            lineNumber: 665,
                                                             columnNumber: 33
                                                         }, undefined),
                                                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("circle", {
@@ -6836,8 +8038,8 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                             r: "1",
                                                             fill: "currentColor"
                                                         }, void 0, false, {
-                                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                            lineNumber: 616,
+                                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                            lineNumber: 666,
                                                             columnNumber: 33
                                                         }, undefined),
                                                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)("path", {
@@ -6846,54 +8048,54 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                                                             strokeWidth: "1.2",
                                                             strokeLinecap: "round"
                                                         }, void 0, false, {
-                                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                            lineNumber: 617,
+                                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                            lineNumber: 667,
                                                             columnNumber: 33
                                                         }, undefined)
                                                     ]
                                                 }, void 0, true, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 613,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 663,
                                                     columnNumber: 31
                                                 }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                                                     icon: child.icon
                                                 }, void 0, false, {
-                                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                    lineNumber: 620,
+                                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                    lineNumber: 670,
                                                     columnNumber: 31
                                                 }, undefined)
                                             }, void 0, false, {
-                                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                lineNumber: 611,
+                                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                lineNumber: 661,
                                                 columnNumber: 27
                                             }, undefined),
                                             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_ListItemText__WEBPACK_IMPORTED_MODULE_17__["default"], {
                                                 primary: child.labelKey ? t(child.labelKey) : child.label
                                             }, void 0, false, {
-                                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                                lineNumber: 624,
+                                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                                lineNumber: 674,
                                                 columnNumber: 25
                                             }, undefined)
                                         ]
                                     }, child.id, true, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                        lineNumber: 595,
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                        lineNumber: 645,
                                         columnNumber: 23
                                     }, undefined))
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                                lineNumber: 550,
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                                lineNumber: 600,
                                 columnNumber: 17
                             }, undefined)
                         ]
                     }, action.id, true, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                        lineNumber: 513,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                        lineNumber: 563,
                         columnNumber: 13
                     }, undefined))
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                lineNumber: 428,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                lineNumber: 478,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Paper__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -6902,7 +8104,7 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                     borderRadius: isMobile ? 0 : 8,
                     boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)',
                     transition: 'background-color 150ms',
-                    backgroundColor: isPromptHighlighted ? (theme.palette.type || theme.palette.mode) === 'dark' ? theme.palette.grey[700] : theme.palette.grey[200] : undefined
+                    backgroundColor: focusIndex === PROMPT_INDEX ? (theme.palette.type || theme.palette.mode) === 'dark' ? theme.palette.grey[700] : theme.palette.grey[200] : undefined
                 },
                 elevation: 0,
                 onMouseEnter: ()=>{
@@ -6915,39 +8117,40 @@ const ScribeActionMenu = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_4__.
                     onArrow: handlePromptArrow,
                     onEscape: onClose
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                    lineNumber: 647,
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                    lineNumber: 697,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-                lineNumber: 634,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+                lineNumber: 684,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
-        lineNumber: 427,
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+        lineNumber: 429,
         columnNumber: 5
     }, undefined);
-}, "FsvCwH4t/Pe+hhGO6wzRXcBHcMw=", false, function() {
+}, "lYz6idbquy4qsMh5bR7ogD+PYQk=", false, function() {
     return [
         twake_i18n__WEBPACK_IMPORTED_MODULE_5__.useI18n,
         cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_10__["default"],
         cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_11__["default"]
     ];
-})), "FsvCwH4t/Pe+hhGO6wzRXcBHcMw=", false, function() {
+})), "lYz6idbquy4qsMh5bR7ogD+PYQk=", false, function() {
     return [
         twake_i18n__WEBPACK_IMPORTED_MODULE_5__.useI18n,
         cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_10__["default"],
         cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_11__["default"]
     ];
 });
-_c1 = ScribeActionMenu;
+_c2 = ScribeActionMenu;
 ScribeActionMenu.displayName = 'ScribeActionMenu';
 ScribeActionMenu.propTypes = {
     onSelect: (prop_types__WEBPACK_IMPORTED_MODULE_20___default().func.isRequired),
     onClose: (prop_types__WEBPACK_IMPORTED_MODULE_20___default().func),
+    onOpenPanel: (prop_types__WEBPACK_IMPORTED_MODULE_20___default().func),
     selectedText: (prop_types__WEBPACK_IMPORTED_MODULE_20___default().string)
 };
 ScribeActionMenu.defaultProps = {
@@ -6955,9 +8158,10 @@ ScribeActionMenu.defaultProps = {
     onClose: null
 };
 
-var _c, _c1;
-$RefreshReg$(_c, "ScribeActionMenu$forwardRef");
-$RefreshReg$(_c1, "ScribeActionMenu");
+var _c, _c1, _c2;
+$RefreshReg$(_c, "PanelIcon");
+$RefreshReg$(_c1, "ScribeActionMenu$forwardRef");
+$RefreshReg$(_c2, "ScribeActionMenu");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -7080,19 +8284,19 @@ const SWIPE_THRESHOLD = 60;
                             backgroundColor: 'rgba(128, 128, 128, 0.4)'
                         }
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
                         lineNumber: 87,
                         columnNumber: 11
                     }, undefined)
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
                     lineNumber: 74,
                     columnNumber: 9
                 }, undefined),
                 children
             ]
         }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
             lineNumber: 52,
             columnNumber: 7
         }, undefined);
@@ -7104,7 +8308,7 @@ const SWIPE_THRESHOLD = 60;
         ...popoverProps,
         children: children
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
         lineNumber: 102,
         columnNumber: 5
     }, undefined);
@@ -7136,16 +8340,266 @@ Promise.resolve().then(function() {
 
 
 }),
+"./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  ScribeProvider: () => (ScribeProvider),
+  useScribe: () => (useScribe)
+});
+/* ESM import */var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/core-js/modules/es.iterator.constructor.js");
+/* ESM import */var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* ESM import */var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/core-js/modules/es.iterator.filter.js");
+/* ESM import */var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/core-js/modules/es.iterator.map.js");
+/* ESM import */var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__);
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
+/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./node_modules/cozy-client/dist/index.js");
+/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(cozy_client__WEBPACK_IMPORTED_MODULE_8__);
+/* ESM import */var twake_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/twake-i18n/dist/index.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeAI.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+
+
+
+var _s = $RefreshSig$(), _s1 = $RefreshSig$();
+
+
+
+
+
+const STORAGE_KEY = 'scribe-panel-open';
+const ScribeContext = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_4__.createContext)(null);
+const CHAT_SYSTEM_PROMPT = 'You are a helpful writing assistant. Help the user with their writing tasks. Respond in the same language as the user\'s message. Use Markdown formatting when appropriate.';
+const readStorage = ()=>{
+    try {
+        return localStorage.getItem(STORAGE_KEY) === 'true';
+    } catch (e) {
+        return false;
+    }
+};
+const writeStorage = (value)=>{
+    try {
+        localStorage.setItem(STORAGE_KEY, String(value));
+    } catch (e) {
+    // localStorage unavailable
+    }
+};
+const ScribeProvider = (param)=>{
+    let { children } = param;
+    _s();
+    const [isPanelOpen, setIsPanelOpen] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(readStorage);
+    const [messages, setMessages] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)([]);
+    const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
+    const [currentSelection, setCurrentSelectionState] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(null);
+    const [panelActions, setPanelActionsState] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(null);
+    const [panelWidth, setPanelWidthState] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(400);
+    const client = (0,cozy_client__WEBPACK_IMPORTED_MODULE_8__.useClient)();
+    const { t } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_5__.useI18n)();
+    // Use ref to always have current messages in sendMessage without re-creating the callback
+    const messagesRef = (0,react__WEBPACK_IMPORTED_MODULE_4__.useRef)(messages);
+    messagesRef.current = messages;
+    // Track dismissed selection text so chip doesn't reappear until a NEW different selection arrives
+    const selectionDismissedRef = (0,react__WEBPACK_IMPORTED_MODULE_4__.useRef)(null);
+    (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(()=>{
+        writeStorage(isPanelOpen);
+    }, [
+        isPanelOpen
+    ]);
+    const togglePanel = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)(()=>setIsPanelOpen((prev)=>!prev), []);
+    const openPanel = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)(()=>setIsPanelOpen(true), []);
+    const closePanel = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)(()=>setIsPanelOpen(false), []);
+    const addMessage = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)((msg)=>{
+        setMessages((prev)=>[
+                ...prev,
+                msg
+            ]);
+    }, []);
+    const setCurrentSelection = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)((text, html)=>{
+        if (!text) {
+            setCurrentSelectionState(null);
+            return;
+        }
+        // If user dismissed this exact text, don't re-show it
+        if (selectionDismissedRef.current === text) return;
+        // New different selection resets the dismissed state
+        selectionDismissedRef.current = null;
+        const markdown = html ? (0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_7__.htmlToMarkdown)(html) : text;
+        setCurrentSelectionState({
+            text,
+            html,
+            markdown
+        });
+    }, []);
+    const dismissSelection = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)(()=>{
+        if (currentSelection) {
+            selectionDismissedRef.current = currentSelection.text;
+        }
+        setCurrentSelectionState(null);
+    }, [
+        currentSelection
+    ]);
+    const setPanelActions = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)((actions)=>{
+        setPanelActionsState(actions);
+    }, []);
+    const setPanelWidth = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)((newWidth)=>{
+        const clamped = Math.min(Math.max(newWidth, 280), window.innerWidth * 0.6);
+        setPanelWidthState(clamped);
+    }, []);
+    const sendMessage = (0,react__WEBPACK_IMPORTED_MODULE_4__.useCallback)(async (text, selectionContext)=>{
+        const userMessage = {
+            id: Date.now(),
+            role: 'user',
+            content: text,
+            selection: selectionContext || null,
+            timestamp: new Date()
+        };
+        setMessages((prev)=>[
+                ...prev,
+                userMessage
+            ]);
+        setIsLoading(true);
+        try {
+            // Build AI messages: system prompt + conversation history (skip error messages)
+            const currentMessages = [
+                ...messagesRef.current,
+                userMessage
+            ];
+            const aiMessages = [
+                {
+                    role: 'system',
+                    content: CHAT_SYSTEM_PROMPT
+                },
+                ...currentMessages.filter((m)=>m.role !== 'error').map((m)=>{
+                    // For user messages with selection, build composite content for AI
+                    if (m.role === 'user' && m.selection) {
+                        const selectionMd = m.selection.markdown || m.selection.text;
+                        return {
+                            role: m.role,
+                            content: `[Selected text from document]\n${selectionMd}\n[End of selected text]\n\n${m.content}`
+                        };
+                    }
+                    return {
+                        role: m.role,
+                        content: m.content
+                    };
+                })
+            ];
+            const responseText = await (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.callScribeAI)(client, aiMessages);
+            setMessages((prev)=>[
+                    ...prev,
+                    {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        content: responseText,
+                        timestamp: new Date()
+                    }
+                ]);
+        } catch (err) {
+            const classified = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.classifyScribeError)(err);
+            // Skip adding error message for abort errors (empty messageKey)
+            if (classified.messageKey) {
+                setMessages((prev)=>[
+                        ...prev,
+                        {
+                            id: Date.now() + 1,
+                            role: 'error',
+                            content: t(classified.messageKey),
+                            timestamp: new Date()
+                        }
+                    ]);
+            }
+        } finally{
+            setIsLoading(false);
+        }
+    }, [
+        client,
+        t
+    ]);
+    const value = (0,react__WEBPACK_IMPORTED_MODULE_4__.useMemo)(()=>({
+            isPanelOpen,
+            togglePanel,
+            openPanel,
+            closePanel,
+            messages,
+            isLoading,
+            sendMessage,
+            addMessage,
+            currentSelection,
+            setCurrentSelection,
+            dismissSelection,
+            panelActions,
+            setPanelActions,
+            panelWidth,
+            setPanelWidth
+        }), [
+        isPanelOpen,
+        togglePanel,
+        openPanel,
+        closePanel,
+        messages,
+        isLoading,
+        sendMessage,
+        addMessage,
+        currentSelection,
+        setCurrentSelection,
+        dismissSelection,
+        panelActions,
+        setPanelActions,
+        panelWidth,
+        setPanelWidth
+    ]);
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(ScribeContext.Provider, {
+        value: value,
+        children: children
+    }, void 0, false, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx",
+        lineNumber: 168,
+        columnNumber: 5
+    }, undefined);
+};
+_s(ScribeProvider, "mMP8VqEcZiMnpLWDaM0gdzKQECU=", false, function() {
+    return [
+        cozy_client__WEBPACK_IMPORTED_MODULE_8__.useClient,
+        twake_i18n__WEBPACK_IMPORTED_MODULE_5__.useI18n
+    ];
+});
+_c = ScribeProvider;
+const useScribe = ()=>{
+    _s1();
+    return (0,react__WEBPACK_IMPORTED_MODULE_4__.useContext)(ScribeContext);
+};
+_s1(useScribe, "gDsCjeeItUuvgOWf1v4qoK9RF6k=");
+var _c;
+$RefreshReg$(_c, "ScribeProvider");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
 "./src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx": (function (module, __webpack_exports__, __webpack_require__) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
-  ScribeFloatingButton: () => (ScribeFloatingButton)
+  ScribeFloatingZone: () => (ScribeFloatingZone)
 });
 /* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* ESM import */var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-dom/index.js");
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
 /* ESM import */var twake_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/twake-i18n/dist/index.js");
 /* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
 
@@ -7153,160 +8607,466 @@ var _s = $RefreshSig$();
 
 
 
-const baseStyle = {
-    position: 'fixed',
-    bottom: 80,
-    right: 40,
-    zIndex: 100000,
-    opacity: 0.4,
-    transition: 'opacity 200ms ease',
-    cursor: 'pointer',
-    borderRadius: 20,
-    padding: '8px 16px',
-    background: 'white',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-    border: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    fontSize: 14,
-    fontFamily: 'inherit',
-    color: '#333'
-};
-const tooltipStyle = {
-    position: 'absolute',
-    bottom: '100%',
-    right: 0,
-    marginBottom: 8,
-    padding: '6px 10px',
-    background: '#333',
-    borderRadius: 6,
-    fontSize: 12,
-    whiteSpace: 'nowrap',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4
-};
+
+const getButtonStyle = (isDark)=>({
+        cursor: 'pointer',
+        borderRadius: 20,
+        padding: '8px 16px',
+        background: isDark ? '#2d2d2d' : 'white',
+        boxShadow: isDark ? '0 2px 8px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.15)',
+        border: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        fontSize: 14,
+        fontFamily: 'inherit',
+        color: isDark ? '#e0e0e0' : '#333',
+        transition: 'opacity 200ms ease'
+    });
+const getTooltipStyle = (isDark)=>({
+        position: 'absolute',
+        bottom: '100%',
+        right: 0,
+        marginBottom: 8,
+        padding: '6px 10px',
+        background: isDark ? '#555' : '#333',
+        borderRadius: 6,
+        fontSize: 12,
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4
+    });
+const SparkleIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                d: "M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z",
+                fill: "#7C3AED",
+                stroke: "#7C3AED",
+                strokeWidth: "0.5"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 49,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                d: "M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z",
+                fill: "#7C3AED",
+                stroke: "#7C3AED",
+                strokeWidth: "0.3"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 55,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+        lineNumber: 42,
+        columnNumber: 3
+    }, undefined);
+_c = SparkleIcon;
+const PanelIcon = ()=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("rect", {
+                x: "1.5",
+                y: "2.5",
+                width: "13",
+                height: "11",
+                rx: "1.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 72,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("line", {
+                x1: "10",
+                y1: "2.5",
+                x2: "10",
+                y2: "13.5",
+                stroke: "currentColor",
+                strokeWidth: "1.2"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 81,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+        lineNumber: 65,
+        columnNumber: 3
+    }, undefined);
+_c1 = PanelIcon;
 /**
- * Floating "Scribe" button rendered in bottom-right of the viewport.
- * Translucent by default, opaque on hover. Rendered via portal on document.body.
+ * Floating zone with two buttons rendered in bottom-right of the viewport.
+ * Both are always visible (translucent by default, opaque on hover).
+ * Rendered via portal on document.body.
  *
- * @param {{ visible: boolean, onClick: () => void }} props
- */ const ScribeFloatingButton = (param)=>{
-    let { visible, onClick } = param;
+ * @param {{ visible: boolean, onTriggerScribe: () => void, onTogglePanel: () => void }} props
+ */ const ScribeFloatingZone = (param)=>{
+    let { visible, onTriggerScribe, onTogglePanel } = param;
     _s();
     const { t } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_3__.useI18n)();
-    const [hovered, setHovered] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-    const [showTooltip, setShowTooltip] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-    const timerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_4__["default"])();
+    const isDark = (theme.palette.type || theme.palette.mode) === 'dark';
+    const [hoveredInline, setHoveredInline] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+    const [hoveredPanel, setHoveredPanel] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
         if (visible) {
-            setHovered(false);
-            setShowTooltip(false);
-            clearTimeout(timerRef.current);
+            setHoveredInline(false);
+            setHoveredPanel(false);
         }
     }, [
         visible
     ]);
-    // Cleanup timer on unmount
-    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>()=>clearTimeout(timerRef.current), []);
     if (!visible) return null;
-    return /*#__PURE__*/ (0,react_dom__WEBPACK_IMPORTED_MODULE_2__.createPortal)(/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("button", {
+    const buttonStyle = getButtonStyle(isDark);
+    const tooltipStyle = getTooltipStyle(isDark);
+    return /*#__PURE__*/ (0,react_dom__WEBPACK_IMPORTED_MODULE_2__.createPortal)(/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
         style: {
-            ...baseStyle,
-            opacity: hovered ? 1 : 0.4
+            position: 'fixed',
+            bottom: 80,
+            right: 40,
+            zIndex: 100000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8
         },
-        onClick: onClick,
-        onMouseEnter: ()=>{
-            setHovered(true);
-            timerRef.current = setTimeout(()=>setShowTooltip(true), 1000);
-        },
-        onMouseLeave: ()=>{
-            setHovered(false);
-            setShowTooltip(false);
-            clearTimeout(timerRef.current);
-        },
-        type: "button",
         children: [
-            showTooltip && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
-                style: tooltipStyle,
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("button", {
+                style: {
+                    ...buttonStyle,
+                    opacity: hoveredInline ? 1 : 0.4,
+                    position: 'relative'
+                },
+                onClick: onTriggerScribe,
+                onMouseEnter: ()=>setHoveredInline(true),
+                onMouseLeave: ()=>setHoveredInline(false),
+                type: "button",
                 children: [
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
-                        style: {
-                            color: 'white'
-                        },
-                        children: t('Scribe.button.text_ai')
-                    }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                        lineNumber: 85,
+                    hoveredInline && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                        style: tooltipStyle,
+                        children: [
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                                style: {
+                                    color: 'white'
+                                },
+                                children: t('Scribe.button.text_ai')
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                                lineNumber: 147,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                                style: {
+                                    color: '#999'
+                                },
+                                children: "(Ctrl+Shift+I)"
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                                lineNumber: 150,
+                                columnNumber: 13
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                        lineNumber: 146,
                         columnNumber: 11
                     }, undefined),
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
-                        style: {
-                            color: '#999'
-                        },
-                        children: "(Ctrl+Shift+I)"
-                    }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                        lineNumber: 86,
-                        columnNumber: 11
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                lineNumber: 84,
-                columnNumber: 9
-            }, undefined),
-            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
-                width: "16",
-                height: "16",
-                viewBox: "0 0 16 16",
-                fill: "none",
-                xmlns: "http://www.w3.org/2000/svg",
-                children: [
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
-                        d: "M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z",
-                        fill: "#7C3AED",
-                        stroke: "#7C3AED",
-                        strokeWidth: "0.5"
-                    }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                        lineNumber: 96,
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(SparkleIcon, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                        lineNumber: 153,
                         columnNumber: 9
                     }, undefined),
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
-                        d: "M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z",
-                        fill: "#7C3AED",
-                        stroke: "#7C3AED",
-                        strokeWidth: "0.3"
-                    }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                        lineNumber: 102,
-                        columnNumber: 9
-                    }, undefined)
+                    "Scribe"
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-                lineNumber: 89,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 134,
                 columnNumber: 7
             }, undefined),
-            "Scribe"
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("button", {
+                style: {
+                    ...buttonStyle,
+                    opacity: hoveredPanel ? 1 : 0.4,
+                    position: 'relative'
+                },
+                onClick: onTogglePanel,
+                onMouseEnter: ()=>setHoveredPanel(true),
+                onMouseLeave: ()=>setHoveredPanel(false),
+                type: "button",
+                children: [
+                    hoveredPanel && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                        style: tooltipStyle,
+                        children: [
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                                style: {
+                                    color: 'white'
+                                },
+                                children: t('Scribe.button.open_panel')
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                                lineNumber: 169,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
+                                style: {
+                                    color: '#999'
+                                },
+                                children: "(Ctrl+Shift+I x2)"
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                                lineNumber: 172,
+                                columnNumber: 13
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                        lineNumber: 168,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(PanelIcon, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                        lineNumber: 175,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+                lineNumber: 156,
+                columnNumber: 7
+            }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
-        lineNumber: 69,
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+        lineNumber: 123,
         columnNumber: 5
     }, undefined), document.body);
 };
-_s(ScribeFloatingButton, "gpBCZpRFD5GMYFzBYYg5p+7LosU=", false, function() {
+_s(ScribeFloatingZone, "IE7XbOzF43zD8ywp2VcauY9tJZ8=", false, function() {
     return [
-        twake_i18n__WEBPACK_IMPORTED_MODULE_3__.useI18n
+        twake_i18n__WEBPACK_IMPORTED_MODULE_3__.useI18n,
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_4__["default"]
     ];
 });
-_c = ScribeFloatingButton;
-var _c;
-$RefreshReg$(_c, "ScribeFloatingButton");
+_c2 = ScribeFloatingZone;
+var _c, _c1, _c2;
+$RefreshReg$(_c, "SparkleIcon");
+$RefreshReg$(_c1, "PanelIcon");
+$RefreshReg$(_c2, "ScribeFloatingZone");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  PANEL_WIDTH: () => (PANEL_WIDTH),
+  ScribePanel: () => (ScribePanel)
+});
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var cozy_ui_transpiled_react_IconButton__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/IconButton/index.js");
+/* ESM import */var cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Icon/index.js");
+/* ESM import */var cozy_ui_transpiled_react_Icons_Cross__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Icons/Cross.js");
+/* ESM import */var cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Typography/index.js");
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ResizeHandle__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ResizeHandle.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ChatMessageList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ChatMessageList.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ChatInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ChatInput.jsx");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+var _s = $RefreshSig$();
+
+
+
+
+
+
+
+
+
+
+const PANEL_WIDTH = 400;
+const SCRIBE_PURPLE = '#7C3AED';
+const SparkleSvg = (param)=>{
+    let { size = 20 } = param;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
+        width: size,
+        height: size,
+        viewBox: "0 0 16 16",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                d: "M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z",
+                fill: SCRIBE_PURPLE,
+                stroke: SCRIBE_PURPLE,
+                strokeWidth: "0.5"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                lineNumber: 26,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                d: "M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z",
+                fill: SCRIBE_PURPLE,
+                stroke: SCRIBE_PURPLE,
+                strokeWidth: "0.3"
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                lineNumber: 32,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+        lineNumber: 19,
+        columnNumber: 3
+    }, undefined);
+};
+_c = SparkleSvg;
+const ScribePanel = ()=>{
+    _s();
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_6__["default"])();
+    const { closePanel, panelWidth } = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__.useScribe)();
+    const isDark = (theme.palette.type || theme.palette.mode) === 'dark';
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+        "data-scribe-panel": true,
+        style: {
+            width: panelWidth,
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'row',
+            height: '100%',
+            boxShadow: isDark ? '-4px 0 12px rgba(0, 0, 0, 0.5)' : '-2px 0 8px rgba(0, 0, 0, 0.1)',
+            background: theme.palette.background.paper,
+            overflow: 'hidden'
+        },
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ResizeHandle__WEBPACK_IMPORTED_MODULE_3__.ResizeHandle, {}, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                lineNumber: 63,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+                style: {
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    minWidth: 0
+                },
+                children: [
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+                        style: {
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            padding: '12px 16px',
+                            borderBottom: `1px solid ${theme.palette.divider}`
+                        },
+                        children: [
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(SparkleSvg, {
+                                size: 20
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                                lineNumber: 75,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                                variant: "h6",
+                                style: {
+                                    marginLeft: 8,
+                                    flex: 1
+                                },
+                                children: "Scribe"
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                                lineNumber: 76,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_IconButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                                size: "small",
+                                onClick: closePanel,
+                                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                                    icon: cozy_ui_transpiled_react_Icons_Cross__WEBPACK_IMPORTED_MODULE_10__["default"],
+                                    size: 16
+                                }, void 0, false, {
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                                    lineNumber: 83,
+                                    columnNumber: 13
+                                }, undefined)
+                            }, void 0, false, {
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                                lineNumber: 82,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                        lineNumber: 66,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ChatMessageList__WEBPACK_IMPORTED_MODULE_4__.ChatMessageList, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                        lineNumber: 88,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ChatInput__WEBPACK_IMPORTED_MODULE_5__.ChatInput, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                        lineNumber: 89,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+                lineNumber: 64,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx",
+        lineNumber: 48,
+        columnNumber: 5
+    }, undefined);
+};
+_s(ScribePanel, "qqjFNC0Ye6tmR2iaR42vAmaXG84=", false, function() {
+    return [
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_6__["default"],
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_2__.useScribe
+    ];
+});
+_c1 = ScribePanel;
+var _c, _c1;
+$RefreshReg$(_c, "SparkleSvg");
+$RefreshReg$(_c1, "ScribePanel");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -7331,21 +9091,21 @@ __webpack_require__.d(__webpack_exports__, {
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__("./node_modules/prop-types/index.js");
 /* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_16__);
-/* ESM import */var cozy_ui_transpiled_react_Alert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Alert/index.js");
 /* ESM import */var cozy_ui_transpiled_react_Paper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Paper/index.js");
 /* ESM import */var cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Spinner/index.js");
 /* ESM import */var cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Typography/index.js");
 /* ESM import */var twake_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/twake-i18n/dist/index.js");
-/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./node_modules/cozy-client/dist/index.js");
-/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(cozy_client__WEBPACK_IMPORTED_MODULE_11__);
+/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./node_modules/cozy-client/dist/index.js");
+/* ESM import */var cozy_client__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(cozy_client__WEBPACK_IMPORTED_MODULE_12__);
 /* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx");
 /* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeActionMenu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeAI.js");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_tableCellMarkers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/tableCellMarkers.js");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeResultPanel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeDevMode.js");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribe.styl");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeAI.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_tableCellMarkers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/tableCellMarkers.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeResultPanel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeDevMode.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribe.styl");
 /* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
 
 var _s = $RefreshSig$();
@@ -7374,10 +9134,12 @@ var _s = $RefreshSig$();
  *
  * Closing the popover during loading aborts the in-flight API request via AbortController.
  */ const ScribePopover = (param)=>{
-    let { open, selectedText, selectedHtml, enrichedMd, tableAmbiguity, partialTableInfo, onReplace, onInsert, onCancel } = param;
+    let { open, selectedText, selectedHtml, enrichedMd, onReplace, onInsert, onCancel, onOpenPanel, tableAmbiguity } = param;
     _s();
     const { t } = (0,twake_i18n__WEBPACK_IMPORTED_MODULE_2__.useI18n)();
-    const client = (0,cozy_client__WEBPACK_IMPORTED_MODULE_11__.useClient)();
+    const client = (0,cozy_client__WEBPACK_IMPORTED_MODULE_12__.useClient)();
+    const scribe = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_5__.useScribe)();
+    const addMessage = scribe === null || scribe === void 0 ? void 0 : scribe.addMessage;
     const abortRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
     const [step, setStep] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('menu') // 'menu' | 'loading' | 'result'
     ;
@@ -7461,9 +9223,9 @@ var _s = $RefreshSig$();
         // Don't send ambiguous selections to LLM
         if (tableAmbiguity) return;
         // Compute intermediate MD for dev panels (enrichedMd preferred over htmlToMarkdown)
-        const inputMd = enrichedMd || (selectedHtml ? (0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_6__.htmlToMarkdown)(selectedHtml) : selectedText);
+        const inputMd = enrichedMd || (selectedHtml ? (0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_7__.htmlToMarkdown)(selectedHtml) : selectedText);
         // Compute normalized HTML for dev panels
-        const normalized = selectedHtml ? (0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_6__.normalizeHtml)(selectedHtml) : '';
+        const normalized = selectedHtml ? (0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_7__.normalizeHtml)(selectedHtml) : '';
         // Dev mode: test-markdown bypasses LLM entirely
         if (actionId === 'test-markdown') {
             setDevData({
@@ -7488,7 +9250,7 @@ var _s = $RefreshSig$();
             breadcrumb
         });
         // Capture dev data for normal flow too
-        if ((0,_modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_9__.isScribeDevMd)()) {
+        if ((0,_modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_10__.isScribeDevMd)()) {
             setDevData({
                 html: selectedHtml || '',
                 normalizedHtml: normalized,
@@ -7498,7 +9260,7 @@ var _s = $RefreshSig$();
         }
         // 1. Transition to loading
         setStep('loading');
-        const loadingInfo = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_5__.deriveLoadingMessage)(actionId, label);
+        const loadingInfo = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.deriveLoadingMessage)(actionId, label);
         setLoadingMessage(loadingInfo.params ? t(loadingInfo.key, loadingInfo.params) : t(loadingInfo.key));
         setResult({
             text: '',
@@ -7521,12 +9283,12 @@ var _s = $RefreshSig$();
             if (enrichedMd) {
                 extra.enrichedMd = enrichedMd;
             }
-            const messages = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_5__.buildMessages)(actionId, selectedText, label, Object.keys(extra).length > 0 ? extra : undefined);
-            const text = await (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_5__.callScribeAI)(client, messages, {
+            const messages = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.buildMessages)(actionId, selectedText, label, Object.keys(extra).length > 0 ? extra : undefined);
+            const text = await (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.callScribeAI)(client, messages, {
                 signal: controller.signal
             });
             // 4. Pre-process cell markers for preview display, keep raw for reinjection
-            const { displayMd, warning } = (0,_modules_views_OnlyOffice_Scribe_tableCellMarkers__WEBPACK_IMPORTED_MODULE_7__.transformCellMarkersForPreview)(text, enrichedMd);
+            const { displayMd, warning } = (0,_modules_views_OnlyOffice_Scribe_tableCellMarkers__WEBPACK_IMPORTED_MODULE_8__.transformCellMarkersForPreview)(text, enrichedMd);
             setRawResult(text);
             setCellWarning(warning);
             setResult({
@@ -7536,11 +9298,26 @@ var _s = $RefreshSig$();
                 canRetry: false
             });
             setStep('result');
+            // 5. Mirror action into shared conversation history
+            if (addMessage) {
+                addMessage({
+                    id: Date.now(),
+                    role: 'user',
+                    content: breadcrumb,
+                    timestamp: new Date()
+                });
+                addMessage({
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    content: text,
+                    timestamp: new Date()
+                });
+            }
         } catch (err) {
             if (err.name === 'AbortError') {
                 return;
             }
-            const classified = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_5__.classifyScribeError)(err);
+            const classified = (0,_modules_views_OnlyOffice_Scribe_scribeAI__WEBPACK_IMPORTED_MODULE_6__.classifyScribeError)(err);
             setResult({
                 text: '',
                 breadcrumb,
@@ -7548,6 +9325,21 @@ var _s = $RefreshSig$();
                 canRetry: classified.canRetry
             });
             setStep('result');
+            // Mirror error into shared conversation history
+            if (addMessage) {
+                addMessage({
+                    id: Date.now(),
+                    role: 'user',
+                    content: breadcrumb,
+                    timestamp: new Date()
+                });
+                addMessage({
+                    id: Date.now() + 1,
+                    role: 'error',
+                    content: classified.messageKey ? t(classified.messageKey) : 'Error',
+                    timestamp: new Date()
+                });
+            }
         } finally{
             if (abortRef.current === controller) {
                 abortRef.current = null;
@@ -7556,10 +9348,9 @@ var _s = $RefreshSig$();
     }, [
         selectedText,
         selectedHtml,
-        enrichedMd,
-        tableAmbiguity,
         client,
-        t
+        t,
+        addMessage
     ]);
     const handleClose = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
         if (abortRef.current) {
@@ -7604,10 +9395,11 @@ var _s = $RefreshSig$();
             }
         }, 50);
     }, []);
-    const devMode = (0,_modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_9__.isScribeDevMd)();
+    const devMode = (0,_modules_views_OnlyOffice_Scribe_scribeDevMode__WEBPACK_IMPORTED_MODULE_10__.isScribeDevMd)();
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeContainer__WEBPACK_IMPORTED_MODULE_3__.ScribeContainer, {
         open: open,
         onClose: handleClose,
+        transitionDuration: 0,
         TransitionProps: {
             onEntered: handleEntered
         },
@@ -7639,33 +9431,21 @@ var _s = $RefreshSig$();
             }
         },
         children: [
-            ambiguityMessage && step === 'menu' && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], {
-                severity: "warning",
-                sx: {
-                    m: 1,
-                    maxWidth: 400,
-                    borderRadius: 2
-                },
-                children: ambiguityMessage
-            }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                lineNumber: 223,
-                columnNumber: 9
-            }, undefined),
-            step === 'menu' && !ambiguityMessage && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeActionMenu__WEBPACK_IMPORTED_MODULE_4__.ScribeActionMenu, {
+            step === 'menu' && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeActionMenu__WEBPACK_IMPORTED_MODULE_4__.ScribeActionMenu, {
                 ref: menuRef,
                 onSelect: handleActionSelect,
                 onClose: handleClose,
+                onOpenPanel: onOpenPanel,
                 selectedText: selectedText
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                lineNumber: 228,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+                lineNumber: 239,
                 columnNumber: 9
             }, undefined),
             step === 'loading' && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Paper__WEBPACK_IMPORTED_MODULE_13__["default"], {
                 ref: loadingRef,
                 tabIndex: -1,
-                className: _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_10__["default"]["scribe-loading-panel"],
+                className: _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_11__["default"]["scribe-loading-panel"],
                 elevation: 0,
                 style: {
                     outline: 'none'
@@ -7674,27 +9454,27 @@ var _s = $RefreshSig$();
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_14__["default"], {
                         size: "large"
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                        lineNumber: 232,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+                        lineNumber: 243,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_15__["default"], {
                         variant: "body2",
                         color: "textSecondary",
-                        className: _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_10__["default"]["scribe-loading-message"],
+                        className: _modules_views_OnlyOffice_Scribe_scribe_styl__WEBPACK_IMPORTED_MODULE_11__["default"]["scribe-loading-message"],
                         children: loadingMessage
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                        lineNumber: 233,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+                        lineNumber: 244,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                lineNumber: 231,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+                lineNumber: 242,
                 columnNumber: 9
             }, undefined),
-            step === 'result' && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeResultPanel__WEBPACK_IMPORTED_MODULE_8__.ScribeResultPanel, {
+            step === 'result' && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeResultPanel__WEBPACK_IMPORTED_MODULE_9__.ScribeResultPanel, {
                 breadcrumb: result.breadcrumb,
                 resultText: result.text,
                 error: result.error,
@@ -7711,21 +9491,22 @@ var _s = $RefreshSig$();
                 panelSize: panelSize,
                 onResize: setPanelSize
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-                lineNumber: 239,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+                lineNumber: 250,
                 columnNumber: 9
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
-        lineNumber: 202,
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+        lineNumber: 217,
         columnNumber: 5
     }, undefined);
 };
-_s(ScribePopover, "riibW6zWg5AOVx43+MoSn09I6dA=", false, function() {
+_s(ScribePopover, "zSyALMJw+rXgKf3qSyuIGQNTcRY=", false, function() {
     return [
         twake_i18n__WEBPACK_IMPORTED_MODULE_2__.useI18n,
-        cozy_client__WEBPACK_IMPORTED_MODULE_11__.useClient
+        cozy_client__WEBPACK_IMPORTED_MODULE_12__.useClient,
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_5__.useScribe
     ];
 });
 _c = ScribePopover;
@@ -7741,7 +9522,8 @@ ScribePopover.propTypes = {
     partialTableInfo: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().object),
     onReplace: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func.isRequired),
     onInsert: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func.isRequired),
-    onCancel: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func.isRequired)
+    onCancel: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func.isRequired),
+    onOpenPanel: (prop_types__WEBPACK_IMPORTED_MODULE_16___default().func)
 };
 
 var _c;
@@ -7848,7 +9630,7 @@ const ScribePromptInput = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_1__
                 },
                 fullWidth: true
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
                 lineNumber: 61,
                 columnNumber: 7
             }, undefined),
@@ -7865,18 +9647,18 @@ const ScribePromptInput = /*#__PURE__*/ _s((0,react__WEBPACK_IMPORTED_MODULE_1__
                     icon: cozy_ui_transpiled_react_Icons_Paperplane__WEBPACK_IMPORTED_MODULE_6__["default"],
                     size: 16
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
                     lineNumber: 80,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
                 lineNumber: 70,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
         lineNumber: 53,
         columnNumber: 5
     }, undefined);
@@ -8050,7 +9832,7 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.htmlSource
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 98,
                     columnNumber: 9
                 }, undefined),
@@ -8061,13 +9843,13 @@ function saveDevPanelPrefs(prefs) {
                         __html: highlightedHtml || escapeHtml(devData.html)
                     }
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 99,
                     columnNumber: 9
                 }, undefined)
             ]
         }, "htmlSource", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 97,
             columnNumber: 7
         }, undefined));
@@ -8080,7 +9862,7 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.htmlNorm
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 113,
                     columnNumber: 9
                 }, undefined),
@@ -8091,13 +9873,13 @@ function saveDevPanelPrefs(prefs) {
                         __html: highlightedNormalized || escapeHtml(devData.normalizedHtml)
                     }
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 114,
                     columnNumber: 9
                 }, undefined)
             ]
         }, "htmlNorm", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 112,
             columnNumber: 7
         }, undefined));
@@ -8110,7 +9892,7 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.mdConverted
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 128,
                     columnNumber: 9
                 }, undefined),
@@ -8121,13 +9903,13 @@ function saveDevPanelPrefs(prefs) {
                         __html: highlightedMd || escapeHtml(devData.md)
                     }
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 129,
                     columnNumber: 9
                 }, undefined)
             ]
         }, "mdConverted", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 127,
             columnNumber: 7
         }, undefined));
@@ -8140,7 +9922,7 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.llmRaw
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 143,
                     columnNumber: 9
                 }, undefined),
@@ -8151,13 +9933,13 @@ function saveDevPanelPrefs(prefs) {
                         __html: highlightedLlmMd || escapeHtml(rawLlmResult || resultText)
                     }
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 144,
                     columnNumber: 9
                 }, undefined)
             ]
         }, "llmRaw", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 142,
             columnNumber: 7
         }, undefined));
@@ -8170,7 +9952,7 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.llmDisplay
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 158,
                     columnNumber: 9
                 }, undefined),
@@ -8181,13 +9963,13 @@ function saveDevPanelPrefs(prefs) {
                         __html: highlightedLlmDisplay || escapeHtml(resultText)
                     }
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 159,
                     columnNumber: 9
                 }, undefined)
             ]
         }, "llmDisplay", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 157,
             columnNumber: 7
         }, undefined));
@@ -8200,14 +9982,14 @@ function saveDevPanelPrefs(prefs) {
                     style: devLabelStyle,
                     children: labels.rendered
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 173,
                     columnNumber: 9
                 }, undefined),
                 resultContent
             ]
         }, "rendered", true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
             lineNumber: 172,
             columnNumber: 7
         }, undefined));
@@ -8226,7 +10008,7 @@ function saveDevPanelPrefs(prefs) {
         },
         children: panels
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
         lineNumber: 185,
         columnNumber: 5
     }, undefined);
@@ -8527,21 +10309,21 @@ const ScribeResultPanel = (param)=>{
                     },
                     children: cellWarning
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 461,
                     columnNumber: 13
                 }, undefined),
                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxDEV)(_modules_views_OnlyOffice_Scribe_MarkdownPreview__WEBPACK_IMPORTED_MODULE_8__.MarkdownPreview, {
                     children: resultText
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                     lineNumber: 472,
                     columnNumber: 11
                 }, undefined)
             ]
         }, void 0, true)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
         lineNumber: 449,
         columnNumber: 5
     }, undefined);
@@ -8598,13 +10380,13 @@ const ScribeResultPanel = (param)=>{
                                         },
                                         children: "DEV MD"
                                     }, void 0, false, {
-                                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                         lineNumber: 510,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                 lineNumber: 507,
                                 columnNumber: 11
                             }, undefined),
@@ -8616,18 +10398,18 @@ const ScribeResultPanel = (param)=>{
                                     icon: cozy_ui_transpiled_react_Icons_Cross__WEBPACK_IMPORTED_MODULE_16__["default"],
                                     size: 16
                                 }, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                     lineNumber: 518,
                                     columnNumber: 13
                                 }, undefined)
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                 lineNumber: 517,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                         lineNumber: 506,
                         columnNumber: 9
                     }, undefined),
@@ -8662,7 +10444,7 @@ const ScribeResultPanel = (param)=>{
                                                 padding: 2
                                             }
                                         }, void 0, false, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                             lineNumber: 539,
                                             columnNumber: 17
                                         }, undefined),
@@ -8672,25 +10454,25 @@ const ScribeResultPanel = (param)=>{
                                             },
                                             children: checkboxLabels[key]
                                         }, void 0, false, {
-                                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                             lineNumber: 545,
                                             columnNumber: 17
                                         }, undefined)
                                     ]
                                 }, key, true, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                                     lineNumber: 526,
                                     columnNumber: 15
                                 }, undefined))
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                             lineNumber: 524,
                             columnNumber: 11
                         }, undefined);
                     })()
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                 lineNumber: 501,
                 columnNumber: 7
             }, undefined),
@@ -8709,7 +10491,7 @@ const ScribeResultPanel = (param)=>{
                 resultText: resultText,
                 resultContent: resultContent
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                 lineNumber: 556,
                 columnNumber: 9
             }, undefined) : resultContent,
@@ -8726,13 +10508,13 @@ const ScribeResultPanel = (param)=>{
                         startIcon: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_15__["default"], {
                             icon: cozy_ui_transpiled_react_Icons_Sync__WEBPACK_IMPORTED_MODULE_19__["default"]
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                             lineNumber: 586,
                             columnNumber: 28
                         }, void 0),
                         onClick: onRetry
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                         lineNumber: 582,
                         columnNumber: 15
                     }, undefined)
@@ -8745,7 +10527,7 @@ const ScribeResultPanel = (param)=>{
                             disabled: insertDisabled,
                             title: insertDisabled ? 'Insertion non disponible pour une selection partielle de tableau' : undefined
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                             lineNumber: 593,
                             columnNumber: 13
                         }, undefined),
@@ -8755,14 +10537,14 @@ const ScribeResultPanel = (param)=>{
                             label: t('Scribe.button.replace'),
                             onClick: onReplace
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                             lineNumber: 600,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                 lineNumber: 575,
                 columnNumber: 7
             }, undefined),
@@ -8771,13 +10553,13 @@ const ScribeResultPanel = (param)=>{
                 onMouseDown: handleResizeStart,
                 tabIndex: -1
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
                 lineNumber: 609,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/ScribeResultPanel.jsx",
         lineNumber: 479,
         columnNumber: 5
     }, undefined);
@@ -8837,6 +10619,152 @@ ScribeResultPanel.defaultProps = {
 var _c, _c1;
 $RefreshReg$(_c, "DevPanelGrid");
 $RefreshReg$(_c1, "ScribeResultPanel");
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+"./src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx": (function (module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  SelectionChip: () => (SelectionChip)
+});
+/* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
+/* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* ESM import */var cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/@material-ui/core/esm/styles/useTheme.js");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+var _s = $RefreshSig$();
+
+
+const SCRIBE_PURPLE = '#7C3AED';
+/**
+ * Compact chip showing truncated selected text from the OO editor.
+ * Click chip body to expand/collapse full text. Dismiss button clears it.
+ */ const SelectionChip = (param)=>{
+    let { selection, onDismiss } = param;
+    _s();
+    const [expanded, setExpanded] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+    const theme = (0,cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_2__["default"])();
+    if (!selection) return null;
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+        style: {
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 4,
+            padding: '4px 0',
+            marginBottom: 4
+        },
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
+                onClick: ()=>setExpanded((prev)=>!prev),
+                role: "button",
+                tabIndex: 0,
+                onKeyDown: (e)=>{
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setExpanded((prev)=>!prev);
+                    }
+                },
+                style: {
+                    flex: 1,
+                    minWidth: 0,
+                    borderLeft: `3px solid ${SCRIBE_PURPLE}`,
+                    paddingLeft: 8,
+                    background: theme.palette.action.hover,
+                    borderRadius: '0 4px 4px 0',
+                    padding: '4px 8px 4px 8px',
+                    cursor: 'pointer',
+                    fontSize: 12,
+                    lineHeight: 1.4,
+                    color: theme.palette.text.secondary,
+                    fontStyle: 'italic',
+                    ...expanded ? {
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word'
+                    } : {
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                    }
+                },
+                "aria-label": "Selected text",
+                children: selection.text
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx",
+                lineNumber: 27,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("button", {
+                onClick: onDismiss,
+                "aria-label": "Dismiss selection",
+                style: {
+                    flexShrink: 0,
+                    width: 20,
+                    height: 20,
+                    border: 'none',
+                    background: 'transparent',
+                    color: theme.palette.text.secondary,
+                    cursor: 'pointer',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 14,
+                    lineHeight: 1,
+                    borderRadius: '50%',
+                    marginTop: 2
+                },
+                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("svg", {
+                    width: "12",
+                    height: "12",
+                    viewBox: "0 0 12 12",
+                    fill: "none",
+                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("path", {
+                        d: "M3 3l6 6M9 3l-6 6",
+                        stroke: "currentColor",
+                        strokeWidth: "1.5",
+                        strokeLinecap: "round"
+                    }, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx",
+                        lineNumber: 84,
+                        columnNumber: 11
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx",
+                    lineNumber: 83,
+                    columnNumber: 9
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx",
+                lineNumber: 62,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Scribe/SelectionChip.jsx",
+        lineNumber: 18,
+        columnNumber: 5
+    }, undefined);
+};
+_s(SelectionChip, "8cGCrqUgWwWUmDt/dmtvzNbRsQU=", false, function() {
+    return [
+        cozy_ui_transpiled_react_styles__WEBPACK_IMPORTED_MODULE_2__["default"]
+    ];
+});
+_c = SelectionChip;
+var _c;
+$RefreshReg$(_c, "SelectionChip");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -8939,7 +10867,7 @@ __webpack_require__.d(__webpack_exports__, {
         systemBase += ' Preserve all [^scribe-fn-N] footnote reference markers exactly as-is. Do NOT add footnote definitions ([^N]: text). The footnote content is managed separately — only preserve the inline reference markers.';
     }
     if ((extra === null || extra === void 0 ? void 0 : extra.enrichedMd) && extra.enrichedMd.includes('{{REF:')) {
-        systemBase += ' Preserve all {{REF:scribe-ref-N:visible text}} cross-reference markers exactly as-is. You may modify surrounding text but must keep these markers intact with their original visible text.';
+        systemBase += ' Preserve all {{REF:scribe-ref-N:visible text}} cross-reference markers. Keep the {{REF:scribe-ref-N: and closing }} delimiters intact. You may modify the visible text inside the marker to match your changes (e.g. translation), but never remove or alter the scribe-ref-N identifier.';
     }
     const systemPrefix = systemBase + '\n\n';
     // Prefer enrichedMd (plugin-side extraction) > htmlToMarkdown(html) > plain text
@@ -10211,17 +12139,17 @@ const Title = ()=>{
                         children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
                             sharingInfos: sharingInfos
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                             lineNumber: 59,
                             columnNumber: 13
                         }, undefined)
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                         lineNumber: 53,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Divider__WEBPACK_IMPORTED_MODULE_10__["default"], {}, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                         lineNumber: 61,
                         columnNumber: 11
                     }, undefined)
@@ -10235,29 +12163,29 @@ const Title = ()=>{
                     fileId: fileId,
                     isPublic: isPublic
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                     lineNumber: 66,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                 lineNumber: 65,
                 columnNumber: 9
             }, undefined) : isSharingBannerPluginDisplayed ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_sharing__WEBPACK_IMPORTED_MODULE_11__.SharingBannerPlugin, {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                 lineNumber: 69,
                 columnNumber: 9
             }, undefined) : null,
             isAddToMyCozyFabDisplayed && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_sharing__WEBPACK_IMPORTED_MODULE_12__["default"], {
                 link: sharingInfos.addSharingLink
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
                 lineNumber: 72,
                 columnNumber: 9
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Title.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Title.jsx",
         lineNumber: 50,
         columnNumber: 5
     }, undefined);
@@ -10324,12 +12252,12 @@ const BackButton = (param)=>{
         children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_4__["default"], {
             icon: cozy_ui_transpiled_react_Icons_Previous__WEBPACK_IMPORTED_MODULE_5__["default"]
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/BackButton.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/BackButton.jsx",
             lineNumber: 20,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/BackButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/BackButton.jsx",
         lineNumber: 13,
         columnNumber: 5
     }, undefined);
@@ -10458,7 +12386,7 @@ const EditButton = (param)=>{
                             icon: cozy_ui_transpiled_react_Icons_Lightbulb__WEBPACK_IMPORTED_MODULE_12__["default"],
                             className: "u-mr-half"
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                             lineNumber: 76,
                             columnNumber: 13
                         }, void 0),
@@ -10467,13 +12395,13 @@ const EditButton = (param)=>{
                             color: "inherit",
                             children: t('OnlyOffice.tooltip.title')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                             lineNumber: 77,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                     lineNumber: 75,
                     columnNumber: 11
                 }, void 0),
@@ -10482,7 +12410,7 @@ const EditButton = (param)=>{
                     color: "inherit",
                     children: t('OnlyOffice.tooltip.text')
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                     lineNumber: 81,
                     columnNumber: 11
                 }, void 0),
@@ -10494,7 +12422,7 @@ const EditButton = (param)=>{
                             variant: "text",
                             label: t('OnlyOffice.tooltip.actions.hide')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                             lineNumber: 85,
                             columnNumber: 13
                         }, void 0),
@@ -10503,13 +12431,13 @@ const EditButton = (param)=>{
                             variant: "text",
                             label: t('OnlyOffice.tooltip.actions.ok')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                             lineNumber: 90,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                     lineNumber: 84,
                     columnNumber: 11
                 }, void 0)
@@ -10522,18 +12450,18 @@ const EditButton = (param)=>{
             startIcon: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_11__["default"], {
                 icon: cozy_ui_transpiled_react_Icons_Rename__WEBPACK_IMPORTED_MODULE_15__["default"]
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
                 lineNumber: 103,
                 columnNumber: 20
             }, void 0),
             label: t('OnlyOffice.actions.edit')
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
             lineNumber: 99,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
         lineNumber: 70,
         columnNumber: 5
     }, undefined);
@@ -10558,7 +12486,7 @@ const EditButtonWithQuery = ()=>{
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(EditButton, {
         openTooltip: openTooltip
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
         lineNumber: 122,
         columnNumber: 10
     }, undefined);
@@ -10575,7 +12503,7 @@ const EditButtonWrapper = ()=>{
     const { isPublic } = (0,_modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_4__.useOnlyOfficeContext)();
     if (isPublic) {
         return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(EditButtonWithQuery, {}, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
             lineNumber: 129,
             columnNumber: 12
         }, undefined);
@@ -10583,7 +12511,7 @@ const EditButtonWrapper = ()=>{
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(EditButton, {
         openTooltip: false
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/EditButton.jsx",
         lineNumber: 132,
         columnNumber: 10
     }, undefined);
@@ -10638,7 +12566,7 @@ const FileIcon = (param)=>{
         icon: (0,_modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_2__.makeOnlyOfficeIconByClass)(fileClass),
         size: 32
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileIcon.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileIcon.jsx",
         lineNumber: 10,
         columnNumber: 5
     }, undefined);
@@ -10742,12 +12670,12 @@ const FileName = (param)=>{
                     refreshFolderContent: onRenameFinished,
                     onAbort: onRenameFinished
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                     lineNumber: 53,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                 lineNumber: 52,
                 columnNumber: 9
             }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -10759,7 +12687,7 @@ const FileName = (param)=>{
                 onClick: !isReadOnly ? onRename : undefined,
                 children: file.name
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                 lineNumber: 62,
                 columnNumber: 9
             }, undefined),
@@ -10772,23 +12700,23 @@ const FileName = (param)=>{
                     children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_MidEllipsis__WEBPACK_IMPORTED_MODULE_12__["default"], {
                         text: parentFolderPath
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                         lineNumber: 80,
                         columnNumber: 13
                     }, undefined)
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                     lineNumber: 79,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
                 lineNumber: 74,
                 columnNumber: 9
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/FileName.jsx",
         lineNumber: 48,
         columnNumber: 5
     }, undefined);
@@ -10847,12 +12775,12 @@ const HomeIcon = ()=>{
             className: "u-w-100 u-h-100 u-maw-2 u-mah-2",
             src: `${client.getStackClient().uri}/assets/images/icon-cozy-home.svg`
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/HomeIcon.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/HomeIcon.jsx",
             lineNumber: 10,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/HomeIcon.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/HomeIcon.jsx",
         lineNumber: 9,
         columnNumber: 5
     }, undefined);
@@ -10938,13 +12866,13 @@ const HomeLinker = (param)=>{
                 "aria-label": t('OnlyOffice.toolbar.goToHome'),
                 children: children
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/HomeLinker.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/HomeLinker.jsx",
                 lineNumber: 42,
                 columnNumber: 9
             }, undefined);
         }
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/HomeLinker.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/HomeLinker.jsx",
         lineNumber: 40,
         columnNumber: 5
     }, undefined);
@@ -10992,7 +12920,7 @@ const Separator = ()=>{
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("span", {
         className: _styles_styl__WEBPACK_IMPORTED_MODULE_2__["default"].separator
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Separator.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Separator.jsx",
         lineNumber: 6,
         columnNumber: 10
     }, undefined);
@@ -11056,12 +12984,12 @@ const Sharing = (param)=>{
                 children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Icon__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     icon: cozy_ui_transpiled_react_Icons_Share__WEBPACK_IMPORTED_MODULE_5__["default"]
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
                     lineNumber: 26,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
                 lineNumber: 21,
                 columnNumber: 9
             }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
@@ -11071,7 +12999,7 @@ const Sharing = (param)=>{
                         size: 32,
                         onClick: toggleShareModal
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
                         lineNumber: 30,
                         columnNumber: 11
                     }, undefined),
@@ -11080,7 +13008,7 @@ const Sharing = (param)=>{
                         docId: file._id,
                         onClick: toggleShareModal
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
                         lineNumber: 35,
                         columnNumber: 11
                     }, undefined)
@@ -11092,7 +13020,7 @@ const Sharing = (param)=>{
                 sharingDesc: file.name,
                 onClose: toggleShareModal
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/Sharing.jsx",
                 lineNumber: 43,
                 columnNumber: 9
             }, undefined)
@@ -11155,7 +13083,7 @@ const SummarizeByAIButtonWrapper = (param)=>{
             className: "u-mr-half",
             onPaywallRedirect: redirectToPaywall
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/SummarizeByAIButtonWrapper.tsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/SummarizeByAIButtonWrapper.tsx",
             lineNumber: 19,
             columnNumber: 9
         }, undefined) : null
@@ -11330,7 +13258,7 @@ const Toolbar = (param)=>{
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         children: [
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_FilesRealTimeQueries__WEBPACK_IMPORTED_MODULE_3__["default"], {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 98,
                 columnNumber: 7
             }, undefined),
@@ -11340,22 +13268,22 @@ const Toolbar = (param)=>{
                     !isMobile && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
                         children: [
                             isPublic ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_HomeIcon__WEBPACK_IMPORTED_MODULE_11__["default"], {}, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                                 lineNumber: 103,
                                 columnNumber: 15
                             }, undefined) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_HomeLinker__WEBPACK_IMPORTED_MODULE_12__["default"], {
                                 children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_HomeIcon__WEBPACK_IMPORTED_MODULE_11__["default"], {}, void 0, false, {
-                                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                                     lineNumber: 106,
                                     columnNumber: 17
                                 }, undefined)
                             }, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                                 lineNumber: 105,
                                 columnNumber: 15
                             }, undefined),
                             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_Separator__WEBPACK_IMPORTED_MODULE_13__["default"], {}, void 0, false, {
-                                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                                 lineNumber: 109,
                                 columnNumber: 13
                             }, undefined)
@@ -11364,14 +13292,14 @@ const Toolbar = (param)=>{
                     showBackButton && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_BackButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         onClick: handleOnClick
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                         lineNumber: 112,
                         columnNumber: 28
                     }, undefined),
                     !isMobile && file.class && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_FileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
                         fileClass: file.class
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                         lineNumber: 113,
                         columnNumber: 37
                     }, undefined),
@@ -11379,13 +13307,13 @@ const Toolbar = (param)=>{
                         file: file,
                         isPublic: isPublic
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                         lineNumber: 114,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 99,
                 columnNumber: 7
             }, undefined),
@@ -11394,12 +13322,12 @@ const Toolbar = (param)=>{
                 isSharingShortcutCreated: isSharingShortcutCreated,
                 variant: showPublicEditButton ? 'secondary' : 'primary'
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 117,
                 columnNumber: 9
             }, undefined),
             showPublicEditButton && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_EditButton__WEBPACK_IMPORTED_MODULE_8__["default"], {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 123,
                 columnNumber: 32
             }, undefined),
@@ -11409,14 +13337,14 @@ const Toolbar = (param)=>{
                 ],
                 actions: actions
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 126,
                 columnNumber: 9
             }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_SummarizeByAIButtonWrapper__WEBPACK_IMPORTED_MODULE_15__["default"], {
                 isLoaded: isEditorReady
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                 lineNumber: 129,
                 columnNumber: 7
             }, undefined),
@@ -11425,12 +13353,12 @@ const Toolbar = (param)=>{
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_Sharing__WEBPACK_IMPORTED_MODULE_14__["default"], {
                         file: file
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                         lineNumber: 133,
                         columnNumber: 11
                     }, undefined),
                     canEdit && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Toolbar_EditButton__WEBPACK_IMPORTED_MODULE_8__["default"], {}, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/Toolbar/index.jsx",
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/Toolbar/index.jsx",
                         lineNumber: 134,
                         columnNumber: 23
                     }, undefined)
@@ -11478,28 +13406,32 @@ __webpack_require__.d(__webpack_exports__, {
 /* ESM import */var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/core-js/modules/es.error.cause.js");
 /* ESM import */var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_1__);
 /* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
-/* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__("./node_modules/prop-types/index.js");
-/* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_17__);
+/* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__("./node_modules/prop-types/index.js");
+/* ESM import */var prop_types__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_19__);
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react/index.js");
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* ESM import */var cozy_flags__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/cozy-flags/dist/index.browser.js");
-/* ESM import */var cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Spinner/index.js");
-/* ESM import */var cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/providers/Breakpoints/index.js");
+/* ESM import */var cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Spinner/index.js");
+/* ESM import */var cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/providers/Breakpoints/index.js");
 /* ESM import */var _modules_views_OnlyOffice_Error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Error.jsx");
 /* ESM import */var _modules_views_OnlyOffice_OnlyOfficeAIAssistantPanel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel.tsx");
 /* ESM import */var _modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/views/OnlyOffice/OnlyOfficeProvider.jsx");
 /* ESM import */var _modules_views_OnlyOffice_ReadOnlyFab__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/views/OnlyOffice/ReadOnlyFab.jsx");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeFloatingButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx");
-/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribePopover__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx");
-/* ESM import */var _modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./src/modules/views/OnlyOffice/config.js");
-/* ESM import */var _modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("./src/modules/views/OnlyOffice/helpers.js");
-/* ESM import */var _modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__("./src/modules/views/OnlyOffice/useCozyBridge.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribePanel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribePanel.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/scribeConversion.js");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeFloatingButton__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribePopover__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx");
+/* ESM import */var _modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__("./src/modules/views/OnlyOffice/config.js");
+/* ESM import */var _modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__("./src/modules/views/OnlyOffice/helpers.js");
+/* ESM import */var _modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__("./src/modules/views/OnlyOffice/useCozyBridge.js");
 /* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
 
 
 
 var _s = $RefreshSig$();
+
+
 
 
 
@@ -11524,7 +13456,7 @@ const unwrapSingleParagraph = (html)=>{
     return html;
 };
 const forceIframeHeight = (value)=>{
-    const iframe = document.getElementsByName(_modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_12__.FRAME_EDITOR_NAME)[0];
+    const iframe = document.getElementsByName(_modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_14__.FRAME_EDITOR_NAME)[0];
     if (iframe) iframe.style.height = value;
 };
 const View = (param)=>{
@@ -11533,40 +13465,52 @@ const View = (param)=>{
     _s();
     const [isError, setIsError] = (0,react__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
     const { isEditorReady, isReadOnly, isTrashed } = (0,_modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_7__.useOnlyOfficeContext)();
-    const { isMobile, isDesktop } = (0,cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_15__["default"])();
+    const { isMobile, isDesktop } = (0,cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_17__["default"])();
     const isScribeEnabled = (0,cozy_flags__WEBPACK_IMPORTED_MODULE_4__["default"])('drive.scribe.enabled');
+    const scribe = (0,_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_9__.useScribe)();
+    const isPanelOpen = scribe ? scribe.isPanelOpen : false;
+    const togglePanel = scribe ? scribe.togglePanel : undefined;
+    const openPanel = scribe ? scribe.openPanel : undefined;
+    const setCurrentSelection = scribe ? scribe.setCurrentSelection : undefined;
+    const setPanelActions = scribe ? scribe.setPanelActions : undefined;
     // cozy-bridge: listen for Scribe intents from OO plugin
     // In dev, allow all origins. In production, derive from serverUrl/instance.
     const allowedOrigins = (0,react__WEBPACK_IMPORTED_MODULE_3__.useMemo)(()=>[
             '*'
         ], []) // TODO: restrict in production
     ;
-    const { pendingIntent, showScribeButton, respond } = (0,_modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_14__.useCozyBridge)(allowedOrigins);
-    // Store partialTableInfo in a ref (doesn't need to trigger re-renders)
-    const partialTableInfoRef = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
-    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
-        var _pendingIntent_data;
-        if (pendingIntent === null || pendingIntent === void 0 ? void 0 : (_pendingIntent_data = pendingIntent.data) === null || _pendingIntent_data === void 0 ? void 0 : _pendingIntent_data.partialTableInfo) {
-            partialTableInfoRef.current = pendingIntent.data.partialTableInfo;
-        } else {
-            partialTableInfoRef.current = null;
+    // Update selection in ScribeContext whenever the plugin reports a change
+    const handleSelectionChanged = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)((data)=>{
+        if (setCurrentSelection) {
+            setCurrentSelection(data.text || null, data.html || null);
         }
     }, [
-        pendingIntent
+        setCurrentSelection
     ]);
-    // Send trigger-intent to plugin iframe (nested inside OO editor iframe).
-    // We broadcast to all descendant iframes so the message reaches the plugin.
-    const triggerScribe = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)(()=>{
-        const msg = {
-            type: 'cozy-bridge:trigger-intent',
-            action: 'AI_TEXT_ASSISTANT'
-        };
-        const broadcastToFrames = (win)=>{
+    const { pendingIntent, respond } = (0,_modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_16__.useCozyBridge)(allowedOrigins, {
+        onTogglePanel: togglePanel,
+        isPanelOpen,
+        onSelectionChanged: handleSelectionChanged
+    });
+    const showFloatingZone = isScribeEnabled && !isPanelOpen;
+    const partialTableInfoRef = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+    // Feed selection data from pendingIntent into ScribeContext
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        if (!setCurrentSelection || !(pendingIntent === null || pendingIntent === void 0 ? void 0 : pendingIntent.data)) return;
+        setCurrentSelection(pendingIntent.data.text || null, pendingIntent.data.html || null);
+        partialTableInfoRef.current = pendingIntent.data.partialTableInfo || null;
+    }, [
+        pendingIntent,
+        setCurrentSelection
+    ]);
+    // Broadcast a message to all descendant iframes (reaches plugin inside OO editor iframe)
+    const broadcastToFrames = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)((msg)=>{
+        const walk = (win)=>{
             try {
                 for(let i = 0; i < win.frames.length; i++){
                     try {
                         win.frames[i].postMessage(msg, '*');
-                        broadcastToFrames(win.frames[i]);
+                        walk(win.frames[i]);
                     } catch (e) {
                     // cross-origin frame, skip
                     }
@@ -11575,14 +13519,33 @@ const View = (param)=>{
             // access denied
             }
         };
-        broadcastToFrames(window);
+        walk(window);
     }, []);
+    // Tell plugin to start/stop sending SELECTION_CHANGED based on panel state
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        broadcastToFrames({
+            type: 'cozy-bridge:selection-subscribe',
+            subscribe: isPanelOpen
+        });
+    }, [
+        isPanelOpen,
+        broadcastToFrames
+    ]);
+    // Send trigger-intent to plugin iframe
+    const triggerScribe = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)(()=>{
+        broadcastToFrames({
+            type: 'cozy-bridge:trigger-intent',
+            action: 'AI_TEXT_ASSISTANT'
+        });
+    }, [
+        broadcastToFrames
+    ]);
     const focusEditor = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)(()=>{
-        const iframe = document.getElementsByName(_modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_12__.FRAME_EDITOR_NAME)[0];
+        const iframe = document.getElementsByName(_modules_views_OnlyOffice_config__WEBPACK_IMPORTED_MODULE_14__.FRAME_EDITOR_NAME)[0];
         if (iframe) iframe.focus();
     }, []);
     const handleReplace = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)((text)=>{
-        const html = unwrapSingleParagraph((0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_9__.markdownToHtml)(text).trim());
+        const html = unwrapSingleParagraph((0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_11__.markdownToHtml)(text).trim());
         const data = {
             text,
             html,
@@ -11602,7 +13565,7 @@ const View = (param)=>{
         focusEditor
     ]);
     const handleInsert = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)((text)=>{
-        const html = unwrapSingleParagraph((0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_9__.markdownToHtml)(text).trim());
+        const html = unwrapSingleParagraph((0,_modules_views_OnlyOffice_Scribe_scribeConversion__WEBPACK_IMPORTED_MODULE_11__.markdownToHtml)(text).trim());
         const data = {
             text,
             html,
@@ -11621,6 +13584,19 @@ const View = (param)=>{
         respond,
         focusEditor
     ]);
+    // Wire respond-based handlers into ScribeContext so MessageActions can call them
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        if (!setPanelActions) return;
+        setPanelActions({
+            replace: handleReplace,
+            insert: handleInsert
+        });
+        return ()=>setPanelActions(null);
+    }, [
+        setPanelActions,
+        handleReplace,
+        handleInsert
+    ]);
     const handleCancel = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)(()=>{
         respond({
             status: 'ok',
@@ -11632,6 +13608,63 @@ const View = (param)=>{
         respond,
         focusEditor
     ]);
+    // Use a ref for handleCancel so the keydown listener never goes stale
+    const handleCancelRef = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)(handleCancel);
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        handleCancelRef.current = handleCancel;
+    }, [
+        handleCancel
+    ]);
+    // Close popover when panel opens while popover is active.
+    // Use respond() directly instead of handleCancel to avoid focusEditor
+    // stealing focus from the panel.
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        if (isPanelOpen && pendingIntent) {
+            respond({
+                status: 'ok',
+                action: 'cancel',
+                data: {}
+            });
+        }
+    }, [
+        isPanelOpen,
+        pendingIntent,
+        respond
+    ]);
+    // Focus management: return focus to editor when panel closes
+    const prevPanelOpenRef = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)(isPanelOpen);
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        const wasOpen = prevPanelOpenRef.current;
+        prevPanelOpenRef.current = isPanelOpen;
+        if (!isPanelOpen && wasOpen) {
+            setTimeout(focusEditor, 100);
+        }
+    }, [
+        isPanelOpen,
+        focusEditor
+    ]);
+    // Ctrl+Shift+I single-press from open popover: open panel and close popover
+    (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(()=>{
+        const popoverOpen = !!pendingIntent && !isPanelOpen;
+        if (!popoverOpen) return;
+        const handler = (e)=>{
+            const isCtrlShiftI = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i');
+            if (!isCtrlShiftI) return;
+            e.preventDefault();
+            if (openPanel) openPanel();
+            handleCancelRef.current();
+        };
+        document.addEventListener('keydown', handler);
+        return ()=>document.removeEventListener('keydown', handler);
+    }, [
+        pendingIntent,
+        isPanelOpen,
+        openPanel
+    ]);
+    // Ctrl+Shift+I when panel is open is handled by useCozyBridge:
+    // the plugin casts AI_TEXT_ASSISTANT or TOGGLE_SCRIBE_PANEL, and the bridge
+    // handler closes the panel. No document keydown listener needed here
+    // since OO keeps focus in its cross-origin iframe.
     const initEditor = (0,react__WEBPACK_IMPORTED_MODULE_3__.useCallback)(()=>{
         new window.DocsAPI.DocEditor('onlyOfficeEditor', docEditorConfig);
         forceIframeHeight('0');
@@ -11669,61 +13702,75 @@ const View = (param)=>{
     }, [
         isEditorReady
     ]);
-    const showReadOnlyFab = isMobile && isEditorReady && !isReadOnly && !isTrashed && (0,_modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_13__.isOfficeEditingEnabled)(isDesktop);
+    const showReadOnlyFab = isMobile && isEditorReady && !isReadOnly && !isTrashed && (0,_modules_views_OnlyOffice_helpers__WEBPACK_IMPORTED_MODULE_15__.isOfficeEditingEnabled)(isDesktop);
     if (isError) return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Error__WEBPACK_IMPORTED_MODULE_5__["default"], {}, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-        lineNumber: 151,
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+        lineNumber: 239,
         columnNumber: 23
     }, undefined);
     return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
         children: [
             !isEditorReady && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
                 className: "u-flex u-flex-items-center u-flex-justify-center u-flex-grow-1",
-                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_16__["default"], {
+                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(cozy_ui_transpiled_react_Spinner__WEBPACK_IMPORTED_MODULE_18__["default"], {
                     size: "xxlarge"
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                    lineNumber: 157,
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                    lineNumber: 245,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                lineNumber: 156,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                lineNumber: 244,
                 columnNumber: 9
             }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
                 className: "u-flex u-flex-grow-1",
+                style: {
+                    minHeight: 0,
+                    overflow: 'hidden'
+                },
                 children: [
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)("div", {
-                        id: "onlyOfficeEditor"
+                        id: "onlyOfficeEditor",
+                        style: {
+                            flex: '1 1 auto',
+                            minWidth: 0
+                        }
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                        lineNumber: 161,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                        lineNumber: 249,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_OnlyOfficeAIAssistantPanel__WEBPACK_IMPORTED_MODULE_6__["default"], {}, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                        lineNumber: 162,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                        lineNumber: 250,
                         columnNumber: 9
+                    }, undefined),
+                    isScribeEnabled && isPanelOpen && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribePanel__WEBPACK_IMPORTED_MODULE_10__.ScribePanel, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                        lineNumber: 251,
+                        columnNumber: 44
                     }, undefined)
                 ]
             }, void 0, true, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                lineNumber: 160,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                lineNumber: 248,
                 columnNumber: 7
             }, undefined),
             isScribeEnabled && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
                 children: [
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeFloatingButton__WEBPACK_IMPORTED_MODULE_10__.ScribeFloatingButton, {
-                        visible: !!showScribeButton && !pendingIntent,
-                        onClick: triggerScribe
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeFloatingButton__WEBPACK_IMPORTED_MODULE_12__.ScribeFloatingZone, {
+                        visible: showFloatingZone,
+                        onTriggerScribe: triggerScribe,
+                        onTogglePanel: togglePanel
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                        lineNumber: 166,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                        lineNumber: 255,
                         columnNumber: 11
                     }, undefined),
-                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribePopover__WEBPACK_IMPORTED_MODULE_11__.ScribePopover, {
-                        open: !!pendingIntent,
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribePopover__WEBPACK_IMPORTED_MODULE_13__.ScribePopover, {
+                        open: !!pendingIntent && !isPanelOpen,
                         selectedText: (pendingIntent === null || pendingIntent === void 0 ? void 0 : (_pendingIntent_data = pendingIntent.data) === null || _pendingIntent_data === void 0 ? void 0 : _pendingIntent_data.text) || '',
                         selectedHtml: (pendingIntent === null || pendingIntent === void 0 ? void 0 : (_pendingIntent_data1 = pendingIntent.data) === null || _pendingIntent_data1 === void 0 ? void 0 : _pendingIntent_data1.html) || '',
                         enrichedMd: (pendingIntent === null || pendingIntent === void 0 ? void 0 : (_pendingIntent_data2 = pendingIntent.data) === null || _pendingIntent_data2 === void 0 ? void 0 : _pendingIntent_data2.enrichedMd) || '',
@@ -11731,34 +13778,43 @@ const View = (param)=>{
                         partialTableInfo: (pendingIntent === null || pendingIntent === void 0 ? void 0 : (_pendingIntent_data4 = pendingIntent.data) === null || _pendingIntent_data4 === void 0 ? void 0 : _pendingIntent_data4.partialTableInfo) || null,
                         onReplace: handleReplace,
                         onInsert: handleInsert,
-                        onCancel: handleCancel
+                        onCancel: handleCancel,
+                        onOpenPanel: openPanel ? ()=>{
+                            openPanel();
+                            respond({
+                                status: 'ok',
+                                action: 'cancel',
+                                data: {}
+                            });
+                        } : undefined
                     }, void 0, false, {
-                        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                        lineNumber: 170,
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                        lineNumber: 260,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true),
             showReadOnlyFab && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxDEV)(_modules_views_OnlyOffice_ReadOnlyFab__WEBPACK_IMPORTED_MODULE_8__["default"], {}, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/View.jsx",
-                lineNumber: 183,
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/View.jsx",
+                lineNumber: 277,
                 columnNumber: 27
             }, undefined)
         ]
     }, void 0, true);
 };
-_s(View, "m7uEts4DQ8aJ6bVnZ5LFZ1sGaXE=", false, function() {
+_s(View, "AtdxTYpzFXfU+SPtdThMkZO4YR0=", false, function() {
     return [
         _modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_7__.useOnlyOfficeContext,
-        cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_15__["default"],
-        _modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_14__.useCozyBridge
+        cozy_ui_transpiled_react_providers_Breakpoints__WEBPACK_IMPORTED_MODULE_17__["default"],
+        _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_9__.useScribe,
+        _modules_views_OnlyOffice_useCozyBridge__WEBPACK_IMPORTED_MODULE_16__.useCozyBridge
     ];
 });
 _c = View;
 View.propTypes = {
-    id: (prop_types__WEBPACK_IMPORTED_MODULE_17___default().string.isRequired),
-    apiUrl: (prop_types__WEBPACK_IMPORTED_MODULE_17___default().string.isRequired),
-    docEditorConfig: (prop_types__WEBPACK_IMPORTED_MODULE_17___default().object.isRequired)
+    id: (prop_types__WEBPACK_IMPORTED_MODULE_19___default().string.isRequired),
+    apiUrl: (prop_types__WEBPACK_IMPORTED_MODULE_19___default().string.isRequired),
+    docEditorConfig: (prop_types__WEBPACK_IMPORTED_MODULE_19___default().object.isRequired)
 };
 /* ESM default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/_c1 = react__WEBPACK_IMPORTED_MODULE_3___default().memo(View));
 var _c, _c1;
@@ -11854,14 +13910,14 @@ const FileDeletedModal = ()=>{
                     className: "u-mb-1",
                     children: t('FileDeletedModal.error')
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
                     lineNumber: 57,
                     columnNumber: 13
                 }, void 0) : null,
                 /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_11__["default"], {
                     children: t('FileDeletedModal.content')
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
                     lineNumber: 61,
                     columnNumber: 11
                 }, void 0)
@@ -11876,7 +13932,7 @@ const FileDeletedModal = ()=>{
                     label: t('FileDeletedModal.cancel'),
                     onClick: goBack
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
                     lineNumber: 66,
                     columnNumber: 11
                 }, void 0),
@@ -11886,14 +13942,14 @@ const FileDeletedModal = ()=>{
                     label: t('FileDeletedModal.confirm'),
                     onClick: restore
                 }, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
+                    fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
                     lineNumber: 73,
                     columnNumber: 11
                 }, void 0)
             ]
         }, void 0, true)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDeletedModal.jsx",
         lineNumber: 51,
         columnNumber: 5
     }, undefined);
@@ -12010,12 +14066,12 @@ const FileDivergedModal = ()=>{
                 label: t('FileDivergedModal.viewMode.confirm'),
                 onClick: goToNewVersion
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                 lineNumber: 65,
                 columnNumber: 11
             }, void 0)
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
             lineNumber: 60,
             columnNumber: 7
         }, undefined);
@@ -12032,14 +14088,14 @@ const FileDivergedModal = ()=>{
                             className: "u-mb-1",
                             children: t('FileDivergedModal.error')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 82,
                             columnNumber: 15
                         }, void 0) : null,
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxDEV)(cozy_ui_transpiled_react_Typography__WEBPACK_IMPORTED_MODULE_14__["default"], {
                             children: t('FileDivergedModal.content')
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 86,
                             columnNumber: 13
                         }, void 0)
@@ -12053,7 +14109,7 @@ const FileDivergedModal = ()=>{
                             label: t('FileDivergedModal.cancel'),
                             onClick: toogleConfirmReloadModal
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 91,
                             columnNumber: 13
                         }, void 0),
@@ -12063,14 +14119,14 @@ const FileDivergedModal = ()=>{
                             label: t('FileDivergedModal.confirm'),
                             onClick: continueEditing
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 97,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                 lineNumber: 76,
                 columnNumber: 7
             }, undefined),
@@ -12086,7 +14142,7 @@ const FileDivergedModal = ()=>{
                             label: t('FileDivergedModal.confirmReload.cancel'),
                             onClick: toogleConfirmReloadModal
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 114,
                             columnNumber: 15
                         }, void 0),
@@ -12094,14 +14150,14 @@ const FileDivergedModal = ()=>{
                             label: t('FileDivergedModal.confirmReload.confirm'),
                             onClick: goToNewVersion
                         }, void 0, false, {
-                            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                             lineNumber: 119,
                             columnNumber: 15
                         }, void 0)
                     ]
                 }, void 0, true)
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/components/FileDivergedModal.jsx",
                 lineNumber: 107,
                 columnNumber: 9
             }, undefined) : null
@@ -12360,11 +14416,12 @@ __webpack_require__.d(__webpack_exports__, {
 /* ESM import */var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react/index.js");
 /* ESM import */var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* ESM import */var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/react-router/dist/index.js");
-/* ESM import */var cozy_ui_transpiled_react_Dialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Dialog/index.js");
+/* ESM import */var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/react-router/dist/index.js");
+/* ESM import */var cozy_ui_transpiled_react_Dialog__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./node_modules/cozy-ui/transpiled/react/Dialog/index.js");
 /* ESM import */var _components_useHead__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/components/useHead.jsx");
 /* ESM import */var _modules_views_OnlyOffice_Editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/views/OnlyOffice/Editor.jsx");
 /* ESM import */var _modules_views_OnlyOffice_OnlyOfficeProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/views/OnlyOffice/OnlyOfficeProvider.jsx");
+/* ESM import */var _modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/views/OnlyOffice/Scribe/ScribeContext.jsx");
 /* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
 
 var _s = $RefreshSig$();
@@ -12374,12 +14431,13 @@ var _s = $RefreshSig$();
 
 
 
+
 const OnlyOffice = (param)=>{
     let { isPublic, isReadOnly = false, isFromSharing, username, isInSharedFolder } = param;
     _s();
-    const { fileId, driveId } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_5__.useParams)();
+    const { fileId, driveId } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useParams)();
     (0,_components_useHead__WEBPACK_IMPORTED_MODULE_2__["default"])();
-    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Dialog__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(cozy_ui_transpiled_react_Dialog__WEBPACK_IMPORTED_MODULE_7__["default"], {
         open: true,
         fullScreen: true,
         transitionDuration: 0,
@@ -12391,32 +14449,38 @@ const OnlyOffice = (param)=>{
             isFromSharing: isFromSharing,
             username: username,
             isInSharedFolder: isInSharedFolder,
-            children: [
-                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Editor__WEBPACK_IMPORTED_MODULE_3__["default"], {}, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/index.jsx",
-                    lineNumber: 31,
-                    columnNumber: 9
-                }, undefined),
-                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Outlet, {}, void 0, false, {
-                    fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/index.jsx",
-                    lineNumber: 32,
-                    columnNumber: 9
-                }, undefined)
-            ]
-        }, void 0, true, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/index.jsx",
-            lineNumber: 22,
+            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Scribe_ScribeContext__WEBPACK_IMPORTED_MODULE_5__.ScribeProvider, {
+                children: [
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_modules_views_OnlyOffice_Editor__WEBPACK_IMPORTED_MODULE_3__["default"], {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/index.jsx",
+                        lineNumber: 33,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Outlet, {}, void 0, false, {
+                        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/index.jsx",
+                        lineNumber: 34,
+                        columnNumber: 11
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/index.jsx",
+                lineNumber: 32,
+                columnNumber: 9
+            }, undefined)
+        }, void 0, false, {
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/index.jsx",
+            lineNumber: 23,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/modules/views/OnlyOffice/index.jsx",
-        lineNumber: 21,
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/modules/views/OnlyOffice/index.jsx",
+        lineNumber: 22,
         columnNumber: 5
     }, undefined);
 };
 _s(OnlyOffice, "3xPb4YujWyIeOzeAjtiFio+3GvQ=", false, function() {
     return [
-        react_router_dom__WEBPACK_IMPORTED_MODULE_5__.useParams,
+        react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useParams,
         _components_useHead__WEBPACK_IMPORTED_MODULE_2__["default"]
     ];
 });
@@ -12621,35 +14685,70 @@ var _s = $RefreshSig$();
 /**
  * React hook wrapping CozyBridge lifecycle with intent state.
  *
- * Creates a CozyBridge instance on mount, registers handlers for
- * AI_TEXT_ASSISTANT intents (opens Scribe popover) and SHOW/HIDE_SCRIBE_BUTTON
- * intents (controls the floating button), and provides a respond callback
- * to send responses back to the plugin.
+ * Creates a CozyBridge instance on mount, registers handlers for:
+ * - AI_TEXT_ASSISTANT: opens Scribe popover (or closes panel if panel is open)
+ * - TOGGLE_SCRIBE_PANEL: toggles the side panel open/closed
  *
  * @param {string[]} allowedOrigins - Stable array of allowed origins.
  *   In dev: ['*']. In prod: derive from instance URL and OO server URL.
  *   Must be memoized by the parent to avoid unnecessary re-renders.
- * @returns {{ pendingIntent: object|null, showScribeButton: object|null, respond: Function }}
+ * @param {object} [options]
+ * @param {Function} [options.onTogglePanel] - Callback to toggle the panel (from ScribeContext)
+ * @param {boolean} [options.isPanelOpen] - Current panel state; when true, AI_TEXT_ASSISTANT
+ *   closes the panel instead of opening the popover (single Ctrl+Shift+I close)
+ * @param {Function} [options.onSelectionChanged] - Called when plugin reports selection change
+ * @returns {{ pendingIntent: object|null, respond: Function }}
  */ function useCozyBridge(allowedOrigins) {
+    let { onTogglePanel, isPanelOpen, onSelectionChanged } = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     _s();
     const [pendingIntent, setPendingIntent] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-    const [showScribeButton, setShowScribeButton] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
     const bridgeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
     const respondRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+    const togglePanelRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onTogglePanel);
+    const isPanelOpenRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(isPanelOpen);
+    const onSelectionChangedRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onSelectionChanged);
+    // Keep refs current to avoid stale closures in bridge handlers
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(()=>{
+        togglePanelRef.current = onTogglePanel;
+    }, [
+        onTogglePanel
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(()=>{
+        isPanelOpenRef.current = isPanelOpen;
+    }, [
+        isPanelOpen
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(()=>{
+        onSelectionChangedRef.current = onSelectionChanged;
+    }, [
+        onSelectionChanged
+    ]);
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(()=>{
         const bridge = new _lib_cozy_bridge__WEBPACK_IMPORTED_MODULE_1__.CozyBridge(allowedOrigins);
         bridgeRef.current = bridge;
         bridge.onIntent('AI_TEXT_ASSISTANT', (intentMessage, respondFn)=>{
+            // If panel is open, Ctrl+Shift+I should close the panel
+            // instead of opening a popover
+            if (isPanelOpenRef.current) {
+                respondFn({
+                    status: 'ok',
+                    action: 'cancel',
+                    data: {}
+                });
+                if (togglePanelRef.current) togglePanelRef.current();
+                return;
+            }
             setPendingIntent(intentMessage);
             respondRef.current = respondFn;
         });
-        bridge.onIntent('SHOW_SCRIBE_BUTTON', (intentMessage)=>{
-            setShowScribeButton({
-                text: intentMessage.data.text
-            });
+        bridge.onIntent('TOGGLE_SCRIBE_PANEL', ()=>{
+            if (togglePanelRef.current) togglePanelRef.current();
         });
-        bridge.onIntent('HIDE_SCRIBE_BUTTON', ()=>{
-            setShowScribeButton(null);
+        bridge.onIntent('SELECTION_CHANGED', (intentMessage)=>{
+            console.log('[Scribe] SELECTION_CHANGED received', intentMessage.data);
+            if (onSelectionChangedRef.current) {
+                onSelectionChangedRef.current(intentMessage.data);
+            }
         });
         return ()=>{
             bridge.destroy();
@@ -12667,15 +14766,13 @@ var _s = $RefreshSig$();
         respondRef.current(responsePayload);
         respondRef.current = null;
         setPendingIntent(null);
-        setShowScribeButton(null);
     }, []);
     return {
         pendingIntent,
-        showScribeButton,
         respond
     };
 }
-_s(useCozyBridge, "N4jC9DCu1lixqZWCzaLPz8CoJCI=");
+_s(useCozyBridge, "uMjbi2dmMi8HvQ+iJiH3Hs+LQY8=");
 
 function $RefreshSig$() {
   return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
@@ -13499,12 +15596,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxDEV)(_modules_services__WEBPACK_IMPORTED_MODULE_14__["default"], {
             intentId: intent
         }, void 0, false, {
-            fileName: "/home/ben/Dev-local/cozy-drive/src/targets/intents/index.jsx",
+            fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/targets/intents/index.jsx",
             lineNumber: 48,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/targets/intents/index.jsx",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/targets/intents/index.jsx",
         lineNumber: 43,
         columnNumber: 5
     }, undefined));
@@ -13545,7 +15642,7 @@ const SvgIconFolderBroken = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEB
                 fill: "#ACF",
                 d: "m32.072 2.136-19 45.5C35.74 62.136 81.6 90.786 84 91.586c3 1 19.5-44 21.572-49.95 1.765-5.068.928-5.55 0-6-.927-.45-42.9-18.2-44.5-19s-1.109-6.152-3-7c-4.572-2.05-19.428-8.95-21.5-9.5s-3.833.666-4.5 2"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/assets/icons/icon-folder-broken.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/assets/icons/icon-folder-broken.svg",
                 lineNumber: 2,
                 columnNumber: 146
             }, undefined),
@@ -13553,7 +15650,7 @@ const SvgIconFolderBroken = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEB
                 fill: "#F26868",
                 d: "M92 69.585c6.075 0 11-4.925 11-11s-4.925-11-11-11-11 4.925-11 11 4.925 11 11 11"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/assets/icons/icon-folder-broken.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/assets/icons/icon-folder-broken.svg",
                 lineNumber: 2,
                 columnNumber: 371
             }, undefined),
@@ -13561,7 +15658,7 @@ const SvgIconFolderBroken = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEB
                 fill: "#fff",
                 d: "m93.42 58.585 3.23-3.23a.998.998 0 0 0-.286-1.69 1 1 0 0 0-1.125.28L92 57.175l-3.23-3.23a1 1 0 1 0-1.41 1.41l3.23 3.23-3.23 3.23a1 1 0 1 0 1.41 1.41l3.23-3.22 3.23 3.23a1 1 0 0 0 1.41-1.41z"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/assets/icons/icon-folder-broken.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/assets/icons/icon-folder-broken.svg",
                 lineNumber: 2,
                 columnNumber: 478
             }, undefined),
@@ -13569,13 +15666,13 @@ const SvgIconFolderBroken = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEB
                 fill: "#E0EDFF",
                 d: "M28.071 43.162c7 2.5 47 20.5 47 20.5 6.43 11.424 9 26 9 28L6.572 59.8c0-1.637-7.373-21.143-6.5-24.637.9-3.603 24 11 28 8"
             }, void 0, false, {
-                fileName: "/home/ben/Dev-local/cozy-drive/src/assets/icons/icon-folder-broken.svg",
+                fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/assets/icons/icon-folder-broken.svg",
                 lineNumber: 2,
                 columnNumber: 692
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "/home/ben/Dev-local/cozy-drive/src/assets/icons/icon-folder-broken.svg",
+        fileName: "/home/ben/Dev-local/cozy-drive-scribe-in-right-panel/src/assets/icons/icon-folder-broken.svg",
         lineNumber: 2,
         columnNumber: 38
     }, undefined);
@@ -13683,7 +15780,7 @@ module.exports = JSON.parse('{"Nav":{"item_drive":"Laufwerk","item_recent":"Zule
 }),
 "./src/locales/en.json": (function (module) {
 "use strict";
-module.exports = JSON.parse('{"Nav":{"item_drive":"Files","item_recent":"Recent","item_sharings":"Sharings","item_shared":"Shared by me","item_activity":"Activity","item_trash":"Trash","item_settings":"Settings","item_collect":"Administrative","item_shared_drives":"Shared drives","item_favorites":"Favorites","item_external_drives":"External drives","item_my_drive":"My Drive","btn-client":"Get Twake Drive for desktop","btn-client-web":"Get Twake","btn-client-mobile":"Take your personnal cloud with you: install %{name} on all your devices!","banner-txt-client":"Get %{name} for Desktop and synchronise your files safely to make them accessible at all times.","banner-btn-client":"Download","link-client":"https://cozy.io/en/download/","link-client-desktop":"https://nuts.cozycloud.cc/download/channel/stable/","link-client-android":"https://play.google.com/store/apps/details?id=io.cozy.flagship.mobile","link-client-ios":"https://apps.apple.com/app/cloud-personnel-cozy/id1600636174","link-client-web":"https://cozy.io/try-it","view_more":"View more","view_less":"View less"},"breadcrumb":{"title_drive":"Files","title_recent":"Recent","title_sharings":"Sharings","title_shared":"Shared by me","title_activity":"Activity","title_trash":"Trash","label":"Show path","title_shared_drives":"Drives","title_favorites":"Favorites"},"Toolbar":{"more":"More"},"toolbar":{"menu_manage_access":"Manage access","menu_leave_shared_drive":"Leave drive","menu_upload":"Upload files","item_more":"More","menu_new_folder":"Folder","menu_new_shared_drive":"Shared drive","menu_new_encrypted_folder":"Encrypted folder","menu_select":"Select items","menu_share_folder":"Share folder","menu_download":"Download","menu_sync_cozy":"Synchronise to my Twake","add_to_mine":"Add to my Twake","menu_download_folder":"Download folder","menu_download_file":"Download this file","menu_create_note":"Note","menu_create_docs":"Docs","menu_create_shortcut":"Shortcut","share":"Share","trash":"Remove","delete_shared_drive":"Delete shared drive","leave":"Leave shared folder & delete it","menu_add":"Add","menu_create":"Create","menu_add_item":"Add an item","menu_onlyOffice":{"text":"Text document","spreadsheet":"Spreadsheet","slide":"Presentation"},"select_all":"Select all","select_all_mobile":"all","clear_selection":"Clear Selection","clear_selection_mobile":"Clear","sharings_tab_all":"All","sharings_tab_drives":"Drives"},"Share":{"create-cozy":"Create my Twake"},"Files":{"share":{"cta":"Share","title":"Share","details":{"title":"Sharing details","createdAt":"On %{date}","ro":"Can read","rw":"Can change","desc":{"ro":"You can view, download, and add this content to your Twake. You will get updates by the owner, but you won\'t be able to update this content yourself.","rw":"You can view, update, delete and add this content to your Twake. Updates you make will be seen on other Cozies."}},"shared":"Shared","sharedByMe":"Shared by me","sharedWithMe":"Shared with me","sharedBy":"Shared by %{name}","shareByLink":{"subtitle":"By public link","desc":"Anyone with the provided link can see and download your files.","creating":"Creating your link...","copy":"Copy link","copied":"Link has been copied to clipboard","failed":"Unable to copy to clipboard"},"shareByEmail":{"subtitle":"By email","email":"To:","emailPlaceholder":"Enter the email address or name of the recipient","send":"Send","genericSuccess":"You sent an invite to %{count} contacts.","success":"You sent an invite to %{email}.","comingsoon":"Coming soon! You will be able to share documents and photos in a single click with your family, your friends, and even your coworkers. Don\'t worry, we\'ll let you know when it\'s ready!","onlyByLink":"This %{type} can only be shared by link, because","type":{"file":"file","folder":"folder"},"hasSharedParent":"it has a shared parent","hasSharedChild":"it contains a shared element"},"revoke":{"title":"Remove from sharing","desc":"This contact will keep a copy but the changes won\'t be synchrnoized anymore.","success":"You removed this shared file from %{email}."},"revokeSelf":{"title":"Remove me from sharing","desc":"You keep the content but it won\'t be updated between your Twake anymore.","success":"You were removed from this sharing."},"sharingLink":{"title":"Link to share","copy":"Copy","copied":"Copied"},"whoHasAccess":{"title":"1 person has access |||| %{smart_count} people have access"},"protectedShare":{"title":"Coming soon!","desc":"Share anything by email with your family and friends!"},"close":"Close","gettingLink":"Getting your link...","error":{"generic":"An error occurred when creating the file share link, please try again.","revoke":"Woops, an error occurred. Please contact us so we can fix this issue as soon as possible."},"specialCase":{"base":"This %{type} cannot be shared but with a link as it","isInSharedFolder":"is in a shared folder","hasSharedFolder":"contains a shared folder"}},"viewer-fallback":"If the file has started downloading, you can close this.","dropzone":{"teaser":"Drop files to upload them to:","noFolderSupport":"Folder drag&drop is currently not supported by your browser. Please upload your files manually."}},"table":{"head_name":"Name","head_update":"Last update","head_size":"Size","head_status":"Share","head_thumbnail_size":"Switch thumbnail size","head_view_mode":"View mode","head_view_list":"List view","head_view_grid":"Grid view","row_update_format":"LLL d, yyyy","row_update_format_full":"LLLL d, yyyy","row_read_only":"Share (Read only)","row_read_write":"Share (Read & Write)","row_size_symbols":{"B":"B","KB":"KB","MB":"MB","GB":"GB","TB":"TB","PB":"PB","EB":"EB","ZB":"ZB","YB":"YB"},"row_sharing_shortcut_aria_label":"New sharing shortcut","load_more":"Load More","mobile":{"head_name_asc":"A-Z","head_name_desc":"Z-A","head_updated_at_asc":"Oldest first","head_updated_at_desc":"Most recent first","head_size_asc":"Lightest first","head_size_desc":"Heavier first"},"tooltip":{"carbonCopy":{"title":"Carbon Copy","caption":"Indicates whether the document is defined as \\"authentic and original\\" by Twake Workplace, the host of your Twake, as it can claim that it comes directly from a third-party service, without having undergone any modification."},"electronicSafe":{"title":"Electronic Safe","caption":"Indicates whether the original document is secured by your personal digital safe with the certifications that give it probative value and a 50-year retention guarantee beyond its deposit."}}},"Storage":{"title":"Storage","availability":"%{smart_count} GB available","increase":"Increase the space"},"SelectionBar":{"selected_count":"item selected |||| items selected","share":"Share","download":"Download","copy":"Copy","cut":"Cut","paste":"Paste","trash":"Remove","trash_all":"Remove all","destroy":"Delete permanently","rename":"Rename","restore":"Restore","close":"Close","openWith":"Open with...","applePreview":"Apple preview","forward":"Forward","forwardTo":"Forward to...","moveto":"Move to…","moveto_mobile":"Move","phone-download":"Make available offline","qualify":"Categorize","history":"History","more":"More","openWithinNextcloud":"Open within Nextcloud"},"DeleteConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","trash":"It will be moved to the Trash. |||| They will be moved to the Trash.","restore":"You can still restore it whenever you want. |||| You can still restore them whenever you want.","share_accepted":"Sharing will be stopped. The following contacts will keep a copy, but your changes will no longer be synchronised:","share_waiting":"Sharing will be stopped. The following contacts will no longer be able to accept sharing and will no longer be able to access shared content:","share_both":"Sharing will be stopped. This means that contacts who have stored files in their Twake will keep a copy, while other contacts will no longer be able to access shared content:","link":"Link sharing will no longer be active","referenced":"Some of the files within the selection are related to a photo album. They will be removed from it if you proceed to trash them.","cancel":"Cancel","delete":"Remove"},"EmptyTrashConfirm":{"title":"Permanently delete?","forbidden":"You won\'t be able to access these files anymore.","restore":"You won\'t be able to restore these files if you didn\'t make a backup.","cancel":"Cancel","delete":"Delete all","processing":"Your trash is being emptied. This might take a few moments.","success":"The trash has been emptied.","error":"An error occurred, please try again."},"DestroyConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","forbidden":"You won\'t be able to access this %{type} anymore. |||| You won\'t be able to access these %{type} anymore.","restore":"You won\'t be able to restore this %{type} if you didn\'t make a backup. |||| You won\'t be able to restore these %{type} if you didn\'t make a backup.","cancel":"Cancel","delete":"Delete permanently","success":"The %{type} has been deleted permanently. |||| %{smart_count} %{type} have been deleted permanently.","error":"An error occurred, please try again.","processing":"The deletion is in progress. This might take a few moments."},"quotaalert":{"title":"Your disk space is full :(","desc":"Please remove files, empty your trash or increase your disk space before uploading files again.","confirm":"OK","increase":"Increase your disk space"},"loading":{"message":"Loading","onlyOfficeCreateInProgress":"Creating the current file..."},"empty":{"title":"You don’t have any files in this folder.","text":"Select files on your computer or drag them here.","mobile_text":"Select files on your device.","trash_title":"You don’t have any deleted files.","trash_text":"Move files you don\'t need anymore to the Trash and permanently delete items to free up storage page.","shared-drive_text":"Create and share your first drive."},"error":{"open_folder":"Something went wrong when opening the folder.","open_file":"Something went wrong when opening the file.","button":{"reload":"Refresh now"},"download_file":{"offline":"You should be connected to download this file","missing":"This file is missing","encryption_many":"You cannot download several encrypted files at once"},"paste_failed":"Failed to paste files. Please try again."},"Error":{"public_unshared_title":"Sorry, this link is no longer available.","public_unshared_text":"This link has expired, or it was removed by its owner. Let him or her know that you missed it!","generic":"Something went wrong. Wait a few minutes and retry."},"alert":{"could_not_open_file":"The file could not be opened","try_again":"An error has occurred, please try again in a moment.","restore_file_success":"The selection has been successfully restored.","trash_file_success":"The selection has been moved to the Trash.","trash_file_processing":"The move to Trash is in progress...","trash_shared_drive_success":"The shared drive has been moved to the Trash.","destroy_file_success":"The selection has been deleted permanently.","folder_name":"The element %{folderName} already exists, please choose a new name.","file_name":"The element %{fileName} already exists, please choose a new name.","file_name_missing":"The file name is missing, please choose a new name.","file_name_illegal_name":"The name %{fileName} is invalid, please choose a new name.","file_name_illegal_characters":"The element %{fileName} contains invalid characters: %{characters}","folder_generic":"An error occurred, please try again.","folder_abort":"You need to add a name to your new folder if you would like to save it. Your information has not been saved.","offline":"This feature is not available offline.","preparing":"Preparing your files…","item_copied":"1 item copied","items_copied":"%{count} items copied","item_cut":"1 item cut","items_cut":"%{count} items cut","item_moved":"1 item was moved","items_moved":"%{count} items were moved","item_pasted":"1 item was moved","items_pasted":"%{count} items were moved","copy_files_only":"Cannot copy folders","copy_not_allowed":"Copy operation is not allowed in this view.","cut_not_allowed":"Cut operation is not allowed in this view.","delete_not_allowed":"Delete operation is not allowed in this view.","paste_error":"An error occurred while pasting files","paste_failed":"Failed to paste files","paste_sharing_error":"Cannot paste files due to sharing restrictions. Please use the Move action instead.","paste_same_folder_skipped":"Cannot move items to the same folder they are already in.","paste_not_allowed":"You cannot paste into this folder","cannot_move_shared_drive":"You cannot move shared drive folder","cannot_copy_shared_drive":"You cannot copy shared drive folder"},"upload":{"label":"Upload","documentType":{"file":"file","directory":"folder","element":"element"},"alert":{"success":"%{smart_count} %{type} uploaded with success. |||| %{smart_count} %{type}s uploaded with success.","success_conflicts":"%{smart_count} %{type} uploaded with %{conflictNumber} conflict(s). |||| %{smart_count} %{type}s uploaded with %{conflictNumber} conflict(s).","success_updated":"%{smart_count} %{type} uploaded and %{updatedCount} updated. |||| %{smart_count} %{type}s uploaded and %{updatedCount} updated.","success_updated_conflicts":"%{smart_count} %{type} uploaded, %{updatedCount} updated and %{conflictCount} conflict(s). |||| %{smart_count} %{type}s uploaded, %{updatedCount} updated and %{conflictCount} conflict(s).","updated":"%{smart_count} %{type} updated. |||| %{smart_count} %{type} updated.","updated_conflicts":"%{smart_count} %{type} updated with %{conflictCount} conflict(s). |||| %{smart_count} %{type}s updated with %{conflictCount} conflict(s).","errors":"Errors occurred during the %{type} upload.","network":"You are currenly offline. Please try again once you\'re connected.","fileTooLargeErrors":"File too large. Maximum file size: %{max_size_value} GB"}},"intents":{"alert":{"error":"Unable to automatically upload the file, please upload it manually with the upload menu."},"picker":{"select":"Select","cancel":"Cancel","new_folder":"New folder","instructions":"Select a target"}},"UploadQueue":{"header":"Uploading %{smart_count} photo to Twake Drive |||| Uploading %{smart_count} photos to Twake Drive","header_mobile":"Uploading %{done} of %{total}","header_done":"Uploaded %{done} out of %{total} successfully","success_flagship":"%{smart_count} file uploaded with success. |||| %{smart_count} files uploaded with success.","close":"close","item":{"pending":"Pending"}},"Viewer":{"close":"Close","noviewer":{"download":"Download this file","openWith":"Open with...","openInOnlyOffice":"Open with Only Office","cta":{"saveTime":"Save some time!","installDesktop":"Install the synchronization tool for your computer","accessFiles":"Access your files directly on your computer"}},"actions":{"download":"Download","forward":"Forward"},"loading":{"error":"This file could not be loaded. Do you have a working internet connection right now?","retry":"Retry"},"error":{"noapp":"No application on your device can handle this file.","generic":"An error occurred when opening this file, please try again.","noNetwork":"You\'re currently offline."},"panel":{"title":"Useful information"}},"Move":{"to":"Move to:","action":"Move","cancel":"Cancel","modalTitle":"Move","title":"%{smart_count} element |||| %{smart_count} elements","success":"%{subject} has been moved to %{target}. |||| %{smart_count} elements have been moved to %{target}.","error":"Something went wrong while moving this element, please try again later. |||| Something went wrong while moving these elements, please try again later.","cancelled":"%{subject} has been moved back to it\'s original location. |||| %{smart_count} elements have been moved back to their original location.","cancelledWithRestoreErrors":"%{subject} has been moved back to it\'s original location but there was an error while restoring the file from trash. |||| %{smart_count} elements have been moved back to their original location but there was %{restoreErrorsCount} error(s) while restoring the file(s) from trash.","cancelled_error":"Sorry, there was an error while moving the element back. |||| Sorry, there was an error while moving these elements back.","multipleEntries":"%{smart_count} element |||| %{smart_count} elements","addFolder":"Add a folder","outsideSharedFolder":{"title":"Moving outside the %{sharedFolder} folder","content_1":"Warning, you want to move %{name} out of the shared %{sharedFolder} folder. |||| Warning, you want to move %{smart_count} %{type}s out of the shared %{sharedFolder} folder.","content_2":"This move, will remove the %{type} %{name} from the share. This %{type} will therefore be trashed for all members of the share. |||| This move, will remove %{smart_count} %{type}s from the share. These %{type}s will therefore be trashed for all members of the share.","cancel":"Cancel","confirm":"I understand"},"insideSharedFolder":{"title":"Move to a shared folder?","content":"All members with access to %{destination} will also have access to %{source}. |||| All members with access to %{destination} will also have access to the selected %{type}.","cancel":"Cancel","confirm":"Ok"},"sharedFolderInsideAnother":{"title":"Cannot be moved","content_1":"You want to move a shared element into a shared folder. This type of move is not allowed.","content_2":"If you still wish to move %{source} to %{destination}, please stop sharing :","cancel":"Cancel move","confirm":"Stop sharing"}},"ImportToDrive":{"title":"%{smart_count} element |||| %{smart_count} elements","to":"Save in:","action":"Save","cancel":"Cancel","success":"%{smart_count} saved file |||| %{smart_count} saved files","error":"Something went wrong. Please try again"},"FileOpenerExternal":{"fileNotFoundError":"Error: file not found"},"TOS":{"updated":{"title":"GDPR comes into reality !","detail":"In the context of the General Data Protection Regulation, [our Terms of Service have been updated](%{link}) and will apply to all our Twake users on May 25, 2018.","cta":"Accept TOS and continue","disconnect":"Refuse and disconnect","error":"Something went wrong, please try again later"}},"manifest":{"permissions":{"contacts":{"description":"Required to share files with your contacts"},"groups":{"description":"Required to share files with your groups"}}},"models":{"contact":{"defaultDisplayName":"Anonymous"}},"Scan":{"none":"Nothing","scan_a_doc":"Scan a doc","save_doc":"Save the doc","filename":"Filename","save":"Save","cancel":"Cancel","qualify":"Categorize","requalify":"Re-categorize","apply":"Apply","error":{"offline":"You are currently offline and you can\'t use this functionnality. Try it later","uploading":"You are already uploading a file. Wait until the end of this upload and try again.","generic":"Something went wrong. Please try again."},"successful":{"qualified_ok":"You just have successfully categorized your file! "}},"History":{"description":"The last 20 versions of your files are automatically kept. Select a version to download it.","current_version":"Current version","loading":"Loading...","noFileVersionEnabled":"Your Twake will soon be able to archive the last modifications of a file to never risk losing them again"},"External":{"redirection":{"title":"Redirection","text":"You\'re about to be redirected…","error":"Error during the redirection. Generally, this means that the content of the file is not in the correct format."}},"RenameModal":{"title":"Rename","description":"You\'re about to change the file\'s extension. Do you want to continue?","continue":"Continue","cancel":"Cancel"},"Shortcut":{"title_modal":"Create a shortcut","filename":"Filename","url":"URL","cancel":"Cancel","create":"Create","created":"Your shortcut has been created","errored":"An error occured","filename_error_ends":"The name should end with .url","needs_info":"Shorcut needs at least an url and a filename","url_badformat":"Your url is not in the right format"},"OnlyOffice":{"Error":{"title":"Something goes wrong","text":"Please try to reload the page"},"readOnly":{"title":"Read only","tooltip":"You are only authorized to view this document. Contact the owner to obtain writing privileges."},"createFileName":{"text":"New text document","spreadsheet":"New spreadsheet","slide":"New presentation"},"toolbar":{"goToHome":"Go to home"},"actions":{"edit":"Edit","validate":"Validate"},"tooltip":{"title":"Edit document","text":"The document is currently read-only. You can modify it by clicking here.","actions":{"ok":"Ok","hide":"Do not display"}}},"Migration":{"title":"Update Twake Drive","content":"Twake Drive needs to update in order to improve its performances. This might take up to several minutes during which you cannot use your app. Do you want to do it now? If you refuse, we will ask you again next time","confirm":"Ok, let\'s do it!","cancel":"No, not now"},"searchbar":{"placeholder":"Search anything","empty":"No result has been found for the query “%{query}”"},"button":{"back":"Back","add":"Add","create":"Create"},"search":{"action":"Search","empty":{"title":"No result","subtitle":"No result has been found for the query “%{query}”"}},"PushBanner":{"quota":{"text":"You\'ve almost run out of storage space. If you reach the limit, you won\'t be able to add any more files. You can delete files, empty your bin or change your offer.","actions":{"first":"I understand","second":"Check our plans"}}},"FileDivergedModal":{"title":"Someone has modified this file","content":"Someone has modified the file outside Twake while you were editing it, you can retrieve their modifications instead of yours or continue your editing in a new file.","confirm":"Continue editing","cancel":"See its changes","error":"An error occurred, please try again.","confirmReload":{"title":"See the changes","content":"When you access the new file, your changes will be cancelled.","cancel":"Cancel","confirm":"Ok, I get it"},"viewMode":{"title":"Someone has modified this file","content":"Someone has changed the contents of this file. You can retrieve these changes.","confirm":"See the changes"}},"FileDeletedModal":{"title":"Someone has deleted this file","content":"Someone has deleted this file while you were editing it. You can stop editing or restore the file to continue editing.","confirm":"Restore file","cancel":"Undo changes","error":"An error occurred, please try again."},"TrashedBanner":{"text":"The item is in your trash","destroy":"Delete permanently","restore":"Restore","restoreSuccess":"The item has been restored","restoreError":"An error has occurred, please try again.","destroySuccess":"The item has been deleted"},"EntriesType":{"file":"file |||| files","directory":"folder |||| folders","element":"element |||| elements"},"NotFound":{"title":"The element cannot be found","text":"We have not found anything at this address. This may be a typing error."},"NextcloudBreadcrumb":{"root":"Shared Drives","trash":"Trash"},"NextcloudToolbar":{"share":"Share"},"NextcloudDeleteConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","trash":"This item will be moved to the Nextcloud trash. |||| These items will be moved to the Nextcloud trash.","restore":"You can always restore it whenever you want from Nextcloud.","error":"An error occurred, please try again.","cancel":"Cancel","delete":"Delete"},"FileName":{"sharedDrive":"Drives","trash":"Trash"},"NextcloudBanner":{"title":"The items below are displayed from a NextCloud drive and are not stored in your Twake."},"favorites":{"label":{"add":"Add to favorites","addMobile":"Favorites","remove":"Remove from favorites"},"error":"An error occurred, please try again.","success":{"add":"%{filename} has been added to favorites |||| These items have been added to favorites","remove":"%{filename} has been removed from favorites |||| These items have been removed from favorites"}},"TrashToolbar":{"emptyTrash":"Empty trash"},"RestoreNextcloudFile":{"label":"Restore","success":"The item has been restored","error":"An error occurred, please try again."},"actions":{"details":"Details","infos":"Details and qualification","infosMobile":"Details","duplicateTo":{"label":"Duplicate to…"},"duplicateToMobile":{"label":"Duplicate"},"personalizeFolder":{"label":"Personalize folder"},"summariseByAI":"Summarise"},"DuplicateModal":{"subTitle":"Duplicate to:","confirmLabel":"Duplicate here","success":"%{fileName} has been duplicated to %{destinationName}. |||| %{smart_count} elements have been duplicated to %{destinationName}.","error":"An error occurred, please try again."},"OpenFolderButton":{"label":"Open directory"},"LastUpdate":{"titleFormat":"LLLL dd, yyyy, HH:MM"},"AddMenu":{"readOnlyFolder":"This is a read-only folder. You cannot perform this action."},"PublicNoteRedirect":{"error":{"title":"Unable to access document","subtitle":"The share link appears to be missing or invalid. Please ask the document owner to check access"}},"FolderCustomizer":{"title":"Personalize folder","description":"Choose a specific color for your folder","cancel":"Cancel","apply":"Apply","error":"An error occurred, please try again.","tabs":{"colors":"Colors","icons":"Icons"},"iconPicker":{"recents":"Recents","chooseCustomIcon":"Choose a custom icon"}},"antivirus":{"infectedFile":"This file is infected with a virus","popover":{"title":"Downloading and sharing is blocked for security reasons","description":"Twake system detected a virus"}},"Scribe":{"menu":{"correct_grammar":"Correct grammar","translate":"Translate","change_tone":"Change tone","improve":"Improve"},"tone":{"professional":"More professional","casual":"More casual","polite":"More polite"},"improve":{"shorter":"Make it shorter","expand":"Expand context","emojify":"Emojify","bullets":"Transform to bullets"},"translate":{"other_language":"Other language...","translating_to":"Translating to %{language}..."},"prompt":{"placeholder":"Help me write"},"button":{"text_ai":"Text AI","insert":"Insert","replace":"Replace","retry":"Retry","cancel":"Cancel","insert_after":"Insert After"},"modal":{"selected_text":"Selected text:"},"loading":{"processing":"Processing...","correct_grammar":"Correcting grammar...","tone_professional":"Making it more professional...","tone_casual":"Making it more casual...","tone_polite":"Making it more polite...","improve_shorter":"Making it shorter...","improve_expand":"Expanding context...","improve_emojify":"Emojifying...","improve_bullets":"Transforming to bullets..."},"error":{"auth":"Authorization error. Please check your Cozy permissions.","rate_limit":"Too many requests. Please wait a moment and try again.","server":"The AI service is temporarily unavailable. Please try again.","generic":"Something went wrong. Please try again later.","network":"Network error. Check your connection and try again.","empty_response":"No result received. Please try again.","unexpected":"An unexpected error occurred. Please try again."}}}')
+module.exports = JSON.parse('{"Nav":{"item_drive":"Files","item_recent":"Recent","item_sharings":"Sharings","item_shared":"Shared by me","item_activity":"Activity","item_trash":"Trash","item_settings":"Settings","item_collect":"Administrative","item_shared_drives":"Shared drives","item_favorites":"Favorites","item_external_drives":"External drives","item_my_drive":"My Drive","btn-client":"Get Twake Drive for desktop","btn-client-web":"Get Twake","btn-client-mobile":"Take your personnal cloud with you: install %{name} on all your devices!","banner-txt-client":"Get %{name} for Desktop and synchronise your files safely to make them accessible at all times.","banner-btn-client":"Download","link-client":"https://cozy.io/en/download/","link-client-desktop":"https://nuts.cozycloud.cc/download/channel/stable/","link-client-android":"https://play.google.com/store/apps/details?id=io.cozy.flagship.mobile","link-client-ios":"https://apps.apple.com/app/cloud-personnel-cozy/id1600636174","link-client-web":"https://cozy.io/try-it","view_more":"View more","view_less":"View less"},"breadcrumb":{"title_drive":"Files","title_recent":"Recent","title_sharings":"Sharings","title_shared":"Shared by me","title_activity":"Activity","title_trash":"Trash","label":"Show path","title_shared_drives":"Drives","title_favorites":"Favorites"},"Toolbar":{"more":"More"},"toolbar":{"menu_manage_access":"Manage access","menu_leave_shared_drive":"Leave drive","menu_upload":"Upload files","item_more":"More","menu_new_folder":"Folder","menu_new_shared_drive":"Shared drive","menu_new_encrypted_folder":"Encrypted folder","menu_select":"Select items","menu_share_folder":"Share folder","menu_download":"Download","menu_sync_cozy":"Synchronise to my Twake","add_to_mine":"Add to my Twake","menu_download_folder":"Download folder","menu_download_file":"Download this file","menu_create_note":"Note","menu_create_docs":"Docs","menu_create_shortcut":"Shortcut","share":"Share","trash":"Remove","delete_shared_drive":"Delete shared drive","leave":"Leave shared folder & delete it","menu_add":"Add","menu_create":"Create","menu_add_item":"Add an item","menu_onlyOffice":{"text":"Text document","spreadsheet":"Spreadsheet","slide":"Presentation"},"select_all":"Select all","select_all_mobile":"all","clear_selection":"Clear Selection","clear_selection_mobile":"Clear","sharings_tab_all":"All","sharings_tab_drives":"Drives"},"Share":{"create-cozy":"Create my Twake"},"Files":{"share":{"cta":"Share","title":"Share","details":{"title":"Sharing details","createdAt":"On %{date}","ro":"Can read","rw":"Can change","desc":{"ro":"You can view, download, and add this content to your Twake. You will get updates by the owner, but you won\'t be able to update this content yourself.","rw":"You can view, update, delete and add this content to your Twake. Updates you make will be seen on other Cozies."}},"shared":"Shared","sharedByMe":"Shared by me","sharedWithMe":"Shared with me","sharedBy":"Shared by %{name}","shareByLink":{"subtitle":"By public link","desc":"Anyone with the provided link can see and download your files.","creating":"Creating your link...","copy":"Copy link","copied":"Link has been copied to clipboard","failed":"Unable to copy to clipboard"},"shareByEmail":{"subtitle":"By email","email":"To:","emailPlaceholder":"Enter the email address or name of the recipient","send":"Send","genericSuccess":"You sent an invite to %{count} contacts.","success":"You sent an invite to %{email}.","comingsoon":"Coming soon! You will be able to share documents and photos in a single click with your family, your friends, and even your coworkers. Don\'t worry, we\'ll let you know when it\'s ready!","onlyByLink":"This %{type} can only be shared by link, because","type":{"file":"file","folder":"folder"},"hasSharedParent":"it has a shared parent","hasSharedChild":"it contains a shared element"},"revoke":{"title":"Remove from sharing","desc":"This contact will keep a copy but the changes won\'t be synchrnoized anymore.","success":"You removed this shared file from %{email}."},"revokeSelf":{"title":"Remove me from sharing","desc":"You keep the content but it won\'t be updated between your Twake anymore.","success":"You were removed from this sharing."},"sharingLink":{"title":"Link to share","copy":"Copy","copied":"Copied"},"whoHasAccess":{"title":"1 person has access |||| %{smart_count} people have access"},"protectedShare":{"title":"Coming soon!","desc":"Share anything by email with your family and friends!"},"close":"Close","gettingLink":"Getting your link...","error":{"generic":"An error occurred when creating the file share link, please try again.","revoke":"Woops, an error occurred. Please contact us so we can fix this issue as soon as possible."},"specialCase":{"base":"This %{type} cannot be shared but with a link as it","isInSharedFolder":"is in a shared folder","hasSharedFolder":"contains a shared folder"}},"viewer-fallback":"If the file has started downloading, you can close this.","dropzone":{"teaser":"Drop files to upload them to:","noFolderSupport":"Folder drag&drop is currently not supported by your browser. Please upload your files manually."}},"table":{"head_name":"Name","head_update":"Last update","head_size":"Size","head_status":"Share","head_thumbnail_size":"Switch thumbnail size","head_view_mode":"View mode","head_view_list":"List view","head_view_grid":"Grid view","row_update_format":"LLL d, yyyy","row_update_format_full":"LLLL d, yyyy","row_read_only":"Share (Read only)","row_read_write":"Share (Read & Write)","row_size_symbols":{"B":"B","KB":"KB","MB":"MB","GB":"GB","TB":"TB","PB":"PB","EB":"EB","ZB":"ZB","YB":"YB"},"row_sharing_shortcut_aria_label":"New sharing shortcut","load_more":"Load More","mobile":{"head_name_asc":"A-Z","head_name_desc":"Z-A","head_updated_at_asc":"Oldest first","head_updated_at_desc":"Most recent first","head_size_asc":"Lightest first","head_size_desc":"Heavier first"},"tooltip":{"carbonCopy":{"title":"Carbon Copy","caption":"Indicates whether the document is defined as \\"authentic and original\\" by Twake Workplace, the host of your Twake, as it can claim that it comes directly from a third-party service, without having undergone any modification."},"electronicSafe":{"title":"Electronic Safe","caption":"Indicates whether the original document is secured by your personal digital safe with the certifications that give it probative value and a 50-year retention guarantee beyond its deposit."}}},"Storage":{"title":"Storage","availability":"%{smart_count} GB available","increase":"Increase the space"},"SelectionBar":{"selected_count":"item selected |||| items selected","share":"Share","download":"Download","copy":"Copy","cut":"Cut","paste":"Paste","trash":"Remove","trash_all":"Remove all","destroy":"Delete permanently","rename":"Rename","restore":"Restore","close":"Close","openWith":"Open with...","applePreview":"Apple preview","forward":"Forward","forwardTo":"Forward to...","moveto":"Move to…","moveto_mobile":"Move","phone-download":"Make available offline","qualify":"Categorize","history":"History","more":"More","openWithinNextcloud":"Open within Nextcloud"},"DeleteConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","trash":"It will be moved to the Trash. |||| They will be moved to the Trash.","restore":"You can still restore it whenever you want. |||| You can still restore them whenever you want.","share_accepted":"Sharing will be stopped. The following contacts will keep a copy, but your changes will no longer be synchronised:","share_waiting":"Sharing will be stopped. The following contacts will no longer be able to accept sharing and will no longer be able to access shared content:","share_both":"Sharing will be stopped. This means that contacts who have stored files in their Twake will keep a copy, while other contacts will no longer be able to access shared content:","link":"Link sharing will no longer be active","referenced":"Some of the files within the selection are related to a photo album. They will be removed from it if you proceed to trash them.","cancel":"Cancel","delete":"Remove"},"EmptyTrashConfirm":{"title":"Permanently delete?","forbidden":"You won\'t be able to access these files anymore.","restore":"You won\'t be able to restore these files if you didn\'t make a backup.","cancel":"Cancel","delete":"Delete all","processing":"Your trash is being emptied. This might take a few moments.","success":"The trash has been emptied.","error":"An error occurred, please try again."},"DestroyConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","forbidden":"You won\'t be able to access this %{type} anymore. |||| You won\'t be able to access these %{type} anymore.","restore":"You won\'t be able to restore this %{type} if you didn\'t make a backup. |||| You won\'t be able to restore these %{type} if you didn\'t make a backup.","cancel":"Cancel","delete":"Delete permanently","success":"The %{type} has been deleted permanently. |||| %{smart_count} %{type} have been deleted permanently.","error":"An error occurred, please try again.","processing":"The deletion is in progress. This might take a few moments."},"quotaalert":{"title":"Your disk space is full :(","desc":"Please remove files, empty your trash or increase your disk space before uploading files again.","confirm":"OK","increase":"Increase your disk space"},"loading":{"message":"Loading","onlyOfficeCreateInProgress":"Creating the current file..."},"empty":{"title":"You don’t have any files in this folder.","text":"Select files on your computer or drag them here.","mobile_text":"Select files on your device.","trash_title":"You don’t have any deleted files.","trash_text":"Move files you don\'t need anymore to the Trash and permanently delete items to free up storage page.","shared-drive_text":"Create and share your first drive."},"error":{"open_folder":"Something went wrong when opening the folder.","open_file":"Something went wrong when opening the file.","button":{"reload":"Refresh now"},"download_file":{"offline":"You should be connected to download this file","missing":"This file is missing","encryption_many":"You cannot download several encrypted files at once"},"paste_failed":"Failed to paste files. Please try again."},"Error":{"public_unshared_title":"Sorry, this link is no longer available.","public_unshared_text":"This link has expired, or it was removed by its owner. Let him or her know that you missed it!","generic":"Something went wrong. Wait a few minutes and retry."},"alert":{"could_not_open_file":"The file could not be opened","try_again":"An error has occurred, please try again in a moment.","restore_file_success":"The selection has been successfully restored.","trash_file_success":"The selection has been moved to the Trash.","trash_file_processing":"The move to Trash is in progress...","trash_shared_drive_success":"The shared drive has been moved to the Trash.","destroy_file_success":"The selection has been deleted permanently.","folder_name":"The element %{folderName} already exists, please choose a new name.","file_name":"The element %{fileName} already exists, please choose a new name.","file_name_missing":"The file name is missing, please choose a new name.","file_name_illegal_name":"The name %{fileName} is invalid, please choose a new name.","file_name_illegal_characters":"The element %{fileName} contains invalid characters: %{characters}","folder_generic":"An error occurred, please try again.","folder_abort":"You need to add a name to your new folder if you would like to save it. Your information has not been saved.","offline":"This feature is not available offline.","preparing":"Preparing your files…","item_copied":"1 item copied","items_copied":"%{count} items copied","item_cut":"1 item cut","items_cut":"%{count} items cut","item_moved":"1 item was moved","items_moved":"%{count} items were moved","item_pasted":"1 item was moved","items_pasted":"%{count} items were moved","copy_files_only":"Cannot copy folders","copy_not_allowed":"Copy operation is not allowed in this view.","cut_not_allowed":"Cut operation is not allowed in this view.","delete_not_allowed":"Delete operation is not allowed in this view.","paste_error":"An error occurred while pasting files","paste_failed":"Failed to paste files","paste_sharing_error":"Cannot paste files due to sharing restrictions. Please use the Move action instead.","paste_same_folder_skipped":"Cannot move items to the same folder they are already in.","paste_not_allowed":"You cannot paste into this folder","cannot_move_shared_drive":"You cannot move shared drive folder","cannot_copy_shared_drive":"You cannot copy shared drive folder"},"upload":{"label":"Upload","documentType":{"file":"file","directory":"folder","element":"element"},"alert":{"success":"%{smart_count} %{type} uploaded with success. |||| %{smart_count} %{type}s uploaded with success.","success_conflicts":"%{smart_count} %{type} uploaded with %{conflictNumber} conflict(s). |||| %{smart_count} %{type}s uploaded with %{conflictNumber} conflict(s).","success_updated":"%{smart_count} %{type} uploaded and %{updatedCount} updated. |||| %{smart_count} %{type}s uploaded and %{updatedCount} updated.","success_updated_conflicts":"%{smart_count} %{type} uploaded, %{updatedCount} updated and %{conflictCount} conflict(s). |||| %{smart_count} %{type}s uploaded, %{updatedCount} updated and %{conflictCount} conflict(s).","updated":"%{smart_count} %{type} updated. |||| %{smart_count} %{type} updated.","updated_conflicts":"%{smart_count} %{type} updated with %{conflictCount} conflict(s). |||| %{smart_count} %{type}s updated with %{conflictCount} conflict(s).","errors":"Errors occurred during the %{type} upload.","network":"You are currenly offline. Please try again once you\'re connected.","fileTooLargeErrors":"File too large. Maximum file size: %{max_size_value} GB"}},"intents":{"alert":{"error":"Unable to automatically upload the file, please upload it manually with the upload menu."},"picker":{"select":"Select","cancel":"Cancel","new_folder":"New folder","instructions":"Select a target"}},"UploadQueue":{"header":"Uploading %{smart_count} photo to Twake Drive |||| Uploading %{smart_count} photos to Twake Drive","header_mobile":"Uploading %{done} of %{total}","header_done":"Uploaded %{done} out of %{total} successfully","success_flagship":"%{smart_count} file uploaded with success. |||| %{smart_count} files uploaded with success.","close":"close","item":{"pending":"Pending"}},"Viewer":{"close":"Close","noviewer":{"download":"Download this file","openWith":"Open with...","openInOnlyOffice":"Open with Only Office","cta":{"saveTime":"Save some time!","installDesktop":"Install the synchronization tool for your computer","accessFiles":"Access your files directly on your computer"}},"actions":{"download":"Download","forward":"Forward"},"loading":{"error":"This file could not be loaded. Do you have a working internet connection right now?","retry":"Retry"},"error":{"noapp":"No application on your device can handle this file.","generic":"An error occurred when opening this file, please try again.","noNetwork":"You\'re currently offline."},"panel":{"title":"Useful information"}},"Move":{"to":"Move to:","action":"Move","cancel":"Cancel","modalTitle":"Move","title":"%{smart_count} element |||| %{smart_count} elements","success":"%{subject} has been moved to %{target}. |||| %{smart_count} elements have been moved to %{target}.","error":"Something went wrong while moving this element, please try again later. |||| Something went wrong while moving these elements, please try again later.","cancelled":"%{subject} has been moved back to it\'s original location. |||| %{smart_count} elements have been moved back to their original location.","cancelledWithRestoreErrors":"%{subject} has been moved back to it\'s original location but there was an error while restoring the file from trash. |||| %{smart_count} elements have been moved back to their original location but there was %{restoreErrorsCount} error(s) while restoring the file(s) from trash.","cancelled_error":"Sorry, there was an error while moving the element back. |||| Sorry, there was an error while moving these elements back.","multipleEntries":"%{smart_count} element |||| %{smart_count} elements","addFolder":"Add a folder","outsideSharedFolder":{"title":"Moving outside the %{sharedFolder} folder","content_1":"Warning, you want to move %{name} out of the shared %{sharedFolder} folder. |||| Warning, you want to move %{smart_count} %{type}s out of the shared %{sharedFolder} folder.","content_2":"This move, will remove the %{type} %{name} from the share. This %{type} will therefore be trashed for all members of the share. |||| This move, will remove %{smart_count} %{type}s from the share. These %{type}s will therefore be trashed for all members of the share.","cancel":"Cancel","confirm":"I understand"},"insideSharedFolder":{"title":"Move to a shared folder?","content":"All members with access to %{destination} will also have access to %{source}. |||| All members with access to %{destination} will also have access to the selected %{type}.","cancel":"Cancel","confirm":"Ok"},"sharedFolderInsideAnother":{"title":"Cannot be moved","content_1":"You want to move a shared element into a shared folder. This type of move is not allowed.","content_2":"If you still wish to move %{source} to %{destination}, please stop sharing :","cancel":"Cancel move","confirm":"Stop sharing"}},"ImportToDrive":{"title":"%{smart_count} element |||| %{smart_count} elements","to":"Save in:","action":"Save","cancel":"Cancel","success":"%{smart_count} saved file |||| %{smart_count} saved files","error":"Something went wrong. Please try again"},"FileOpenerExternal":{"fileNotFoundError":"Error: file not found"},"TOS":{"updated":{"title":"GDPR comes into reality !","detail":"In the context of the General Data Protection Regulation, [our Terms of Service have been updated](%{link}) and will apply to all our Twake users on May 25, 2018.","cta":"Accept TOS and continue","disconnect":"Refuse and disconnect","error":"Something went wrong, please try again later"}},"manifest":{"permissions":{"contacts":{"description":"Required to share files with your contacts"},"groups":{"description":"Required to share files with your groups"}}},"models":{"contact":{"defaultDisplayName":"Anonymous"}},"Scan":{"none":"Nothing","scan_a_doc":"Scan a doc","save_doc":"Save the doc","filename":"Filename","save":"Save","cancel":"Cancel","qualify":"Categorize","requalify":"Re-categorize","apply":"Apply","error":{"offline":"You are currently offline and you can\'t use this functionnality. Try it later","uploading":"You are already uploading a file. Wait until the end of this upload and try again.","generic":"Something went wrong. Please try again."},"successful":{"qualified_ok":"You just have successfully categorized your file! "}},"History":{"description":"The last 20 versions of your files are automatically kept. Select a version to download it.","current_version":"Current version","loading":"Loading...","noFileVersionEnabled":"Your Twake will soon be able to archive the last modifications of a file to never risk losing them again"},"External":{"redirection":{"title":"Redirection","text":"You\'re about to be redirected…","error":"Error during the redirection. Generally, this means that the content of the file is not in the correct format."}},"RenameModal":{"title":"Rename","description":"You\'re about to change the file\'s extension. Do you want to continue?","continue":"Continue","cancel":"Cancel"},"Shortcut":{"title_modal":"Create a shortcut","filename":"Filename","url":"URL","cancel":"Cancel","create":"Create","created":"Your shortcut has been created","errored":"An error occured","filename_error_ends":"The name should end with .url","needs_info":"Shorcut needs at least an url and a filename","url_badformat":"Your url is not in the right format"},"OnlyOffice":{"Error":{"title":"Something goes wrong","text":"Please try to reload the page"},"readOnly":{"title":"Read only","tooltip":"You are only authorized to view this document. Contact the owner to obtain writing privileges."},"createFileName":{"text":"New text document","spreadsheet":"New spreadsheet","slide":"New presentation"},"toolbar":{"goToHome":"Go to home"},"actions":{"edit":"Edit","validate":"Validate"},"tooltip":{"title":"Edit document","text":"The document is currently read-only. You can modify it by clicking here.","actions":{"ok":"Ok","hide":"Do not display"}}},"Migration":{"title":"Update Twake Drive","content":"Twake Drive needs to update in order to improve its performances. This might take up to several minutes during which you cannot use your app. Do you want to do it now? If you refuse, we will ask you again next time","confirm":"Ok, let\'s do it!","cancel":"No, not now"},"searchbar":{"placeholder":"Search anything","empty":"No result has been found for the query “%{query}”"},"button":{"back":"Back","add":"Add","create":"Create"},"search":{"action":"Search","empty":{"title":"No result","subtitle":"No result has been found for the query “%{query}”"}},"PushBanner":{"quota":{"text":"You\'ve almost run out of storage space. If you reach the limit, you won\'t be able to add any more files. You can delete files, empty your bin or change your offer.","actions":{"first":"I understand","second":"Check our plans"}}},"FileDivergedModal":{"title":"Someone has modified this file","content":"Someone has modified the file outside Twake while you were editing it, you can retrieve their modifications instead of yours or continue your editing in a new file.","confirm":"Continue editing","cancel":"See its changes","error":"An error occurred, please try again.","confirmReload":{"title":"See the changes","content":"When you access the new file, your changes will be cancelled.","cancel":"Cancel","confirm":"Ok, I get it"},"viewMode":{"title":"Someone has modified this file","content":"Someone has changed the contents of this file. You can retrieve these changes.","confirm":"See the changes"}},"FileDeletedModal":{"title":"Someone has deleted this file","content":"Someone has deleted this file while you were editing it. You can stop editing or restore the file to continue editing.","confirm":"Restore file","cancel":"Undo changes","error":"An error occurred, please try again."},"TrashedBanner":{"text":"The item is in your trash","destroy":"Delete permanently","restore":"Restore","restoreSuccess":"The item has been restored","restoreError":"An error has occurred, please try again.","destroySuccess":"The item has been deleted"},"EntriesType":{"file":"file |||| files","directory":"folder |||| folders","element":"element |||| elements"},"NotFound":{"title":"The element cannot be found","text":"We have not found anything at this address. This may be a typing error."},"NextcloudBreadcrumb":{"root":"Shared Drives","trash":"Trash"},"NextcloudToolbar":{"share":"Share"},"NextcloudDeleteConfirm":{"title":"Delete %{filename}? |||| Delete %{smart_count} %{type}?","trash":"This item will be moved to the Nextcloud trash. |||| These items will be moved to the Nextcloud trash.","restore":"You can always restore it whenever you want from Nextcloud.","error":"An error occurred, please try again.","cancel":"Cancel","delete":"Delete"},"FileName":{"sharedDrive":"Drives","trash":"Trash"},"NextcloudBanner":{"title":"The items below are displayed from a NextCloud drive and are not stored in your Twake."},"favorites":{"label":{"add":"Add to favorites","addMobile":"Favorites","remove":"Remove from favorites"},"error":"An error occurred, please try again.","success":{"add":"%{filename} has been added to favorites |||| These items have been added to favorites","remove":"%{filename} has been removed from favorites |||| These items have been removed from favorites"}},"TrashToolbar":{"emptyTrash":"Empty trash"},"RestoreNextcloudFile":{"label":"Restore","success":"The item has been restored","error":"An error occurred, please try again."},"actions":{"details":"Details","infos":"Details and qualification","infosMobile":"Details","duplicateTo":{"label":"Duplicate to…"},"duplicateToMobile":{"label":"Duplicate"},"personalizeFolder":{"label":"Personalize folder"},"summariseByAI":"Summarise"},"DuplicateModal":{"subTitle":"Duplicate to:","confirmLabel":"Duplicate here","success":"%{fileName} has been duplicated to %{destinationName}. |||| %{smart_count} elements have been duplicated to %{destinationName}.","error":"An error occurred, please try again."},"OpenFolderButton":{"label":"Open directory"},"LastUpdate":{"titleFormat":"LLLL dd, yyyy, HH:MM"},"AddMenu":{"readOnlyFolder":"This is a read-only folder. You cannot perform this action."},"PublicNoteRedirect":{"error":{"title":"Unable to access document","subtitle":"The share link appears to be missing or invalid. Please ask the document owner to check access"}},"FolderCustomizer":{"title":"Personalize folder","description":"Choose a specific color for your folder","cancel":"Cancel","apply":"Apply","error":"An error occurred, please try again.","tabs":{"colors":"Colors","icons":"Icons"},"iconPicker":{"recents":"Recents","chooseCustomIcon":"Choose a custom icon"}},"antivirus":{"infectedFile":"This file is infected with a virus","popover":{"title":"Downloading and sharing is blocked for security reasons","description":"Twake system detected a virus"}},"Scribe":{"panel":{"tagline":"Your writing assistant"},"chat":{"typing":"Scribe is thinking...","error_prefix":"Error","welcome":"Ask me anything about your document","selection_context":"Selected text"},"menu":{"correct_grammar":"Correct grammar","translate":"Translate","change_tone":"Change tone","improve":"Improve"},"tone":{"professional":"More professional","casual":"More casual","polite":"More polite"},"improve":{"shorter":"Make it shorter","expand":"Expand context","emojify":"Emojify","bullets":"Transform to bullets"},"translate":{"other_language":"Other language...","translating_to":"Translating to %{language}..."},"prompt":{"placeholder":"Help me write"},"button":{"text_ai":"Text AI","insert":"Insert","replace":"Replace","retry":"Retry","cancel":"Cancel","insert_after":"Insert After","open_panel":"Scribe Panel","copy":"Copy"},"modal":{"selected_text":"Selected text:"},"loading":{"processing":"Processing...","correct_grammar":"Correcting grammar...","tone_professional":"Making it more professional...","tone_casual":"Making it more casual...","tone_polite":"Making it more polite...","improve_shorter":"Making it shorter...","improve_expand":"Expanding context...","improve_emojify":"Emojifying...","improve_bullets":"Transforming to bullets..."},"error":{"auth":"Authorization error. Please check your Cozy permissions.","rate_limit":"Too many requests. Please wait a moment and try again.","server":"The AI service is temporarily unavailable. Please try again.","generic":"Something went wrong. Please try again later.","network":"Network error. Check your connection and try again.","empty_response":"No result received. Please try again.","unexpected":"An unexpected error occurred. Please try again."}}}')
 
 }),
 "./src/locales/es.json": (function (module) {
@@ -13693,7 +15790,7 @@ module.exports = JSON.parse('{"Nav":{"item_drive":"Drive","item_recent":"Recient
 }),
 "./src/locales/fr.json": (function (module) {
 "use strict";
-module.exports = JSON.parse('{"Nav":{"item_drive":"Fichiers","item_recent":"Récents","item_sharings":"Partages","item_shared":"Partagés","item_activity":"Activité","item_trash":"Corbeille","item_settings":"Paramètres","item_collect":"Administratif","item_shared_drives":"Drives partagés","item_favorites":"Favoris","item_external_drives":"Disques externes","item_my_drive":"Mon Drive","btn-client":"Télécharger Twake Drive ","btn-client-web":"Obtenez un Twake","btn-client-mobile":"Emportez votre cloud personnel avec vous : installez notre app %{name} !","banner-txt-client":"Installez %{name} pour ordinateur et synchronisez vos fichiers pour les rendre accessibles à tout moment.","banner-btn-client":"Télécharger","link-client":"https://cozy.io/fr/download/","link-client-desktop":"https://nuts.cozycloud.cc/download/channel/stable/","link-client-android":"https://play.google.com/store/apps/details?id=io.cozy.flagship.mobile","link-client-ios":"https://apps.apple.com/app/cloud-personnel-cozy/id1600636174","link-client-web":"https://cozy.io/try-it","view_more":"Voir plus","view_less":"Voir moins"},"breadcrumb":{"title_drive":"Fichiers","title_recent":"Récents","title_sharings":"Partages","title_shared":"Mes fichiers partagés","title_activity":"Activité","title_trash":"Corbeille","label":"Voir le chemin","title_shared_drives":"Drives","title_favorites":"Favoris"},"Toolbar":{"more":"Plus"},"toolbar":{"menu_manage_access":"Gérer les accès","menu_leave_shared_drive":"Sortir drive","menu_upload":"Importer des fichiers","item_more":"Plus","menu_new_folder":"Dossier","menu_new_shared_drive":"Drive partagé","menu_new_encrypted_folder":"Dossier chiffré","menu_select":"Sélectionner les éléments","menu_share_folder":"Partager le dossier","menu_download":"Télécharger","menu_sync_cozy":"Synchroniser dans mon Twake","add_to_mine":"Ajouter à mon Twake","menu_download_folder":"Télécharger le dossier","menu_download_file":"Télécharger ce fichier","menu_create_note":"Note","menu_create_docs":"Docs","menu_create_shortcut":"Raccourci","share":"Partager","trash":"Supprimer","delete_shared_drive":"Supprimer le drive partagé","leave":"Quitter le partage et supprimer le dossier","menu_add":"Ajouter","menu_create":"Créer","menu_add_item":"Ajouter un élément","menu_onlyOffice":{"text":"Document texte","spreadsheet":"Feuille de calcul","slide":"Présentation"},"select_all":"Tout sélectionner","select_all_mobile":"Tout","clear_selection":"Effacer la sélection","clear_selection_mobile":"Annuler","sharings_tab_all":"Tout","sharings_tab_drives":"Drives"},"Share":{"create-cozy":"Créer mon Twake"},"Files":{"share":{"cta":"Partager","title":"Partager","details":{"title":"Détails du partage","createdAt":"Depuis le %{date}","ro":"Peut consulter","rw":"Peut modifier","desc":{"ro":"Vous pouvez consulter, télécharger, et ajouter ce contenu à votre Twake. Vous recevrez les modifications faites par le propriétaire, mais vous ne pourrez pas le modifier.","rw":"Vous pouvez consulter, modifier et supprimer du contenu. Les modifications sur le contenu seront répercutées automatiquement entre vos Twake."}},"shared":"Partagé","sharedByMe":"Partagé","sharedWithMe":"Partagé avec moi","sharedBy":"Partagé par %{name}","shareByLink":{"subtitle":"Par lien public","desc":"Chaque personne possédant le lien fourni peut voir et télécharger vos fichiers.","creating":"Création du lien...","copy":"Copier le lien","copied":"Lien copié dans le presse-papiers.","failed":"Impossible de copier dans le presse papier"},"shareByEmail":{"subtitle":"Par email","email":"À :","emailPlaceholder":"Saisissez le courriel ou le nom du destinataire.","send":"Envoyer","genericSuccess":"Vous avez invité %{count} contacts.","success":"Vous avez envoyé une invitation à %{email}.","comingsoon":"Bientôt disponible ! Vous pourrez partager un document et vos photos en un seul clic avec votre famille, vos amis, et même vos collaborateurs. Ne vous inquiétez pas, on vous prévient quand ce sera prêt !","onlyByLink":"Ce %{type} ne peut être partagé que sous la forme d\'un lien, car il","type":{"file":"fichier","folder":"dossier"},"hasSharedParent":"se trouve dans un dossier partagé.","hasSharedChild":"contient un élément partagé."},"revoke":{"title":"Arrêter le partage","desc":"Votre contact conservera une copie mais vos changements ne seront plus synchronisés.","success":"Vous avez cessé de partager ce fichier avec %{email}."},"revokeSelf":{"title":"Arrêter le partage","desc":"Vous conservez le contenu mais il ne sera plus mis à jour entre vos Twake.","success":"Vous avez été retiré de ce partage."},"sharingLink":{"title":"Partager","copy":"Copier","copied":"Copié"},"whoHasAccess":{"title":"1 personne y a accès |||| %{smart_count} personnes y ont accès"},"protectedShare":{"title":"Prochainement !","desc":"Partagez ce que vous souhaitez par email avec votre famille et vos amis !"},"close":"Fermer","gettingLink":"Création du lien…","error":{"generic":"Une erreur est survenue lors de la création du lien de partage, merci de réessayer","revoke":"Oups, une erreur est survenue. Contactez-nous pour que nous résolvions la situation au plus vite.\\n"},"specialCase":{"base":"Ce %{type} ne peut être partagé que sous la forme d\'un lien, car il","isInSharedFolder":"se trouve dans un dossier partagé.","hasSharedFolder":"contient un dossier partagé."}},"viewer-fallback":"Le fichier est en cours de téléchargement, vous pouvez fermer cette fenêtre.","dropzone":{"teaser":"Déposez des fichiers pour les importer vers :","noFolderSupport":"Votre navigateur ne prend pas en charge le glisser-déposer de dossier pour le moment. Veuillez importer les fichiers manuellement."}},"table":{"head_name":"Nom","head_update":"Mise à jour","head_size":"Taille","head_status":"Partage","head_thumbnail_size":"Changer la taille des miniatures","head_view_mode":"Mode d\'affichage","head_view_list":"Vue liste","head_view_grid":"Vue grille","row_update_format":"d LLL yyyy","row_update_format_full":"d LLLL yyyy","row_read_only":"Partagé (lecture seule)","row_read_write":"Partagé (lecture & écriture)","row_size_symbols":{"B":"o","KB":"Ko","MB":"Mo","GB":"Go","TB":"To","PB":"Po","EB":"Eo","ZB":"Zo","YB":"Yo"},"row_sharing_shortcut_aria_label":"Nouveau raccourci de partage","load_more":"Plus de fichiers","mobile":{"head_name_asc":"A-Z","head_name_desc":"Z-A","head_updated_at_asc":"Plus anciens en premier","head_updated_at_desc":"Plus récents en premier","head_size_asc":"Plus légers en premier","head_size_desc":"Plus lourds en premier"},"tooltip":{"carbonCopy":{"title":"Copie conforme","caption":"Le document est défini \\"authentique et original\\" par Twake Workplace, l\'hébergeur de votre Twake, car il peut affirmer qu\'il provient directement des services de son émetteur sans avoir subi aucune modification."},"electronicSafe":{"title":"Coffre-fort numérique","caption":"Indique si le document original est sécurisé par votre coffre-fort numérique personnel avec les certifications qui lui confèrent une valeur probante et une garantie de conservation de 50 ans au-delà de son dépôt."}}},"Storage":{"title":"Stockage","availability":"%{smart_count} Go disponible","increase":"Augmenter l\'espace"},"SelectionBar":{"selected_count":"élément sélectionné |||| éléments sélectionnés","share":"Partager","download":"Télécharger","trash":"Supprimer","trash_all":"Supprimer tout","destroy":"Supprimer définitivement","rename":"Renommer","restore":"Restaurer","close":"Fermer","openWith":"Ouvrir avec...","applePreview":"Aperçu Apple","forward":"Transférer","forwardTo":"Transférer vers...","moveto":"Déplacer vers…","moveto_mobile":"Déplacer","phone-download":"Rendre accessible hors-ligne","requalify":"Requalifier","qualify":"Qualifier","history":"Versions","more":"Afficher plus d\'action","openWithinNextcloud":"Ouvrir dans Nextcloud"},"DeleteConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","trash":"Cet élément sera déplacé dans la corbeille. |||| Ces éléments seront déplacés dans la corbeille.","restore":"Vous pouvez toujours le restaurer quand vous voulez.","share_accepted":"Le partage sera arrêté. Ainsi, les contacts suivant conserveront une copie mais vos changements ne seront plus synchronisés :","share_waiting":"Le partage sera arrêté. Ainsi, les contacts suivant ne pourront donc plus accepter le partage et ne pourront plus accéder aux contenus partagés :","share_both":"Le partage sera arrêté. Ainsi, les contacts ayant stocké les fichiers dans leur Twake conserveront une copie, les autres contacts ne pourront plus accéder aux contenus partagés :","link":"Le partage par lien ne sera plus actif.","referenced":"Des photos de la sélection sont dans un album. Elles seront retirées de l\'album si vous confirmez.","cancel":"Annuler","delete":"Supprimer"},"EmptyTrashConfirm":{"title":"Supprimer définitivement ?","forbidden":"Vous ne pourrez plus accéder à ces fichiers.","restore":"Vous ne pourrez pas restaurer ces fichiers.","cancel":"Annuler","delete":"Tout supprimer","processing":"Votre corbeille est en train de se vider. Cela peut prendre quelques instants.","success":"La corbeille a été vidée.","error":"Une erreur est survenue, merci de réessayer."},"DestroyConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","forbidden":"Vous ne pourrez plus accéder à ce %{type}. |||| Vous ne pourrez plus accéder à ces %{type}.","restore":"Vous ne pourrez pas restaurer ce %{type}. |||| Vous ne pourrez pas restaurer ces %{type}.","cancel":"Annuler","delete":"Supprimer définitivement","success":"Le %{type} a été supprimé définitivement. |||| %{smart_count} %{type} ont été supprimés définitivement.","error":"Une erreur est survenue, merci de réessayer.","processing":"La suppression est en cours. Cela peut prendre quelques instants."},"quotaalert":{"title":"Votre espace disque est plein :(","desc":"Veuillez supprimer des fichiers, vider votre corbeille ou augmenter votre espace disque avant d\'importer de nouveau fichier.","confirm":"OK","increase":"Augmenter votre espace disque"},"loading":{"message":"Chargement","onlyOfficeCreateInProgress":"Création du fichier en cours..."},"empty":{"title":"Vous n\'avez aucun fichier dans ce dossier.","text":"Sélectionnez les fichiers sur votre ordinateur ou faites-les glisser ici.","mobile_text":"Sélectionnez les fichiers sur votre appareil.","trash_title":"Vous n\'avez aucun fichier supprimé.","trash_text":"Déplacez les fichiers dont vous n\'avez plus besoin dans la corbeille et supprimez-les définitivement pour récupérer de l\'espace de stockage.","shared-drive_text":"Créez et partagez votre premier drive."},"error":{"open_folder":"Une erreur est survenue pendant l\'ouverture du dossier.","open_file":"Une erreur est survenue pendant l\'ouverture du fichier.","button":{"reload":"Rafraîchir"},"download_file":{"offline":"Vous devez être connecté pour pouvoir ouvrir ce fichier","missing":"Le fichier n\'existe pas","encryption_many":"Vous ne pouvez pas télécharger plusieurs fichiers chiffrés en même temps"}},"Error":{"public_unshared_title":"Désolé, ce lien n\'est plus disponible.","public_unshared_text":"Ce lien a expiré ou il a été supprimé par le ou la propriétaire. Signalez-lui que vous voulez accéder à son contenu !","generic":"Une erreur s\'est produite. Attendez quelques minutes et recommencez."},"alert":{"could_not_open_file":"Impossible d\'ouvrir le fichier","try_again":"Une erreur est survenue, merci de réessayer dans un instant.","restore_file_success":"La sélection a été restaurée avec succès.","trash_file_success":"La sélection a été déplacée dans la Corbeille.","trash_file_processing":"Le déplacement vers la Corbeille est en cours...","trash_shared_drive_success":"Le drive partagé a été déplacé dans la Corbeille.","destroy_file_success":"La sélection a été supprimée définitivement.","folder_name":"L\'élément %{folderName} existe déjà, merci de choisir un nouveau nom.","file_name":"L\'élément %{fileName} existe déjà, utilisez un nouveau nom","file_name_missing":"Le nom du fichier est manquant, veuillez choisir un nouveau nom.","file_name_illegal_name":"Le nom du fichier %{fileName} est invalide, veuillez choisir un nouveau nom.","file_name_illegal_characters":"Le nom du fichier %{fileName} est invalide, il contient les caractères interdits suivants : %{characters}","folder_generic":"Une erreur est survenue, merci de réessayer.","folder_abort":"Vous devez nommer votre dossier si vous voulez le sauvegarder. Vos informations n\'ont pas été enregistrées.","offline":"Cette fonctionnalité n’est pas disponible en mode hors-ligne.","preparing":"Préparation de vos fichiers...","item_copied":"1 élément copié","items_copied":"%{count} éléments copiés","item_cut":"1 élément coupé","items_cut":"%{count} éléments coupés","item_moved":"1 élément a été déplacé","items_moved":"%{count} éléments ont été déplacés","item_pasted":"1 élément a été déplacé","items_pasted":"%{count} éléments ont été déplacés","copy_files_only":"Impossible de copier les dossiers","copy_not_allowed":"L\'opération de copie n\'est pas autorisée dans cette vue.","cut_not_allowed":"L\'opération de coupe n\'est pas autorisée dans cette vue.","delete_not_allowed":"L\'opération de suppression n\'est pas autorisée dans cette vue.","paste_error":"Une erreur s\'est produite lors du collage des fichiers","paste_failed":"Échec du collage des fichiers","paste_sharing_error":"Impossible de coller les fichiers en raison de restrictions de partage. Veuillez utiliser l\'action Déplacer à la place.","paste_same_folder_skipped":"Impossible de déplacer les éléments dans le même dossier où ils se trouvent déjà.","paste_not_allowed":"Vous ne pouvez pas coller dans ce dossier","cannot_move_shared_drive":"Vous ne pouvez pas déplacer le dossier de lecteur partagé","cannot_copy_shared_drive":"Vous ne pouvez pas copier le dossier du lecteur partagé"},"upload":{"label":"Importer","documentType":{"file":"fichier","directory":"dossier","element":"élément"},"alert":{"success":"%{smart_count} %{type} importé. |||| %{smart_count} %{type}s importés.","success_conflicts":"%{smart_count} %{type} importé avec %{conflictNumber} conflit(s). |||| %{smart_count} %{type}s importés avec %{conflictNumber} conflit(s).","success_updated":"%{smart_count} %{type} importé et %{updatedCount} mis à jour. |||| %{smart_count} %{type}s importés et %{updatedCount} mis à jour.","success_updated_conflicts":"%{smart_count} %{type} importé, %{updatedCount} mis à jour et %{conflictCount} conflit(s). |||| %{smart_count} %{type}s importés, %{updatedCount} mis à jour et %{conflictCount} conflit(s).","updated":"%{smart_count} %{type} mis à jour. |||| %{smart_count} %{type} mis à jour.","updated_conflicts":"%{smart_count} %{type} mis à jour avec %{conflictCount} conflit(s). |||| %{smart_count} %{type}s mis à jour avec %{conflictCount} conflit(s).","errors":"Une erreur est survenue lors de l’import du %{type}, merci de réessayer plus tard.","network":"Vous ne disposez pas d\'une connexion internet. Merci de réessayer quand ce sera le cas.","fileTooLargeErrors":"Fichier trop volumineux. Taille maximale autorisée par fichier : %{max_size_value} Go"}},"intents":{"alert":{"error":"La récupération du fichier a échoué. Téléchargez le fichier manuellement puis ajoutez-le à Twake. "},"picker":{"select":"Sélectionner","cancel":"Annuler","new_folder":"Nouveau dossier","instructions":"Choisir une cible"}},"UploadQueue":{"header":"Import de %{smart_count} fichier dans votre Twake |||| Import de %{smart_count} fichiers dans votre Twake","header_mobile":"Import de %{done} sur %{total}","header_done":"%{done} sur %{total} élément(s) importé(s)","success_flagship":"%{smart_count} fichier importé avec succès. |||| %{smart_count} fichiers importés avec succès.","close":"Fermer","item":{"pending":"En attente"}},"Viewer":{"close":"Fermer","noviewer":{"download":"Télécharger ce fichier","openWith":"Ouvrir avec...","openInOnlyOffice":"Ouvrir avec Only Office","cta":{"saveTime":"Gagnez du temps !","installDesktop":"Installez l\'outil de synchronisation pour ordinateur","accessFiles":"Accédez à vos fichiers directement sur votre ordinateur"}},"actions":{"download":"Télécharger","forward":"Transférer"},"loading":{"error":"Ce fichier n\'a pas pu être chargé. Avez-vous une connexion internet qui fonctionne actuellement ?","retry":"Réessayer"},"error":{"noapp":"Votre téléphone n\'a identifié aucune application pour lire ce type de fichier.","generic":"Une erreur est survenue lors de l\'ouverture de ce fichier, merci de réessayer.","noNetwork":"Vous êtes actuellement hors ligne."},"panel":{"title":"Informations utiles"}},"Move":{"to":"Déplacer vers :","action":"Déplacer","cancel":"Annuler","modalTitle":"Déplacer","title":"%{smart_count} élément |||| %{smart_count} éléments","success":"%{subject} a été déplacé dans %{target}. |||| %{smart_count} éléments ont été déplacés dans %{target}.","error":"Une erreur est survenue pendant le déplacement de cet élément, merci de réessayer plus tard. |||| Une erreur est survenue pendant le déplacement de ces éléments, merci de réessayer plus tard.","cancelled":"%{subject} a été rapatrié dans son dossier d’origine. |||| %{smart_count} éléments ont été rapatriés dans leur dossiers d’origine.","cancelledWithRestoreErrors":"%{subject} a été rapatrié dans son dossier d\'origine mais il y a eu une erreur lors de la restauration du fichier depuis la corbeille. |||| %{smart_count} éléments ont été rapatriés dans leur dossiers d\'origine mais il y a eu %{restoreErrorsCount} erreur(s) lors de la restauration des fichiers depuis la corbeille.","cancelled_error":"Une erreur est survenue lors de l’annulation du déplacement. |||| Une erreur est survenue lors de l’annulation de ces déplacements.","multipleEntries":"%{smart_count} élément |||| %{smart_count} éléments","addFolder":"Ajouter un dossier","outsideSharedFolder":{"title":"Déplacement en dehors du dossier %{sharedFolder}","content_1":"Attention, vous souhaitez déplacer %{name} en dehors du dossier partagé %{sharedFolder}. |||| Attention, vous souhaitez déplacer %{smart_count} %{type}s en dehors du dossier partagé %{sharedFolder}.","content_2":"Ce déplacement, va retirer le %{type} %{name} du partage. Ce %{type} va donc être mis à la corbeille pour l\'ensemble des membres du partage. |||| Ce déplacement, va retirer les %{smart_count} %{type}s du partage. Ces %{type}s vont donc être mis à la corbeille pour l\'ensemble des membres du partage.","cancel":"Annuler","confirm":"J\'ai compris"},"insideSharedFolder":{"title":"Déplacer vers un dossier partagé ?","content":"Tous les membres ayant accès à %{destination} auront également accès à %{source}. |||| Tous les membres ayant accès à %{destination} auront également accès aux %{type} sélectionnés.","cancel":"Annuler","confirm":"Ok"},"sharedFolderInsideAnother":{"title":"Déplacement impossible","content_1":"Vous souhaitez déplacer un élément partagé dans un dossier lui-même partagé. Ce type déplacement n\'est pas autorisé.","content_2":"Si vous souhaitez tout de même déplacer %{source} dans %{destination}, veuillez arrêter le partage de :","cancel":"Annuler le déplacement","confirm":"Arrêter le partage"}},"ImportToDrive":{"title":"%{smart_count} fichier |||| %{smart_count} fichiers","to":"Enregistrer dans :","action":"Enregistrer","cancel":"Annuler","success":"%{smart_count} fichier enregistré |||| %{smart_count} fichiers enregistrés","error":"Une erreur s\'est produite. Merci de recommencer. "},"FileOpenerExternal":{"fileNotFoundError":"Erreur : fichier non trouvé"},"TOS":{"updated":{"title":"Du nouveau avec le RGPD !","detail":"Dans le cadre du Règlement Général de la Protection des Données (RGPD), [nos CGU sont actualisées](%{link}) et s’appliquent pour vous à partir du 25 mai 2018.","cta":"Accepter les CGU et continuer","disconnect":"Refuser et se déconnecter","error":"Une erreur est survenue, merci de réessayer plus tard"}},"manifest":{"permissions":{"contacts":{"description":"Utilisé pour partager des éléments à vos contacts"},"groups":{"description":"Utilisé pour partager des éléments à vos groupes"}}},"models":{"contact":{"defaultDisplayName":"Anonyme"}},"Scan":{"none":"Aucune","scan_a_doc":"Numériser un doc","save_doc":"Enregistrer le document","filename":"Nom du fichier","save":"Sauvegarder","cancel":"Annuler","qualify":"Qualifier","requalify":"Requalifier","apply":"Appliquer","error":{"offline":"Vous êtes actuellement déconnecté, vous ne pouvez donc pas utiliser cette fonctionnalité. Connectez-vous à internet et recommencez. ","uploading":"Vous avez déjà un fichier en cours de téléchargement. Attendez la fin et recommencez.","generic":"Un problème est survenu. Veuillez réessayer. "},"successful":{"qualified_ok":"Fichier qualifié avec succès !"}},"History":{"description":"Les 20 dernières versions de vos fichiers sont conservées automatiquement. Sélectionnez une version pour la télécharger.","current_version":"Version actuelle","loading":"Chargement...","noFileVersionEnabled":"Nouveauté : votre Twake pourra prochainement archiver les dernières modifications d\'un fichier pour ne plus jamais risquer de les perdre"},"External":{"redirection":{"title":"Redirection","text":"Vous êtes sur le point d\'être redirigé... ","error":"Erreur pendant la redirection. Généralement cela signifie que le contenu du fichier n\'est pas dans le bon format. "}},"RenameModal":{"title":"Renommer","description":"Vous êtes sur le point de changer l\'extension du fichier. Voulez-vous continuer ? ","continue":"Continuer","cancel":"Annuler"},"Shortcut":{"title_modal":"Créer un raccourci","filename":"Nom du fichier","url":"URL","cancel":"Annuler","create":"Créer","created":"Le raccourci a été créé","errored":"Une erreur s\'est produite","filename_error_ends":"Le nom du fichier doit se terminer par .url","needs_info":"Un raccourci a besoin d\'un nom et d\'une URL","url_badformat":"L\'URL saisie n\'est pas dans le bon format"},"OnlyOffice":{"Error":{"title":"Quelque chose n\'a pas fonctionné","text":"Essayez de recharger la page s\'il vous plaît"},"readOnly":{"title":"Lecture seule","tooltip":"Vous êtes uniquement autorisé à visualiser ce document. Contactez le propriétaire pour obtenir des droits d\'écriture."},"createFileName":{"text":"Nouveau document texte","spreadsheet":"Nouvelle feuille de calcul","slide":"Nouvelle présentation"},"toolbar":{"goToHome":"Aller à l\'accueil"},"actions":{"edit":"Modifier","validate":"Valider"},"tooltip":{"title":"Modifier le document","text":"Le document est actuellement en lecture seule, Vous pouvez le modifier en cliquant ici.","actions":{"ok":"Ok","hide":"Ne plus afficher"}}},"Migration":{"title":"Mettre à jour Twake Drive","content":"Twake Drive doit être mis à jour afin d\'améliorer ses performances. Cela peut prendre jusqu\'à plusieurs minutes durant lesquelles vous ne pourrez pas utiliser l\'application. Souhaitez-vous le faire maintenant ? Si vous refusez, nous vous redemanderons la prochaine fois.","confirm":"Ok, c\'est parti !","cancel":"Non, pas maintenant"},"searchbar":{"placeholder":"Rechercher","empty":"Aucun résultat trouvé pour la requête \\"%{query}\\""},"button":{"back":"Retour","add":"Ajouter","create":"Créer"},"search":{"action":"Rechercher","empty":{"title":"Aucun résultat","subtitle":"Aucun résultat trouvé pour la requête \\"%{query}\\""}},"PushBanner":{"quota":{"text":"Vous n\'avez presque plus d\'espace de stockage. Si vous atteignez la limite, vous ne pourrez plus ajouter de fichiers. Vous pouvez supprimer des fichiers, vider votre corbeille ou changer d\'offre.","actions":{"first":"J\'ai compris","second":"Voir les offres"}}},"FileDivergedModal":{"title":"Quelqu’un a modifié ce fichier","content":"Quelqu’un a modifié le contenu de ce fichier pendant que vous l\'éditiez. Vous pouvez récupérer ces changements ou continuer votre édition sur un nouveau fichier.","confirm":"Continuer d\'éditer","cancel":"Voir les changements","error":"Une erreur est survenue, merci de réessayer.","confirmReload":{"title":"Voir les changements","content":"En accédant au nouveau fichier, vos modifications seront annulées.","cancel":"Annuler","confirm":"Ok, j’ai compris"},"viewMode":{"title":"Quelqu’un a modifié ce fichier","content":"Quelqu’un a modifié le contenu de ce fichier. Vous pouvez récupérer ces changements.","confirm":"Voir les changements"}},"FileDeletedModal":{"title":"Quelqu’un a supprimé ce fichier","content":"Quelqu’un a supprimé ce fichier pendant que vous l\'éditiez. Vous pouvez arrêter vos modifications ou restaurer ce fichier pour continuer vos modifications.","confirm":"Restaurer le fichier","cancel":"Annuler l\'édition","error":"Une erreur est survenue, merci de réessayer."},"TrashedBanner":{"text":"Cet élément est dans la corbeille","destroy":"Supprimer définitivement","restore":"Restaurer","restoreSuccess":"L’élément a bien été restauré","restoreError":"Une erreur est survenue, merci de réessayer.","destroySuccess":"L’élément a bien été supprimé"},"EntriesType":{"file":"fichier |||| fichiers","directory":"dossier |||| dossiers","element":"élément |||| éléments"},"NotFound":{"title":"L’élément est introuvable","text":"Nous n’avons trouvé aucun élément à cette adresse. Il s’agit peut-être d’une erreur de frappe."},"NextcloudBreadcrumb":{"root":"Drive partagés","trash":"Corbeille"},"NextcloudToolbar":{"share":"Partager"},"NextcloudDeleteConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","trash":"Cet élément sera déplacé dans la corbeille de Nextcloud. |||| Ces éléments seront déplacés dans la corbeille de Nextcloud.","restore":"Vous pouvez toujours le restaurer quand vous voulez depuis Nextcloud.","error":"Une erreur est survenue, merci de réessayer.","cancel":"Annuler","delete":"Supprimer"},"FileName":{"sharedDrive":"Drives","trash":"Corbeille"},"NextcloudBanner":{"title":"Les éléments ci-dessous sont affichés depuis un drive NextCloud et ne sont pas stockés dans votre Twake."},"favorites":{"label":{"add":"Ajouter aux favoris","addMobile":"Favoris","remove":"Retirer des favoris"},"error":"Une erreur est survenue, merci de réessayer.","success":{"add":"%{filename} a été ajouté aux favoris |||| Ces éléments ont été ajoutés aux favoris","remove":"%{filename} a été retiré des favoris |||| Ces éléments ont été retirés des favoris"}},"TrashToolbar":{"emptyTrash":"Vider la corbeille"},"RestoreNextcloudFile":{"label":"Restaurer","success":"L\'élément a bien été restauré","error":"Une erreur est survenue, merci de réessayer."},"actions":{"details":"Détails","infos":"Détails et qualification","infosMobile":"Détails","duplicateTo":{"label":"Dupliquer vers…"},"duplicateToMobile":{"label":"Dupliquer"},"personalizeFolder":{"label":"Personnaliser le dossier"},"summariseByAI":"Résumer"},"FolderCustomizer":{"title":"Personnaliser le dossier","description":"Choisissez une couleur spécifique pour votre dossier","cancel":"Annuler","apply":"Appliquer","error":"Une erreur est survenue, merci de réessayer.","tabs":{"colors":"Couleurs","icons":"Icônes"},"iconPicker":{"recents":"Récents","chooseCustomIcon":"Choisir une icône personnalisée"}},"DuplicateModal":{"subTitle":"Dupliquer vers :","confirmLabel":"Dupliquer ici","success":"%{fileName} a été dupliqué dans %{destinationName}. |||| %{smart_count} éléments ont été dupliqués dans %{destinationName}.","error":"Une erreur est survenue, merci de réessayer."},"OpenFolderButton":{"label":"Ouvrir le dossier"},"LastUpdate":{"titleFormat":"dd LLLL yyyy, HH:MM"},"AddMenu":{"readOnlyFolder":"Ce dossier est en lecture seule. Vous ne pouvez pas effectuer cette action."},"PublicNoteRedirect":{"error":{"title":"Impossible d\'accéder au document","subtitle":"Le lien de partage semble manquant ou invalide. Merci de demander au propriétaire du document de vérifier les accès"}},"antivirus":{"infectedFile":"Ce fichier est infecté par un virus","popover":{"title":"Le téléchargement et le partage sont bloqués pour des raisons de sécurité","description":"Le système Twake a détecté un virus"}},"Scribe":{"menu":{"correct_grammar":"Corriger la grammaire","translate":"Traduire","change_tone":"Changer le ton","improve":"Améliorer"},"tone":{"professional":"Plus professionnel","casual":"Plus décontracté","polite":"Plus poli"},"improve":{"shorter":"Raccourcir","expand":"Développer","emojify":"Emojifier","bullets":"Transformer en liste"},"translate":{"other_language":"Autre langue...","translating_to":"Traduction en %{language}..."},"prompt":{"placeholder":"Aidez-moi à écrire"},"button":{"text_ai":"IA Texte","insert":"Insérer","replace":"Remplacer","retry":"Réessayer","cancel":"Annuler","insert_after":"Insérer après"},"modal":{"selected_text":"Texte sélectionné :"},"loading":{"processing":"Traitement en cours...","correct_grammar":"Correction de la grammaire...","tone_professional":"Ton plus professionnel...","tone_casual":"Ton plus décontracté...","tone_polite":"Ton plus poli...","improve_shorter":"Raccourcissement...","improve_expand":"Développement...","improve_emojify":"Ajout d\'emojis...","improve_bullets":"Transformation en liste..."},"error":{"auth":"Erreur d\'autorisation. Vérifiez vos permissions Cozy.","rate_limit":"Trop de requêtes. Veuillez patienter et réessayer.","server":"Le service IA est temporairement indisponible. Veuillez réessayer.","generic":"Une erreur est survenue. Veuillez réessayer plus tard.","network":"Erreur réseau. Vérifiez votre connexion et réessayez.","empty_response":"Aucun résultat reçu. Veuillez réessayer.","unexpected":"Une erreur inattendue est survenue. Veuillez réessayer."}}}')
+module.exports = JSON.parse('{"Nav":{"item_drive":"Fichiers","item_recent":"Récents","item_sharings":"Partages","item_shared":"Partagés","item_activity":"Activité","item_trash":"Corbeille","item_settings":"Paramètres","item_collect":"Administratif","item_shared_drives":"Drives partagés","item_favorites":"Favoris","item_external_drives":"Disques externes","item_my_drive":"Mon Drive","btn-client":"Télécharger Twake Drive ","btn-client-web":"Obtenez un Twake","btn-client-mobile":"Emportez votre cloud personnel avec vous : installez notre app %{name} !","banner-txt-client":"Installez %{name} pour ordinateur et synchronisez vos fichiers pour les rendre accessibles à tout moment.","banner-btn-client":"Télécharger","link-client":"https://cozy.io/fr/download/","link-client-desktop":"https://nuts.cozycloud.cc/download/channel/stable/","link-client-android":"https://play.google.com/store/apps/details?id=io.cozy.flagship.mobile","link-client-ios":"https://apps.apple.com/app/cloud-personnel-cozy/id1600636174","link-client-web":"https://cozy.io/try-it","view_more":"Voir plus","view_less":"Voir moins"},"breadcrumb":{"title_drive":"Fichiers","title_recent":"Récents","title_sharings":"Partages","title_shared":"Mes fichiers partagés","title_activity":"Activité","title_trash":"Corbeille","label":"Voir le chemin","title_shared_drives":"Drives","title_favorites":"Favoris"},"Toolbar":{"more":"Plus"},"toolbar":{"menu_manage_access":"Gérer les accès","menu_leave_shared_drive":"Sortir drive","menu_upload":"Importer des fichiers","item_more":"Plus","menu_new_folder":"Dossier","menu_new_shared_drive":"Drive partagé","menu_new_encrypted_folder":"Dossier chiffré","menu_select":"Sélectionner les éléments","menu_share_folder":"Partager le dossier","menu_download":"Télécharger","menu_sync_cozy":"Synchroniser dans mon Twake","add_to_mine":"Ajouter à mon Twake","menu_download_folder":"Télécharger le dossier","menu_download_file":"Télécharger ce fichier","menu_create_note":"Note","menu_create_docs":"Docs","menu_create_shortcut":"Raccourci","share":"Partager","trash":"Supprimer","delete_shared_drive":"Supprimer le drive partagé","leave":"Quitter le partage et supprimer le dossier","menu_add":"Ajouter","menu_create":"Créer","menu_add_item":"Ajouter un élément","menu_onlyOffice":{"text":"Document texte","spreadsheet":"Feuille de calcul","slide":"Présentation"},"select_all":"Tout sélectionner","select_all_mobile":"Tout","clear_selection":"Effacer la sélection","clear_selection_mobile":"Annuler","sharings_tab_all":"Tout","sharings_tab_drives":"Drives"},"Share":{"create-cozy":"Créer mon Twake"},"Files":{"share":{"cta":"Partager","title":"Partager","details":{"title":"Détails du partage","createdAt":"Depuis le %{date}","ro":"Peut consulter","rw":"Peut modifier","desc":{"ro":"Vous pouvez consulter, télécharger, et ajouter ce contenu à votre Twake. Vous recevrez les modifications faites par le propriétaire, mais vous ne pourrez pas le modifier.","rw":"Vous pouvez consulter, modifier et supprimer du contenu. Les modifications sur le contenu seront répercutées automatiquement entre vos Twake."}},"shared":"Partagé","sharedByMe":"Partagé","sharedWithMe":"Partagé avec moi","sharedBy":"Partagé par %{name}","shareByLink":{"subtitle":"Par lien public","desc":"Chaque personne possédant le lien fourni peut voir et télécharger vos fichiers.","creating":"Création du lien...","copy":"Copier le lien","copied":"Lien copié dans le presse-papiers.","failed":"Impossible de copier dans le presse papier"},"shareByEmail":{"subtitle":"Par email","email":"À :","emailPlaceholder":"Saisissez le courriel ou le nom du destinataire.","send":"Envoyer","genericSuccess":"Vous avez invité %{count} contacts.","success":"Vous avez envoyé une invitation à %{email}.","comingsoon":"Bientôt disponible ! Vous pourrez partager un document et vos photos en un seul clic avec votre famille, vos amis, et même vos collaborateurs. Ne vous inquiétez pas, on vous prévient quand ce sera prêt !","onlyByLink":"Ce %{type} ne peut être partagé que sous la forme d\'un lien, car il","type":{"file":"fichier","folder":"dossier"},"hasSharedParent":"se trouve dans un dossier partagé.","hasSharedChild":"contient un élément partagé."},"revoke":{"title":"Arrêter le partage","desc":"Votre contact conservera une copie mais vos changements ne seront plus synchronisés.","success":"Vous avez cessé de partager ce fichier avec %{email}."},"revokeSelf":{"title":"Arrêter le partage","desc":"Vous conservez le contenu mais il ne sera plus mis à jour entre vos Twake.","success":"Vous avez été retiré de ce partage."},"sharingLink":{"title":"Partager","copy":"Copier","copied":"Copié"},"whoHasAccess":{"title":"1 personne y a accès |||| %{smart_count} personnes y ont accès"},"protectedShare":{"title":"Prochainement !","desc":"Partagez ce que vous souhaitez par email avec votre famille et vos amis !"},"close":"Fermer","gettingLink":"Création du lien…","error":{"generic":"Une erreur est survenue lors de la création du lien de partage, merci de réessayer","revoke":"Oups, une erreur est survenue. Contactez-nous pour que nous résolvions la situation au plus vite.\\n"},"specialCase":{"base":"Ce %{type} ne peut être partagé que sous la forme d\'un lien, car il","isInSharedFolder":"se trouve dans un dossier partagé.","hasSharedFolder":"contient un dossier partagé."}},"viewer-fallback":"Le fichier est en cours de téléchargement, vous pouvez fermer cette fenêtre.","dropzone":{"teaser":"Déposez des fichiers pour les importer vers :","noFolderSupport":"Votre navigateur ne prend pas en charge le glisser-déposer de dossier pour le moment. Veuillez importer les fichiers manuellement."}},"table":{"head_name":"Nom","head_update":"Mise à jour","head_size":"Taille","head_status":"Partage","head_thumbnail_size":"Changer la taille des miniatures","head_view_mode":"Mode d\'affichage","head_view_list":"Vue liste","head_view_grid":"Vue grille","row_update_format":"d LLL yyyy","row_update_format_full":"d LLLL yyyy","row_read_only":"Partagé (lecture seule)","row_read_write":"Partagé (lecture & écriture)","row_size_symbols":{"B":"o","KB":"Ko","MB":"Mo","GB":"Go","TB":"To","PB":"Po","EB":"Eo","ZB":"Zo","YB":"Yo"},"row_sharing_shortcut_aria_label":"Nouveau raccourci de partage","load_more":"Plus de fichiers","mobile":{"head_name_asc":"A-Z","head_name_desc":"Z-A","head_updated_at_asc":"Plus anciens en premier","head_updated_at_desc":"Plus récents en premier","head_size_asc":"Plus légers en premier","head_size_desc":"Plus lourds en premier"},"tooltip":{"carbonCopy":{"title":"Copie conforme","caption":"Le document est défini \\"authentique et original\\" par Twake Workplace, l\'hébergeur de votre Twake, car il peut affirmer qu\'il provient directement des services de son émetteur sans avoir subi aucune modification."},"electronicSafe":{"title":"Coffre-fort numérique","caption":"Indique si le document original est sécurisé par votre coffre-fort numérique personnel avec les certifications qui lui confèrent une valeur probante et une garantie de conservation de 50 ans au-delà de son dépôt."}}},"Storage":{"title":"Stockage","availability":"%{smart_count} Go disponible","increase":"Augmenter l\'espace"},"SelectionBar":{"selected_count":"élément sélectionné |||| éléments sélectionnés","share":"Partager","download":"Télécharger","trash":"Supprimer","trash_all":"Supprimer tout","destroy":"Supprimer définitivement","rename":"Renommer","restore":"Restaurer","close":"Fermer","openWith":"Ouvrir avec...","applePreview":"Aperçu Apple","forward":"Transférer","forwardTo":"Transférer vers...","moveto":"Déplacer vers…","moveto_mobile":"Déplacer","phone-download":"Rendre accessible hors-ligne","requalify":"Requalifier","qualify":"Qualifier","history":"Versions","more":"Afficher plus d\'action","openWithinNextcloud":"Ouvrir dans Nextcloud"},"DeleteConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","trash":"Cet élément sera déplacé dans la corbeille. |||| Ces éléments seront déplacés dans la corbeille.","restore":"Vous pouvez toujours le restaurer quand vous voulez.","share_accepted":"Le partage sera arrêté. Ainsi, les contacts suivant conserveront une copie mais vos changements ne seront plus synchronisés :","share_waiting":"Le partage sera arrêté. Ainsi, les contacts suivant ne pourront donc plus accepter le partage et ne pourront plus accéder aux contenus partagés :","share_both":"Le partage sera arrêté. Ainsi, les contacts ayant stocké les fichiers dans leur Twake conserveront une copie, les autres contacts ne pourront plus accéder aux contenus partagés :","link":"Le partage par lien ne sera plus actif.","referenced":"Des photos de la sélection sont dans un album. Elles seront retirées de l\'album si vous confirmez.","cancel":"Annuler","delete":"Supprimer"},"EmptyTrashConfirm":{"title":"Supprimer définitivement ?","forbidden":"Vous ne pourrez plus accéder à ces fichiers.","restore":"Vous ne pourrez pas restaurer ces fichiers.","cancel":"Annuler","delete":"Tout supprimer","processing":"Votre corbeille est en train de se vider. Cela peut prendre quelques instants.","success":"La corbeille a été vidée.","error":"Une erreur est survenue, merci de réessayer."},"DestroyConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","forbidden":"Vous ne pourrez plus accéder à ce %{type}. |||| Vous ne pourrez plus accéder à ces %{type}.","restore":"Vous ne pourrez pas restaurer ce %{type}. |||| Vous ne pourrez pas restaurer ces %{type}.","cancel":"Annuler","delete":"Supprimer définitivement","success":"Le %{type} a été supprimé définitivement. |||| %{smart_count} %{type} ont été supprimés définitivement.","error":"Une erreur est survenue, merci de réessayer.","processing":"La suppression est en cours. Cela peut prendre quelques instants."},"quotaalert":{"title":"Votre espace disque est plein :(","desc":"Veuillez supprimer des fichiers, vider votre corbeille ou augmenter votre espace disque avant d\'importer de nouveau fichier.","confirm":"OK","increase":"Augmenter votre espace disque"},"loading":{"message":"Chargement","onlyOfficeCreateInProgress":"Création du fichier en cours..."},"empty":{"title":"Vous n\'avez aucun fichier dans ce dossier.","text":"Sélectionnez les fichiers sur votre ordinateur ou faites-les glisser ici.","mobile_text":"Sélectionnez les fichiers sur votre appareil.","trash_title":"Vous n\'avez aucun fichier supprimé.","trash_text":"Déplacez les fichiers dont vous n\'avez plus besoin dans la corbeille et supprimez-les définitivement pour récupérer de l\'espace de stockage.","shared-drive_text":"Créez et partagez votre premier drive."},"error":{"open_folder":"Une erreur est survenue pendant l\'ouverture du dossier.","open_file":"Une erreur est survenue pendant l\'ouverture du fichier.","button":{"reload":"Rafraîchir"},"download_file":{"offline":"Vous devez être connecté pour pouvoir ouvrir ce fichier","missing":"Le fichier n\'existe pas","encryption_many":"Vous ne pouvez pas télécharger plusieurs fichiers chiffrés en même temps"}},"Error":{"public_unshared_title":"Désolé, ce lien n\'est plus disponible.","public_unshared_text":"Ce lien a expiré ou il a été supprimé par le ou la propriétaire. Signalez-lui que vous voulez accéder à son contenu !","generic":"Une erreur s\'est produite. Attendez quelques minutes et recommencez."},"alert":{"could_not_open_file":"Impossible d\'ouvrir le fichier","try_again":"Une erreur est survenue, merci de réessayer dans un instant.","restore_file_success":"La sélection a été restaurée avec succès.","trash_file_success":"La sélection a été déplacée dans la Corbeille.","trash_file_processing":"Le déplacement vers la Corbeille est en cours...","trash_shared_drive_success":"Le drive partagé a été déplacé dans la Corbeille.","destroy_file_success":"La sélection a été supprimée définitivement.","folder_name":"L\'élément %{folderName} existe déjà, merci de choisir un nouveau nom.","file_name":"L\'élément %{fileName} existe déjà, utilisez un nouveau nom","file_name_missing":"Le nom du fichier est manquant, veuillez choisir un nouveau nom.","file_name_illegal_name":"Le nom du fichier %{fileName} est invalide, veuillez choisir un nouveau nom.","file_name_illegal_characters":"Le nom du fichier %{fileName} est invalide, il contient les caractères interdits suivants : %{characters}","folder_generic":"Une erreur est survenue, merci de réessayer.","folder_abort":"Vous devez nommer votre dossier si vous voulez le sauvegarder. Vos informations n\'ont pas été enregistrées.","offline":"Cette fonctionnalité n’est pas disponible en mode hors-ligne.","preparing":"Préparation de vos fichiers...","item_copied":"1 élément copié","items_copied":"%{count} éléments copiés","item_cut":"1 élément coupé","items_cut":"%{count} éléments coupés","item_moved":"1 élément a été déplacé","items_moved":"%{count} éléments ont été déplacés","item_pasted":"1 élément a été déplacé","items_pasted":"%{count} éléments ont été déplacés","copy_files_only":"Impossible de copier les dossiers","copy_not_allowed":"L\'opération de copie n\'est pas autorisée dans cette vue.","cut_not_allowed":"L\'opération de coupe n\'est pas autorisée dans cette vue.","delete_not_allowed":"L\'opération de suppression n\'est pas autorisée dans cette vue.","paste_error":"Une erreur s\'est produite lors du collage des fichiers","paste_failed":"Échec du collage des fichiers","paste_sharing_error":"Impossible de coller les fichiers en raison de restrictions de partage. Veuillez utiliser l\'action Déplacer à la place.","paste_same_folder_skipped":"Impossible de déplacer les éléments dans le même dossier où ils se trouvent déjà.","paste_not_allowed":"Vous ne pouvez pas coller dans ce dossier","cannot_move_shared_drive":"Vous ne pouvez pas déplacer le dossier de lecteur partagé","cannot_copy_shared_drive":"Vous ne pouvez pas copier le dossier du lecteur partagé"},"upload":{"label":"Importer","documentType":{"file":"fichier","directory":"dossier","element":"élément"},"alert":{"success":"%{smart_count} %{type} importé. |||| %{smart_count} %{type}s importés.","success_conflicts":"%{smart_count} %{type} importé avec %{conflictNumber} conflit(s). |||| %{smart_count} %{type}s importés avec %{conflictNumber} conflit(s).","success_updated":"%{smart_count} %{type} importé et %{updatedCount} mis à jour. |||| %{smart_count} %{type}s importés et %{updatedCount} mis à jour.","success_updated_conflicts":"%{smart_count} %{type} importé, %{updatedCount} mis à jour et %{conflictCount} conflit(s). |||| %{smart_count} %{type}s importés, %{updatedCount} mis à jour et %{conflictCount} conflit(s).","updated":"%{smart_count} %{type} mis à jour. |||| %{smart_count} %{type} mis à jour.","updated_conflicts":"%{smart_count} %{type} mis à jour avec %{conflictCount} conflit(s). |||| %{smart_count} %{type}s mis à jour avec %{conflictCount} conflit(s).","errors":"Une erreur est survenue lors de l’import du %{type}, merci de réessayer plus tard.","network":"Vous ne disposez pas d\'une connexion internet. Merci de réessayer quand ce sera le cas.","fileTooLargeErrors":"Fichier trop volumineux. Taille maximale autorisée par fichier : %{max_size_value} Go"}},"intents":{"alert":{"error":"La récupération du fichier a échoué. Téléchargez le fichier manuellement puis ajoutez-le à Twake. "},"picker":{"select":"Sélectionner","cancel":"Annuler","new_folder":"Nouveau dossier","instructions":"Choisir une cible"}},"UploadQueue":{"header":"Import de %{smart_count} fichier dans votre Twake |||| Import de %{smart_count} fichiers dans votre Twake","header_mobile":"Import de %{done} sur %{total}","header_done":"%{done} sur %{total} élément(s) importé(s)","success_flagship":"%{smart_count} fichier importé avec succès. |||| %{smart_count} fichiers importés avec succès.","close":"Fermer","item":{"pending":"En attente"}},"Viewer":{"close":"Fermer","noviewer":{"download":"Télécharger ce fichier","openWith":"Ouvrir avec...","openInOnlyOffice":"Ouvrir avec Only Office","cta":{"saveTime":"Gagnez du temps !","installDesktop":"Installez l\'outil de synchronisation pour ordinateur","accessFiles":"Accédez à vos fichiers directement sur votre ordinateur"}},"actions":{"download":"Télécharger","forward":"Transférer"},"loading":{"error":"Ce fichier n\'a pas pu être chargé. Avez-vous une connexion internet qui fonctionne actuellement ?","retry":"Réessayer"},"error":{"noapp":"Votre téléphone n\'a identifié aucune application pour lire ce type de fichier.","generic":"Une erreur est survenue lors de l\'ouverture de ce fichier, merci de réessayer.","noNetwork":"Vous êtes actuellement hors ligne."},"panel":{"title":"Informations utiles"}},"Move":{"to":"Déplacer vers :","action":"Déplacer","cancel":"Annuler","modalTitle":"Déplacer","title":"%{smart_count} élément |||| %{smart_count} éléments","success":"%{subject} a été déplacé dans %{target}. |||| %{smart_count} éléments ont été déplacés dans %{target}.","error":"Une erreur est survenue pendant le déplacement de cet élément, merci de réessayer plus tard. |||| Une erreur est survenue pendant le déplacement de ces éléments, merci de réessayer plus tard.","cancelled":"%{subject} a été rapatrié dans son dossier d’origine. |||| %{smart_count} éléments ont été rapatriés dans leur dossiers d’origine.","cancelledWithRestoreErrors":"%{subject} a été rapatrié dans son dossier d\'origine mais il y a eu une erreur lors de la restauration du fichier depuis la corbeille. |||| %{smart_count} éléments ont été rapatriés dans leur dossiers d\'origine mais il y a eu %{restoreErrorsCount} erreur(s) lors de la restauration des fichiers depuis la corbeille.","cancelled_error":"Une erreur est survenue lors de l’annulation du déplacement. |||| Une erreur est survenue lors de l’annulation de ces déplacements.","multipleEntries":"%{smart_count} élément |||| %{smart_count} éléments","addFolder":"Ajouter un dossier","outsideSharedFolder":{"title":"Déplacement en dehors du dossier %{sharedFolder}","content_1":"Attention, vous souhaitez déplacer %{name} en dehors du dossier partagé %{sharedFolder}. |||| Attention, vous souhaitez déplacer %{smart_count} %{type}s en dehors du dossier partagé %{sharedFolder}.","content_2":"Ce déplacement, va retirer le %{type} %{name} du partage. Ce %{type} va donc être mis à la corbeille pour l\'ensemble des membres du partage. |||| Ce déplacement, va retirer les %{smart_count} %{type}s du partage. Ces %{type}s vont donc être mis à la corbeille pour l\'ensemble des membres du partage.","cancel":"Annuler","confirm":"J\'ai compris"},"insideSharedFolder":{"title":"Déplacer vers un dossier partagé ?","content":"Tous les membres ayant accès à %{destination} auront également accès à %{source}. |||| Tous les membres ayant accès à %{destination} auront également accès aux %{type} sélectionnés.","cancel":"Annuler","confirm":"Ok"},"sharedFolderInsideAnother":{"title":"Déplacement impossible","content_1":"Vous souhaitez déplacer un élément partagé dans un dossier lui-même partagé. Ce type déplacement n\'est pas autorisé.","content_2":"Si vous souhaitez tout de même déplacer %{source} dans %{destination}, veuillez arrêter le partage de :","cancel":"Annuler le déplacement","confirm":"Arrêter le partage"}},"ImportToDrive":{"title":"%{smart_count} fichier |||| %{smart_count} fichiers","to":"Enregistrer dans :","action":"Enregistrer","cancel":"Annuler","success":"%{smart_count} fichier enregistré |||| %{smart_count} fichiers enregistrés","error":"Une erreur s\'est produite. Merci de recommencer. "},"FileOpenerExternal":{"fileNotFoundError":"Erreur : fichier non trouvé"},"TOS":{"updated":{"title":"Du nouveau avec le RGPD !","detail":"Dans le cadre du Règlement Général de la Protection des Données (RGPD), [nos CGU sont actualisées](%{link}) et s’appliquent pour vous à partir du 25 mai 2018.","cta":"Accepter les CGU et continuer","disconnect":"Refuser et se déconnecter","error":"Une erreur est survenue, merci de réessayer plus tard"}},"manifest":{"permissions":{"contacts":{"description":"Utilisé pour partager des éléments à vos contacts"},"groups":{"description":"Utilisé pour partager des éléments à vos groupes"}}},"models":{"contact":{"defaultDisplayName":"Anonyme"}},"Scan":{"none":"Aucune","scan_a_doc":"Numériser un doc","save_doc":"Enregistrer le document","filename":"Nom du fichier","save":"Sauvegarder","cancel":"Annuler","qualify":"Qualifier","requalify":"Requalifier","apply":"Appliquer","error":{"offline":"Vous êtes actuellement déconnecté, vous ne pouvez donc pas utiliser cette fonctionnalité. Connectez-vous à internet et recommencez. ","uploading":"Vous avez déjà un fichier en cours de téléchargement. Attendez la fin et recommencez.","generic":"Un problème est survenu. Veuillez réessayer. "},"successful":{"qualified_ok":"Fichier qualifié avec succès !"}},"History":{"description":"Les 20 dernières versions de vos fichiers sont conservées automatiquement. Sélectionnez une version pour la télécharger.","current_version":"Version actuelle","loading":"Chargement...","noFileVersionEnabled":"Nouveauté : votre Twake pourra prochainement archiver les dernières modifications d\'un fichier pour ne plus jamais risquer de les perdre"},"External":{"redirection":{"title":"Redirection","text":"Vous êtes sur le point d\'être redirigé... ","error":"Erreur pendant la redirection. Généralement cela signifie que le contenu du fichier n\'est pas dans le bon format. "}},"RenameModal":{"title":"Renommer","description":"Vous êtes sur le point de changer l\'extension du fichier. Voulez-vous continuer ? ","continue":"Continuer","cancel":"Annuler"},"Shortcut":{"title_modal":"Créer un raccourci","filename":"Nom du fichier","url":"URL","cancel":"Annuler","create":"Créer","created":"Le raccourci a été créé","errored":"Une erreur s\'est produite","filename_error_ends":"Le nom du fichier doit se terminer par .url","needs_info":"Un raccourci a besoin d\'un nom et d\'une URL","url_badformat":"L\'URL saisie n\'est pas dans le bon format"},"OnlyOffice":{"Error":{"title":"Quelque chose n\'a pas fonctionné","text":"Essayez de recharger la page s\'il vous plaît"},"readOnly":{"title":"Lecture seule","tooltip":"Vous êtes uniquement autorisé à visualiser ce document. Contactez le propriétaire pour obtenir des droits d\'écriture."},"createFileName":{"text":"Nouveau document texte","spreadsheet":"Nouvelle feuille de calcul","slide":"Nouvelle présentation"},"toolbar":{"goToHome":"Aller à l\'accueil"},"actions":{"edit":"Modifier","validate":"Valider"},"tooltip":{"title":"Modifier le document","text":"Le document est actuellement en lecture seule, Vous pouvez le modifier en cliquant ici.","actions":{"ok":"Ok","hide":"Ne plus afficher"}}},"Migration":{"title":"Mettre à jour Twake Drive","content":"Twake Drive doit être mis à jour afin d\'améliorer ses performances. Cela peut prendre jusqu\'à plusieurs minutes durant lesquelles vous ne pourrez pas utiliser l\'application. Souhaitez-vous le faire maintenant ? Si vous refusez, nous vous redemanderons la prochaine fois.","confirm":"Ok, c\'est parti !","cancel":"Non, pas maintenant"},"searchbar":{"placeholder":"Rechercher","empty":"Aucun résultat trouvé pour la requête \\"%{query}\\""},"button":{"back":"Retour","add":"Ajouter","create":"Créer"},"search":{"action":"Rechercher","empty":{"title":"Aucun résultat","subtitle":"Aucun résultat trouvé pour la requête \\"%{query}\\""}},"PushBanner":{"quota":{"text":"Vous n\'avez presque plus d\'espace de stockage. Si vous atteignez la limite, vous ne pourrez plus ajouter de fichiers. Vous pouvez supprimer des fichiers, vider votre corbeille ou changer d\'offre.","actions":{"first":"J\'ai compris","second":"Voir les offres"}}},"FileDivergedModal":{"title":"Quelqu’un a modifié ce fichier","content":"Quelqu’un a modifié le contenu de ce fichier pendant que vous l\'éditiez. Vous pouvez récupérer ces changements ou continuer votre édition sur un nouveau fichier.","confirm":"Continuer d\'éditer","cancel":"Voir les changements","error":"Une erreur est survenue, merci de réessayer.","confirmReload":{"title":"Voir les changements","content":"En accédant au nouveau fichier, vos modifications seront annulées.","cancel":"Annuler","confirm":"Ok, j’ai compris"},"viewMode":{"title":"Quelqu’un a modifié ce fichier","content":"Quelqu’un a modifié le contenu de ce fichier. Vous pouvez récupérer ces changements.","confirm":"Voir les changements"}},"FileDeletedModal":{"title":"Quelqu’un a supprimé ce fichier","content":"Quelqu’un a supprimé ce fichier pendant que vous l\'éditiez. Vous pouvez arrêter vos modifications ou restaurer ce fichier pour continuer vos modifications.","confirm":"Restaurer le fichier","cancel":"Annuler l\'édition","error":"Une erreur est survenue, merci de réessayer."},"TrashedBanner":{"text":"Cet élément est dans la corbeille","destroy":"Supprimer définitivement","restore":"Restaurer","restoreSuccess":"L’élément a bien été restauré","restoreError":"Une erreur est survenue, merci de réessayer.","destroySuccess":"L’élément a bien été supprimé"},"EntriesType":{"file":"fichier |||| fichiers","directory":"dossier |||| dossiers","element":"élément |||| éléments"},"NotFound":{"title":"L’élément est introuvable","text":"Nous n’avons trouvé aucun élément à cette adresse. Il s’agit peut-être d’une erreur de frappe."},"NextcloudBreadcrumb":{"root":"Drive partagés","trash":"Corbeille"},"NextcloudToolbar":{"share":"Partager"},"NextcloudDeleteConfirm":{"title":"Supprimer %{filename} ? |||| Supprimer %{smart_count} %{type} ?","trash":"Cet élément sera déplacé dans la corbeille de Nextcloud. |||| Ces éléments seront déplacés dans la corbeille de Nextcloud.","restore":"Vous pouvez toujours le restaurer quand vous voulez depuis Nextcloud.","error":"Une erreur est survenue, merci de réessayer.","cancel":"Annuler","delete":"Supprimer"},"FileName":{"sharedDrive":"Drives","trash":"Corbeille"},"NextcloudBanner":{"title":"Les éléments ci-dessous sont affichés depuis un drive NextCloud et ne sont pas stockés dans votre Twake."},"favorites":{"label":{"add":"Ajouter aux favoris","addMobile":"Favoris","remove":"Retirer des favoris"},"error":"Une erreur est survenue, merci de réessayer.","success":{"add":"%{filename} a été ajouté aux favoris |||| Ces éléments ont été ajoutés aux favoris","remove":"%{filename} a été retiré des favoris |||| Ces éléments ont été retirés des favoris"}},"TrashToolbar":{"emptyTrash":"Vider la corbeille"},"RestoreNextcloudFile":{"label":"Restaurer","success":"L\'élément a bien été restauré","error":"Une erreur est survenue, merci de réessayer."},"actions":{"details":"Détails","infos":"Détails et qualification","infosMobile":"Détails","duplicateTo":{"label":"Dupliquer vers…"},"duplicateToMobile":{"label":"Dupliquer"},"personalizeFolder":{"label":"Personnaliser le dossier"},"summariseByAI":"Résumer"},"FolderCustomizer":{"title":"Personnaliser le dossier","description":"Choisissez une couleur spécifique pour votre dossier","cancel":"Annuler","apply":"Appliquer","error":"Une erreur est survenue, merci de réessayer.","tabs":{"colors":"Couleurs","icons":"Icônes"},"iconPicker":{"recents":"Récents","chooseCustomIcon":"Choisir une icône personnalisée"}},"DuplicateModal":{"subTitle":"Dupliquer vers :","confirmLabel":"Dupliquer ici","success":"%{fileName} a été dupliqué dans %{destinationName}. |||| %{smart_count} éléments ont été dupliqués dans %{destinationName}.","error":"Une erreur est survenue, merci de réessayer."},"OpenFolderButton":{"label":"Ouvrir le dossier"},"LastUpdate":{"titleFormat":"dd LLLL yyyy, HH:MM"},"AddMenu":{"readOnlyFolder":"Ce dossier est en lecture seule. Vous ne pouvez pas effectuer cette action."},"PublicNoteRedirect":{"error":{"title":"Impossible d\'accéder au document","subtitle":"Le lien de partage semble manquant ou invalide. Merci de demander au propriétaire du document de vérifier les accès"}},"antivirus":{"infectedFile":"Ce fichier est infecté par un virus","popover":{"title":"Le téléchargement et le partage sont bloqués pour des raisons de sécurité","description":"Le système Twake a détecté un virus"}},"Scribe":{"panel":{"tagline":"Votre assistant d\'ecriture"},"chat":{"typing":"Scribe reflechit...","error_prefix":"Erreur","welcome":"Posez-moi une question sur votre document","selection_context":"Texte selectionne"},"menu":{"correct_grammar":"Corriger la grammaire","translate":"Traduire","change_tone":"Changer le ton","improve":"Améliorer"},"tone":{"professional":"Plus professionnel","casual":"Plus décontracté","polite":"Plus poli"},"improve":{"shorter":"Raccourcir","expand":"Développer","emojify":"Emojifier","bullets":"Transformer en liste"},"translate":{"other_language":"Autre langue...","translating_to":"Traduction en %{language}..."},"prompt":{"placeholder":"Aidez-moi à écrire"},"button":{"text_ai":"IA Texte","insert":"Insérer","replace":"Remplacer","retry":"Réessayer","cancel":"Annuler","insert_after":"Insérer après","open_panel":"Panneau Scribe","copy":"Copier"},"modal":{"selected_text":"Texte sélectionné :"},"loading":{"processing":"Traitement en cours...","correct_grammar":"Correction de la grammaire...","tone_professional":"Ton plus professionnel...","tone_casual":"Ton plus décontracté...","tone_polite":"Ton plus poli...","improve_shorter":"Raccourcissement...","improve_expand":"Développement...","improve_emojify":"Ajout d\'emojis...","improve_bullets":"Transformation en liste..."},"error":{"auth":"Erreur d\'autorisation. Vérifiez vos permissions Cozy.","rate_limit":"Trop de requêtes. Veuillez patienter et réessayer.","server":"Le service IA est temporairement indisponible. Veuillez réessayer.","generic":"Une erreur est survenue. Veuillez réessayer plus tard.","network":"Erreur réseau. Vérifiez votre connexion et réessayez.","empty_response":"Aucun résultat reçu. Veuillez réessayer.","unexpected":"Une erreur inattendue est survenue. Veuillez réessayer."}}}')
 
 }),
 "./src/locales/it.json": (function (module) {
@@ -13905,7 +16002,7 @@ __webpack_require__.hu = (chunkId) => ('' + chunkId + '.' + __webpack_require__.
 })();
 // webpack/runtime/get_full_hash
 (() => {
-__webpack_require__.h = () => ("4dcc399b69bbf2b0")
+__webpack_require__.h = () => ("c5cce52d970ba568")
 })();
 // webpack/runtime/get_main_filename/update manifest
 (() => {
