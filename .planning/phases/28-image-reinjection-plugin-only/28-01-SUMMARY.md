@@ -123,6 +123,12 @@ Tasks 1 & 2 carry `tdd="true"`, but this plan is **structure-verified, not test-
 - Structural refactor complete and parsing as ES5; ready for Plan 28-02 live UAT (re-point oo-dev to this worktree, run Replace with cell + paragraph images, forcesave round-trip, re-run image goldens T9/C1 + Insert regression).
 - No STATE.md/ROADMAP.md writes performed (worktree mode — orchestrator owns those).
 
+## Self-Check: PASSED
+- FOUND: plugins/onlyoffice-scribe/scripts/code.js
+- FOUND: .planning/phases/28-image-reinjection-plugin-only/28-01-SUMMARY.md
+- FOUND commits: 180bc2fb7, 1f29cad6e, db6825ccb, 9e90bc409
+- `node --check` on code.js: ES5-PARSE-OK
+
 ---
 *Phase: 28-image-reinjection-plugin-only*
 *Completed: 2026-07-06*
