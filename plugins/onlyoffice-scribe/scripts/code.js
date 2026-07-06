@@ -115,13 +115,13 @@
   // ---- Paste HTML with smart spacing ----
   // Prevents init() and polling from interfering during paste.
   var pasteInProgress = false;
-  // Tracks whether a GroupActions undo-group is currently open (see
-  // startUndoGroup/endUndoGroup). A full-table/image injection makes several
-  // history points (InsertContent callCommand + one PasteHtml per image); wrapping
-  // them in a GroupActions group collapses them into a SINGLE undo point so one
-  // Ctrl+Z reverts the whole reply. Guard keeps Start/End balanced (an unbalanced
-  // StartAction would swallow every later edit into the group).
-  var undoGroupOpen = false;
+  // Dormant floating-image fallback flag. When false (default), inline AND floating
+  // (drawingType === "anchor") images are re-injected via the Api.FromJSON + AddDrawing
+  // fast path (source-verified to preserve wrap/anchor — see 28-RESEARCH Risk 1). The
+  // detection hook inside the injection callCommand routes anchor images to the old
+  // PasteHtml mechanism ONLY if this is flipped true after a live floating-save check
+  // (Plan 02 Q1). Ships false; the fallback path is intentionally not built beyond the hook.
+  var FLOATING_FALLBACK = false;
 
   // Debounce for the selection-extraction triggered by OO on every selection
   // change (config initOnSelectionChanged:true). Running it on each change
@@ -379,25 +379,6 @@
     return blocks;
   }
 
-  // ---- Undo-group helpers ----
-  // OO's plugin API exposes StartAction/EndAction with type "GroupActions" — the
-  // same primitive OO uses internally to make a multi-step operation a single undo
-  // point (probe-confirmed: a group spans separate callCommand + async PasteHtml
-  // calls and collapses to ONE point that one Undo reverts / one Redo restores).
-  // We open a group around the whole Builder injection so a full-table/image reply
-  // (InsertContent + N image PasteHtml = N+1 points) becomes a single Ctrl+Z.
-  // Fire-and-forget is safe: the plugin→editor command channel is FIFO, so the
-  // StartAction lands before the first callCommand point (probe-confirmed).
-  function startUndoGroup() {
-    if (undoGroupOpen) return;
-    undoGroupOpen = true;
-    try { window.Asc.plugin.executeMethod("StartAction", ["GroupActions", "Scribe injection"], function() {}); } catch (e) {}
-  }
-  function endUndoGroup() {
-    if (!undoGroupOpen) return;
-    undoGroupOpen = false;
-    try { window.Asc.plugin.executeMethod("EndAction", ["GroupActions", "Scribe injection"], function() {}); } catch (e) {}
-  }
 
   // ---- Normalize list indentation before marked.lexer ----
   // LLMs (and our own extraction) indent nested list items by 2 spaces per level.
@@ -436,6 +417,42 @@
       }
     }
     return out.join("\n");
+  }
+
+  // ---- Collect scribe-img-* names referenced by a parsed response ----
+  // Plugin-side scan of the flattened blocks + parsed table cells for the image
+  // names the LLM response refers to. Used to drive the read-only ToJSON capture
+  // pre-pass and the async getLocalImagePath media registration (see buildAndInject).
+  // Order-preserving, de-duplicated.
+  function collectReferencedImageNames(flat, parsedTables) {
+    var names = [];
+    var seen = {};
+    function addName(n) {
+      if (n && !seen[n]) { seen[n] = true; names.push(n); }
+    }
+    function scanBlocks(blocks) {
+      if (!blocks) return;
+      for (var i = 0; i < blocks.length; i++) {
+        var b = blocks[i];
+        if (!b) continue;
+        if (b.type === "image_placeholder" && b.name) addName(b.name);
+        var runs = b.runs || [];
+        for (var r = 0; r < runs.length; r++) {
+          if (runs[r] && runs[r].imageMarker) addName(runs[r].imageMarker);
+        }
+      }
+    }
+    scanBlocks(flat);
+    if (parsedTables) {
+      for (var t = 0; t < parsedTables.length; t++) {
+        var cells = parsedTables[t].cells || [];
+        for (var c = 0; c < cells.length; c++) {
+          var cellBlocks = cells[c].blocks || [{ runs: cells[c].runs || [] }];
+          scanBlocks(cellBlocks);
+        }
+      }
+    }
+    return names;
   }
 
   // ---- Builder API injection with PasteHtml fallback ----
@@ -524,12 +541,13 @@
     }
 
     pasteInProgress = true;
-    // Open an undo-group so the InsertContent callCommand + every image PasteHtml
-    // collapse into ONE undo point. Closed on every exit path below (timeout
-    // fallback, no-image callback, and post-image-injection callback).
-    startUndoGroup();
+    // Everything (text + images) is injected inside the single injection callCommand
+    // below (images via FromJSON + AddDrawing from the pre-registered media map), which
+    // is already ONE atomic history point — one Ctrl+Z reverts the whole reply. No
+    // undo-group is needed (OO 9.4's GroupActions is a no-op stub; see 28-RESEARCH Pitfall 4).
     Asc.scope.tokens = JSON.stringify(flat);
     Asc.scope._mode = mode || "replace";
+    Asc.scope.floatingFallback = FLOATING_FALLBACK;
     if (parsedTables.length > 0) {
       Asc.scope.parsedTables = JSON.stringify(parsedTables);
       Asc.scope.tableDocIndices = JSON.stringify(lastTableDocIndices);
@@ -557,11 +575,18 @@
     }
     Asc.scope.hasMixedContent = hasMixedContent;
 
+    // Collect the scribe-img-* names referenced by the parsed response so the
+    // read-only capture pre-pass (below) knows which drawings to serialize.
+    var referencedImageNames = collectReferencedImageNames(flat, parsedTables);
+
+    // The injection callCommand is wrapped in runInjection() so it can be deferred
+    // until AFTER the async getLocalImagePath media pre-pass completes (barrier
+    // below). All text + images land in this single callCommand = one undo point.
+    function runInjection() {
     var callbackFired = false;
     var fallbackTimer = setTimeout(function() {
       if (!callbackFired) {
         log("Builder callCommand timeout -- falling back to PasteHtml");
-        endUndoGroup();
         pasteInProgress = false;
         if (fallbackHtml) { pasteHtml(fallbackHtml, mode); }
       }
@@ -936,117 +961,59 @@
         }
       }
 
-      // Pre-cache all referenced images via Copy() BEFORE InsertContent destroys
-      // the selection. Copy() preserves the full image bitmap data, unlike
-      // ToJSON which only serializes structure (dimensions) but loses the fill.
-      //
-      // Build a name->drawing index by scanning all paragraphs in the document,
-      // since ApiDocument has no GetDrawingsByName method.
-      // Build a name->drawing index by scanning the whole document (there is no
-      // GetDrawingsByName API). Each fragment marker scribe-img-N is resolved to the
-      // drawing CURRENTLY bearing that name (see imgNameOf for the round-trip + the
-      // uniqueness/stability guarantees that keep this lookup unambiguous).
-      var drawingIndex = {};  // name -> ApiDrawing
-      var allParas = doc.GetAllParagraphs();
-      for (var dp = 0; dp < allParas.length; dp++) {
-        var dpDrawings = allParas[dp].GetAllDrawingObjects();
-        if (!dpDrawings) continue;
-        for (var dd = 0; dd < dpDrawings.length; dd++) {
-          var dpName = dpDrawings[dd].GetName();
-          if (dpName && dpName.indexOf("scribe-img-") === 0) {
-            drawingIndex[dpName] = dpDrawings[dd];
-          }
-        }
-      }
-      // Also scan paragraphs inside table cells (GetAllParagraphs doesn't include them)
-      var allDocTables = doc.GetAllTables();
-      for (var dit = 0; dit < allDocTables.length; dit++) {
-        var ditRows = allDocTables[dit].GetRowsCount();
-        for (var ditr = 0; ditr < ditRows; ditr++) {
-          var ditRow = allDocTables[dit].GetRow(ditr);
-          for (var ditc = 0; ditc < ditRow.GetCellsCount(); ditc++) {
-            var ditCell = allDocTables[dit].GetCell(ditr, ditc);
-            if (!ditCell) continue;
-            var ditContent = ditCell.GetContent();
-            if (!ditContent) continue;
-            for (var dite = 0; dite < ditContent.GetElementsCount(); dite++) {
-              var ditElem = ditContent.GetElement(dite);
-              var ditDrawings = ditElem.GetAllDrawingObjects ? ditElem.GetAllDrawingObjects() : null;
-              if (!ditDrawings) continue;
-              for (var ditd = 0; ditd < ditDrawings.length; ditd++) {
-                var ditName = ditDrawings[ditd].GetName();
-                if (ditName && ditName.indexOf("scribe-img-") === 0) {
-                  drawingIndex[ditName] = ditDrawings[ditd];
-                }
-              }
-            }
-          }
-        }
-      }
+      // --- Image re-injection via Api.FromJSON + AddDrawing (plugin-only) ---
+      // The media pre-pass (buildAndInject) already: (1) captured each referenced
+      // image's FULL drawing ToJSON before this callCommand, and (2) registered its
+      // media via getLocalImagePath, yielding a local media path. That name ->
+      // { json, localPath } map arrives here through Asc.scope.imageMediaMap.
+      // For each insertion we rewrite the blip rasterImageId (a base64 data-URL in
+      // the captured JSON) to the registered localPath, then Api.FromJSON rebuilds a
+      // COMPLETE drawing (crop/rotation/flip/wrap/anchor/effects/alt-text preserved)
+      // and AddDrawing inserts it — all inside this single injection callCommand.
+      var imageMediaMap = {};
+      try { imageMediaMap = JSON.parse(Asc.scope.imageMediaMap || "{}") || {}; } catch (e) { imageMediaMap = {}; }
+      var floatingFallback = !!Asc.scope.floatingFallback;
 
-      // Now Copy() only the drawings referenced by the LLM response tokens.
-      // Copy() is a deep copy that preserves image bitmap data, unlike ToJSON
-      // which only serializes structure (dimensions, position) but not the fill.
-      var imageCache = {};  // name -> ApiDrawing (copy)
-      for (var ic = 0; ic < blocks.length; ic++) {
-        var icBlock = blocks[ic];
-        if (icBlock.type === "image_placeholder" && icBlock.name) {
-          if (!imageCache[icBlock.name] && drawingIndex[icBlock.name]) {
-            try { imageCache[icBlock.name] = drawingIndex[icBlock.name].Copy(); } catch (e) {}
-          }
+      // Insert image `name` into `target` (a paragraph or run) via FromJSON+AddDrawing.
+      // Returns true if a drawing was inserted, false otherwise (unknown/failed image).
+      // Never injects an empty rasterImageId: a failed getLocalImagePath (recorded
+      // without a localPath in the pre-pass) is skipped with a log (Pitfall 1).
+      function injectDrawingInto(target, name) {
+        var entry = imageMediaMap[name];
+        if (!entry || !entry.localPath || entry.failed) {
+          log("Scribe: skipping image " + name + " (no registered media path)");
+          return false;
         }
-        // Also scan runs for inline imageMarkers
-        if (icBlock.runs) {
-          for (var ir = 0; ir < icBlock.runs.length; ir++) {
-            var irMarker = icBlock.runs[ir].imageMarker;
-            if (irMarker && !imageCache[irMarker] && drawingIndex[irMarker]) {
-              try { imageCache[irMarker] = drawingIndex[irMarker].Copy(); } catch (e) {}
-            }
-          }
-        }
-      }
-      function restoreImage(name) {
-        var cached = imageCache[name];
-        if (!cached) return null;
-        // Copy() is consumed by AddDrawing — make a fresh copy for next use
-        try { imageCache[name] = cached.Copy(); } catch (e) { imageCache[name] = null; }
-        return cached;
-      }
-
-      // --- Image media-orphan fix (top-level ¶ images) ---
-      // AddDrawing(Copy()) renders live but the re-inserted image carries a raw
-      // data-URL RasterImageId that is NEVER uploaded to the doc-server, so at save
-      // it has no blip/media and is dropped (probed 2026-06-27). The paste pipeline
-      // DOES upload media, so we instead insert top-level images via PasteHtml AFTER
-      // InsertContent: here we only drop a text MARKER run where the image goes and
-      // record its data-URL + size; the plugin-side callback (injectPendingImages)
-      // selects each marker and PasteHtml's the <img>. (Table-cell images still use
-      // AddDrawing for now — same latent save bug, handled in a later pass.)
-      var pendingImages = [];  // [{marker, src(dataURL), w, h}] returned to the callback
-      function imageSpecFor(name) {
-        var d = drawingIndex[name];
-        if (!d) return null;
         try {
-          var j = JSON.parse(d.ToJSON());
-          var bf = j && j.graphic ? j.graphic.blipFill : null;
-          var src = bf ? bf.rasterImageId : null;
-          if (!src) return null;
-          return { src: src, w: d.GetWidth(), h: d.GetHeight() };  // w/h in EMU
-        } catch (e) { return null; }
-      }
-      // Append a marker run for image `name` to `para`; record the pending image.
-      // Returns true if a marker was added (image known), false otherwise.
-      function addImageMarker(para, name, fontFamily, fontSize) {
-        var spec = imageSpecFor(name);
-        if (!spec) return false;
-        var marker = "\u0000IMG:" + pendingImages.length + "\u0000";
-        var run = Api.CreateRun();
-        run.AddText(marker);
-        if (fontFamily) run.SetFontFamily(fontFamily);
-        if (fontSize) run.SetFontSize(fontSize);
-        para.AddElement(run);
-        pendingImages.push({ marker: marker, src: spec.src, w: spec.w, h: spec.h });
-        return true;
+          var j = JSON.parse(entry.json);
+          if (!j || !j.graphic || !j.graphic.blipFill) {
+            log("Scribe: image " + name + " has no blipFill in captured JSON");
+            return false;
+          }
+          // Rewrite the blip from the captured data-URL to the registered media path
+          // so the reconstructed drawing references real media (non-orphan at save).
+          j.graphic.blipFill.rasterImageId = entry.localPath;
+          // Floating-image detection hook: drawingType === "anchor" => floating image.
+          // Both inline and floating go through the FromJSON fast path by default; the
+          // dormant fallback (floatingFallback flag) is intentionally not built beyond
+          // this hook (see 28-RESEARCH Risk 1 / Plan 02 Q1).
+          var isAnchor = (j.drawingType === "anchor");
+          if (floatingFallback && isAnchor) {
+            log("Scribe: floating image " + name + " — PasteHtml fallback flag set but path not built; using FromJSON");
+          }
+          // Fresh Api.FromJSON per insertion — AddDrawing binds it into the document,
+          // so one ApiDrawing must not be reused across two AddDrawing calls (Pitfall 2).
+          var apiDrawing = Api.FromJSON(JSON.stringify(j));
+          if (apiDrawing && target && target.AddDrawing) {
+            target.AddDrawing(apiDrawing);
+            return true;
+          }
+          log("Scribe: FromJSON produced no drawing for " + name);
+          return false;
+        } catch (e) {
+          log("Scribe: FromJSON injection failed for " + name + ": " + e);
+          return false;
+        }
       }
 
       // --- Footnote round-trip: save content text, recreate after InsertContent ---
@@ -1150,43 +1117,17 @@
       var partialTableInfo = partialTableInfoJson ? JSON.parse(partialTableInfoJson) : null;
       var hasMixedContent = Asc.scope.hasMixedContent;
 
-      // Pre-cache images from table cell blocks/runs (in addition to the block scan above)
-      for (var itc = 0; itc < parsedTables.length; itc++) {
-        var itCells = parsedTables[itc].cells || [];
-        for (var itci = 0; itci < itCells.length; itci++) {
-          var itBlocks = itCells[itci].blocks || [{ runs: itCells[itci].runs || [] }];
-          for (var itbi = 0; itbi < itBlocks.length; itbi++) {
-            var itBlock = itBlocks[itbi];
-            // Block-level image (image_placeholder)
-            if (itBlock.type === "image_placeholder" && itBlock.name) {
-              if (!imageCache[itBlock.name] && drawingIndex[itBlock.name]) {
-                try { imageCache[itBlock.name] = drawingIndex[itBlock.name].Copy(); } catch (e) {}
-              }
-            }
-            // Inline images in runs
-            var itRuns = itBlock.runs || [];
-            for (var itri = 0; itri < itRuns.length; itri++) {
-              var itMarker = itRuns[itri].imageMarker;
-              if (itMarker && !imageCache[itMarker] && drawingIndex[itMarker]) {
-                try { imageCache[itMarker] = drawingIndex[itMarker].Copy(); } catch (e) {}
-              }
-            }
-          }
-        }
-      }
-
       // Replace the content of a single cell: clear all paragraphs, rebuild from blocks.
       // Used by all injection paths (in-place, reduced clone, full clone).
       // Add block content to a paragraph: handles runs and image_placeholder blocks.
       function addBlockToParagraph(para, block, fontFamily, fontSize) {
         if (block.type === "image_placeholder" && block.name) {
-          // Cell block image: marker + post-InsertContent PasteHtml (media upload),
-          // like top-level images — so a re-inserted cell image survives save.
-          // AddDrawing(Copy) renders live but leaves an orphaned data-URL dropped at
-          // save (the table clone-path / T9 bug).
-          addImageMarker(para, block.name, fontFamily, fontSize);
+          // Cell block image: reconstruct via FromJSON + AddDrawing (shared path with
+          // paragraph images) using the pre-registered media path — the re-inserted
+          // image keeps real media at save (fixes the table clone-path / T9 orphan bug).
+          injectDrawingInto(para, block.name);
         } else {
-          addRunsToParagraph(para, block.runs || [], fontFamily, fontSize, pendingImages);
+          addRunsToParagraph(para, block.runs || [], fontFamily, fontSize);
         }
       }
 
@@ -1445,22 +1386,15 @@
 
       // Shared function: add runs to a paragraph (used for both document paragraphs
       // and table cells). Handles text, bold/italic/strikethrough/code, hyperlinks,
-      // and image markers (via restoreImage from image cache).
-      function addRunsToParagraph(para, runs, fontFamily, fontSize, imageSink) {
+      // and inline images (via injectDrawingInto — FromJSON + AddDrawing from the
+      // pre-registered media map, same path for paragraph and table-cell images).
+      function addRunsToParagraph(para, runs, fontFamily, fontSize) {
         for (var ri = 0; ri < runs.length; ri++) {
           var run = runs[ri];
           if (run.imageMarker) {
-            // Top-level (imageSink given): drop a marker, PasteHtml the image later
-            // so its media is uploaded (AddDrawing would orphan it at save).
-            // Table cells (no imageSink): keep AddDrawing for now.
-            if (imageSink) {
-              addImageMarker(para, run.imageMarker, fontFamily, fontSize);
-            } else {
-              var imDrawing = restoreImage(run.imageMarker);
-              if (imDrawing) {
-                para.AddDrawing(imDrawing);
-              }
-            }
+            // Inline image: reconstruct via FromJSON + AddDrawing with the blip rewritten
+            // to the registered media path — one path for cell and paragraph images.
+            injectDrawingInto(para, run.imageMarker);
           } else if (run.footnoteMarker) {
             // Footnote placeholder: defer actual footnote creation to post-InsertContent.
             // AddFootnote requires the cursor to be in the document.
@@ -1694,7 +1628,7 @@
           var headingStyle = doc.GetStyle(styleName);
           if (headingStyle) p.SetStyle(headingStyle);
           if (isFirst && needSpaceBefore) p.AddElement(makeSpaceRun());
-          addRunsToParagraph(p, block.runs || [], null, null, pendingImages);
+          addRunsToParagraph(p, block.runs || [], null, null);
           if (isLast && needSpaceAfter) p.AddElement(makeSpaceRun());
           content.push(p);
         } else if (block.type === "list_item") {
@@ -1703,7 +1637,7 @@
           var numLvl = numbering.GetLevel(block.level);
           p.SetNumbering(numLvl);
           if (isFirst && needSpaceBefore) p.AddElement(makeSpaceRun());
-          addRunsToParagraph(p, block.runs || [], srcFontFamily, srcFontSize, pendingImages);
+          addRunsToParagraph(p, block.runs || [], srcFontFamily, srcFontSize);
           if (isLast && needSpaceAfter) p.AddElement(makeSpaceRun());
           content.push(p);
         } else if (block.type === "code_block") {
@@ -1718,7 +1652,7 @@
           for (var j = 0; j < runs.length; j++) {
             var run = runs[j];
             if (run.imageMarker) {
-              addImageMarker(p, run.imageMarker, null, srcFontSize);
+              injectDrawingInto(p, run.imageMarker);
             } else {
               var r = Api.CreateRun();
               r.AddText(run.text);
@@ -1754,7 +1688,7 @@
             if (!cellContent) return;
             var cellPara = cellContent.GetElement(0);
             if (!cellPara) return;
-            addRunsToParagraph(cellPara, runs, srcFontFamily, srcFontSize, pendingImages);
+            addRunsToParagraph(cellPara, runs, srcFontFamily, srcFontSize);
           }
 
           // Fill header row (row 0) — bold by default
@@ -1787,18 +1721,18 @@
         } else if (block.type === "paragraph") {
           var p = Api.CreateParagraph();
           if (isFirst && needSpaceBefore) p.AddElement(makeSpaceRun());
-          addRunsToParagraph(p, block.runs || [], srcFontFamily, srcFontSize, pendingImages);
+          addRunsToParagraph(p, block.runs || [], srcFontFamily, srcFontSize);
           if (isLast && needSpaceAfter) p.AddElement(makeSpaceRun());
           content.push(p);
         } else if (block.type === "image_placeholder") {
-          // Pure-image paragraph (top-level): marker now, PasteHtml the image later
-          // so its media is uploaded (AddDrawing would orphan it at save).
+          // Pure-image paragraph (top-level): reconstruct via FromJSON + AddDrawing
+          // with the blip rewritten to the pre-registered media path (non-orphan at save).
           var imgPara = Api.CreateParagraph();
           if (isFirst && needSpaceBefore) imgPara.AddElement(makeSpaceRun());
-          var added = addImageMarker(imgPara, block.name, srcFontFamily, srcFontSize);
+          var added = injectDrawingInto(imgPara, block.name);
           if (isLast && needSpaceAfter) imgPara.AddElement(makeSpaceRun());
           if (added) content.push(imgPara);
-          // If not in cache (image was deleted from doc), silently skip
+          // If the image is unknown/failed (deleted from doc or media register failed), skip.
         }
 
         // Apply blockquote styling if flagged
@@ -2353,94 +2287,149 @@
         }
       }
 
-      // Hand back the deferred top-level images so the callback can PasteHtml them
-      // (their bitmap+size travels as a data URL; PasteHtml uploads the media).
-      return JSON.stringify({ pendingImages: pendingImages });
+      // All text + images were injected inside this single callCommand (images via
+      // FromJSON + AddDrawing from the pre-registered media map) — nothing is deferred.
+      return;
     }, false, false, function(ret) {
       callbackFired = true;
       clearTimeout(fallbackTimer);
       log("Builder injection complete (" + mode + ")");
-      var pend = [];
-      try { pend = (JSON.parse(ret || "{}").pendingImages) || []; } catch (e) {}
-      if (pend.length === 0) {
-        endUndoGroup();
-        pasteInProgress = false;
-        return;
-      }
-      // Replace each marker with a properly-uploaded image, then close the group
-      // (all the PasteHtml points fold into the single undo point) and clear the flag.
-      injectPendingImages(pend, function() { endUndoGroup(); pasteInProgress = false; });
+      pasteInProgress = false;
     });
-  }
+    }  // end runInjection
 
-  // Post-InsertContent: for each deferred top-level image, find its marker run,
-  // select it, and PasteHtml the <img> in its place. PasteHtml routes through OO's
-  // paste pipeline which UPLOADS the image media to the doc-server — so the saved
-  // .docx keeps a real blip+media part (AddDrawing leaves an orphaned data URL that
-  // is dropped at save). Runs sequentially (each PasteHtml is async).
-  function injectPendingImages(list, done) {
-    var i = 0;
-    function emu2px(emu) {
-      var n = Math.round((emu || 0) / 9525);  // 1 px = 9525 EMU
-      return n > 0 ? n : 48;
-    }
-    function step() {
-      if (i >= list.length) { if (done) done(); return; }
-      var img = list[i++];
-      // 1) select the marker run (its range) so PasteHtml replaces it
-      Asc.scope._imgMarker = img.marker;
+    // ---- Image media pre-pass (capture full ToJSON + register media) ----
+    // Before the injection callCommand runs, capture each referenced image's FULL
+    // drawing ToJSON (read-only, no history point / no repaint) and register its
+    // media via the stock getLocalImagePath plugin method (async, doc-server
+    // upload, no doc mutation). Only once ALL registrations return (ES5 counter
+    // barrier) do we start the injection callCommand, passing the
+    // name -> { json, localPath } map through Asc.scope.imageMediaMap.
+    if (!referencedImageNames || referencedImageNames.length === 0) {
+      Asc.scope.imageMediaMap = "{}";
+      runInjection();
+    } else {
+      Asc.scope._captureNames = JSON.stringify(referencedImageNames);
+      // Read-only capture callCommand: serialize the referenced drawings BEFORE
+      // InsertContent destroys them. Returns [{name, json, dataUrl}].
       window.Asc.plugin.callCommand(function() {
         var doc = Api.GetDocument();
-        var marker = Asc.scope._imgMarker;
-        // Select the marker run inside a paragraph (returns true if found).
-        function selectMarkerIn(para) {
-          var ec = para && para.GetElementsCount ? para.GetElementsCount() : 0;
-          for (var e = 0; e < ec; e++) {
-            var el = para.GetElement(e);
-            var t = el && el.GetText ? el.GetText() : "";
-            if (t === marker) {
-              var rg = el.GetRange ? el.GetRange() : null;
-              if (rg) rg.Select();
-              return true;
+        var names = [];
+        try { names = JSON.parse(Asc.scope._captureNames || "[]"); } catch (e) { names = []; }
+
+        // Build a name -> ApiDrawing index by scanning the whole document
+        // (top-level paragraphs + table cells) — same scan the injection uses.
+        var drawingIndex = {};
+        var allParas = doc.GetAllParagraphs();
+        for (var dp = 0; dp < allParas.length; dp++) {
+          var dpDrawings = allParas[dp].GetAllDrawingObjects();
+          if (!dpDrawings) continue;
+          for (var dd = 0; dd < dpDrawings.length; dd++) {
+            var dpName = dpDrawings[dd].GetName();
+            if (dpName && dpName.indexOf("scribe-img-") === 0) {
+              drawingIndex[dpName] = dpDrawings[dd];
             }
           }
-          return false;
         }
-        // Top-level paragraphs first.
-        var paras = doc.GetAllParagraphs();
-        for (var p = 0; p < paras.length; p++) {
-          if (selectMarkerIn(paras[p])) return;
-        }
-        // Then table cells (GetAllParagraphs does NOT include them) — needed for
-        // images re-inserted into a reconstructed/cloned table (T9 clone path).
-        var tables = doc.GetAllTables();
-        for (var ti = 0; ti < tables.length; ti++) {
-          var rows = tables[ti].GetRowsCount();
-          for (var r = 0; r < rows; r++) {
-            var row = tables[ti].GetRow(r);
-            var cc = row ? row.GetCellsCount() : 0;
-            for (var c = 0; c < cc; c++) {
-              var cell = tables[ti].GetCell(r, c);
-              var content = cell ? cell.GetContent() : null;
-              var n = content ? content.GetElementsCount() : 0;
-              for (var k = 0; k < n; k++) {
-                var elx = content.GetElement(k);
-                if (elx && elx.GetClassType && elx.GetClassType() === "paragraph") {
-                  if (selectMarkerIn(elx)) return;
+        var allDocTables = doc.GetAllTables();
+        for (var dit = 0; dit < allDocTables.length; dit++) {
+          var ditRows = allDocTables[dit].GetRowsCount();
+          for (var ditr = 0; ditr < ditRows; ditr++) {
+            var ditRow = allDocTables[dit].GetRow(ditr);
+            for (var ditc = 0; ditc < ditRow.GetCellsCount(); ditc++) {
+              var ditCell = allDocTables[dit].GetCell(ditr, ditc);
+              if (!ditCell) continue;
+              var ditContent = ditCell.GetContent();
+              if (!ditContent) continue;
+              for (var dite = 0; dite < ditContent.GetElementsCount(); dite++) {
+                var ditElem = ditContent.GetElement(dite);
+                var ditDrawings = ditElem.GetAllDrawingObjects ? ditElem.GetAllDrawingObjects() : null;
+                if (!ditDrawings) continue;
+                for (var ditd = 0; ditd < ditDrawings.length; ditd++) {
+                  var ditName = ditDrawings[ditd].GetName();
+                  if (ditName && ditName.indexOf("scribe-img-") === 0) {
+                    drawingIndex[ditName] = ditDrawings[ditd];
+                  }
                 }
               }
             }
           }
         }
-      }, false, false, function() {
-        // 2) PasteHtml the image over the now-selected marker
-        var html = '<img src="' + img.src + '" width="' + emu2px(img.w) + '" height="' + emu2px(img.h) + '"/>';
-        window.Asc.plugin.executeMethod("PasteHtml", [html], function() {
-          setTimeout(step, 60);
-        });
+
+        // Capture the FULL ToJSON + the blip data-URL for each referenced image.
+        // (The data-URL is the value handed to getLocalImagePath on the plugin side.)
+        function imageSpecFor(name) {
+          var d = drawingIndex[name];
+          if (!d) return null;
+          try {
+            var jsonStr = d.ToJSON();
+            var j = JSON.parse(jsonStr);
+            var bf = j && j.graphic ? j.graphic.blipFill : null;
+            var dataUrl = bf ? bf.rasterImageId : null;
+            if (!dataUrl) return null;
+            return { name: name, json: jsonStr, dataUrl: dataUrl };
+          } catch (e) { return null; }
+        }
+
+        var captured = [];
+        for (var ni = 0; ni < names.length; ni++) {
+          var spec = imageSpecFor(names[ni]);
+          if (spec) captured.push(spec);
+        }
+        return JSON.stringify(captured);
+      }, false, false, function(capJson) {
+        var captured = [];
+        try { captured = JSON.parse(capJson || "[]"); } catch (e) { captured = []; }
+        if (!captured || captured.length === 0) {
+          Asc.scope.imageMediaMap = "{}";
+          runInjection();
+          return;
+        }
+        // Async media registration: one getLocalImagePath per image, joined by an
+        // ES5 counter barrier. On error, record the image WITHOUT a localPath so the
+        // injection skips it (never writes an empty rasterImageId). A safety timeout
+        // guarantees we never hang if a callback is dropped.
+        var mediaMap = {};
+        var remaining = captured.length;
+        var proceeded = false;
+        function proceed() {
+          if (proceeded) return;
+          proceeded = true;
+          Asc.scope.imageMediaMap = JSON.stringify(mediaMap);
+          runInjection();
+        }
+        var barrierTimer = setTimeout(function() {
+          log("getLocalImagePath barrier timeout -- proceeding with partial media map");
+          proceed();
+        }, 8000);
+        function oneDone() {
+          remaining--;
+          if (remaining <= 0) {
+            clearTimeout(barrierTimer);
+            proceed();
+          }
+        }
+        for (var ci = 0; ci < captured.length; ci++) {
+          (function(cap) {
+            try {
+              window.Asc.plugin.executeMethod("getLocalImagePath", [cap.dataUrl], function(ret) {
+                if (ret && ret.error === false && ret.path) {
+                  mediaMap[cap.name] = { json: cap.json, localPath: ret.path };
+                } else {
+                  mediaMap[cap.name] = { json: cap.json, failed: true };
+                  log("getLocalImagePath failed for " + cap.name);
+                }
+                oneDone();
+              });
+            } catch (e) {
+              mediaMap[cap.name] = { json: cap.json, failed: true };
+              log("getLocalImagePath threw for " + cap.name);
+              oneDone();
+            }
+          })(captured[ci]);
+        }
       });
     }
-    step();
   }
 
   // Rich text paste pipeline:
