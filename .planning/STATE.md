@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v3.3
 milestone_name: Fidélité d'injection image
-status: planning
-last_updated: "2026-07-06T15:33:19.152Z"
-last_activity: 2026-07-06
+status: executing
+last_updated: "2026-07-06T20:41:18.991Z"
+last_activity: 2026-07-06 -- Phase 28 execution started
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
-  total_plans: 0
+  total_plans: 2
   completed_plans: 0
   percent: 0
 ---
@@ -34,14 +34,18 @@ Note: the four verification items are pre-existing human-verify gaps inherited f
 See: .planning/PROJECT.md (updated 2026-06-24)
 
 **Core value:** L'utilisateur peut interagir avec l'IA de maniere fluide -- actions rapides inline ou chat conversationnel dans un panneau lateral -- pour transformer et manipuler le contenu de son document OnlyOffice.
-**Current focus:** Phase v3.2-03-cablage-document-complet-strategie-taille — Câblage document complet + stratégie taille
+**Current focus:** Phase 28 — image-reinjection-plugin-only
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-07-06 — Milestone v3.3 started
+Phase: 28 (image-reinjection-plugin-only) — Wave 1 DONE, Wave 2 = LIVE UAT (Ben-driven)
+Plan: 28-01 COMPLETE (1/2) ; 28-02 PENDING live UAT
+Status: Paused at Wave 2 boundary — awaiting Ben's live UAT
+Last activity: 2026-07-06 -- 28-01 executed + merged (plugin-only image re-injection landed in code.js)
+
+### Wave 2 handoff (28-02 — autonomous:false, Ben drives)
+28-01 landed on feat/image-reinjection (merge be577bc44). code.js now: capture full drawing ToJSON → async getLocalImagePath media pre-pass (ES5 counter barrier, 8s safety timeout) → blip rasterImageId rewrite to ret.path → Api.FromJSON + AddDrawing per insertion inside the single injection callCommand, shared cell+¶ via injectDrawingInto(). Removed: marker/PasteHtml machinery (imageSpecFor/addImageMarker/pendingImages/injectPendingImages), drawingIndex/imageCache/Copy() pre-cache, GroupActions undo-group stub. Dormant floating hook: drawingType==="anchor" + FLOATING_FALLBACK=false.
+Next = /gsd-execute-phase 28 --wave 2 (or drive UAT manually). UAT needs oo-dev container RE-POINTED to cozy-drive-image-reinject worktree (shared container — coordinate). Checks: Q1 floating, Q2 crop+rotation@save, Q3 cross-origin real-Cozy getLocalImagePath, Q4 ret.path vs ret.url; observables single-undo/no-flicker/selection-covers-content; forcesave→unzip docx→word/media/imageN.png + <a:blip> resolves; regression T9 cell + C1 ¶ goldens + Insert path. If Q1 fails → flip dormant FLOATING_FALLBACK. jest broken here (symlinked node_modules) → goldens re-run live.
 
 ## v3.2 Roadmap Summary
 

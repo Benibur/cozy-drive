@@ -116,7 +116,7 @@ v3.1 phases execute in order: v3.1-01 -> v3.1-02 -> v3.1-03 (HARD GATE) -> v3.1-
 | v3.2-01. Zone « Inclure » discrète (UX statique) | v3.2 | 1/1 | Complete | 2026-06-24 |
 | v3.2-02. Câblage discussion + sélection | v3.2 | 1/1 | Complete | 2026-06-25 |
 | v3.2-03. Câblage document complet + stratégie de taille | v3.2 | 0/4 | Planned | - |
-| 28. image-reinjection-plugin-only | v3.3 | 0/2 | Planned | - |
+| 28. image-reinjection-plugin-only | v3.3 | 1/2 | In Progress|  |
 
 ## Phase Details
 
@@ -194,10 +194,10 @@ _Active milestone only. Shipped milestones keep their full phase details in `.pl
 6. Non-régression : goldens image existants (T9 cellule, C1 ¶) + Insert toujours verts.
 
 **Context:** ✅ `28-CONTEXT.md` (spike validé) · **Research:** ✅ `28-RESEARCH.md` (HIGH confidence)
-**Plans:** 2 plans (2 waves)
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 28-01-PLAN.md — code.js surgery: full-ToJSON capture + async getLocalImagePath media pre-pass, swap all image sites to Api.FromJSON+AddDrawing (cell + paragraph shared path), remove marker/injectPendingImages + undo-group stub, dormant floating fallback hook [IMG-01..05] (wave 1)
+- [x] 28-01-PLAN.md — code.js surgery: full-ToJSON capture + async getLocalImagePath media pre-pass, swap all image sites to Api.FromJSON+AddDrawing (cell + paragraph shared path), remove marker/injectPendingImages + undo-group stub, dormant floating fallback hook [IMG-01..05] (wave 1)
 - [ ] 28-02-PLAN.md — live UAT (Ben-driven): core observables (single undo / no flicker / selection covers content), fidelity-at-save Q1-Q4 (floating, crop+rotation, ret.path, cross-origin), + regression goldens T9/C1/Insert [IMG-01..05] (wave 2)
 
 ## Backlog
