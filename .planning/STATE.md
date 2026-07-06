@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v3.2
-milestone_name: Contexte enrichi du prompt
-status: executing
-last_updated: "2026-06-26T08:34:24.043Z"
-last_activity: 2026-06-26 -- Phase v3.2-03-cablage-document-complet-strategie-taille execution started
+milestone: v3.3
+milestone_name: Fidélité d'injection image
+status: planning
+last_updated: "2026-07-06T15:33:19.152Z"
+last_activity: 2026-07-06
 progress:
-  total_phases: 3
-  completed_phases: 2
-  total_plans: 1
-  completed_plans: 1
-  percent: 67
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -38,15 +38,10 @@ See: .planning/PROJECT.md (updated 2026-06-24)
 
 ## Current Position
 
-Phase: v3.2-03-cablage-document-complet-strategie-taille (Câblage document complet + stratégie taille) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase v3.2-03-cablage-document-complet-strategie-taille
-Progress: [#######---] 67% (2/3 v3.2 phases complete)
-Last activity: 2026-06-26 -- Phase v3.2-03-cablage-document-complet-strategie-taille execution started
-
-⚠️ TOOLING: gsd-sdk v1.42.3 cannot resolve `vX.Y-NN` phases (find-phase/phase-plan-index return "Phase not found" for ALL v3.0/v3.1 phases — regex only matches numeric-prefixed dirs). Orchestrate v3.2 phases manually with explicit paths; ROADMAP/STATE/REQUIREMENTS completion writes done by hand (gsd-sdk phase.complete fails on vX.Y-NN).
-
-Next: phase v3.2-03 — câblage document complet + stratégie de taille (the LAST v3.2 phase). ✅ CONTEXT GATHERED (discuss-phase done 2026-06-25) → `.planning/phases/v3.2-03-cablage-document-complet-strategie-taille/v3.2-03-CONTEXT.md` (D-01..D-07 + DISCUSSION-LOG). ✅ UI-SPEC DONE (gsd-ui-checker approved 6/6, 2026-06-25) → `v3.2-03-UI-SPEC.md`. RESUME COMMAND: `/gsd-plan-phase v3.2-03-cablage-document-complet-strategie-taille`. UI scope (verrouillé) : DEC-UI-01 notice « document tronqué » = message système discret INLINE dans le fil de chat (frère du loading), ancré au tour déclencheur, PAS de badge persistant sur la case (défaut illimité ⇒ troncature = événement rare par-envoi) ; DEC-UI-02 extraction-pending = réutilise `isLoading` (« Scribe is thinking… »), pas de nouvelle UI ; DEC-UI-03 échec d'extraction = réutilise `ErrorBubble`. 2 nouvelles chaînes i18n (fr/en/de/es/it). Zéro nouveau token de design. Décisions clés verrouillées : D-01 nouveau chemin plugin `GetAllParagraphs()` réutilisant l'émetteur md par-élément (ES5 strict, code.js l.2219+/2633/2638) ; **D-02 taille pilotée par CONFIG, défaut ILLIMITÉ (on envoie tout), troncature signalée si budget configuré dépassé** ; D-03 indicateur « tronqué » discret jamais silencieux ; D-04 doc+sélection = les deux indépendamment ; D-05 extraction fraîche à chaque envoi (pas de cache) ; D-06 cadre énuméré (graine D-05 v3.2-02 → frame complet, wording=discrétion) ; D-07 garde-fou contrat v3.1 (PROBE-01+corpus verts, pas de fuite fragments). ⚠️ cap transport bridge 1 Mo (protocol.js l.35) à gérer sur très gros docs. Le seam de composition (v3.2-02) accueille `includeDocument` (ScribeContext l.65-67) sans réécriture.
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-07-06 — Milestone v3.3 started
 
 ## v3.2 Roadmap Summary
 

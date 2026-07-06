@@ -8,6 +8,7 @@
 - ✅ **v3.0 Scribe Chat Panel** -- Phases v3.0-01 to v3.0-04 (shipped 2026-04-04)
 - ✅ **v3.1 Contrat de réponse structurée LLM (MCP-ready)** -- Phases v3.1-01 to v3.1-07 (shipped 2026-06-24)
 - 🚧 **v3.2 Contexte enrichi du prompt** -- Phases v3.2-01 to v3.2-03 (planning, started 2026-06-24)
+- 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`)
 
 ## Phases
 
@@ -213,3 +214,23 @@ Extraire les prompts hors de Scribe vers un module de prompts partagé (pendant 
 - **Moyen/gros** si vrai partage via `cozy-viewer` + alignement du chemin d'appel (`chatCompletion` + `AbortController`) → touche une lib externe, coordination/publication.
 
 **Important** : ni bug ni faille de sécurité — architecture/cohérence. Aucune urgence, indépendant de la PR #2 (JSON) et du fix JWT.
+
+### Phase 28: image-reinjection-plugin-only (v3.3)
+
+**Goal:** Remplacer la ré-insertion image au Replace (marqueur + PasteHtml séquentiel async) par une insertion plugin-only en un seul callCommand — pré-passe `getLocalImagePath` (méthode OO stock, enregistre le média) puis `FromJSON`+`AddDrawing` — pour cellules ET paragraphes. Aucune modif sdkjs.
+**Requirements**: IMG-01..05 (voir 28-CONTEXT.md)
+**Depends on:** rien (branche isolée sur tip de feat/scribe-in-right-panel, base = fix L#2)
+
+**Success criteria (observables) :**
+1. Replace d'une sélection contenant une/des image(s) en cellule → **un seul undo** ramène à l'état initial.
+2. Idem → **aucun clignotement** perceptible (une seule passe de rendu).
+3. Idem → la **sélection finale couvre le contenu injecté** (texte + images), pas un curseur collapsed.
+4. Attributs image **préservés au save** : taille + crop/rotation ; habillage flottant conservé (ou fallback documenté).
+5. Cas paragraphe-image : mêmes garanties (chemin partagé).
+6. Non-régression : goldens image existants (T9 cellule, C1 ¶) + Insert toujours verts.
+
+**Context:** ✅ `28-CONTEXT.md` (spike validé)
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 28 to break down)
