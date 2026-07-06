@@ -438,6 +438,42 @@
     return out.join("\n");
   }
 
+  // ---- Collect scribe-img-* names referenced by a parsed response ----
+  // Plugin-side scan of the flattened blocks + parsed table cells for the image
+  // names the LLM response refers to. Used to drive the read-only ToJSON capture
+  // pre-pass and the async getLocalImagePath media registration (see buildAndInject).
+  // Order-preserving, de-duplicated.
+  function collectReferencedImageNames(flat, parsedTables) {
+    var names = [];
+    var seen = {};
+    function addName(n) {
+      if (n && !seen[n]) { seen[n] = true; names.push(n); }
+    }
+    function scanBlocks(blocks) {
+      if (!blocks) return;
+      for (var i = 0; i < blocks.length; i++) {
+        var b = blocks[i];
+        if (!b) continue;
+        if (b.type === "image_placeholder" && b.name) addName(b.name);
+        var runs = b.runs || [];
+        for (var r = 0; r < runs.length; r++) {
+          if (runs[r] && runs[r].imageMarker) addName(runs[r].imageMarker);
+        }
+      }
+    }
+    scanBlocks(flat);
+    if (parsedTables) {
+      for (var t = 0; t < parsedTables.length; t++) {
+        var cells = parsedTables[t].cells || [];
+        for (var c = 0; c < cells.length; c++) {
+          var cellBlocks = cells[c].blocks || [{ runs: cells[c].runs || [] }];
+          scanBlocks(cellBlocks);
+        }
+      }
+    }
+    return names;
+  }
+
   // ---- Builder API injection with PasteHtml fallback ----
   // Tokenizes markdown via marked.lexer(), flattens to paragraph+runs,
   // passes through Asc.scope, and interprets as Builder API calls inside
@@ -557,6 +593,14 @@
     }
     Asc.scope.hasMixedContent = hasMixedContent;
 
+    // Collect the scribe-img-* names referenced by the parsed response so the
+    // read-only capture pre-pass (below) knows which drawings to serialize.
+    var referencedImageNames = collectReferencedImageNames(flat, parsedTables);
+
+    // The injection callCommand is wrapped in runInjection() so it can be deferred
+    // until AFTER the async getLocalImagePath media pre-pass completes (barrier
+    // below). All text + images land in this single callCommand = one undo point.
+    function runInjection() {
     var callbackFired = false;
     var fallbackTimer = setTimeout(function() {
       if (!callbackFired) {
@@ -2371,6 +2415,140 @@
       // (all the PasteHtml points fold into the single undo point) and clear the flag.
       injectPendingImages(pend, function() { endUndoGroup(); pasteInProgress = false; });
     });
+    }  // end runInjection
+
+    // ---- Image media pre-pass (capture full ToJSON + register media) ----
+    // Before the injection callCommand runs, capture each referenced image's FULL
+    // drawing ToJSON (read-only, no history point / no repaint) and register its
+    // media via the stock getLocalImagePath plugin method (async, doc-server
+    // upload, no doc mutation). Only once ALL registrations return (ES5 counter
+    // barrier) do we start the injection callCommand, passing the
+    // name -> { json, localPath } map through Asc.scope.imageMediaMap.
+    if (!referencedImageNames || referencedImageNames.length === 0) {
+      Asc.scope.imageMediaMap = "{}";
+      runInjection();
+    } else {
+      Asc.scope._captureNames = JSON.stringify(referencedImageNames);
+      // Read-only capture callCommand: serialize the referenced drawings BEFORE
+      // InsertContent destroys them. Returns [{name, json, dataUrl}].
+      window.Asc.plugin.callCommand(function() {
+        var doc = Api.GetDocument();
+        var names = [];
+        try { names = JSON.parse(Asc.scope._captureNames || "[]"); } catch (e) { names = []; }
+
+        // Build a name -> ApiDrawing index by scanning the whole document
+        // (top-level paragraphs + table cells) — same scan the injection uses.
+        var drawingIndex = {};
+        var allParas = doc.GetAllParagraphs();
+        for (var dp = 0; dp < allParas.length; dp++) {
+          var dpDrawings = allParas[dp].GetAllDrawingObjects();
+          if (!dpDrawings) continue;
+          for (var dd = 0; dd < dpDrawings.length; dd++) {
+            var dpName = dpDrawings[dd].GetName();
+            if (dpName && dpName.indexOf("scribe-img-") === 0) {
+              drawingIndex[dpName] = dpDrawings[dd];
+            }
+          }
+        }
+        var allDocTables = doc.GetAllTables();
+        for (var dit = 0; dit < allDocTables.length; dit++) {
+          var ditRows = allDocTables[dit].GetRowsCount();
+          for (var ditr = 0; ditr < ditRows; ditr++) {
+            var ditRow = allDocTables[dit].GetRow(ditr);
+            for (var ditc = 0; ditc < ditRow.GetCellsCount(); ditc++) {
+              var ditCell = allDocTables[dit].GetCell(ditr, ditc);
+              if (!ditCell) continue;
+              var ditContent = ditCell.GetContent();
+              if (!ditContent) continue;
+              for (var dite = 0; dite < ditContent.GetElementsCount(); dite++) {
+                var ditElem = ditContent.GetElement(dite);
+                var ditDrawings = ditElem.GetAllDrawingObjects ? ditElem.GetAllDrawingObjects() : null;
+                if (!ditDrawings) continue;
+                for (var ditd = 0; ditd < ditDrawings.length; ditd++) {
+                  var ditName = ditDrawings[ditd].GetName();
+                  if (ditName && ditName.indexOf("scribe-img-") === 0) {
+                    drawingIndex[ditName] = ditDrawings[ditd];
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Capture the FULL ToJSON + the blip data-URL for each referenced image.
+        // (The data-URL is the value handed to getLocalImagePath on the plugin side.)
+        function imageSpecFor(name) {
+          var d = drawingIndex[name];
+          if (!d) return null;
+          try {
+            var jsonStr = d.ToJSON();
+            var j = JSON.parse(jsonStr);
+            var bf = j && j.graphic ? j.graphic.blipFill : null;
+            var dataUrl = bf ? bf.rasterImageId : null;
+            if (!dataUrl) return null;
+            return { name: name, json: jsonStr, dataUrl: dataUrl };
+          } catch (e) { return null; }
+        }
+
+        var captured = [];
+        for (var ni = 0; ni < names.length; ni++) {
+          var spec = imageSpecFor(names[ni]);
+          if (spec) captured.push(spec);
+        }
+        return JSON.stringify(captured);
+      }, false, false, function(capJson) {
+        var captured = [];
+        try { captured = JSON.parse(capJson || "[]"); } catch (e) { captured = []; }
+        if (!captured || captured.length === 0) {
+          Asc.scope.imageMediaMap = "{}";
+          runInjection();
+          return;
+        }
+        // Async media registration: one getLocalImagePath per image, joined by an
+        // ES5 counter barrier. On error, record the image WITHOUT a localPath so the
+        // injection skips it (never writes an empty rasterImageId). A safety timeout
+        // guarantees we never hang if a callback is dropped.
+        var mediaMap = {};
+        var remaining = captured.length;
+        var proceeded = false;
+        function proceed() {
+          if (proceeded) return;
+          proceeded = true;
+          Asc.scope.imageMediaMap = JSON.stringify(mediaMap);
+          runInjection();
+        }
+        var barrierTimer = setTimeout(function() {
+          log("getLocalImagePath barrier timeout -- proceeding with partial media map");
+          proceed();
+        }, 8000);
+        function oneDone() {
+          remaining--;
+          if (remaining <= 0) {
+            clearTimeout(barrierTimer);
+            proceed();
+          }
+        }
+        for (var ci = 0; ci < captured.length; ci++) {
+          (function(cap) {
+            try {
+              window.Asc.plugin.executeMethod("getLocalImagePath", [cap.dataUrl], function(ret) {
+                if (ret && ret.error === false && ret.path) {
+                  mediaMap[cap.name] = { json: cap.json, localPath: ret.path };
+                } else {
+                  mediaMap[cap.name] = { json: cap.json, failed: true };
+                  log("getLocalImagePath failed for " + cap.name);
+                }
+                oneDone();
+              });
+            } catch (e) {
+              mediaMap[cap.name] = { json: cap.json, failed: true };
+              log("getLocalImagePath threw for " + cap.name);
+              oneDone();
+            }
+          })(captured[ci]);
+        }
+      });
+    }
   }
 
   // Post-InsertContent: for each deferred top-level image, find its marker run,
