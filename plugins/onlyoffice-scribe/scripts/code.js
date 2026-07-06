@@ -122,13 +122,6 @@
   // PasteHtml mechanism ONLY if this is flipped true after a live floating-save check
   // (Plan 02 Q1). Ships false; the fallback path is intentionally not built beyond the hook.
   var FLOATING_FALLBACK = false;
-  // Tracks whether a GroupActions undo-group is currently open (see
-  // startUndoGroup/endUndoGroup). A full-table/image injection makes several
-  // history points (InsertContent callCommand + one PasteHtml per image); wrapping
-  // them in a GroupActions group collapses them into a SINGLE undo point so one
-  // Ctrl+Z reverts the whole reply. Guard keeps Start/End balanced (an unbalanced
-  // StartAction would swallow every later edit into the group).
-  var undoGroupOpen = false;
 
   // Debounce for the selection-extraction triggered by OO on every selection
   // change (config initOnSelectionChanged:true). Running it on each change
@@ -386,25 +379,6 @@
     return blocks;
   }
 
-  // ---- Undo-group helpers ----
-  // OO's plugin API exposes StartAction/EndAction with type "GroupActions" — the
-  // same primitive OO uses internally to make a multi-step operation a single undo
-  // point (probe-confirmed: a group spans separate callCommand + async PasteHtml
-  // calls and collapses to ONE point that one Undo reverts / one Redo restores).
-  // We open a group around the whole Builder injection so a full-table/image reply
-  // (InsertContent + N image PasteHtml = N+1 points) becomes a single Ctrl+Z.
-  // Fire-and-forget is safe: the plugin→editor command channel is FIFO, so the
-  // StartAction lands before the first callCommand point (probe-confirmed).
-  function startUndoGroup() {
-    if (undoGroupOpen) return;
-    undoGroupOpen = true;
-    try { window.Asc.plugin.executeMethod("StartAction", ["GroupActions", "Scribe injection"], function() {}); } catch (e) {}
-  }
-  function endUndoGroup() {
-    if (!undoGroupOpen) return;
-    undoGroupOpen = false;
-    try { window.Asc.plugin.executeMethod("EndAction", ["GroupActions", "Scribe injection"], function() {}); } catch (e) {}
-  }
 
   // ---- Normalize list indentation before marked.lexer ----
   // LLMs (and our own extraction) indent nested list items by 2 spaces per level.
@@ -567,10 +541,10 @@
     }
 
     pasteInProgress = true;
-    // Open an undo-group so the InsertContent callCommand + every image PasteHtml
-    // collapse into ONE undo point. Closed on every exit path below (timeout
-    // fallback, no-image callback, and post-image-injection callback).
-    startUndoGroup();
+    // Everything (text + images) is injected inside the single injection callCommand
+    // below (images via FromJSON + AddDrawing from the pre-registered media map), which
+    // is already ONE atomic history point — one Ctrl+Z reverts the whole reply. No
+    // undo-group is needed (OO 9.4's GroupActions is a no-op stub; see 28-RESEARCH Pitfall 4).
     Asc.scope.tokens = JSON.stringify(flat);
     Asc.scope._mode = mode || "replace";
     Asc.scope.floatingFallback = FLOATING_FALLBACK;
@@ -613,7 +587,6 @@
     var fallbackTimer = setTimeout(function() {
       if (!callbackFired) {
         log("Builder callCommand timeout -- falling back to PasteHtml");
-        endUndoGroup();
         pasteInProgress = false;
         if (fallbackHtml) { pasteHtml(fallbackHtml, mode); }
       }
