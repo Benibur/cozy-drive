@@ -116,6 +116,7 @@ v3.1 phases execute in order: v3.1-01 -> v3.1-02 -> v3.1-03 (HARD GATE) -> v3.1-
 | v3.2-01. Zone « Inclure » discrète (UX statique) | v3.2 | 1/1 | Complete | 2026-06-24 |
 | v3.2-02. Câblage discussion + sélection | v3.2 | 1/1 | Complete | 2026-06-25 |
 | v3.2-03. Câblage document complet + stratégie de taille | v3.2 | 0/4 | Planned | - |
+| 28. image-reinjection-plugin-only | v3.3 | 0/2 | Planned | - |
 
 ## Phase Details
 
@@ -176,6 +177,29 @@ _Active milestone only. Shipped milestones keep their full phase details in `.pl
 - [x] v3.2-03-04-regression-composition-gate-PLAN.md — extend compose + scribeAI specs (document path, any-combination, determinism) and run the PROBE-01 + corpus + literal-audit GREEN gate (D-07) [CTX-LLM-01, CTX-LLM-04] (wave 3)
 **UI hint**: yes
 
+### v3.3 Fidélité d'injection image (Phase 28) -- IN PROGRESS
+
+#### Phase 28: image-reinjection-plugin-only
+
+**Goal:** Remplacer la ré-insertion image au Replace (marqueur + PasteHtml séquentiel async) par une insertion plugin-only en un seul callCommand — pré-passe `getLocalImagePath` (méthode OO stock, enregistre le média) puis `FromJSON`+`AddDrawing` — pour cellules ET paragraphes. Aucune modif sdkjs.
+**Requirements**: IMG-01..05 (voir 28-CONTEXT.md)
+**Depends on:** rien (branche isolée sur tip de feat/scribe-in-right-panel, base = fix L#2)
+
+**Success criteria (observables) :**
+1. Replace d'une sélection contenant une/des image(s) en cellule → **un seul undo** ramène à l'état initial.
+2. Idem → **aucun clignotement** perceptible (une seule passe de rendu).
+3. Idem → la **sélection finale couvre le contenu injecté** (texte + images), pas un curseur collapsed.
+4. Attributs image **préservés au save** : taille + crop/rotation ; habillage flottant conservé (ou fallback documenté).
+5. Cas paragraphe-image : mêmes garanties (chemin partagé).
+6. Non-régression : goldens image existants (T9 cellule, C1 ¶) + Insert toujours verts.
+
+**Context:** ✅ `28-CONTEXT.md` (spike validé) · **Research:** ✅ `28-RESEARCH.md` (HIGH confidence)
+**Plans:** 2 plans (2 waves)
+
+Plans:
+- [ ] 28-01-PLAN.md — code.js surgery: full-ToJSON capture + async getLocalImagePath media pre-pass, swap all image sites to Api.FromJSON+AddDrawing (cell + paragraph shared path), remove marker/injectPendingImages + undo-group stub, dormant floating fallback hook [IMG-01..05] (wave 1)
+- [ ] 28-02-PLAN.md — live UAT (Ben-driven): core observables (single undo / no flicker / selection covers content), fidelity-at-save Q1-Q4 (floating, crop+rotation, ret.path, cross-origin), + regression goldens T9/C1/Insert [IMG-01..05] (wave 2)
+
 ## Backlog
 
 ### Phase 999.1: Centralisation des prompts IA (Scribe → module partagé) (BACKLOG)
@@ -214,23 +238,3 @@ Extraire les prompts hors de Scribe vers un module de prompts partagé (pendant 
 - **Moyen/gros** si vrai partage via `cozy-viewer` + alignement du chemin d'appel (`chatCompletion` + `AbortController`) → touche une lib externe, coordination/publication.
 
 **Important** : ni bug ni faille de sécurité — architecture/cohérence. Aucune urgence, indépendant de la PR #2 (JSON) et du fix JWT.
-
-### Phase 28: image-reinjection-plugin-only (v3.3)
-
-**Goal:** Remplacer la ré-insertion image au Replace (marqueur + PasteHtml séquentiel async) par une insertion plugin-only en un seul callCommand — pré-passe `getLocalImagePath` (méthode OO stock, enregistre le média) puis `FromJSON`+`AddDrawing` — pour cellules ET paragraphes. Aucune modif sdkjs.
-**Requirements**: IMG-01..05 (voir 28-CONTEXT.md)
-**Depends on:** rien (branche isolée sur tip de feat/scribe-in-right-panel, base = fix L#2)
-
-**Success criteria (observables) :**
-1. Replace d'une sélection contenant une/des image(s) en cellule → **un seul undo** ramène à l'état initial.
-2. Idem → **aucun clignotement** perceptible (une seule passe de rendu).
-3. Idem → la **sélection finale couvre le contenu injecté** (texte + images), pas un curseur collapsed.
-4. Attributs image **préservés au save** : taille + crop/rotation ; habillage flottant conservé (ou fallback documenté).
-5. Cas paragraphe-image : mêmes garanties (chemin partagé).
-6. Non-régression : goldens image existants (T9 cellule, C1 ¶) + Insert toujours verts.
-
-**Context:** ✅ `28-CONTEXT.md` (spike validé)
-**Plans:** 0 plans
-
-Plans:
-- [ ] TBD (run /gsd-plan-phase 28 to break down)
