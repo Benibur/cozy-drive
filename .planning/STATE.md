@@ -38,10 +38,27 @@ See: .planning/PROJECT.md (updated 2026-06-24)
 
 ## Current Position
 
-Phase: 28 (image-reinjection-plugin-only) — Wave 1 DONE, Wave 2 = LIVE UAT (Ben-driven)
-Plan: 28-01 COMPLETE (1/2) ; 28-02 PENDING live UAT
-Status: Paused at Wave 2 boundary — awaiting Ben's live UAT
-Last activity: 2026-07-06 -- 28-01 executed + merged (plugin-only image re-injection landed in code.js)
+Phase: 28 (image-reinjection-plugin-only) — Wave 1 DONE, Wave 2 = LIVE UAT (Ben-driven), IN PROGRESS
+Plan: 28-01 COMPLETE (1/2) ; 28-02 UAT started — first run blocked UPSTREAM of 28-01 (see diagnostic below)
+Status: Awaiting Ben's report from the "Test MD" dev panel (source badge + MD-source column)
+Last activity: 2026-07-07 -- diagnosed first UAT failure; root cause is upstream (no image marker in md), NOT the 28-01 injection
+
+### 28-02 UAT — first-run DIAGNOSTIC (2026-07-07)
+Env READY: oo-dev container re-pointed to THIS worktree (cozy-drive-image-reinject) + serving fresh code.js (verified 17 new-symbol hits, 0 old-machinery); no-store + SW patch applied → Ctrl+Shift+R suffices. cozy-stack running; use slug **drive-rb** (same front as this worktree's base scribe-in-right-panel). Dev-mode Test MD button needs `localStorage.SCRIBE_DEV_MD='true'`.
+
+FIRST UAT (Ben): selected a paragraph WITH an image, used dev "Test MD" button (bypasses LLM, re-injects the extracted md). Result: text inserted OK, but NO image, multiple undos, no redo.
+
+DIAGNOSIS (from console `[Scribe]` logs Ben pasted): mode was `insert`; ZERO image-capture logs. `collectReferencedImageNames` runs unconditionally (code.js:578-580) and the capture pre-pass logs as soon as a name is found — so zero logs ⇒ the injected md carried NO `{{IMG:scribe-img-N}}` / `![IMG:scribe-img-N]` marker ⇒ capture pre-pass never ran (empty-names shortcut code.js:2308-2310) ⇒ image never referenced. **This is UPSTREAM of 28-01, NOT an injection bug**: the OLD marker+PasteHtml path had the SAME prerequisite (needs the scribe-img marker in the md). 28-01 only changed injection consumption.
+
+ROOT-CAUSE MECHANISM: "Test MD" sends `inputMd = enrichedMd || htmlToMarkdown(selectedHtml)` (ScribePopover.jsx:137-139). `enrichedMd` = plugin extraction = ONLY source that carries `{{IMG:scribe-img-N}}` markers. If enrichedMd is absent it falls back to turndown → `![](data:…)` with empty alt → buildAndInject drops it (code.js:250 requires alt starting `IMG:scribe-img-`). So no marker → image silently dropped.
+
+PENDING — Ben to report from the Test MD dev panel (3 cols + source badge, already on screen):
+  (1) source badge = `plugin` or `turndown`?
+  (2) MD-source column at the image location: `{{IMG:scribe-img-N}}` / `![IMG:scribe-img-N]` / `![](data:…)` / nothing?
+Branches: `turndown` → plugin extraction returned nothing for the selection (why? sdkjs GetInlineDrawings patch not loaded in browser? extraction gap for this image type?). `plugin` but no marker → extraction dropped the image. Only once we get a marker-bearing md can 28-01's real injection path (and its undo/redo behaviour) be validated.
+
+KEY CODE REFS: injection consume = code.js:964-1017 injectDrawingInto (imageMediaMap 973-974, skip 983-985); capture pre-pass + getLocalImagePath barrier = code.js:2301-2432 (empty shortcut 2308-2310); collectReferencedImageNames = 427-456; IMG: stripped = 250-255 (inline) / 309-313 (block); md→marker conversion = 466; extraction emits = 3245/3265/3330 (`{{IMG:}}` inline), 3433 (`![IMG:]` block). Test MD button = ScribePopover.jsx:137-174; scribeDevMode.js.
+NOTE: "multiple undos / no redo" not yet analysed on the REAL image path — the insert run had only ONE callCommand (no capture), so revisit once a marker-bearing Replace runs. `callCommand truncates redo` is a known OO gotcha (memory oo_plugin_gotchas_focus_timing_redo).
 
 ### Wave 2 handoff (28-02 — autonomous:false, Ben drives)
 28-01 landed on feat/image-reinjection (merge be577bc44). code.js now: capture full drawing ToJSON → async getLocalImagePath media pre-pass (ES5 counter barrier, 8s safety timeout) → blip rasterImageId rewrite to ret.path → Api.FromJSON + AddDrawing per insertion inside the single injection callCommand, shared cell+¶ via injectDrawingInto(). Removed: marker/PasteHtml machinery (imageSpecFor/addImageMarker/pendingImages/injectPendingImages), drawingIndex/imageCache/Copy() pre-cache, GroupActions undo-group stub. Dormant floating hook: drawingType==="anchor" + FLOATING_FALLBACK=false.
