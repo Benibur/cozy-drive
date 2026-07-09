@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-09.2 — single-undo for image Insert: the extraction renames images (SetName scribe-img-N) inside History.TurnOff/TurnOn so it no longer creates its own undo point before the injection (was the 2nd undo; name still persists at save, just not undoable). PLUS image live-render fix: blip rasterImageId = ret.url (prefix-stripped) so a re-injected image resolves at render (ret.path kept the media/ prefix → getFullImageSrc2 double-prefixed to undefined → blank until reload). Insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen; NOT g_image_loader.LoadImage, whose onload asyncImageEndLoaded inserts a bogus 50mm image as a separate undo). Local log() helper in the injection callCommand (module log closure is out of scope there; the no-media skip logged OUTSIDE the try, a latent ReferenceError). On top of 2026-07-06.1.";
+  var SCRIBE_BUILD = "2026-07-09.6 — image SAVE-fidelity fix (ROOT CAUSE (c) CONFIRMED via .5-diag): a FromJSON+AddDrawing blip with a hand-set rasterImageId is DROPPED at co-editing (x2t) save regardless of the id form (data-URL and byte-backed media-id both failed the oracle). MECHANISM: the injection callCommand passed recalculate=false, so OO skipped _afterEvalCommand -> Reassign_ImageUrls (apiBase.js:4638). During the callCommand Asc.editor.evalCommand===true, so CImageShape.setBlipFill (common/Drawings/Format/Image.js:117) SKIPS its CChangesImageIdStart/rasterChunks/CChangesImageIdEnd history — the blipFill/rasterImageId change is NEVER transmitted as a co-editing change and CollaborativeEditing.Add_NewImage() (DrawingsChanges.js:391) never fires. The server therefore never learns the injected drawing's rasterId -> x2t emits a degenerate <pic:blipFill dpi=\"7602275\"><a:tile/></pic:blipFill> (no <a:blip>) and writes NO word/media part; it renders live only because our warm pass paints it client-side. FIX: pass recalculate=TRUE for the injection callCommand when images are present (scribeInjectRecalc). recalculate=true runs _afterEvalCommand -> Reassign_ImageUrls, which — now that evalCommand===false — re-applies setBlipFill WITH history on every injected drawing, transmitting the blipFill change (x2t writes <a:blip r:embed> + a new word/media part) and calling Add_NewImage. FromJSON is fully retained for geometry: Reassign duplicates the existing blipFill (createDuplicate preserves stretch/tile/srcRect = CROP) and never touches spPr.xfrm (extent/rotation), so crop/rotation/extent fidelity from 28-01 is intact. The media pre-pass (getLocalImagePath upload -> byte-backed media id) is kept so the server holds the bytes and Check_LoadingDataBeforePrepaste keeps the id in the reassign map. Removed the .5-diag IMGDIAG instrumentation. On top of 2026-07-09.4/.2 — .4: imageSpecFor hands getLocalImagePath a server-FETCHABLE source (ToJSON data:URL, else getFullImageSrc2 full http URL); .2: single-undo for image Insert (SetName scribe-img-N inside History.TurnOff/TurnOn) + live-render (blip rasterImageId = ret.url prefix-stripped) + insert-free warming (LoadImagesWithCallback + CheckRasterImageOnScreen). On top of 2026-07-06.1.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -588,6 +588,21 @@
     // until AFTER the async getLocalImagePath media pre-pass completes (barrier
     // below). All text + images land in this single callCommand = one undo point.
     function runInjection() {
+    // Recalculate flag for the injection callCommand. When images are injected we MUST
+    // pass recalculate=true: only then does OO run _afterEvalCommand -> Reassign_ImageUrls
+    // (common/apiBase.js), which re-applies setBlipFill WITH history on each injected
+    // drawing (Asc.editor.evalCommand is false by then), transmitting the
+    // blipFill/rasterImageId as a co-editing change and calling
+    // CollaborativeEditing.Add_NewImage(). Without it (recalculate=false) the
+    // FromJSON+AddDrawing blip is set directly while evalCommand===true, so
+    // CImageShape.setBlipFill SKIPS its CChangesImageIdStart/chunks/End history — the
+    // injected media is never registered for the co-editing (x2t) save serializer, so the
+    // saved .docx gets a degenerate <pic:blipFill> with NO <a:blip> and no word/media part
+    // (renders live via our warm pass, lost on reopen). FromJSON still carries all
+    // geometry (crop/rotation/extent/srcRect); Reassign_ImageUrls duplicates the blipFill
+    // preserving that geometry and only re-registers the raster. See debug:
+    // inject-blip-lost-at-save (root cause (c), CONFIRMED via 2026-07-09.5-diag).
+    var scribeInjectRecalc = !!(referencedImageNames && referencedImageNames.length);
     var callbackFired = false;
     var fallbackTimer = setTimeout(function() {
       if (!callbackFired) {
@@ -979,22 +994,24 @@
       // --- Image re-injection via Api.FromJSON + AddDrawing (plugin-only) ---
       // The media pre-pass (buildAndInject) already: (1) captured each referenced
       // image's FULL drawing ToJSON before this callCommand, and (2) registered its
-      // media via getLocalImagePath, yielding a registered media id. That name ->
-      // { json, rasterId } map arrives here through Asc.scope.imageMediaMap.
-      // For each insertion we rewrite the blip rasterImageId (a base64 data-URL in
-      // the captured JSON) to the registered rasterId (= ret.url, the prefix-stripped
-      // media id — NOT ret.path, which double-prefixes to undefined at render), then
-      // Api.FromJSON rebuilds a COMPLETE drawing (crop/rotation/flip/wrap/anchor/
-      // effects/alt-text preserved) and AddDrawing inserts it — all inside this single
-      // injection callCommand.
+      // media via getLocalImagePath — which UPLOADS a server-fetchable source (see
+      // imageSpecFor) so the doc server creates a BYTE-BACKED media part and returns its
+      // id (ret.url). That name -> { json, rasterId } map arrives here through
+      // Asc.scope.imageMediaMap.
+      // For each insertion we set the blip rasterImageId to entry.rasterId (the
+      // byte-backed uploaded media id): it renders live (getFullImageSrc2 resolves it)
+      // AND embeds at co-editing save (x2t has the bytes -> <a:blip r:embed> +
+      // word/media part). Api.FromJSON then rebuilds a COMPLETE drawing (crop/rotation/
+      // flip/wrap/anchor/effects/alt-text preserved) and AddDrawing inserts it — all
+      // inside this single injection callCommand. The render cache is warmed for the
+      // media id at the end so it also paints live in-session.
       var imageMediaMap = {};
       try { imageMediaMap = JSON.parse(Asc.scope.imageMediaMap || "{}") || {}; } catch (e) { imageMediaMap = {}; }
       var floatingFallback = !!Asc.scope.floatingFallback;
-      // Blip rasterImageIds (ret.url, the prefix-stripped media id) of images actually
-      // injected this pass — the value we set as rasterImageId. getLocalImagePath only
-      // registers the path->url mapping; it does NOT load the bitmap into the render cache,
-      // so injected drawings paint blank until reload. We warm the cache for these
-      // rasterImageIds at the END of this callCommand (see below).
+      // Blip rasterImageIds (byte-backed media ids) of images actually injected this
+      // pass. Nothing here loads the bitmap into the render cache, so injected drawings
+      // paint blank until reload; we warm the cache for these ids at the END of this
+      // callCommand (see below).
       var scribeInjectedRasterIds = [];
 
       // Insert image `name` into `target` (a paragraph or run) via FromJSON+AddDrawing.
@@ -1013,9 +1030,21 @@
             log("Scribe: image " + name + " has no blipFill in captured JSON");
             return false;
           }
-          // Rewrite the blip from the captured data-URL to the registered media id
-          // (prefix-stripped ret.url) so the drawing resolves at render AND at save.
-          j.graphic.blipFill.rasterImageId = entry.rasterId;
+          // Set the injected blip to the byte-BACKED uploaded media id
+          // (entry.rasterId = getLocalImagePath ret.url = imagePath2Local of the media
+          // part that sendImgUrls just created on the doc server). The capture pre-pass
+          // (imageSpecFor) handed sendImgUrls a FETCHABLE source — the ToJSON `data:` URL
+          // when the image was decoded, else the resolved full doc-server http URL — so
+          // the server downloaded/decoded REAL BYTES into this media part. Therefore this
+          // id both renders live (getFullImageSrc2 resolves the "media/"-prefixed id to
+          // the registered URL) AND embeds at co-editing save (x2t finds the bytes in its
+          // ImageMap and writes <a:blip r:embed> + a word/media part). The earlier
+          // "keep the ToJSON data-URL" approach (build 2026-07-09.3) was FALSIFIED: for a
+          // media-backed source image ToJSON emits a bare media id, not a data-URL, so
+          // the data: guard fell through to a byte-less fallback — identical corrupt save
+          // (see debug: inject-blip-lost-at-save, Eliminated).
+          var blipRasterId = entry.rasterId;
+          j.graphic.blipFill.rasterImageId = blipRasterId;
           // Floating-image detection hook: drawingType === "anchor" => floating image.
           // Both inline and floating go through the FromJSON fast path by default; the
           // dormant fallback (floatingFallback flag) is intentionally not built beyond
@@ -1029,8 +1058,10 @@
           var apiDrawing = Api.FromJSON(JSON.stringify(j));
           if (apiDrawing && target && target.AddDrawing) {
             target.AddDrawing(apiDrawing);
-            // Remember the rasterImageId so we can warm the render cache post-inject.
-            if (entry.rasterId) scribeInjectedRasterIds.push(entry.rasterId);
+            // Remember the rasterImageId (the byte-backed media id we injected) so we
+            // can warm the render cache post-inject — getFullImageSrc2(rasterId)
+            // resolves the "media/"-prefixed id to the registered doc-server URL.
+            if (blipRasterId) scribeInjectedRasterIds.push(blipRasterId);
             return true;
           }
           log("Scribe: FromJSON produced no drawing for " + name);
@@ -2368,7 +2399,7 @@
       // All text + images were injected inside this single callCommand (images via
       // FromJSON + AddDrawing from the pre-registered media map) — nothing is deferred.
       return;
-    }, false, false, function(ret) {
+    }, false, scribeInjectRecalc, function(ret) {
       callbackFired = true;
       clearTimeout(fallbackTimer);
       log("Builder injection complete (" + mode + ")");
@@ -2434,8 +2465,28 @@
           }
         }
 
-        // Capture the FULL ToJSON + the blip data-URL for each referenced image.
-        // (The data-URL is the value handed to getLocalImagePath on the plugin side.)
+        // Capture the FULL ToJSON + a SERVER-FETCHABLE source for each referenced
+        // image. The `uploadSrc` we return is handed to getLocalImagePath ->
+        // AscCommon.sendImgUrls on the plugin side, which UPLOADS it to the doc server
+        // (the "imgurls" command downloads/decodes the bytes into a real media part and
+        // returns a byte-backed media id). For that upload to yield BYTES the input MUST
+        // be fetchable: a `data:` URL (decoded server-side) or a full `http(s)://` URL
+        // (downloaded server-side).
+        //
+        // ToJSON's blipFill.rasterImageId (getBase64Data, Format.js) is a re-encoded
+        // `data:` URL ONLY when the source image is loaded Complete in the render cache
+        // at capture time; for an image not yet decoded it returns the BARE media id
+        // ("image1.png") unchanged. A bare relative id is NOT fetchable by the server ->
+        // sendImgUrls registers a byte-LESS media entry -> the injected drawing renders
+        // live (getFullImageSrc2 re-adds "media/" and finds the ORIGINAL registration)
+        // but is DROPPED at co-editing save (x2t has no bytes -> degenerate
+        // <pic:blipFill dpi="7602275"><a:tile/></pic:blipFill>, no <a:blip>). This was
+        // the root cause of the blank-on-reopen bug (see debug: inject-blip-lost-at-save).
+        //
+        // Fix: if the ToJSON rasterImageId is NOT a self-contained `data:` URL, resolve
+        // the bare media id to its full doc-server http URL via getFullImageSrc2 so the
+        // server can DOWNLOAD real bytes. Then ret.url is a byte-backed media id that
+        // both renders live and embeds at save (the standard OO add-image recipe).
         function imageSpecFor(name) {
           var d = drawingIndex[name];
           if (!d) return null;
@@ -2443,9 +2494,29 @@
             var jsonStr = d.ToJSON();
             var j = JSON.parse(jsonStr);
             var bf = j && j.graphic ? j.graphic.blipFill : null;
-            var dataUrl = bf ? bf.rasterImageId : null;
-            if (!dataUrl) return null;
-            return { name: name, json: jsonStr, dataUrl: dataUrl };
+            var rasterId = bf ? bf.rasterImageId : null;
+            if (!rasterId) return null;
+            var uploadSrc = rasterId;
+            if (rasterId.indexOf("data:") !== 0) {
+              // Bare media id (or any non-data src): resolve to the full server URL so
+              // sendImgUrls can fetch the bytes. getFullImageSrc2 re-adds the "media/"
+              // prefix and maps to the registered doc-server URL.
+              try {
+                if (typeof AscCommon !== "undefined" && AscCommon.getFullImageSrc2) {
+                  var full = AscCommon.getFullImageSrc2(rasterId);
+                  if (full && full.indexOf("data:") !== 0 &&
+                      (full.indexOf("http:") === 0 || full.indexOf("https:") === 0 ||
+                       full.indexOf("blob:") === 0 || full.indexOf("file:") === 0)) {
+                    uploadSrc = full;
+                  }
+                }
+              } catch (eFull) {}
+            }
+            return {
+              name: name,
+              json: jsonStr,
+              dataUrl: uploadSrc
+            };
           } catch (e) { return null; }
         }
 
@@ -2490,6 +2561,14 @@
         for (var ci = 0; ci < captured.length; ci++) {
           (function(cap) {
             try {
+              // cap.dataUrl is a SERVER-FETCHABLE source (a `data:` URL, or the resolved
+              // full doc-server http URL for a bare media id — see imageSpecFor).
+              // getLocalImagePath -> sendImgUrls uploads it so the server creates a
+              // media part WITH bytes; ret.url is that part's byte-backed id. The bytes
+              // must exist on the server so that, post-injection, _afterEvalCommand ->
+              // Check_LoadingDataBeforePrepaste keeps this id in the reassign map and
+              // Reassign_ImageUrls re-registers the blip for the co-editing save (see the
+              // scribeInjectRecalc note in runInjection).
               window.Asc.plugin.executeMethod("getLocalImagePath", [cap.dataUrl], function(ret) {
                 if (ret && ret.error === false && ret.path) {
                   // Use ret.url (= g_oDocumentUrls.imagePath2Local(path), the media
