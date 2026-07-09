@@ -52,12 +52,13 @@ else
   # On 9.4 apiBuilder.js (the builder API + our patch) lives only in sdk-all.js,
   # not sdk-all-min.js; sdk-all.js has no .gz in the image so the bind mount is
   # served directly. Built from sdkjs v9.4.0.129 + the patch + the sdkjs-forms
-  # addon (see ~/Dev-local/onlyoffice-sdkjs-integ and plugins/onlyoffice-scribe/oo-api-proposal.md).
+  # addon (see ~/Dev-local/onlyoffice-sdkjs-integ [branch integration/scribe-oo-9.4.0.129]
+  # and plugins/onlyoffice-scribe/oo-api-proposal.md).
   SDKJS_PATCHED_94="$(cd "$(dirname "$0")/.." && pwd)/../onlyoffice-sdkjs-integ/dist/sdkjs-patch-9.4.0.129/sdk-all.js"
   SDKJS_CONTAINER_DIR="/var/www/onlyoffice/documentserver/sdkjs/word"
   SDKJS_VOLUMES=""
   if [ -f "${SDKJS_PATCHED_94}" ]; then
-    echo "  Patched SDK (9.4): mounting sdk-all.js (GetInlineDrawings)"
+    echo "  Patched SDK (9.4): mounting sdk-all.js (GetInlineDrawings + GetSelectionScreenRect)"
     SDKJS_VOLUMES="-v ${SDKJS_PATCHED_94}:${SDKJS_CONTAINER_DIR}/sdk-all.js:ro"
   else
     echo "  WARNING: 9.4 patched sdk-all.js not found at ${SDKJS_PATCHED_94}"
