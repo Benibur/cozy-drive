@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-06.1 — cross-boundary mixed Replace (T4/T5/T6) re-establishes a spanning post-selection over the INJECTED region only (L#2 fix): text ¶s bracketed with two XSEL sentinels, injected span recovered shift-compensated, paired with fresh GetCell ranges, ExpandTo the extremes — no doc.GetRange(int,int) across a cell boundary. On top of .14 (inline fresh extraction).";
+  var SCRIBE_BUILD = "2026-07-09.1 — image live-render fix: blip rasterImageId = ret.url (prefix-stripped) so a re-injected image resolves at render (ret.path kept the media/ prefix → getFullImageSrc2 double-prefixed to undefined → blank until reload). Insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen; NOT g_image_loader.LoadImage, whose onload asyncImageEndLoaded inserts a bogus 50mm image as a separate undo). Local log() helper in the injection callCommand (module log closure is out of scope there; the no-media skip logged OUTSIDE the try, a latent ReferenceError). On top of 2026-07-06.1.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -593,6 +593,16 @@
     }, 5000);
 
     window.Asc.plugin.callCommand(function() {
+      // callCommand bodies are serialized via toString() and re-run in the EDITOR
+      // scope (see plugins.js: "(" + f.toString() + ")()") — module-level plugin
+      // closures such as log() are NOT in scope here. Define a local log() so
+      // diagnostics inside this callCommand reach the editor console instead of
+      // throwing ReferenceError. This matters for robustness: the no-media skip in
+      // injectDrawingInto logs OUTSIDE its try/catch, so a bare log() would abort
+      // the whole injection exactly in the getLocalImagePath-failed case the 8s
+      // barrier is meant to survive.
+      function log(m) { if (typeof console !== "undefined" && console.log) console.log("[Scribe] " + m); }
+
       var tokensJson = Asc.scope.tokens;
       var mode = Asc.scope._mode;
       if (!tokensJson) return;
@@ -973,6 +983,12 @@
       var imageMediaMap = {};
       try { imageMediaMap = JSON.parse(Asc.scope.imageMediaMap || "{}") || {}; } catch (e) { imageMediaMap = {}; }
       var floatingFallback = !!Asc.scope.floatingFallback;
+      // Blip media paths ("media/imageN.png") of images actually injected this pass —
+      // the value we set as rasterImageId. getLocalImagePath only registers the
+      // path->url mapping; it does NOT load the bitmap into the editor render cache,
+      // so injected drawings paint blank until reload. We warm the cache for these
+      // rasterImageIds at the END of this callCommand (see below).
+      var scribeInjectedRasterIds = [];
 
       // Insert image `name` into `target` (a paragraph or run) via FromJSON+AddDrawing.
       // Returns true if a drawing was inserted, false otherwise (unknown/failed image).
@@ -980,7 +996,7 @@
       // without a localPath in the pre-pass) is skipped with a log (Pitfall 1).
       function injectDrawingInto(target, name) {
         var entry = imageMediaMap[name];
-        if (!entry || !entry.localPath || entry.failed) {
+        if (!entry || !entry.rasterId || entry.failed) {
           log("Scribe: skipping image " + name + " (no registered media path)");
           return false;
         }
@@ -990,9 +1006,9 @@
             log("Scribe: image " + name + " has no blipFill in captured JSON");
             return false;
           }
-          // Rewrite the blip from the captured data-URL to the registered media path
-          // so the reconstructed drawing references real media (non-orphan at save).
-          j.graphic.blipFill.rasterImageId = entry.localPath;
+          // Rewrite the blip from the captured data-URL to the registered media id
+          // (prefix-stripped ret.url) so the drawing resolves at render AND at save.
+          j.graphic.blipFill.rasterImageId = entry.rasterId;
           // Floating-image detection hook: drawingType === "anchor" => floating image.
           // Both inline and floating go through the FromJSON fast path by default; the
           // dormant fallback (floatingFallback flag) is intentionally not built beyond
@@ -1006,6 +1022,8 @@
           var apiDrawing = Api.FromJSON(JSON.stringify(j));
           if (apiDrawing && target && target.AddDrawing) {
             target.AddDrawing(apiDrawing);
+            // Remember the rasterImageId so we can warm the render cache post-inject.
+            if (entry.rasterId) scribeInjectedRasterIds.push(entry.rasterId);
             return true;
           }
           log("Scribe: FromJSON produced no drawing for " + name);
@@ -1217,7 +1235,7 @@
             var fromJsonTable = Api.FromJSON(tableSnapshots[ptIndex]);
             if (fromJsonTable) return fromJsonTable;
           } catch (fjErr) {
-            log("[Scribe] FromJSON failed for TABLE:" + ptIndex + ", falling back to clone");
+            log("FromJSON failed for TABLE:" + ptIndex + ", falling back to clone");
           }
         }
         // FALLBACK: legacy clone path — remove once ToJSON snapshots are proven stable
@@ -2287,6 +2305,59 @@
         }
       }
 
+      // --- Live-render fix: warm the editor image cache for injected media ---
+      // getLocalImagePath -> AscCommon.sendImgUrls only registers the media
+      // path->url mapping in g_oDocumentUrls; it does NOT decode the bitmap into the
+      // editor's image render cache (g_image_loader), and — unlike document open,
+      // which ends with asyncImagesDocumentEndLoaded — nothing here triggers the
+      // post-load redraw. Result: a freshly FromJSON+AddDrawing'd image lays out but
+      // paints BLANK until a reload re-loads media from the docx.
+      //
+      // We must NOT use g_image_loader.LoadImage(): its onload calls
+      // asc_docs_api.asyncImageEndLoaded, which — outside the interactive
+      // insert-image flow — runs StartAction + AddInlineImage(50,50) + FinalizeAction,
+      // i.e. it INSERTS a bogus ~50mm image as a SEPARATE undo point (word/api.js).
+      // Instead use LoadImagesWithCallback (decodes into the render cache, fires only
+      // our callback — no insert), then CheckRasterImageOnScreen to repaint the pages
+      // showing that raster (the exact path asyncImageEndLoadedBackground uses).
+      // src must be getFullImageSrc2(blipPath): the drawing's rasterImageId is the
+      // media path we set, and CheckRasterImageOnScreen compares getFullImageSrc2 of
+      // each on-page raster id against this src.
+      // Guarded: if the editor internals are unreachable, injection is unaffected
+      // (the image still appears on reload, the pre-fix behaviour).
+      try {
+        if (scribeInjectedRasterIds.length > 0 &&
+            typeof AscCommon !== "undefined" &&
+            AscCommon.g_image_loader && AscCommon.getFullImageSrc2) {
+          var _loader = AscCommon.g_image_loader;
+          var _wApi = _loader.Api;
+          var _wDD = (_wApi && _wApi.WordControl) ? _wApi.WordControl.m_oDrawingDocument : null;
+          var _srcs = [];
+          for (var wImg = 0; wImg < scribeInjectedRasterIds.length; wImg++) {
+            if (scribeInjectedRasterIds[wImg]) {
+              // getFullImageSrc2(rasterId) resolves the prefix-stripped id to the real
+              // media URL (getImageUrl re-adds the "media/" prefix). This is also the
+              // exact src CheckRasterImageOnScreen compares against per on-page raster.
+              _srcs.push(AscCommon.getFullImageSrc2(scribeInjectedRasterIds[wImg]));
+            }
+          }
+          if (_srcs.length > 0 && _loader.LoadImagesWithCallback) {
+            _loader.LoadImagesWithCallback(_srcs, function() {
+              try {
+                if (_wDD && _wDD.CheckRasterImageOnScreen) {
+                  for (var cri = 0; cri < _srcs.length; cri++) {
+                    _wDD.CheckRasterImageOnScreen(_srcs[cri]);
+                  }
+                }
+              } catch (eRepaint) {}
+            }, null, false);
+            log("warming render cache for " + _srcs.length + " injected image(s)");
+          }
+        }
+      } catch (eWarm) {
+        log("image-cache warm failed (image will still appear on reload): " + eWarm);
+      }
+
       // All text + images were injected inside this single callCommand (images via
       // FromJSON + AddDrawing from the pre-registered media map) — nothing is deferred.
       return;
@@ -2414,7 +2485,14 @@
             try {
               window.Asc.plugin.executeMethod("getLocalImagePath", [cap.dataUrl], function(ret) {
                 if (ret && ret.error === false && ret.path) {
-                  mediaMap[cap.name] = { json: cap.json, localPath: ret.path };
+                  // Use ret.url (= g_oDocumentUrls.imagePath2Local(path), the media
+                  // path with the "media/" prefix STRIPPED) as the blip rasterImageId.
+                  // ret.path keeps the prefix, and getFullImageSrc2 re-adds it via
+                  // getImageUrl -> getUrl("media/"+id), so a prefixed id resolves to
+                  // undefined and the drawing paints BLANK until reload (verified live:
+                  // WARMDIAG getImageUrl=undefined). The stripped form is OO's normal
+                  // rasterImageId, so it resolves at render AND maps back at save.
+                  mediaMap[cap.name] = { json: cap.json, rasterId: ret.url || ret.path };
                 } else {
                   mediaMap[cap.name] = { json: cap.json, failed: true };
                   log("getLocalImagePath failed for " + cap.name);
