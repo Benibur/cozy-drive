@@ -543,8 +543,13 @@
     pasteInProgress = true;
     // Everything (text + images) is injected inside the single injection callCommand
     // below (images via FromJSON + AddDrawing from the pre-registered media map), which
-    // is already ONE atomic history point — one Ctrl+Z reverts the whole reply. No
-    // undo-group is needed (OO 9.4's GroupActions is a no-op stub; see 28-RESEARCH Pitfall 4).
+    // is already ONE atomic history point. No undo-group is needed (OO 9.4's GroupActions
+    // is a no-op stub; see 28-RESEARCH Pitfall 4). One Ctrl+Z reverts the whole reply
+    // ONLY because the extraction's SetName("scribe-img-N") rename is wrapped in
+    // History.TurnOff/On (see the extraction pass) so it adds no separate undo point —
+    // otherwise an image Insert/Replace would take 2 undos. (Note: Start_SilentMode is
+    // NOT the right lever — it gates recalc/interface events, not history; History.TurnOff
+    // is what suppresses the undo record.)
     Asc.scope.tokens = JSON.stringify(flat);
     Asc.scope._mode = mode || "replace";
     Asc.scope.floatingFallback = FLOATING_FALLBACK;
@@ -974,18 +979,20 @@
       // --- Image re-injection via Api.FromJSON + AddDrawing (plugin-only) ---
       // The media pre-pass (buildAndInject) already: (1) captured each referenced
       // image's FULL drawing ToJSON before this callCommand, and (2) registered its
-      // media via getLocalImagePath, yielding a local media path. That name ->
-      // { json, localPath } map arrives here through Asc.scope.imageMediaMap.
+      // media via getLocalImagePath, yielding a registered media id. That name ->
+      // { json, rasterId } map arrives here through Asc.scope.imageMediaMap.
       // For each insertion we rewrite the blip rasterImageId (a base64 data-URL in
-      // the captured JSON) to the registered localPath, then Api.FromJSON rebuilds a
-      // COMPLETE drawing (crop/rotation/flip/wrap/anchor/effects/alt-text preserved)
-      // and AddDrawing inserts it — all inside this single injection callCommand.
+      // the captured JSON) to the registered rasterId (= ret.url, the prefix-stripped
+      // media id — NOT ret.path, which double-prefixes to undefined at render), then
+      // Api.FromJSON rebuilds a COMPLETE drawing (crop/rotation/flip/wrap/anchor/
+      // effects/alt-text preserved) and AddDrawing inserts it — all inside this single
+      // injection callCommand.
       var imageMediaMap = {};
       try { imageMediaMap = JSON.parse(Asc.scope.imageMediaMap || "{}") || {}; } catch (e) { imageMediaMap = {}; }
       var floatingFallback = !!Asc.scope.floatingFallback;
-      // Blip media paths ("media/imageN.png") of images actually injected this pass —
-      // the value we set as rasterImageId. getLocalImagePath only registers the
-      // path->url mapping; it does NOT load the bitmap into the editor render cache,
+      // Blip rasterImageIds (ret.url, the prefix-stripped media id) of images actually
+      // injected this pass — the value we set as rasterImageId. getLocalImagePath only
+      // registers the path->url mapping; it does NOT load the bitmap into the render cache,
       // so injected drawings paint blank until reload. We warm the cache for these
       // rasterImageIds at the END of this callCommand (see below).
       var scribeInjectedRasterIds = [];
@@ -993,7 +1000,7 @@
       // Insert image `name` into `target` (a paragraph or run) via FromJSON+AddDrawing.
       // Returns true if a drawing was inserted, false otherwise (unknown/failed image).
       // Never injects an empty rasterImageId: a failed getLocalImagePath (recorded
-      // without a localPath in the pre-pass) is skipped with a log (Pitfall 1).
+      // without a rasterId in the pre-pass) is skipped with a log (Pitfall 1).
       function injectDrawingInto(target, name) {
         var entry = imageMediaMap[name];
         if (!entry || !entry.rasterId || entry.failed) {
@@ -2375,7 +2382,7 @@
     // media via the stock getLocalImagePath plugin method (async, doc-server
     // upload, no doc mutation). Only once ALL registrations return (ES5 counter
     // barrier) do we start the injection callCommand, passing the
-    // name -> { json, localPath } map through Asc.scope.imageMediaMap.
+    // name -> { json, rasterId } map through Asc.scope.imageMediaMap.
     if (!referencedImageNames || referencedImageNames.length === 0) {
       Asc.scope.imageMediaMap = "{}";
       runInjection();
@@ -2457,7 +2464,7 @@
           return;
         }
         // Async media registration: one getLocalImagePath per image, joined by an
-        // ES5 counter barrier. On error, record the image WITHOUT a localPath so the
+        // ES5 counter barrier. On error, record the image WITHOUT a rasterId so the
         // injection skips it (never writes an empty rasterImageId). A safety timeout
         // guarantees we never hang if a callback is dropped.
         var mediaMap = {};

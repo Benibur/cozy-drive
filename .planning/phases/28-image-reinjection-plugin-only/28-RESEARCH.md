@@ -19,7 +19,7 @@ There is no formal IMG-xx block in REQUIREMENTS.md; 28-CONTEXT.md + the ROADMAP 
 
 | ID | Description (from CONTEXT / success criteria) | Research Support |
 |----|-----------------------------------------------|------------------|
-| IMG-01 | Replace with image(s) → **a single undo** restores initial state | All mutation inside one `callCommand`; undo-group stub removed (it was a no-op in 9.4). One `callCommand` = one history point → one undo. HIGH |
+| IMG-01 | Replace with image(s) → **a single undo** restores initial state | All mutation inside one `callCommand`; undo-group stub removed (it was a no-op in 9.4). One `callCommand` = one history point. **RESOLVED (28-02):** the injection callCommand was indeed one undo point, but the EXTRACTION pass's `ApiDrawing.SetName("scribe-img-N")` rename created a SECOND undo point right before it (why an image Insert took 2 undos while text-only took 1). Fixed by wrapping that rename in `AscCommon.History.TurnOff()`/`TurnOn()` (OO's own nestable no-history counter) so the rename applies + persists at save but records no undo point → a single undo. HIGH |
 | IMG-02 | → **no perceptible flicker** (one render pass) | `getLocalImagePath` does not mutate the doc (async media register only); FromJSON+AddDrawing happen in the single injection `callCommand` → one recalculation/repaint. HIGH |
 | IMG-03 | → **final selection covers injected content** (text + images), not a collapsed cursor | No post-`callCommand` PasteHtml to move the cursor; the existing end-of-callCommand post-selection (fix L#2) stays authoritative. HIGH |
 | IMG-04 | image attrs preserved at save: size + crop/rotation; **floating wrap preserved** (or documented fallback) | ToJSON↔FromJSON symmetric for `extent`, `srcRect`, `xfrm.rot/flipH/flipV`, wrap/anchor, effects, locks, alt-text (source-verified). Floating preserved via `getParaDrawing()` parent back-ref. Fallback documented below. HIGH (source) / needs 1 live save check |
@@ -145,12 +145,12 @@ Api.prototype["pluginMethod_getLocalImagePath"] = function(url) {
 ```
 var j = JSON.parse(fullDrawingJson);      // captured ToJSON of the source image
 // (data-URL that we already handed to getLocalImagePath)
-var localPath = ret.path;                 // "media/imageN.png" from getLocalImagePath
-j.graphic.blipFill.rasterImageId = localPath;
+var rasterId = ret.url;                    // imagePath2Local(path): "media/" prefix STRIPPED
+j.graphic.blipFill.rasterImageId = rasterId;
 var apiDrawing = Api.FromJSON(JSON.stringify(j));   // fresh drawing per insertion
 para.AddDrawing(apiDrawing);              // or run.AddDrawing(apiDrawing)
 ```
-- Use **`ret.path`** (`"media/imageN.png"`) as the rewrite value — this is the value the spike verified end-to-end (CONTEXT: "réécrire le blip rasterImageId vers le chemin média local … forcesave: media présent, blip rId8 valide"). If a live check shows the reconstructed image does not render/save, try **`ret.url`** (`imagePath2Local(path)`) instead — flag as the one value to confirm live (Open Questions Q4).
+- **RESOLVED (28-02): use `ret.url`, NOT `ret.path`.** The original recommendation (rewrite to `ret.path` = `"media/imageN.png"`, spike-verified at forcesave) was **inverted by the live-render check**: `ret.path` keeps the `"media/"` prefix, and `getFullImageSrc2` (`getImageUrl → getUrl("media/"+id)`) re-adds it, so a prefixed id resolves to `undefined` and the image paints **BLANK until reload**. The correct value is **`ret.url`** = `imagePath2Local(path)` (the media path with the `"media/"` prefix stripped) — OO's normal `rasterImageId` form, which resolves at render AND maps back at save. So `ret.path` is no longer even the fallback; `ret.url` is THE value used.
 - One `Api.FromJSON` **per insertion** (it returns a fresh `ApiDrawing`); `AddDrawing` consumes it and checks `IsUseInDocument()` — a fresh drawing is not in the document, so the guard passes. No `Copy()` needed anymore.
 
 **Provenance:** JSON path = source-verified + already used in current code. `ret.path` as the rewrite value = spike-verified (per CONTEXT).
@@ -250,7 +250,7 @@ Not applicable as a data-migration surface. This is a **code-path replacement** 
 | A1 | Floating (anchor) wrap is fully preserved through FromJSON+AddDrawing | Risk 1 | INFERRED from sdkjs 9.4 source (reader/writer/getParaDrawing chain); spike tested inline only | Need `drawingType==="anchor"` PasteHtml fallback (already scoped as a hook) |
 | A2 | Cropped+rotated image survives end-to-end **at save** | Risk 2 | INFERRED (writer/reader symmetric); spike verified the round-trip mechanism, not this specific attr at save | Low — fields are independent; would show as one wrong attr, not data loss |
 | A3 | `getLocalImagePath` async `executeMethod` responds in the **real cross-origin Cozy** frame | Risk 3 | INFERRED (source confirms method + async return; same channel as working PasteHtml); spike ran in oo-dev | Blocks the whole approach in prod — but very low (channel already proven) |
-| A4 | Rewriting the blip to **`ret.path`** (not `ret.url`) yields a valid non-orphan blip | Risk 4 | SPIKE-VERIFIED per CONTEXT; the exact string form is the one value to reconfirm | If wrong, swap to `ret.url` (one-line change) |
+| A4 | ~~Rewriting the blip to **`ret.path`** (not `ret.url`) yields a valid non-orphan blip~~ **RESOLVED (28-02): use `ret.url`.** `ret.path` (prefix kept) renders BLANK until reload (getFullImageSrc2 double-prefixes to undefined); `ret.url` (prefix stripped) resolves at render AND at save. | Risk 4 | Was SPIKE-VERIFIED for save-only; live-render check inverted it to `ret.url` | — (resolved: the one-line swap to `ret.url` was applied in 28-02) |
 
 ## Open Questions (live checks the planner should add as tasks)
 
@@ -259,7 +259,7 @@ Not applicable as a data-migration surface. This is a **code-path replacement** 
    - Unclear: whether OO re-anchors cleanly when the drawing is inserted into a freshly-built run.
 2. **Crop+rotation, at save (Q2 / A2).** Replace with a cropped + rotated image; forcesave; open the `.docx` and confirm `srcRect` + `xfrm.rot` survive.
 3. **Cross-origin real Cozy (Q3 / A3).** Confirm `executeMethod("getLocalImagePath",…)` fires its callback in the real Cozy plugin frame (not just oo-dev).
-4. **Rewrite value path vs url (Q4 / A4).** Confirm `ret.path` gives a valid blip; if the image is blank/dropped, retry with `ret.url`.
+4. **Rewrite value path vs url (Q4 / A4). RESOLVED (28-02): `ret.url`.** `ret.path` gave a valid blip AT SAVE but rendered BLANK until reload (getFullImageSrc2 re-adds the `"media/"` prefix → undefined src). Switched to `ret.url` (prefix-stripped), which resolves at render AND at save. No longer open.
 
 ## Sources
 

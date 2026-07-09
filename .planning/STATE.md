@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.3
 milestone_name: Fidélité d'injection image
-status: executing
-last_updated: "2026-07-06T20:41:18.991Z"
-last_activity: 2026-07-06 -- Phase 28 execution started
+status: Awaiting Ben's report from the "Test MD" dev panel (source badge + MD-source column)
+last_updated: "2026-07-08T12:49:49.584Z"
+last_activity: 2026-07-07 -- diagnosed first UAT failure; root cause is upstream (no image marker in md), NOT the 28-01 injection
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 2
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -44,6 +44,13 @@ Status: Awaiting Ben's report from the "Test MD" dev panel (source badge + MD-so
 Last activity: 2026-07-07 -- diagnosed first UAT failure; root cause is upstream (no image marker in md), NOT the 28-01 injection
 
 ### 28-02 UAT — first-run DIAGNOSTIC (2026-07-07)
+
+> **✅ SUPERSEDED / RESOLVED (2026-07-09).** The first-run "text OK but NO image, multiple undos" was subsequently root-caused to bugs in the 28-01 injection itself, not (only) the upstream marker prerequisite theorised below:
+> 1. **No image / blank** = a live-render bug: the blip was set to `ret.path` (keeps the `media/` prefix), which `getFullImageSrc2` double-prefixes to `undefined` → image paints BLANK until reload. Fixed by using `ret.url` (prefix-stripped) + insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen). Commit `18e0fb0f5`.
+> 2. **Multiple undos** = the extraction's `SetName("scribe-img-N")` rename landed in its own undo point right before injection. Fixed by wrapping it in `AscCommon.History.TurnOff()/TurnOn()` → a single undo. Commit `d2b8782be`.
+>
+> The upstream marker analysis below remains a valid prerequisite (the md must carry a `scribe-img-N` marker for capture to run) and is kept for the record, but it was NOT the whole story — the injection had real defects that are now fixed.
+
 Env READY: oo-dev container re-pointed to THIS worktree (cozy-drive-image-reinject) + serving fresh code.js (verified 17 new-symbol hits, 0 old-machinery); no-store + SW patch applied → Ctrl+Shift+R suffices. cozy-stack running; use slug **drive-rb** (same front as this worktree's base scribe-in-right-panel). Dev-mode Test MD button needs `localStorage.SCRIBE_DEV_MD='true'`.
 
 FIRST UAT (Ben): selected a paragraph WITH an image, used dev "Test MD" button (bypasses LLM, re-injects the extracted md). Result: text inserted OK, but NO image, multiple undos, no redo.
@@ -58,11 +65,12 @@ PENDING — Ben to report from the Test MD dev panel (3 cols + source badge, alr
 Branches: `turndown` → plugin extraction returned nothing for the selection (why? sdkjs GetInlineDrawings patch not loaded in browser? extraction gap for this image type?). `plugin` but no marker → extraction dropped the image. Only once we get a marker-bearing md can 28-01's real injection path (and its undo/redo behaviour) be validated.
 
 KEY CODE REFS: injection consume = code.js:964-1017 injectDrawingInto (imageMediaMap 973-974, skip 983-985); capture pre-pass + getLocalImagePath barrier = code.js:2301-2432 (empty shortcut 2308-2310); collectReferencedImageNames = 427-456; IMG: stripped = 250-255 (inline) / 309-313 (block); md→marker conversion = 466; extraction emits = 3245/3265/3330 (`{{IMG:}}` inline), 3433 (`![IMG:]` block). Test MD button = ScribePopover.jsx:137-174; scribeDevMode.js.
-NOTE: "multiple undos / no redo" not yet analysed on the REAL image path — the insert run had only ONE callCommand (no capture), so revisit once a marker-bearing Replace runs. `callCommand truncates redo` is a known OO gotcha (memory oo_plugin_gotchas_focus_timing_redo).
+NOTE: "multiple undos" — RESOLVED (see the SUPERSEDED banner above): root-caused to the extraction `SetName` rename creating its own undo point; fixed via `History.TurnOff/TurnOn` (commit `d2b8782be`) → single undo. ("no redo" is the separate known OO gotcha `callCommand truncates redo` / redo-disabled-in-coediting — not the plugin.)
 
 ### Wave 2 handoff (28-02 — autonomous:false, Ben drives)
-28-01 landed on feat/image-reinjection (merge be577bc44). code.js now: capture full drawing ToJSON → async getLocalImagePath media pre-pass (ES5 counter barrier, 8s safety timeout) → blip rasterImageId rewrite to ret.path → Api.FromJSON + AddDrawing per insertion inside the single injection callCommand, shared cell+¶ via injectDrawingInto(). Removed: marker/PasteHtml machinery (imageSpecFor/addImageMarker/pendingImages/injectPendingImages), drawingIndex/imageCache/Copy() pre-cache, GroupActions undo-group stub. Dormant floating hook: drawingType==="anchor" + FLOATING_FALLBACK=false.
-Next = /gsd-execute-phase 28 --wave 2 (or drive UAT manually). UAT needs oo-dev container RE-POINTED to cozy-drive-image-reinject worktree (shared container — coordinate). Checks: Q1 floating, Q2 crop+rotation@save, Q3 cross-origin real-Cozy getLocalImagePath, Q4 ret.path vs ret.url; observables single-undo/no-flicker/selection-covers-content; forcesave→unzip docx→word/media/imageN.png + <a:blip> resolves; regression T9 cell + C1 ¶ goldens + Insert path. If Q1 fails → flip dormant FLOATING_FALLBACK. jest broken here (symlinked node_modules) → goldens re-run live.
+
+28-01 landed on feat/image-reinjection (merge be577bc44); 28-02 then added two live fixes (18e0fb0f5, d2b8782be). code.js now: capture full drawing ToJSON → async getLocalImagePath media pre-pass (ES5 counter barrier, 8s safety timeout) → blip rasterImageId rewrite to **ret.url** (prefix-stripped; ret.path double-prefixed to undefined → blank until reload — corrected in 28-02) → Api.FromJSON + AddDrawing per insertion inside the single injection callCommand, shared cell+¶ via injectDrawingInto(); post-inject the render cache is warmed via LoadImagesWithCallback + CheckRasterImageOnScreen (NOT g_image_loader.LoadImage, whose onload inserts a bogus 50mm image). The extraction's SetName("scribe-img-N") rename is wrapped in AscCommon.History.TurnOff()/TurnOn() so it no longer creates a 2nd undo point → an image Insert/Replace is a SINGLE undo. Removed: marker/PasteHtml machinery (imageSpecFor/addImageMarker/pendingImages/injectPendingImages), drawingIndex/imageCache/Copy() pre-cache, GroupActions undo-group stub. Dormant floating hook: drawingType==="anchor" + FLOATING_FALLBACK=false.
+Next = /gsd-execute-phase 28 --wave 2 (or drive UAT manually). UAT needs oo-dev container RE-POINTED to cozy-drive-image-reinject worktree (shared container — coordinate). Checks: Q1 floating, Q2 crop+rotation@save, Q3 cross-origin real-Cozy getLocalImagePath; (Q4 ret.path-vs-ret.url RESOLVED → ret.url; single-undo RESOLVED → extraction rename wrapped in History.TurnOff/On); remaining observables no-flicker/selection-covers-content; forcesave→unzip docx→word/media/imageN.png + <a:blip> resolves; regression T9 cell + C1 ¶ goldens + Insert path. If Q1 fails → flip dormant FLOATING_FALLBACK. jest broken here (symlinked node_modules) → goldens re-run live.
 
 ## v3.2 Roadmap Summary
 
@@ -99,10 +107,10 @@ Execution order: v3.2-01 (UX statique) -> v3.2-02 (câblage discussion + sélect
 
 ## Session Continuity
 
-Last session: 2026-06-25
+Last session: 2026-07-08T12:49:49.576Z
 Stopped at (most recent): v3.2-03 CONTEXT + UI-SPEC DONE & committés. discuss-phase = 4 axes (troncature, retour tronqué, doc+sélection, fraîcheur ; décision structurante = taille pilotée par config, défaut illimité). ui-phase = UI-SPEC approuvé 6/6 par gsd-ui-checker (notice tronqué inline discrète, réutilisation isLoading/ErrorBubble). Next → `/gsd-plan-phase v3.2-03-cablage-document-complet-strategie-taille`.
 Earlier this session: v3.2-02 EXECUTED + VERIFIED passed (10/10). Discussion+selection gates wired at the sendMessage seam (live-read refs, no stale closure), D-05 framing seed added, deterministic 4-quadrant compose spec + v3.1 corpus/PROBE-01 GREEN (160/160 on the 5 gate specs), v3.1 contract frozen artifacts unmodified. Code review found 0 critical / 2 warning (dev-only probe+panel divergence when selection gated OFF) → both fixed (b1b11bb5f). Next step → v3.2-03 (last v3.2 phase; has UI hint).
-Resume file: `.planning/phases/v3.2-02-cablage-discussion-selection/v3.2-02-VERIFICATION.md`.
+Resume file: None
 ⚠️ KNOWN PRE-EXISTING RED (NOT a v3.2-02 regression): `ScribeContainer.spec.jsx › configures Drawer PaperProps for fullscreen on mobile` fails (expects height '100%'; impl uses max-85vh auto-height). ScribeContainer last changed in 55768d1f6/d95e9193d — Phase-16 responsive-drawer drift, predates v3.2-02. Worth fixing in a future polish pass.
 📋 UAT DÉCIDÉ — DIFFÉRÉE (décision 2026-06-25, B. + Claude) : pas d'UAT live sur v3.2-02. La CORRECTION (composition déterministe, contrat v3.1 intact, zéro fuite dans fragments) est déjà prouvée automatiquement (160/160, corpus + PROBE-01 verts avec contextes activés) → vérification `passed`, aucun item humain. Seule l'EFFICACITÉ LLM (le modèle exploite-t-il réellement l'historique/la sélection ?) nécessiterait un œil humain — mais le prompt est encore en évolution : le framing D-05 n'est qu'une AMORCE que v3.2-03 retravaille (frame multi-source complet) en ajoutant le bloc document. Tester live maintenant = jeté à v3.2-03. ⇒ UAT LLM-efficacité CONSOLIDÉE après v3.2-03, sur l'état quasi-final du prompt v3.2, couvrant les 3 sources ensemble (sélection + discussion + document). Rien ne ship entre-temps (milestone v3.2 ne ferme qu'à v3.2-03).
 ✅ RESUME after reboot: run `/gsd-plan-phase v3.2-02-cablage-discussion-selection`. The full slug resolves now that the phase dir exists (verified init.plan-phase phase_found=true on 06-25 after CONTEXT.md write). NO dev env (OO/cozy-stack) needed for planning — it's pure doc generation; the env is only needed later for execute/UAT.

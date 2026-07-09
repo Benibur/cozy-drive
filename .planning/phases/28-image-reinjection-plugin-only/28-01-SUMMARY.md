@@ -31,7 +31,7 @@ key-files:
 
 key-decisions:
   - "Capture the full drawing ToJSON in a dedicated read-only pre-pass callCommand (fresh, runs before InsertContent destroys the source drawings) rather than at extraction time"
-  - "Use ret.path (\"media/imageN.png\") as the blip rewrite value (spike-verified); ret.url is the documented Plan-02 fallback"
+  - "Use ret.path (\"media/imageN.png\") as the blip rewrite value (spike-verified); ret.url is the documented Plan-02 fallback — SUPERSEDED by 28-02: switched to ret.url (prefix-stripped) because ret.path renders blank-until-reload (getFullImageSrc2 double-prefixes to undefined)"
   - "getLocalImagePath error:true records the image WITHOUT a localPath so injectDrawingInto skips it — never writes an empty rasterImageId (T-28-01 mitigation)"
   - "Added a safety barrier timeout (8s) so a dropped getLocalImagePath callback can never hang the injection (Rule 2 — critical robustness)"
   - "Floating fallback is a dormant hook only (FLOATING_FALLBACK=false, passed via Asc.scope); the PasteHtml fallback path is intentionally not built (28-RESEARCH Risk 1: floating preserved by construction)"
@@ -86,7 +86,7 @@ _Note: Tasks 1 & 2 are flagged `tdd="true"` in the plan, but behavioral tests ar
   - `FLOATING_FALLBACK` module flag near `pasteInProgress` (~line 118); `Asc.scope.floatingFallback` set in the injection setup
 
 ## Decisions Made
-- **`ret.path` used for the blip rewrite value** (spike-verified per 28-CONTEXT/28-RESEARCH A4). `ret.url` is the one-line Plan-02 fallback if a live check shows a blank/dropped image.
+- **`ret.path` used for the blip rewrite value** (spike-verified per 28-CONTEXT/28-RESEARCH A4). `ret.url` is the one-line Plan-02 fallback if a live check shows a blank/dropped image. **⚠️ SUPERSEDED by 28-02 (commit `18e0fb0f5`):** the live check showed exactly that blank-until-reload symptom with `ret.path` (getFullImageSrc2 re-adds the `media/` prefix → undefined), so the blip value was switched to **`ret.url`** (prefix-stripped). Post-inject render-cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen) was also added. Additionally the extraction `SetName` rename is now wrapped in `History.TurnOff/On` so an image Insert is a single undo (commit `d2b8782be`).
 - **Dedicated read-only capture pre-pass** (not capture-at-extraction) so the serialized ToJSON is fresh and handles images edited since extraction (28-RESEARCH ordering constraint 2).
 - **Fresh `Api.FromJSON` per insertion** (Pitfall 2) — `injectDrawingInto` never reuses one ApiDrawing across two `AddDrawing` calls.
 - **Floating fallback left dormant** — source analysis (28-RESEARCH Risk 1) shows anchor/wrap is preserved through FromJSON+AddDrawing; the hook exists but the PasteHtml fallback is intentionally unbuilt pending Plan-02 Q1 live confirmation.
