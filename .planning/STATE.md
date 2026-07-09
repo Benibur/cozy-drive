@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v3.3
 milestone_name: Fidélité d'injection image
-status: Awaiting Ben's report from the "Test MD" dev panel (source badge + MD-source column)
-last_updated: "2026-07-08T12:49:49.584Z"
-last_activity: 2026-07-07 -- diagnosed first UAT failure; root cause is upstream (no image marker in md), NOT the 28-01 injection
+status: 28-02 core observables (IMG-01..05) + IMG-04 save-fidelity VERIFIED live (build 2026-07-09.6, commit ba54d6306); residual follow-ups Q1 floating / Q3 cross-origin / T9 re-run deferred (non-blocking)
+last_updated: "2026-07-09T00:00:00.000Z"
+last_activity: 2026-07-09 -- undo=1 + live render + IMG-04 save-fidelity all VERIFIED live; save bug (blip lost at save) root-caused (recalculate=false) & fixed (recalculate=true / Reassign_ImageUrls) via /gsd-debug, committed ba54d6306
 progress:
-  total_phases: 2
+  total_phases: 1
   completed_phases: 0
   total_plans: 2
-  completed_plans: 1
-  percent: 0
+  completed_plans: 2
+  percent: 90
 ---
 
 # Project State
@@ -38,12 +38,20 @@ See: .planning/PROJECT.md (updated 2026-06-24)
 
 ## Current Position
 
-Phase: 28 (image-reinjection-plugin-only) — Wave 1 DONE, Wave 2 = LIVE UAT (Ben-driven), IN PROGRESS
-Plan: 28-01 COMPLETE (1/2) ; 28-02 UAT started — first run blocked UPSTREAM of 28-01 (see diagnostic below)
-Status: Awaiting Ben's report from the "Test MD" dev panel (source badge + MD-source column)
-Last activity: 2026-07-07 -- diagnosed first UAT failure; root cause is upstream (no image marker in md), NOT the 28-01 injection
+Phase: 28 (image-reinjection-plugin-only) — Wave 1 DONE, Wave 2 core VERIFIED (build 2026-07-09.6)
+Plan: 28-01 COMPLETE ; 28-02 COMPLETE for the core gate (IMG-01..05 + IMG-04 save-fidelity) — see `28-02-SUMMARY.md`
+Status: 28-02 core observables + save-fidelity VERIFIED live; residual follow-ups (Q1 floating / Q3 cross-origin / T9 re-run) deferred, non-blocking
+Last activity: 2026-07-09 -- save bug (image lost at save) found + root-caused (recalculate=false → setBlipFill history skipped → not transmitted to x2t) + fixed (recalculate=true / Reassign_ImageUrls, commit ba54d6306) via /gsd-debug
 
-### 28-02 UAT — first-run DIAGNOSTIC (2026-07-07)
+### 28-02 — RESOLUTION (2026-07-09)
+
+Core observables and IMG-04 save-fidelity are VERIFIED live (details in `28-02-SUMMARY.md`; save-bug forensics in `.planning/debug/resolved/inject-blip-lost-at-save.md`):
+- **IMG-01 single undo** — VERIFIED (Insert + Replace = one undo on a fresh unnamed image; extraction `SetName` wrapped in `History.TurnOff/On`, commit `d2b8782be`).
+- **Live render + size** — VERIFIED (blip = `ret.url` prefix-stripped + insert-free warming, commit `18e0fb0f5`; paints at stored extent).
+- **IMG-04 save fidelity** — a real bug was found and FIXED: the re-injected image rendered live but was DROPPED at save (degenerate `<pic:blipFill>`, no `<a:blip>`, blank on reopen). Root cause: injection callCommand ran with `recalculate=false` → under `evalCommand===true`, `setBlipFill` skipped its history → blipFill change never transmitted to the co-editing (x2t) server → `Add_NewImage` never fired. Fix: `recalculate=true` when images present (`scribeInjectRecalc`) → `Reassign_ImageUrls` re-applies `setBlipFill` WITH history → x2t writes `<a:blip r:embed>` + new `word/media` part; FromJSON geometry (crop/rotation/extent) preserved. Commit `ba54d6306` (build `2026-07-09.6`), VERIFIED live end-to-end (Insert embeds `rId10`+`image2.png`, renders on reopen; Replace embeds; single-undo intact). The `.3` (keep data-URL) and `.4` (resolve to http URL) fixes were FALSIFIED first — the rasterId FORM was irrelevant, the co-editing TRANSMISSION was the issue.
+- **Deferred (non-blocking):** Q1 floating-wrap at save, Q3 cross-origin real-Cozy `getLocalImagePath`, IMG-02 formal no-flicker check, T9 table-cell live re-run.
+
+### 28-02 UAT — first-run DIAGNOSTIC (2026-07-07) — historical, superseded
 
 > **✅ SUPERSEDED / RESOLVED (2026-07-09).** The first-run "text OK but NO image, multiple undos" was subsequently root-caused to bugs in the 28-01 injection itself, not (only) the upstream marker prerequisite theorised below:
 > 1. **No image / blank** = a live-render bug: the blip was set to `ret.path` (keeps the `media/` prefix), which `getFullImageSrc2` double-prefixes to `undefined` → image paints BLANK until reload. Fixed by using `ret.url` (prefix-stripped) + insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen). Commit `18e0fb0f5`.
@@ -70,7 +78,7 @@ NOTE: "multiple undos" — RESOLVED (see the SUPERSEDED banner above): root-caus
 ### Wave 2 handoff (28-02 — autonomous:false, Ben drives)
 
 28-01 landed on feat/image-reinjection (merge be577bc44); 28-02 then added two live fixes (18e0fb0f5, d2b8782be). code.js now: capture full drawing ToJSON → async getLocalImagePath media pre-pass (ES5 counter barrier, 8s safety timeout) → blip rasterImageId rewrite to **ret.url** (prefix-stripped; ret.path double-prefixed to undefined → blank until reload — corrected in 28-02) → Api.FromJSON + AddDrawing per insertion inside the single injection callCommand, shared cell+¶ via injectDrawingInto(); post-inject the render cache is warmed via LoadImagesWithCallback + CheckRasterImageOnScreen (NOT g_image_loader.LoadImage, whose onload inserts a bogus 50mm image). The extraction's SetName("scribe-img-N") rename is wrapped in AscCommon.History.TurnOff()/TurnOn() so it no longer creates a 2nd undo point → an image Insert/Replace is a SINGLE undo. Removed: marker/PasteHtml machinery (imageSpecFor/addImageMarker/pendingImages/injectPendingImages), drawingIndex/imageCache/Copy() pre-cache, GroupActions undo-group stub. Dormant floating hook: drawingType==="anchor" + FLOATING_FALLBACK=false.
-Next = /gsd-execute-phase 28 --wave 2 (or drive UAT manually). UAT needs oo-dev container RE-POINTED to cozy-drive-image-reinject worktree (shared container — coordinate). Checks: Q1 floating, Q2 crop+rotation@save, Q3 cross-origin real-Cozy getLocalImagePath; (Q4 ret.path-vs-ret.url RESOLVED → ret.url; single-undo RESOLVED → extraction rename wrapped in History.TurnOff/On); remaining observables no-flicker/selection-covers-content; forcesave→unzip docx→word/media/imageN.png + <a:blip> resolves; regression T9 cell + C1 ¶ goldens + Insert path. If Q1 fails → flip dormant FLOATING_FALLBACK. jest broken here (symlinked node_modules) → goldens re-run live.
+Checks status (2026-07-09): **RESOLVED** — single-undo (History.TurnOff/On); Q4 blip = ret.url; live render+size; **IMG-04 save fidelity** (the forcesave→unzip→`word/media/imageN.png` + `<a:blip>` check) — this was a REAL bug (blip lost at save, `recalculate=false`), now FIXED via `recalculate=true`/`Reassign_ImageUrls` (commit `ba54d6306`, build `.6`); C1 ¶ + Insert regression. **DEFERRED (non-blocking):** Q1 floating (flip dormant FLOATING_FALLBACK if it fails), Q3 cross-origin real-Cozy getLocalImagePath, IMG-02 formal no-flicker, T9 table-cell live re-run. Env: re-point oo-dev to this worktree (`./scripts/oo-dev-setup.sh`, shared container — coordinate); a full oo-dev restart can transiently break OO↔cozy save (callback JWT/session) → re-run the container from this worktree to restore. **jest WORKS here now** (Ben ran `yarn install`; `env NODE_ENV=test npx jest` = 1253 pass / 1 skip / 1 pre-existing ScribeContainer mobile fail; harness config 32/32) — ignore older "jest broken (symlinked node_modules)" notes.
 
 ## v3.2 Roadmap Summary
 

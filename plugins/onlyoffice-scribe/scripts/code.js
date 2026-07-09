@@ -1032,17 +1032,19 @@
           }
           // Set the injected blip to the byte-BACKED uploaded media id
           // (entry.rasterId = getLocalImagePath ret.url = imagePath2Local of the media
-          // part that sendImgUrls just created on the doc server). The capture pre-pass
-          // (imageSpecFor) handed sendImgUrls a FETCHABLE source — the ToJSON `data:` URL
-          // when the image was decoded, else the resolved full doc-server http URL — so
-          // the server downloaded/decoded REAL BYTES into this media part. Therefore this
-          // id both renders live (getFullImageSrc2 resolves the "media/"-prefixed id to
-          // the registered URL) AND embeds at co-editing save (x2t finds the bytes in its
-          // ImageMap and writes <a:blip r:embed> + a word/media part). The earlier
-          // "keep the ToJSON data-URL" approach (build 2026-07-09.3) was FALSIFIED: for a
-          // media-backed source image ToJSON emits a bare media id, not a data-URL, so
-          // the data: guard fell through to a byte-less fallback — identical corrupt save
-          // (see debug: inject-blip-lost-at-save, Eliminated).
+          // part that sendImgUrls just created on the doc server, with REAL bytes — see
+          // imageSpecFor's fetchable-source pre-pass). This id renders live
+          // (getFullImageSrc2 resolves the "media/"-prefixed id to the registered URL).
+          // It embeds at co-editing SAVE only because the injection callCommand runs with
+          // recalculate=TRUE (scribeInjectRecalc, ~l.590): that re-applies setBlipFill
+          // WITH history so the blipFill change is transmitted to x2t, which then writes
+          // <a:blip r:embed> + a word/media part. The rasterId FORM is NOT what fixed the
+          // save: builds .3 (keep the ToJSON data-URL) and .4 (resolve to a fetchable http
+          // URL) BOTH failed the save oracle identically — the .5-diag build proved the
+          // source WAS a real data-URL AND the server HELD the bytes (getLocalImagePath
+          // error:false, fresh hash media id), yet the save stayed degenerate. The true
+          // fix was the co-editing TRANSMISSION (recalculate=true), not the id form
+          // (see debug: inject-blip-lost-at-save, Eliminated + root cause (c)).
           var blipRasterId = entry.rasterId;
           j.graphic.blipFill.rasterImageId = blipRasterId;
           // Floating-image detection hook: drawingType === "anchor" => floating image.
@@ -2361,6 +2363,10 @@
       // src must be getFullImageSrc2(blipPath): the drawing's rasterImageId is the
       // media path we set, and CheckRasterImageOnScreen compares getFullImageSrc2 of
       // each on-page raster id against this src.
+      // SIZE: the injected drawing lays out at the extent stored in its FromJSON
+      // spPr.xfrm (= the source image's saved size); this warm pass only DECODES +
+      // REPAINTS the existing raster, it never resizes — contrast the LoadImage path
+      // above, which would have inserted a fresh bogus 50mm image.
       // Guarded: if the editor internals are unreachable, injection is unaffected
       // (the image still appears on reload, the pre-fix behaviour).
       try {
@@ -2477,16 +2483,25 @@
         // `data:` URL ONLY when the source image is loaded Complete in the render cache
         // at capture time; for an image not yet decoded it returns the BARE media id
         // ("image1.png") unchanged. A bare relative id is NOT fetchable by the server ->
-        // sendImgUrls registers a byte-LESS media entry -> the injected drawing renders
-        // live (getFullImageSrc2 re-adds "media/" and finds the ORIGINAL registration)
-        // but is DROPPED at co-editing save (x2t has no bytes -> degenerate
-        // <pic:blipFill dpi="7602275"><a:tile/></pic:blipFill>, no <a:blip>). This was
-        // the root cause of the blank-on-reopen bug (see debug: inject-blip-lost-at-save).
+        // sendImgUrls would register a byte-LESS media entry. So we make the upload source
+        // fetchable (below), so the doc server holds REAL bytes for the media part.
         //
-        // Fix: if the ToJSON rasterImageId is NOT a self-contained `data:` URL, resolve
-        // the bare media id to its full doc-server http URL via getFullImageSrc2 so the
-        // server can DOWNLOAD real bytes. Then ret.url is a byte-backed media id that
-        // both renders live and embeds at save (the standard OO add-image recipe).
+        // NECESSARY-BUT-NOT-SUFFICIENT — the bytes must exist server-side for x2t to write
+        // them at save, but byte-presence was NOT the root cause of the blank-on-reopen
+        // bug. The .5-diag build proved a byte-backed id (server HAD the bytes) STILL saved
+        // degenerate; the real cause was the injection callCommand running with
+        // recalculate=false, which skipped the co-editing TRANSMISSION of the blipFill
+        // change (see scribeInjectRecalc, ~l.590, and debug: inject-blip-lost-at-save root
+        // cause (c)). This pre-pass and recalculate=true are BOTH required: bytes-on-server
+        // HERE + change-transmitted THERE.
+        //
+        // Fix (this pre-pass): if the ToJSON rasterImageId is NOT a self-contained `data:`
+        // URL, resolve the bare media id to its full doc-server http URL via
+        // getFullImageSrc2 so the server can DOWNLOAD real bytes. (This non-`data:` branch
+        // is ALSO the CONTAMINATION path: re-extracting an ALREADY-injected image, whose
+        // blip is now a media ref, not a data-URL — the http resolution lets it round-trip
+        // again; if resolution fails, the bare id is kept and the image is skipped
+        // gracefully at injection, injectDrawingInto's no-media skip.)
         function imageSpecFor(name) {
           var d = drawingIndex[name];
           if (!d) return null;
@@ -3247,6 +3262,12 @@
         // run text stream). GetInlineDrawings() below only sees inline ones; we
         // reconcile against this superset at the end so floating images are never
         // dropped (the cause of "image sometimes missing from the extracted md").
+        // NOTE: GetInlineDrawings() is an sdkjs ApiRun method added by OUR patch
+        // (ONLYOFFICE/sdkjs PR #4868 — exposes a run's inline drawings + their char
+        // position so the "{{IMG:scribe-img-N}}" marker can be placed in the text
+        // stream); stock OO 9.4 lacks it. It ships baked into the deployed sdk-all.js
+        // (see project_oo_sdk_pr / plugins/onlyoffice-scribe/oo-api-proposal.md). The
+        // `el.GetInlineDrawings ? … : []` guards below degrade gracefully if unpatched.
         var paraDrawings = para.GetAllDrawingObjects() || [];
         var hasScribeDrawings = paraDrawings.length > 0;
         var emittedImg = {};     // scribe-img names already emitted inline (dedup vs floating pass)
@@ -4375,6 +4396,16 @@
   // Undo/redo trigger the passive init() extraction (via the resulting
   // selection change), whose callCommand truncates the redo stack and breaks
   // redo. We suppress that extraction whenever an undo/redo is invoked.
+  //
+  // NOTE — two DISTINCT causes of "redo doesn't work", only one is ours:
+  //   (a) THIS one — the plugin's own post-injection extraction callCommand wipes
+  //       the redo stack. That is the plugin's fault and is what suppressExtraction
+  //       fixes.
+  //   (b) OO ALSO disables Redo natively in fast (non-strict) co-editing — verified
+  //       in OO source; repro = a 2nd tab on the same doc. That is an OO PRODUCT
+  //       behavior, NOT the plugin, and is unfixable here (product decision:
+  //       coEditing 'strict'). See memory oo_redo_disabled_in_coediting. Don't chase
+  //       (b) as a plugin bug.
   //
   // Two reasons the old 500ms window failed (Scribe's redo died ~1s after every
   // insert/replace, while keyboard redo survived):

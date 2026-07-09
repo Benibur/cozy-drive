@@ -8,7 +8,7 @@
 - ✅ **v3.0 Scribe Chat Panel** -- Phases v3.0-01 to v3.0-04 (shipped 2026-04-04)
 - ✅ **v3.1 Contrat de réponse structurée LLM (MCP-ready)** -- Phases v3.1-01 to v3.1-07 (shipped 2026-06-24)
 - 🚧 **v3.2 Contexte enrichi du prompt** -- Phases v3.2-01 to v3.2-03 (planning, started 2026-06-24)
-- 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`)
+- 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`) — core observables + IMG-04 save-fidelity VERIFIED live 2026-07-09 (build `2026-07-09.6`); residual follow-ups Q1/Q3/T9 deferred
 
 ## Phases
 
@@ -116,7 +116,7 @@ v3.1 phases execute in order: v3.1-01 -> v3.1-02 -> v3.1-03 (HARD GATE) -> v3.1-
 | v3.2-01. Zone « Inclure » discrète (UX statique) | v3.2 | 1/1 | Complete | 2026-06-24 |
 | v3.2-02. Câblage discussion + sélection | v3.2 | 1/1 | Complete | 2026-06-25 |
 | v3.2-03. Câblage document complet + stratégie de taille | v3.2 | 0/4 | Planned | - |
-| 28. image-reinjection-plugin-only | v3.3 | 1/2 | In Progress|  |
+| 28. image-reinjection-plugin-only | v3.3 | 2/2 | Core+save VERIFIED (build .6, ba54d6306); Q1/Q3/T9 deferred |  |
 
 ## Phase Details
 
@@ -177,7 +177,7 @@ _Active milestone only. Shipped milestones keep their full phase details in `.pl
 - [x] v3.2-03-04-regression-composition-gate-PLAN.md — extend compose + scribeAI specs (document path, any-combination, determinism) and run the PROBE-01 + corpus + literal-audit GREEN gate (D-07) [CTX-LLM-01, CTX-LLM-04] (wave 3)
 **UI hint**: yes
 
-### v3.3 Fidélité d'injection image (Phase 28) -- IN PROGRESS
+### v3.3 Fidélité d'injection image (Phase 28) -- CORE VERIFIED (2026-07-09); Q1/Q3/T9 deferred
 
 #### Phase 28: image-reinjection-plugin-only
 
@@ -194,11 +194,13 @@ _Active milestone only. Shipped milestones keep their full phase details in `.pl
 6. Non-régression : goldens image existants (T9 cellule, C1 ¶) + Insert toujours verts.
 
 **Context:** ✅ `28-CONTEXT.md` (spike validé) · **Research:** ✅ `28-RESEARCH.md` (HIGH confidence)
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans executed
+
+> **2026-07-09 — Core observables + IMG-04 save-fidelity VERIFIED live (build `2026-07-09.6`).** Single undo (Insert+Replace, `History.TurnOff/On`, `d2b8782be`), live render+size (blip=`ret.url`, `18e0fb0f5`), and **IMG-04 save fidelity** all confirmed. IMG-04 surfaced a REAL bug: the re-injected image rendered live but was LOST at save (degenerate `<pic:blipFill>`, no `<a:blip>`, blank on reopen). Root cause = injection callCommand `recalculate=false` → `setBlipFill` skipped history → blipFill change not transmitted to the co-editing (x2t) server → `Add_NewImage` never fired. Fix = `recalculate=true` when images present (`scribeInjectRecalc`) → `Reassign_ImageUrls` → `<a:blip r:embed>` + new `word/media` part; geometry preserved (commit `ba54d6306`). Forensics: `.planning/debug/resolved/inject-blip-lost-at-save.md`; results: `28-02-SUMMARY.md`. **Deferred (non-blocking):** Q1 floating wrap@save, Q3 cross-origin real-Cozy, IMG-02 formal no-flicker, T9 table-cell live re-run.
 
 Plans:
 - [x] 28-01-PLAN.md — code.js surgery: full-ToJSON capture + async getLocalImagePath media pre-pass, swap all image sites to Api.FromJSON+AddDrawing (cell + paragraph shared path), remove marker/injectPendingImages + undo-group stub, dormant floating fallback hook [IMG-01..05] (wave 1)
-- [ ] 28-02-PLAN.md — live UAT (Ben-driven): core observables (single undo / no flicker / selection covers content), fidelity-at-save Q1-Q4 (floating, crop+rotation, ret.path, cross-origin), + regression goldens T9/C1/Insert [IMG-01..05] (wave 2)
+- [x] 28-02-PLAN.md — live UAT: core observables (single undo ✅ / selection covers content ✅) + IMG-04 save-fidelity ✅ (bug found+fixed, `recalculate=true`), Q4 blip value ✅; regression C1 ¶ + Insert ✅. Deferred: Q1 floating, Q3 cross-origin, IMG-02 no-flicker formal, T9 cell re-run [IMG-01..05] (wave 2) — see `28-02-SUMMARY.md`
 
 ## Backlog
 
