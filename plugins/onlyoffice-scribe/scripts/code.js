@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-09.1 — image live-render fix: blip rasterImageId = ret.url (prefix-stripped) so a re-injected image resolves at render (ret.path kept the media/ prefix → getFullImageSrc2 double-prefixed to undefined → blank until reload). Insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen; NOT g_image_loader.LoadImage, whose onload asyncImageEndLoaded inserts a bogus 50mm image as a separate undo). Local log() helper in the injection callCommand (module log closure is out of scope there; the no-media skip logged OUTSIDE the try, a latent ReferenceError). On top of 2026-07-06.1.";
+  var SCRIBE_BUILD = "2026-07-09.2 — single-undo for image Insert: the extraction renames images (SetName scribe-img-N) inside History.TurnOff/TurnOn so it no longer creates its own undo point before the injection (was the 2nd undo; name still persists at save, just not undoable). PLUS image live-render fix: blip rasterImageId = ret.url (prefix-stripped) so a re-injected image resolves at render (ret.path kept the media/ prefix → getFullImageSrc2 double-prefixed to undefined → blank until reload). Insert-free cache warming (LoadImagesWithCallback + CheckRasterImageOnScreen; NOT g_image_loader.LoadImage, whose onload asyncImageEndLoaded inserts a bogus 50mm image as a separate undo). Local log() helper in the injection callCommand (module log closure is out of scope there; the no-media skip logged OUTSIDE the try, a latent ReferenceError). On top of 2026-07-06.1.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -3216,7 +3216,18 @@
           nm = "scribe-img-" + Asc.scope.imgCounter;
           Asc.scope.imgCounter = Asc.scope.imgCounter + 1;
           if (Asc.scope.scribeExtractMode !== "document") {
-            try { if (drawing && drawing.SetName) drawing.SetName(nm); } catch (e) {}
+            // Rename WITHOUT a history point: the extraction's SetName otherwise
+            // lands in its own undo point right before injection (→ 2 undos to revert
+            // an image Insert). History.TurnOff/On (nestable counter gating
+            // CanAddChanges) is OO's own no-history pattern (Document.js). The name
+            // still applies to the drawing and persists at save; only undo is skipped.
+            try {
+              if (drawing && drawing.SetName) {
+                var _hi = (typeof AscCommon !== "undefined") ? AscCommon.History : null;
+                if (_hi && _hi.TurnOff) _hi.TurnOff();
+                try { drawing.SetName(nm); } finally { if (_hi && _hi.TurnOn) _hi.TurnOn(); }
+              }
+            } catch (e) {}
             // The fresh name is now unique → reuse it on later visits to the same
             // drawing within THIS extraction (run loop, then floating-image pass).
             if (Asc.scope._imgNameCount) Asc.scope._imgNameCount[nm] = 1;
@@ -3494,7 +3505,12 @@
             name = "scribe-img-" + Asc.scope.imgCounter;
             Asc.scope.imgCounter = Asc.scope.imgCounter + 1;
             if (Asc.scope.scribeExtractMode !== "document") {
-              try { drawing.SetName(name); } catch (eSetName) {}
+              // Rename without a history point (see the inline-image SetName above).
+              try {
+                var _hi2 = (typeof AscCommon !== "undefined") ? AscCommon.History : null;
+                if (_hi2 && _hi2.TurnOff) _hi2.TurnOff();
+                try { drawing.SetName(name); } finally { if (_hi2 && _hi2.TurnOn) _hi2.TurnOn(); }
+              } catch (eSetName) {}
               if (Asc.scope._imgNameCount) Asc.scope._imgNameCount[name] = 1;
             }
             hasUnnamed = true;
