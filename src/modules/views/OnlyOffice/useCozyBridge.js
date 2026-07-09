@@ -20,13 +20,14 @@ import { createPanelActionIntent } from '@/lib/cozy-bridge/protocol'
  * @param {Function} [options.onSelectionChanged] - Called when plugin reports selection change
  * @returns {{ pendingIntent: object|null, respond: Function }}
  */
-export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSelectionChanged } = {}) {
+export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSelectionChanged, onSelectionGeometry } = {}) {
   const [pendingIntent, setPendingIntent] = useState(null)
   const bridgeRef = useRef(null)
   const respondRef = useRef(null)
   const togglePanelRef = useRef(onTogglePanel)
   const isPanelOpenRef = useRef(isPanelOpen)
   const onSelectionChangedRef = useRef(onSelectionChanged)
+  const onSelectionGeometryRef = useRef(onSelectionGeometry)
 
   // Keep refs current to avoid stale closures in bridge handlers
   useEffect(() => {
@@ -38,6 +39,9 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
   useEffect(() => {
     onSelectionChangedRef.current = onSelectionChanged
   }, [onSelectionChanged])
+  useEffect(() => {
+    onSelectionGeometryRef.current = onSelectionGeometry
+  }, [onSelectionGeometry])
 
   useEffect(() => {
     const bridge = new CozyBridge(allowedOrigins)
@@ -62,6 +66,14 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
     bridge.onIntent('SELECTION_CHANGED', intentMessage => {
       if (onSelectionChangedRef.current) {
         onSelectionChangedRef.current(intentMessage.data)
+      }
+    })
+
+    // Lightweight geometry for the under-selection floating button. Emitted on
+    // every selection change (independent of the panel / SELECTION_CHANGED).
+    bridge.onIntent('SELECTION_GEOMETRY', intentMessage => {
+      if (onSelectionGeometryRef.current) {
+        onSelectionGeometryRef.current(intentMessage.data)
       }
     })
 

@@ -38,29 +38,6 @@ const getTooltipStyle = isDark => ({
   gap: 4
 })
 
-const SparkleIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z"
-      fill="#7C3AED"
-      stroke="#7C3AED"
-      strokeWidth="0.5"
-    />
-    <path
-      d="M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z"
-      fill="#7C3AED"
-      stroke="#7C3AED"
-      strokeWidth="0.3"
-    />
-  </svg>
-)
-
 const PanelIcon = () => (
   <svg
     width="16"
@@ -90,26 +67,25 @@ const PanelIcon = () => (
 )
 
 /**
- * Floating zone with two buttons rendered in bottom-right of the viewport.
- * Both are always visible (translucent by default, opaque on hover).
- * Rendered via portal on document.body.
+ * Floating zone rendered in the bottom-right of the viewport. Holds the
+ * "open side panel" button (translucent by default, opaque on hover), via a
+ * portal on document.body.
  *
- * @param {{ visible: boolean, onTriggerScribe: () => void, onTogglePanel: () => void }} props
+ * The inline-Scribe trigger that used to sit here was removed: it is now the
+ * under-selection floating button (ScribeSelectionButton), which appears right
+ * where the user is working. Panel access stays here because the panel is
+ * useful without any selection.
+ *
+ * @param {{ visible: boolean, onTogglePanel: () => void }} props
  */
-export const ScribeFloatingZone = ({
-  visible,
-  onTriggerScribe,
-  onTogglePanel
-}) => {
+export const ScribeFloatingZone = ({ visible, onTogglePanel }) => {
   const { t } = useI18n()
   const theme = useTheme()
   const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
-  const [hoveredInline, setHoveredInline] = useState(false)
   const [hoveredPanel, setHoveredPanel] = useState(false)
 
   useEffect(() => {
     if (visible) {
-      setHoveredInline(false)
       setHoveredPanel(false)
     }
   }, [visible])
@@ -131,28 +107,6 @@ export const ScribeFloatingZone = ({
         gap: 8
       }}
     >
-      <button
-        style={{
-          ...buttonStyle,
-          opacity: hoveredInline ? 1 : 0.4,
-          position: 'relative'
-        }}
-        onClick={onTriggerScribe}
-        onMouseEnter={() => setHoveredInline(true)}
-        onMouseLeave={() => setHoveredInline(false)}
-        type="button"
-      >
-        {hoveredInline && (
-          <span style={tooltipStyle}>
-            <span style={{ color: 'white' }}>
-              {t('Scribe.button.text_ai')}
-            </span>
-            <span style={{ color: '#999' }}>(Ctrl+Shift+I)</span>
-          </span>
-        )}
-        <SparkleIcon />
-        Scribe
-      </button>
       <button
         style={{
           ...buttonStyle,

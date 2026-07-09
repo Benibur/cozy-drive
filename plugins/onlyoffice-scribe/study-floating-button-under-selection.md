@@ -65,13 +65,18 @@ Pipeline plugin → hôte (cozy-bridge, `src/lib/cozy-bridge/protocol.js:27-32`)
 
 ## 5. Les deux routes
 
-### Route A — Patch sdkjs (recommandée)
-Exposer la géométrie au canal plugin, la faire remonter à l'hôte Drive, rendre un nouveau bouton portalisé.
+### Route A — Patch sdkjs (recommandée, IMPLÉMENTÉE)
 
-Flux :
+⚠️ **CORRECTION vs la 1re rédaction de l'étude** — le canal `executeMethod` / `pluginMethod_` (proposé initialement dans `apiBase_plugins.js`) NE convient PAS au pipeline de patch réel. Vérifié sur le conteneur oo-dev (OO 9.4.0.1) :
+- Le dispatch `executeMethod` (`pluginMethod_*`, `apiBase_plugins.js`, `api.js`) est servi par **`sdk-all-min.js`** — le bundle **minifié stock**, que le pipeline Scribe **ne patche PAS** (cf. `oo-dev-setup.sh` L#51-54 : « mount ONLY sdk-all.js ; apiBuilder lives only in sdk-all.js, not sdk-all-min.js »). Un patch dans `apiBase_plugins.js` n'atteindrait donc jamais le navigateur sans recompiler le core minifié (Closure) — ce que le pipeline évite délibérément.
+- Le canal **`callCommand` / builder** (`word/apiBuilder.js`) est servi par **`sdk-all.js`** — le bundle concat **non-min**, seul fichier monté/patché (là où vit déjà `GetInlineDrawings`). C'est le SEUL canal qui ride le pipeline prouvé.
+
+→ La méthode est donc exposée côté **builder** (`apiBuilder.js`), appelée par **callCommand**, exactement comme `GetInlineDrawings`.
+
+Flux (implémenté) :
 ```
-[patch] pluginMethod_GetSelectionScreenRect  (OO editor window px)
-   │ executeMethod
+[patch] Api.GetSelectionScreenRect()  (word/apiBuilder.js, editor-window px)
+   │ callCommand(function(){ return Api.GetSelectionScreenRect(); }, ...)
 [plugin code.js]  émet un intent léger SELECTION_GEOMETRY { rect, hasText }
    │ postMessage (broadcastToFrames)
 [View.jsx / useCozyBridge]  + offset iframe éditeur (getBoundingClientRect)
@@ -79,25 +84,25 @@ Flux :
 [nouveau composant]  portal document.body, position:fixed top/left = rect, z 100000
 ```
 
-Patch (calqué sur `GetInlineDrawings`, mais dans `common/apiBase_plugins.js` — canal `executeMethod`, pas `callCommand`) :
+Patch réel (`word/apiBuilder.js`, à côté de `Api.GetDocument` :4623, export :30534) :
 ```js
-// common/apiBase_plugins.js — à côté de pluginMethod_GetSelectionType (:1109)
-Api.prototype["pluginMethod_GetSelectionScreenRect"] = function() {
-    if (this.editorId !== AscCommon.c_oEditorId.Word) return null;
-    var c = this.asc_GetSelectionBounds();      // stock, word/api.js:14232
+Api.GetSelectionScreenRect = function() {
+    var oEditor = Asc.editor;                    // real asc_docs_api in editor window (callCommand ctx)
+    if (!oEditor || typeof oEditor.asc_GetSelectionBounds !== "function") return null;
+    var c = oEditor.asc_GetSelectionBounds();    // stock, word/api.js:14232
     if (!c) return null;
     var xs = [c[0][0],c[1][0],c[2][0],c[3][0]];
     var ys = [c[0][1],c[1][1],c[2][1],c[3][1]];
     var left = Math.min.apply(null,xs), top = Math.min.apply(null,ys);
     var right = Math.max.apply(null,xs), bottom = Math.max.apply(null,ys);
     if (left===0 && top===0 && right===0 && bottom===0) return null; // no selection
-    return { left:left, top:top, width:right-left, height:bottom-top,
-             corners:c };   // garder le quad pour ancrer précisément (fin de sélection)
+    return { left, top, width:right-left, height:bottom-top, corners:c };
 };
+Api["GetSelectionScreenRect"] = Api.GetSelectionScreenRect;
 ```
-- `this` dans `apiBase_plugins.js` **est** `asc_docs_api` → `this.asc_GetSelectionBounds()` direct, zéro nouvelle math.
-- Build : même pipeline concat `sdk-all.js` que le patch existant (`dist/sdkjs-patch-9.4.0.129/`), livré via l'image OO dérivée (`deploy/integration/image/`) + release asset.
-- Ampleur : **PETIT** (1 fichier, ~15 lignes, additif, réutilise une fonction stock).
+- `Asc.editor` est le vrai `asc_docs_api` : la méthode s'exécute dans la fenêtre éditeur (pas dans le closure sandboxé du plugin), donc `asc_GetSelectionBounds()` est accessible — même mécanique que `GetInlineDrawings`.
+- Build : `python3 build/build.py --product word --addon ../sdkjs-forms-94` → `deploy/sdkjs/word/sdk-all.js`, recopié dans `dist/sdkjs-patch-9.4.0.129/sdk-all.js` (monté `:ro` dans oo-dev). Concat pur, pas de Closure. Diff vs dist = uniquement ce patch (43 l.). Livré via l'image OO dérivée (`deploy/integration/image/`) + release asset.
+- Ampleur : **PETIT** (1 fichier, ~25 l., additif, réutilise une fonction stock). ✅ Fait + vérifié : bundle+servi contiennent `GetSelectionScreenRect` x2, `GetInlineDrawings` intact x4.
 
 Côté plugin (`code.js`) :
 - Nouvel intent **léger** `SELECTION_GEOMETRY { rect, hasText }` — NE PAS surcharger `SELECTION_CHANGED` (qui extrait html/markdown/table lourds à chaque sélection : coûteux juste pour bouger un bouton).

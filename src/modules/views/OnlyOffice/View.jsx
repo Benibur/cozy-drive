@@ -11,6 +11,7 @@ import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ScribePanel } from '@/modules/views/OnlyOffice/Scribe/ScribePanel'
 import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
 import { ScribeFloatingZone } from '@/modules/views/OnlyOffice/Scribe/ScribeFloatingButton'
+import { ScribeSelectionButton } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButton'
 import { ScribePopover } from '@/modules/views/OnlyOffice/Scribe/ScribePopover'
 import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
 import { useCozyBridge } from '@/modules/views/OnlyOffice/useCozyBridge'
@@ -65,12 +66,32 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
     tableSnapshotsRef.current = data.tableSnapshots || null
   }, [setCurrentSelection])
 
+  // Geometry of the current selection (editor-window px) for the under-selection
+  // floating button. Fed by the plugin's lightweight SELECTION_GEOMETRY intent,
+  // independent of the panel-gated SELECTION_CHANGED flow.
+  const [selectionGeometry, setSelectionGeometry] = useState({ rect: null, hasText: false })
+  const handleSelectionGeometry = useCallback(data => {
+    setSelectionGeometry({
+      rect: (data && data.hasText && data.rect) || null,
+      hasText: !!(data && data.hasText)
+    })
+  }, [])
+
   const { pendingIntent, respond, castPanelAction } = useCozyBridge(
     allowedOrigins,
-    { onTogglePanel: togglePanel, isPanelOpen, onSelectionChanged: handleSelectionChanged }
+    {
+      onTogglePanel: togglePanel,
+      isPanelOpen,
+      onSelectionChanged: handleSelectionChanged,
+      onSelectionGeometry: handleSelectionGeometry
+    }
   )
 
   const showFloatingZone = isScribeEnabled && !isPanelOpen
+  // Under-selection button: only while Scribe is on, the panel is closed, and the
+  // plugin reports a non-empty selection with a usable rect.
+  const showSelectionButton =
+    isScribeEnabled && !isPanelOpen && selectionGeometry.hasText && !!selectionGeometry.rect
 
   const partialTableInfoRef = useRef(null)
   const tableSnapshotsRef = useRef(null)
@@ -439,9 +460,14 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
         <>
           <ScribeFloatingZone
             visible={showFloatingZone}
-            onTriggerScribe={triggerScribe}
             onTogglePanel={togglePanel}
           />
+          {showSelectionButton && (
+            <ScribeSelectionButton
+              rect={selectionGeometry.rect}
+              onTriggerScribe={triggerScribe}
+            />
+          )}
           <ScribePopover
             open={!!pendingIntent && !isPanelOpen}
             visible={scribeVisible}

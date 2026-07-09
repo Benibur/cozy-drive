@@ -28,6 +28,9 @@ export const INTENT_ACTIONS = {
   AI_TEXT_ASSISTANT: 'AI_TEXT_ASSISTANT',
   TOGGLE_SCRIBE_PANEL: 'TOGGLE_SCRIBE_PANEL',
   SELECTION_CHANGED: 'SELECTION_CHANGED',
+  // Lightweight { rect, hasText } geometry, emitted on every selection change
+  // (independent of the panel) to place the under-selection floating button.
+  SELECTION_GEOMETRY: 'SELECTION_GEOMETRY',
   PANEL_ACTION: 'PANEL_ACTION'
 }
 
