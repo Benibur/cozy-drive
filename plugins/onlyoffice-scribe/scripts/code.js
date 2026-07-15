@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-09.7 — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-15.1 — fix: header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -3683,19 +3683,45 @@
           if (!parentCell) continue;
           var cellR = parentCell.GetRowIndex ? parentCell.GetRowIndex() : -1;
           var cellC = parentCell.GetIndex ? parentCell.GetIndex() : -1;
-          if (cellR >= 0 && cellC >= 0) {
-            var key = cellR + "," + cellC;
-            if (!hitCells[key]) {
-              hitCells[key] = { r: cellR, c: cellC };
-              hitCount++;
+          if (cellR < 0 || cellC < 0) continue;
+          // Only count cells that ACTUALLY belong to the table being analyzed.
+          // Header/footer tables collide with body positions (all start at pos 0),
+          // so pPos-overlap can drag in paragraphs whose REAL parent is another table
+          // — importing its cell coords (e.g. row 2) into a 2-row header table, then
+          // GetCell(2,c) throws "Row index out of bounds". Verify parent-table identity
+          // (GetParentTable), with a bounds check fallback when it is unavailable.
+          var pTable = parentCell.GetParentTable ? parentCell.GetParentTable() : null;
+          if (pTable) {
+            var sameT = (pTable === table);
+            if (!sameT) {
+              try {
+                var _pr = pTable.GetRange();
+                sameT = !!_pr && _pr.GetStartPos() === tblStart && _pr.GetEndPos() === tblEnd && pTable.GetRowsCount() === rowCount;
+              } catch (eId) { sameT = false; }
             }
+            if (!sameT) continue;
+          } else if (cellR >= rowCount) {
+            continue; // coord cannot exist in this table → belongs to another table
+          }
+          var key = cellR + "," + cellC;
+          if (!hitCells[key]) {
+            hitCells[key] = { r: cellR, c: cellC };
+            hitCount++;
           }
         }
 
         // Intra-cell: only 1 cell has paragraphs in the selection
         if (hitCount <= 1) {
           if (hitCount === 0) {
-            return { full: false, selectedCells: [], ambiguous: true, reason: "no_cell_match" };
+            // No selected paragraph is structurally inside any cell of this table
+            // (GetParentTableCell null for all). This happens when a BODY selection
+            // numerically overlaps a HEADER/FOOTER table's position range — those
+            // live in a separate 0-based coordinate space that collides with body
+            // positions (GetAllTables returns them, all starting at pos 0). Such a
+            // table is NOT part of the selection, so fall through to normal text
+            // extraction; do NOT flag ambiguous. A genuine partial/ambiguous table
+            // selection always has hitCount >= 1 (at least one cell actually hit).
+            return { full: false, selectedCells: [], ambiguous: false, reason: "not_involved", notInvolved: true };
           }
           return { full: false, selectedCells: [], ambiguous: false, reason: "intra_cell", intraCell: true };
         }
@@ -3772,6 +3798,13 @@
         var cellMd = [];
         for (var i = 0; i < selectedCells.length; i++) {
           var sc = selectedCells[i];
+          // Defensive bounds check: GetCell(r,c) THROWS (not returns null) when out
+          // of range, which would crash the whole extraction. Skip impossible coords.
+          var _rc = table.GetRowsCount ? table.GetRowsCount() : 0;
+          if (sc.r < 0 || sc.r >= _rc) continue;
+          var _row = table.GetRow ? table.GetRow(sc.r) : null;
+          var _cc = (_row && _row.GetCellsCount) ? _row.GetCellsCount() : 0;
+          if (sc.c < 0 || sc.c >= _cc) continue;
           var cell = table.GetCell(sc.r, sc.c);
           if (!cell) continue;
           cellMd.push("[CELL:" + sc.r + "," + sc.c + "]" + extractCellContent(cell) + "[/CELL]");
@@ -4049,10 +4082,22 @@
             if (!tableRanges[ti].emitted) {
               tableRanges[ti].emitted = true;
               if (!tableRanges[ti].analysis) {
-                tableRanges[ti].analysis = analyzeTableSelection(tableRanges[ti].table, selStart, selEnd, paragraphs);
+                // Defensive: analyzeTableSelection touches OO table APIs that can throw
+                // on degenerate structures; never let that crash the whole extraction.
+                // Treat an analysis failure as "not involved" (fall through to text).
+                try {
+                  tableRanges[ti].analysis = analyzeTableSelection(tableRanges[ti].table, selStart, selEnd, paragraphs);
+                } catch (_ate) {
+                  tableRanges[ti].analysis = { full: false, selectedCells: [], ambiguous: false, reason: "analyze_error", notInvolved: true };
+                }
               }
               var analysis = tableRanges[ti].analysis;
-              if (analysis.intraCell) {
+              if (analysis.notInvolved) {
+                // Header/footer table false-overlap (see analyzeTableSelection):
+                // the selection is structurally in no cell of this table. Fall
+                // through to normal text extraction — insideTable stays false.
+                tableRanges[ti].isNotInvolved = true;
+              } else if (analysis.intraCell) {
                 // Case 1: intra-cell — let paragraphs fall through to normal
                 // paragraph extraction (same code path as non-table text)
                 tableRanges[ti].isIntraCell = true;
@@ -4105,11 +4150,19 @@
                   insideTable = true;
                 }
                 // else: insideTable stays false → paragraph goes through paragraphToMarkdown
+              } else if (tableRanges[ti].isNotInvolved) {
+                // Header/footer false-overlap: this table is not part of the selection,
+                // so the paragraph falls through to normal text extraction.
+                // insideTable stays false.
               } else {
                 insideTable = true;
               }
             }
-            break;
+            // Only stop scanning once a table actually CLAIMS this paragraph. A
+            // not_involved table (header/footer position collision) must NOT end the
+            // scan — the paragraph's REAL table can come later in tableRanges (the
+            // spurious 0-position header tables are enumerated before body tables).
+            if (!tableRanges[ti].isNotInvolved) break;
           }
         }
         if (insideTable) {
