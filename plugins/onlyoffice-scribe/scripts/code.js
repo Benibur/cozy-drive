@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-15.2 — fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-15.3 — dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -5155,6 +5155,88 @@
     });
   }
 
+  // DEV PROBE (§4quater). Reports the raw ingredients of the header/footer-table
+  // "position collision" so a synthetic fixture can be proven to reproduce the bug
+  // condition against the real reference doc, instead of eyeballing OOXML.
+  //   - allTables : doc.GetAllTables() (INCLUDES header/footer tables) — each with
+  //     its GetRange() [start,end], dims, first-cell text, and isBody flag.
+  //   - bodyTables: tables reached via doc.GetElement (the body coordinate space).
+  //   - topOfBody : the first body element's range = a deterministic "selection at
+  //     the top of the body" proxy, plus the buggy predicate hits against it.
+  // Collision reproduced  <=>  some allTable with isBody:false is in
+  // topOfBody.predicateHits (a header/footer table spuriously "overlaps" a
+  // top-of-body selection). Flag-gated; never runs in production.
+  function hookProbeTables() {
+    return new Promise(function(resolve) {
+      window.Asc.plugin.callCommand(function() {
+        var doc = Api.GetDocument();
+        function rng(el) {
+          var r = el && el.GetRange ? el.GetRange() : null;
+          return r ? { s: r.GetStartPos(), e: r.GetEndPos() } : { s: -1, e: -1 };
+        }
+        function tdims(t) {
+          var rows = t.GetRowsCount ? t.GetRowsCount() : 0, cols = 0, first = "";
+          if (rows > 0) {
+            var row0 = t.GetRow(0);
+            cols = row0 && row0.GetCellsCount ? row0.GetCellsCount() : 0;
+            var c0 = t.GetCell(0, 0);
+            var cc = c0 && c0.GetContent ? c0.GetContent() : null;
+            var n = cc && cc.GetElementsCount ? cc.GetElementsCount() : 0;
+            for (var k = 0; k < n && first.length < 40; k++) {
+              var e = cc.GetElement(k);
+              if (e && e.GetText) first += e.GetText();
+            }
+          }
+          return { rows: rows, cols: cols, first: first.slice(0, 40) };
+        }
+        var bodyInfo = [], bc = doc.GetElementsCount();
+        for (var j = 0; j < bc; j++) {
+          var bel = doc.GetElement(j);
+          if (bel && bel.GetClassType && bel.GetClassType() === "table") {
+            var br = rng(bel), bd = tdims(bel);
+            bodyInfo.push({ elem: j, start: br.s, end: br.e, rows: bd.rows, cols: bd.cols, first: bd.first });
+          }
+        }
+        function isBodyTable(d) {
+          for (var b = 0; b < bodyInfo.length; b++) {
+            if (bodyInfo[b].rows === d.rows && bodyInfo[b].cols === d.cols && bodyInfo[b].first === d.first) return true;
+          }
+          return false;
+        }
+        var all = doc.GetAllTables ? doc.GetAllTables() : [], allInfo = [];
+        for (var i = 0; i < all.length; i++) {
+          var r = rng(all[i]), d = tdims(all[i]);
+          allInfo.push({ i: i, start: r.s, end: r.e, rows: d.rows, cols: d.cols, first: d.first, isBody: isBodyTable(d) });
+        }
+        function predicate(selS, selE) {
+          var hits = [];
+          for (var k = 0; k < allInfo.length; k++) {
+            if (allInfo[k].end >= selS && allInfo[k].start <= selE) hits.push(allInfo[k].i);
+          }
+          return hits;
+        }
+        var topEl = bc > 0 ? doc.GetElement(0) : null, topR = topEl ? rng(topEl) : { s: -1, e: -1 };
+        var srange = doc.GetRangeBySelect ? doc.GetRangeBySelect() : null;
+        var liveSel = srange ? { start: srange.GetStartPos(), end: srange.GetEndPos() } : null;
+        var topHits = predicate(topR.s, topR.e);
+        var spurious = [];
+        for (var s = 0; s < topHits.length; s++) {
+          if (!allInfo[topHits[s]].isBody) spurious.push(topHits[s]);
+        }
+        return JSON.stringify({
+          allTables: allInfo,
+          bodyTables: bodyInfo,
+          extraTables: allInfo.length - bodyInfo.length,
+          topOfBody: { start: topR.s, end: topR.e, predicateHits: topHits, spuriousHeaderFooterHits: spurious },
+          liveSelection: liveSel ? { start: liveSel.start, end: liveSel.end, predicateHits: predicate(liveSel.start, liveSel.end) } : null,
+          collisionReproduced: spurious.length > 0
+        });
+      }, false, false, function(ret) {
+        try { resolve(JSON.parse(ret)); } catch (e) { resolve({ error: "probeTables parse: " + e }); }
+      });
+    });
+  }
+
   function runTestCmd(action, params) {
     if (!testHooksEnabled()) return Promise.resolve({ ok: false, error: "test hooks disabled" });
     if (action === "setSelection") return hookSetSelection(params.spec);
@@ -5162,6 +5244,7 @@
     if (action === "injectAtSelection") return hookInjectAtSelection(params.spec, params.md, params.mode);
     if (action === "dumpState") return hookDumpState(params.scope || "region");
     if (action === "extractSelection") return hookExtractSelection();
+    if (action === "probeTables") return hookProbeTables();
     return Promise.resolve({ ok: false, error: "unknown scribeTest action: " + action });
   }
 
