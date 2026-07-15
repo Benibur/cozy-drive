@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-15.1 — fix: header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-15.2 — fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -1979,11 +1979,21 @@
               var insSelEnd = insSelR ? insSelR.GetEndPos() : -1;
               if (insSelEnd >= 0) {
                 var insTarget = insSelEnd;
-                var insDocTables = doc.GetAllTables();
-                for (var idt = 0; idt < insDocTables.length; idt++) {
-                  var idtR = insDocTables[idt].GetRange();
-                  if (idtR && insSelEnd >= idtR.GetStartPos() && insSelEnd <= idtR.GetEndPos()) {
-                    insTarget = idtR.GetEndPos() + 1; // selection ends inside this table → after it
+                // Find the BODY table whose range contains selEnd via doc.GetElement
+                // (body elements ONLY) — NOT GetAllTables(), which also returns
+                // header/footer tables whose 0-based positions collide with body
+                // positions and would match first, sending the cursor far past the real
+                // table (§4quater: "insert after top-of-body table"). Anchor to the start
+                // of the element AFTER the table (or table end+1 if it is the last).
+                var insBodyCount = doc.GetElementsCount();
+                for (var ibe = 0; ibe < insBodyCount; ibe++) {
+                  var ibel = doc.GetElement(ibe);
+                  if (!ibel.GetClassType || ibel.GetClassType() !== "table") continue;
+                  var ibelR = ibel.GetRange ? ibel.GetRange() : null;
+                  if (ibelR && insSelEnd >= ibelR.GetStartPos() && insSelEnd <= ibelR.GetEndPos()) {
+                    var ibNext = (ibe + 1 < insBodyCount) ? doc.GetElement(ibe + 1) : null;
+                    var ibNextR = (ibNext && ibNext.GetRange) ? ibNext.GetRange() : null;
+                    insTarget = ibNextR ? ibNextR.GetStartPos() : (ibelR.GetEndPos() + 1);
                     break;
                   }
                 }
@@ -3673,6 +3683,7 @@
         // using GetParentTableCell() — this is the ground truth of what's selected
         var hitCells = {}; // "r,c" → {r, c}
         var hitCount = 0;
+        var inTableParaCount = 0; // # selected paragraphs that belong to THIS table
         for (var pi = 0; pi < paragraphs.length; pi++) {
           var pRange = paragraphs[pi].GetRange ? paragraphs[pi].GetRange() : null;
           if (!pRange) continue;
@@ -3703,6 +3714,7 @@
           } else if (cellR >= rowCount) {
             continue; // coord cannot exist in this table → belongs to another table
           }
+          inTableParaCount++; // this selected paragraph belongs to THIS table
           var key = cellR + "," + cellC;
           if (!hitCells[key]) {
             hitCells[key] = { r: cellR, c: cellC };
@@ -3710,19 +3722,24 @@
           }
         }
 
-        // Intra-cell: only 1 cell has paragraphs in the selection
-        if (hitCount <= 1) {
-          if (hitCount === 0) {
-            // No selected paragraph is structurally inside any cell of this table
-            // (GetParentTableCell null for all). This happens when a BODY selection
-            // numerically overlaps a HEADER/FOOTER table's position range — those
-            // live in a separate 0-based coordinate space that collides with body
-            // positions (GetAllTables returns them, all starting at pos 0). Such a
-            // table is NOT part of the selection, so fall through to normal text
-            // extraction; do NOT flag ambiguous. A genuine partial/ambiguous table
-            // selection always has hitCount >= 1 (at least one cell actually hit).
-            return { full: false, selectedCells: [], ambiguous: false, reason: "not_involved", notInvolved: true };
-          }
+        // No cell of this table is selected → table not involved.
+        // (GetParentTableCell null for all selected paragraphs.) This happens when a
+        // BODY selection numerically overlaps a HEADER/FOOTER table's position range —
+        // those live in a separate 0-based coordinate space that collides with body
+        // positions (GetAllTables returns them, all starting at pos 0). Such a table is
+        // NOT part of the selection → fall through to normal text extraction; do NOT
+        // flag ambiguous. A genuine partial/ambiguous selection always has hitCount >= 1.
+        if (hitCount === 0) {
+          return { full: false, selectedCells: [], ambiguous: false, reason: "not_involved", notInvolved: true };
+        }
+
+        // Intra-cell — ONLY when the WHOLE selection sits inside this one cell (nothing
+        // else selected). If the selection also holds content OUTSIDE this table (a
+        // paragraph before/after, or another table's cells), it is a MIXED
+        // paragraph+table selection (T4/T5): the touched cell must be emitted as a
+        // partial table ([TABLE]/[CELL]) rather than flattened to plain text. So a
+        // single hit cell with external content falls through to the partial branch.
+        if (hitCount === 1 && inTableParaCount >= paragraphs.length) {
           return { full: false, selectedCells: [], ambiguous: false, reason: "intra_cell", intraCell: true };
         }
 
