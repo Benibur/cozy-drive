@@ -102,6 +102,15 @@ qui est cross-origin.)
   callCommand (indispensable : un curseur collapsed posé dans un callCommand séparé retombe à 0).
 - `extractSelection` → lance la vraie extraction sélection→md, renvoie `{text, md}`.
 - `injectFixture` → injecte sans (re)poser la sélection.
+- `probeTables` → diagnostic §4quater : `doc.GetAllTables()` (inclut en-tête/pied) + positions +
+  `isBody` + le prédicat de chevauchement vs une sélection haut-de-corps → `collisionReproduced`.
+  Sert à **prouver** qu'une fixture reproduit la collision en-tête/pied (calibré sur le vrai doc).
+
+**Grammaire des specs de sélection** (`parseSelSpec`, séparateur `..`, PAS de virgule) :
+`P<n>@<kind>` · `T<n>.C(r,c)@<kind>` · `T<n>.full` ; `<kind>` ∈ `start|end|mid|space|<offset>`.
+Ex. : `P1@start..P1@end`, `T1.full`, `T1.C(0,0)@start..T1.C(1,1)@end` (cross-cell),
+`T1.C(1,1)@start..P1@end` (¶↔cellule). ⚠️ La colonne `selection` de `cases.csv` utilise une
+notation descriptive `[tête,queue]` (virgule) → **le driver la traduit** vers cette grammaire.
 
 ### Procédure de capture (v3, §5bis)
 1. Page fraîche `new_page({ url, isolatedContext })` — le plugin est servi `immutable, max-age=1an`
@@ -154,6 +163,19 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
 - **`oo-dev` mount** : le conteneur monte le plugin depuis CE worktree
   (`cozy-drive-scribe-in-right-panel`). `oo-dev-setup.sh` ne fait que `docker start` d'un conteneur
   existant → pour changer le montage, `docker rm -f oo-dev` d'abord.
+- **Uploader de l'exemple OO cassé** (observé 2026-07-15) : le `upload_file` MCP sur le champ
+  fichier de `/example/` → **502** (`ds:example` crashe), « Upload error: Undefined error », même
+  sur une fixture minuscule. **Contournement** : uploader en multipart puis ouvrir l'éditeur par
+  nom de fichier :
+  ```sh
+  curl -s -X POST http://localhost/example/upload \
+    -F "uploadedFile=@FILE.docx;type=application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  # → {"filename":"FILE.docx",...}  puis :
+  #   new_page http://localhost/example/editor?fileName=FILE.docx
+  ```
+- **Fichier Word volumineux/complexe** qui fait planter le converter de l'exemple depuis l'UI mais
+  que `ConvertService.ashx` convertit : le **normaliser via LibreOffice**
+  (`soffice --headless --convert-to docx`) — élague `styles.xml`, structure préservée.
 
 ---
 
@@ -166,16 +188,19 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
   un golden aujourd'hui ». C'est l'objet de ce fichier.
 - **(c) Driver de capture non committé** — la « recette » Chrome MCP (§4) est exécutée à la main ;
   il n'existe pas de script de capture/replay committé. À reconstruire et committer (phase C).
-- **(d) Note T10 hors source de vérité** — la note ⚠️ `no_cell_match`/§4quater a été éditée dans le
-  bloc généré de `SELECTION-CASES.md` (donc `gen_matrices.py --check` échoue et une régénération
-  l'écraserait). À déplacer dans la colonne `notes` de `cases.csv` (T10), puis régénérer.
-- **(H) Couverture manquante — tables d'en-tête/pied (§4quater)** — la classe de bugs « collision
-  de positions » (`@4a984c9ba`/`@a655c601f`/`@aa8772310`) n'a **aucun golden**. Prévu : axe H dans
-  `cases.csv` (H1 table haut entière / H2 mixte ¶+cellule→partial / H3 cellule seule→intra_cell /
-  H4 multi-cellules / H-reg même chose table du bas) + nouvelle fixture `table-header.docx`
-  (table d'en-tête + table en haut du corps, dérivée de la démo *Speakers at POSAIS 2026.docx*)
-  via `gen_fixtures.py`. Inclut le bug **déféré** : Insérer après un tableau en haut du corps
-  atterrit trop loin (fix = insertion basée éléments, pas positions).
+  Note : les goldens d'injection **de tableau** (clone/replace, H1/H4) exigent le **round-trip
+  d'extraction réel** (le hook `injectAtSelection` avec une fixture plain injecte du texte mais
+  NE clone PAS ; la fixture plain ne porte pas de marqueurs `[TABLE]`). Le driver C doit passer par
+  extraction → md structuré → inject.
+- **(d) ✅ RÉSOLU** — la note T10 §4quater a été déplacée du bloc généré vers `cases.csv` T10
+  `notes` ; `gen_matrices.py --check` **passe** de nouveau.
+- **(H) Axe H — fixture + câblage FAITS ; goldens d'injection à bénir** — fixture
+  `table-header.docx` livrée + **collision prouvée** via `probeTables` (dev-hook, code.js). Cas
+  H1..H4 + H-reg câblés dans `cases.csv` (group `header`) + matrice générée dans §4quater. Le
+  **ciblage/classification** sous collision est VALIDÉ via `probeTables` (bonne identité de table,
+  pas de crash, pas de faux `no_cell_match`, table du bas immunisée). RESTE : capturer+bénir les
+  goldens d'injection complets (H1/insert = xfail attendu = bug **déféré** §4quater : Insérer après
+  un tableau en haut du corps atterrit trop loin — fix = insertion basée éléments, pas positions).
 
 ---
 
