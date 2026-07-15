@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-15.3 — dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -1586,16 +1586,21 @@
             // Collect non-table paragraphs
             var nonTableParas = [];
             for (var mpi = 0; mpi < mixParas.length; mpi++) {
-              var mpRange = mixParas[mpi].GetRange ? mixParas[mpi].GetRange() : null;
-              var mpStart = mpRange ? mpRange.GetStartPos() : -1;
+              // Element-based table-membership test (§4quater). A paragraph is "in a
+              // table" iff it has a parent table cell — position-independent, so it is
+              // immune to the header/footer position collision. The OLD raw-position
+              // test compared the paragraph start against every doc.GetAllTables()
+              // range, but GetAllTables INCLUDES header/footer tables living in a
+              // separate 0-based coordinate space: a top-of-body paragraph (low
+              // position) then falsely matched a header table's range -> it was dropped
+              // from nonTableParas -> nonTableParas became empty -> the mixed in-place
+              // path was skipped -> the general path ran a DESTRUCTIVE full-range
+              // InsertContent that deleted a table row (H2/replace corruption).
               var mpInTable = false;
-              for (var mti = 0; mti < allTables.length; mti++) {
-                var mtRange = allTables[mti].GetRange();
-                if (mtRange && mpStart >= mtRange.GetStartPos() && mpStart <= mtRange.GetEndPos()) {
-                  mpInTable = true;
-                  break;
-                }
-              }
+              try {
+                var mpCell = mixParas[mpi].GetParentTableCell ? mixParas[mpi].GetParentTableCell() : null;
+                if (mpCell) mpInTable = true;
+              } catch (e) {}
               if (!mpInTable) nonTableParas.push(mixParas[mpi]);
             }
             if (nonTableParas.length > 0) {
