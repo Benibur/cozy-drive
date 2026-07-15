@@ -85,13 +85,18 @@ def _count_images(elements):
             scan_one_para(el)
     return mx
 
-def content_types(with_styles, with_images=False):
+def content_types(with_styles, with_images=False, with_header=False):
     styles_override = (
         '<Override PartName="/word/styles.xml" '
         'ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'
         if with_styles else ''
     )
     png_default = '<Default Extension="png" ContentType="image/png"/>' if with_images else ''
+    header_override = (
+        '<Override PartName="/word/header1.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>'
+        if with_header else ''
+    )
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
@@ -100,7 +105,7 @@ def content_types(with_styles, with_images=False):
         f'{png_default}'
         '<Override PartName="/word/document.xml" '
         'ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
-        f'{styles_override}'
+        f'{styles_override}{header_override}'
         '</Types>'
     )
 
@@ -261,7 +266,21 @@ def _has_styles(elements):
     return False
 
 
-def document_xml(elements):
+def header_xml(elements):
+    """En-tête de page (word/header1.xml). Même vocabulaire d'éléments que le
+    corps (¶ / tableaux). Un tableau d'en-tête reproduit la « collision de
+    positions » §4quater : il est renvoyé par doc.GetAllTables() en positions
+    basses 0-based qui recoupent celles du haut du corps."""
+    body = ''.join(element_xml(e) for e in elements)
+    if isinstance(elements[-1], dict) and 'table' in elements[-1]:
+        body += '<w:p/>'  # OOXML : pas de tableau en dernier bloc
+    return (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        f'<w:hdr xmlns:w="{W}">{body}</w:hdr>'
+    )
+
+
+def document_xml(elements, header_rid=None):
     body = ''.join(element_xml(e) for e in elements)
     # OOXML : un tableau ne peut pas être le dernier bloc ni précéder <w:sectPr>
     # sans un paragraphe entre les deux → garde un ¶ traînant si on finit sur un tbl.
@@ -269,20 +288,30 @@ def document_xml(elements):
         body += '<w:p/>'
     # Les namespaces drawing ne sont ajoutés que si la fixture a une image (sinon
     # les fixtures sans image restent byte-identiques à leur version d'origine).
-    img_ns = (
-        ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
-        ' xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'
-        ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
-        ' xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"'
-    ) if _count_images(elements) else ''
+    # Le namespace r seul suffit pour la référence d'en-tête (r:id).
+    if _count_images(elements):
+        ns_extra = (
+            ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
+            ' xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'
+            ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
+            ' xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"'
+        )
+    elif header_rid:
+        ns_extra = ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
+    else:
+        ns_extra = ''
+    sectpr = (
+        f'<w:sectPr><w:headerReference w:type="default" r:id="{header_rid}"/></w:sectPr>'
+        if header_rid else '<w:sectPr/>'
+    )
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        f'<w:document xmlns:w="{W}"{img_ns}>'
-        f'<w:body>{body}<w:sectPr/></w:body></w:document>'
+        f'<w:document xmlns:w="{W}"{ns_extra}>'
+        f'<w:body>{body}{sectpr}</w:body></w:document>'
     )
 
 
-def doc_rels(with_styles, n_images):
+def doc_rels(with_styles, n_images, header_rid=None):
     rels = []
     if with_styles:
         rels.append(
@@ -297,6 +326,12 @@ def doc_rels(with_styles, n_images):
             'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
             'Target="media/image%d.png"/>' % (base + i, i + 1)
         )
+    if header_rid:
+        rels.append(
+            '<Relationship Id="%s" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" '
+            'Target="header1.xml"/>' % header_rid
+        )
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
@@ -304,19 +339,25 @@ def doc_rels(with_styles, n_images):
     )
 
 
-def write_docx(path, paras):
+def write_docx(path, paras, header=None):
     global _DOC_WITH_STYLES
     with_styles = _has_styles(paras)
     _DOC_WITH_STYLES = with_styles
     n_images = _count_images(paras)
+    # rId de l'en-tête = premier libre après styles (rId1) + images.
+    header_rid = ('rId%d' % ((2 if with_styles else 1) + n_images)) if header else None
     with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as z:
-        z.writestr('[Content_Types].xml', content_types(with_styles, n_images > 0))
+        z.writestr('[Content_Types].xml',
+                   content_types(with_styles, n_images > 0, header is not None))
         z.writestr('_rels/.rels', RELS)
-        z.writestr('word/document.xml', document_xml(paras))
-        if with_styles or n_images:
-            z.writestr('word/_rels/document.xml.rels', doc_rels(with_styles, n_images))
+        z.writestr('word/document.xml', document_xml(paras, header_rid))
+        if with_styles or n_images or header:
+            z.writestr('word/_rels/document.xml.rels',
+                       doc_rels(with_styles, n_images, header_rid))
         if with_styles:
             z.writestr('word/styles.xml', STYLES_XML)
+        if header:
+            z.writestr('word/header1.xml', header_xml(header))
         for i in range(n_images):
             z.writestr('word/media/image%d.png' % (i + 1), _png_for_index(i))
 
@@ -476,14 +517,57 @@ FIXTURES = [
             [{'t': 'Outro paragraph'}],
         ],
     },
+    {
+        # Famille TABLE D'EN-TÊTE — support de l'axe H (§4quater « collision de
+        # positions » en-tête/pied). Dérivée de la démo « Speakers at POSAIS 2026 »
+        # (lettre à en-tête LINAGORA), minimisée. Reproduit la condition-racine :
+        #   - un TABLEAU en en-tête (word/header1.xml) → renvoyé par
+        #     doc.GetAllTables() en positions basses 0-based ;
+        #   - un TABLEAU de corps EN HAUT (élément 0) → positions basses qui
+        #     recoupent celles de l'en-tête → « spurious hit » du prédicat de
+        #     chevauchement (validé par le dev-hook probeTables :
+        #     collisionReproduced=true, cf calibration sur le vrai doc).
+        # Cibles de l'axe H :
+        #   - table de corps HAUT (2×2, cellules Alpha/Beta/Gamma/Delta) : H1 (table
+        #     entière), H3 (1 cellule → intra_cell), H4 (multi-cellules) ;
+        #   - ¶ « Body intro paragraph » juste après : H2 (mixte ¶ + 1 cellule) ;
+        #   - table de corps BAS (2×2, Xa..Xd), positions HAUTES (après le
+        #     remplissage) → IMMUNISÉE : H-reg (doit se comporter comme un T normal).
+        # Le remplissage (¶ Line NN) pousse la table du bas au-delà de la plage
+        # d'en-tête pour garantir la non-collision (vérifié par probeTables).
+        'name': 'table-header.docx',
+        'header': [
+            {'table': [[
+                [[{'t': 'ACME'}]],
+                [[{'t': 'ACME CORPORATION — Confidential letterhead'}]],
+                [[{'t': 'Ref. 2026'}]],
+            ]]},
+        ],
+        'paras': [
+            {'table': [
+                [[[{'t': 'Alpha'}]], [[{'t': 'Beta'}]]],
+                [[[{'t': 'Gamma'}]], [[{'t': 'Delta'}]]],
+            ]},
+            [{'t': 'Body intro paragraph'}],
+        ] + [
+            [{'t': 'Line %02d' % i}] for i in range(1, 13)
+        ] + [
+            {'table': [
+                [[[{'t': 'Xa'}]], [[{'t': 'Xb'}]]],
+                [[[{'t': 'Xc'}]], [[{'t': 'Xd'}]]],
+            ]},
+            [{'t': 'Outro paragraph'}],
+        ],
+    },
 ]
 
 
 def main():
     for fx in FIXTURES:
         out = os.path.join(HERE, fx['name'])
-        write_docx(out, fx['paras'])
-        print(f"wrote {out}  ({len(fx['paras'])} paragraphs)")
+        write_docx(out, fx['paras'], fx.get('header'))
+        hdr = ' + header' if fx.get('header') else ''
+        print(f"wrote {out}  ({len(fx['paras'])} paragraphs{hdr})")
 
 
 if __name__ == '__main__':
