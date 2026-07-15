@@ -1,0 +1,17 @@
+{
+  "caseId": "H1",
+  "mode": "replace",
+  "spec": "T1.full",
+  "fixture": "[CELL:0,0]w[/CELL][CELL:0,1]x[/CELL][CELL:1,0]y[/CELL][CELL:1,1]z[/CELL]",
+  "source": "table-header.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js v1 (build 2026-07-15.3, setSelection+extractSelection+injectAtSelection; table-header)",
+  "capturedAt": "2026-07-15",
+  "verdict": "pending",
+  "claudeAnalysis": "pass",
+  "comment": "remplacement in-place du tableau du haut par [[w,x],[y,z]] ; reste du doc intact. Comme T3.",
+  "afterDocxPending": true,
+  "screenshotsPending": true
+}

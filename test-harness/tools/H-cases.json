@@ -1,0 +1,16 @@
+{
+  "_comment": "H-axis (§4quater header/footer position-collision) capture definitions for capture-driver.js. fixtureDoc = table-header.docx (top body table = table 1 / collision; bottom body table = table 2 / immune). md follows the same conventions as the T-goldens: plain text for intra-cell, [CELL:r,c] markers for whole/partial tables, [TABLE:i]...[/TABLE]\\n\\ntext for table<->paragraph crossings.",
+  "fixtureDoc": "table-header.docx",
+  "cases": [
+    { "id": "H1", "mode": "insert", "spec": "T1.full", "md": "[CELL:0,0]w[/CELL][CELL:0,1]x[/CELL][CELL:1,0]y[/CELL][CELL:1,1]z[/CELL]", "note": "top-of-body table entire (collision). Expect: clone [[w,x],[y,z]] AFTER the table (like T3). §4quater deferred: insert-after-top-table may land far -> xfail." },
+    { "id": "H1", "mode": "replace", "spec": "T1.full", "md": "[CELL:0,0]w[/CELL][CELL:0,1]x[/CELL][CELL:1,0]y[/CELL][CELL:1,1]z[/CELL]", "note": "in-place replace of the top table (like T3)." },
+    { "id": "H2", "mode": "insert", "spec": "T1.C(1,1)@start..P1@end", "md": "[TABLE:0]\n[CELL:1,1]DD[/CELL]\n[/TABLE]\n\nIntro edit", "note": "top table last cell -> following paragraph (like T5, table->para crossing)." },
+    { "id": "H2", "mode": "replace", "spec": "T1.C(1,1)@start..P1@end", "md": "[TABLE:0]\n[CELL:1,1]DD[/CELL]\n[/TABLE]\n\nIntro edit", "note": "replace the cell + following paragraph in place." },
+    { "id": "H3", "mode": "insert", "spec": "T1.C(0,0)@start..T1.C(0,0)@end", "md": "XXX", "note": "intra one cell (0,0) -> paragraph path (like T1)." },
+    { "id": "H3", "mode": "replace", "spec": "T1.C(0,0)@start..T1.C(0,0)@end", "md": "XXX", "note": "replace the cell text (like T1)." },
+    { "id": "H4", "mode": "insert", "spec": "T1.C(0,0)@start..T1.C(0,1)@end", "md": "[CELL:0,0]AA[/CELL][CELL:0,1]BB[/CELL]", "note": "partial multi-cell (top row) -> reduced copy after table (like T2a)." },
+    { "id": "H4", "mode": "replace", "spec": "T1.C(0,0)@start..T1.C(0,1)@end", "md": "[CELL:0,0]AA[/CELL][CELL:0,1]BB[/CELL]", "note": "in-place partial cells (like T2a)." },
+    { "id": "H-reg", "mode": "insert", "spec": "T2.full", "md": "[CELL:0,0]w[/CELL][CELL:0,1]x[/CELL][CELL:1,0]y[/CELL][CELL:1,1]z[/CELL]", "note": "bottom (immune) table entire -> must behave like a normal T3 (regression guard)." },
+    { "id": "H-reg", "mode": "replace", "spec": "T2.full", "md": "[CELL:0,0]w[/CELL][CELL:0,1]x[/CELL][CELL:1,0]y[/CELL][CELL:1,1]z[/CELL]", "note": "in-place replace of the immune bottom table (like T3)." }
+  ]
+}

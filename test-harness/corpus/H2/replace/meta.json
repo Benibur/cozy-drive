@@ -1,0 +1,18 @@
+{
+  "caseId": "H2",
+  "mode": "replace",
+  "spec": "T1.C(1,1)@start..P1@end",
+  "fixture": "[TABLE:0]\n[CELL:1,1]DD[/CELL]\n[/TABLE]\n\nIntro edit",
+  "source": "table-header.docx",
+  "statusFromCsv": "xfail",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js v1 (build 2026-07-15.3, setSelection+extractSelection+injectAtSelection; table-header)",
+  "capturedAt": "2026-07-15",
+  "verdict": "pending",
+  "claudeAnalysis": "xfail",
+  "comment": "CORRUPTION : le tableau du haut passe de 2x2 a 1x2 ([[Alpha, Beta+'Intro edit'+¶vide]]) — la ligne 1 (Gamma/Delta) est SUPPRIMEE et 'Intro edit' fusionne dans la cellule Beta. Golden desire = in-place propre (comme T5/replace). A investiguer (classe replace cross table->¶ ; peut etre lie a la collision de positions haut-de-corps).",
+  "afterDocxPending": true,
+  "screenshotsPending": true,
+  "modelGolden": "TO AUTHOR (desired in-place, not the captured buggy output)"
+}

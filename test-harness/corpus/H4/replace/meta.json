@@ -1,0 +1,17 @@
+{
+  "caseId": "H4",
+  "mode": "replace",
+  "spec": "T1.C(0,0)@start..T1.C(0,1)@end",
+  "fixture": "[CELL:0,0]AA[/CELL][CELL:0,1]BB[/CELL]",
+  "source": "table-header.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js v1 (build 2026-07-15.3, setSelection+extractSelection+injectAtSelection; table-header)",
+  "capturedAt": "2026-07-15",
+  "verdict": "pending",
+  "claudeAnalysis": "pass",
+  "comment": "cellules partielles (ligne 0) in-place : [[AA,BB],[Gamma,Delta]] ; ligne 1 intacte. Comme T2a.",
+  "afterDocxPending": true,
+  "screenshotsPending": true
+}
