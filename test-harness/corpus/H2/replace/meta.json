@@ -11,8 +11,9 @@
   "capturedAt": "2026-07-15",
   "verdict": "pending",
   "claudeAnalysis": "xfail",
-  "comment": "CORRUPTION : le tableau du haut passe de 2x2 a 1x2 ([[Alpha, Beta+'Intro edit'+¶vide]]) — la ligne 1 (Gamma/Delta) est SUPPRIMEE et 'Intro edit' fusionne dans la cellule Beta. Golden desire = in-place propre (comme T5/replace). A investiguer (classe replace cross table->¶ ; peut etre lie a la collision de positions haut-de-corps).",
+  "comment": "CORRUPTION confirmée COLLISION-SPECIFIC (§4quater), pas geometrie. Isolation 2026-07-15 : (1) meme geometrie C(1,1)->¶@end replace sur table-plain (sans en-tete) = PROPRE ; (2) sur le MEME table-header, table du BAS immunisee [174,193] meme geometrie = PROPRE ; seule la table du HAUT [0,30] (collision avec en-tete [0,63]) corrompt (2x2->1x2, ligne 1 supprimee, 'Tail edit' fusionne dans cellule). Pendant cote replace du bug d'insertion (insert corrige par ancre basee-elements aa8772310) ; le chemin mixte replace (~code.js 1583-1640, origStart/origEnd = mixSelRange positions brutes + GetAllTables 1301) reste positionnel. Fix futur = basé elements. Golden desire (in-place propre) A ECRIRE ; sortie buggee = ce capture.json.",
   "afterDocxPending": true,
   "screenshotsPending": true,
-  "modelGolden": "TO AUTHOR (desired in-place, not the captured buggy output)"
+  "modelGolden": "TO AUTHOR (desired in-place, not the captured buggy output)",
+  "rootCause": "§4quater header/footer position-collision on the mixed cross table->paragraph REPLACE path (raw positions ~1583-1640)"
 }
