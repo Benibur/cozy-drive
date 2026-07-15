@@ -186,21 +186,22 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
   corriger : pointer vers `feat/scribe-in-right-panel` + ce RUNBOOK.
 - **(b) [RÉSOLU par ce doc]** — absence de runbook consolidé « comment lancer l'oracle / capturer
   un golden aujourd'hui ». C'est l'objet de ce fichier.
-- **(c) Driver de capture non committé** — la « recette » Chrome MCP (§4) est exécutée à la main ;
-  il n'existe pas de script de capture/replay committé. À reconstruire et committer (phase C).
-  Note : les goldens d'injection **de tableau** (clone/replace, H1/H4) exigent le **round-trip
-  d'extraction réel** (le hook `injectAtSelection` avec une fixture plain injecte du texte mais
-  NE clone PAS ; la fixture plain ne porte pas de marqueurs `[TABLE]`). Le driver C doit passer par
-  extraction → md structuré → inject.
+- **(c) ✅ RÉSOLU — driver committé** — `test-harness/tools/capture-driver.js` (browser-side :
+  frame walk, undo-reset, `setSelection`→`extractSelection`→`injectAtSelection`, double-lecture de
+  stabilité) + `H-cases.json` (specs + md par cas). ⚠️ **L'étape extraction est OBLIGATOIRE pour
+  les cas tableau** : le clone/copie-partielle lit `Asc.scope.parsedTables`, peuplé UNIQUEMENT par
+  le scan d'extraction ; sans elle le clone no-op en silence. Piloté via Chrome MCP (inliner le
+  fichier dans un `evaluate_script`, cf en-tête du fichier). RESTE `after.docx`/captures d'écran
+  (via `assemble.py` + MCP) au moment de la passe de blessing.
 - **(d) ✅ RÉSOLU** — la note T10 §4quater a été déplacée du bloc généré vers `cases.csv` T10
   `notes` ; `gen_matrices.py --check` **passe** de nouveau.
-- **(H) Axe H — fixture + câblage FAITS ; goldens d'injection à bénir** — fixture
-  `table-header.docx` livrée + **collision prouvée** via `probeTables` (dev-hook, code.js). Cas
-  H1..H4 + H-reg câblés dans `cases.csv` (group `header`) + matrice générée dans §4quater. Le
-  **ciblage/classification** sous collision est VALIDÉ via `probeTables` (bonne identité de table,
-  pas de crash, pas de faux `no_cell_match`, table du bas immunisée). RESTE : capturer+bénir les
-  goldens d'injection complets (H1/insert = xfail attendu = bug **déféré** §4quater : Insérer après
-  un tableau en haut du corps atterrit trop loin — fix = insertion basée éléments, pas positions).
+- **(H) ✅ Fixture + câblage + goldens FAITS ; verdicts à bénir** — fixture `table-header.docx` +
+  **collision prouvée** (`probeTables`). Cas H1..H4 + H-reg câblés (`cases.csv` group `header`) +
+  matrice §4quater. **10 goldens capturés** (`corpus/H1..H4,H-reg/{insert,replace}`, `model.json`
+  pour les 9 pass). **Résultat : le bug déféré §4quater EST CORRIGÉ** (`aa8772310` — H1/insert
+  clone juste après le tableau du haut). Seul **H2/replace** = `xfail` (corruption de structure).
+  RESTE : faire **bénir** les verdicts (`verdict:pending`) par Ben + écrire le golden désiré de
+  H2/replace + ajouter `after.docx`/captures.
 
 ---
 
