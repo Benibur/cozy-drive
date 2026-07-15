@@ -195,13 +195,13 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
   (via `assemble.py` + MCP) au moment de la passe de blessing.
 - **(d) ✅ RÉSOLU** — la note T10 §4quater a été déplacée du bloc généré vers `cases.csv` T10
   `notes` ; `gen_matrices.py --check` **passe** de nouveau.
-- **(H) ✅ Fixture + câblage + goldens FAITS ; verdicts à bénir** — fixture `table-header.docx` +
-  **collision prouvée** (`probeTables`). Cas H1..H4 + H-reg câblés (`cases.csv` group `header`) +
-  matrice §4quater. **10 goldens capturés** (`corpus/H1..H4,H-reg/{insert,replace}`, `model.json`
-  pour les 9 pass). **Résultat : le bug déféré §4quater EST CORRIGÉ** (`aa8772310` — H1/insert
-  clone juste après le tableau du haut). Seul **H2/replace** = `xfail` (corruption de structure).
-  RESTE : faire **bénir** les verdicts (`verdict:pending`) par Ben + écrire le golden désiré de
-  H2/replace + ajouter `after.docx`/captures.
+- **(H) ✅ Axe H COMPLET — 10/10 goldens pass** — fixture `table-header.docx` + **collision
+  prouvée** (`probeTables`). Cas H1..H4 + H-reg câblés (`cases.csv` group `header`) + matrice
+  §4quater. **2 bugs §4quater corrigés via ce harnais** : (1) insert-après-table-en-haut
+  (`aa8772310`, H1/insert) ; (2) **mixed-replace corruption** (`2026-07-16.1`, H2/replace —
+  test d'appartenance basé `GetParentTableCell` au lieu de positions brutes vs `GetAllTables`).
+  Les 10 `corpus/H*/{insert,replace}` sont **pass** (`model.json` = sortie corrigée). RESTE :
+  faire **bénir** les verdicts (`verdict:pending`) par Ben + ajouter `after.docx`/captures.
 
 ---
 
