@@ -17,7 +17,7 @@
 | Colonne | Sens |
 |---|---|
 | `id` | identifiant **stable** du cas (A0…A8, T1…T13). Clé pour la provenance, le delta, le nommage des goldens. |
-| `group` | `paragraph` \| `table` \| `guard` |
+| `group` | `paragraph` \| `table` \| `guard` \| `header` (axe H §4quater, collision en-tête/pied) \| `content` |
 | `selection` | notation de la sélection (cf §2 de `SELECTION-CASES.md`). **Contient des virgules → champ quoté.** |
 | `description` | libellé court du cas |
 | `driving` | comment poser la sélection : `auto` (API OO) \| `manual` (drag souris — cas cross-boundary T4–T6) \| `na` (garde, pas une sélection) |

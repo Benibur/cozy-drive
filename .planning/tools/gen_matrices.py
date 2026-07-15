@@ -92,6 +92,7 @@ def gen_content():
 BLOCKS = {
     "paragraph": lambda: gen_cases({"paragraph"}),
     "table": lambda: gen_cases({"table", "guard"}),
+    "header": lambda: gen_cases({"header"}),
     "content": gen_content,
 }
 
