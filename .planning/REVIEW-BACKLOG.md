@@ -70,7 +70,7 @@ de bord extraits, indépendamment de la réponse).
 
 | ID | Constat | Décision | Statut |
 |----|---------|----------|--------|
-| **A2/A4-postsel-golden** | goldens de **sélection** A2 (`block0:9→15`) et A4 (`4→10`) PÉRIMÉS : le vif donne 17 / 12. **Pré-existant** (vérifié sur code committé .9, AVANT le chantier intra-cellule) — la sélection inline a changé au **build .2** (rework smart-spacing A1/A5) ; goldens datent du build .1 (§5bis). Le TEXTE est bon ; seul `selection` diffère. | Investiguer si 17/12 = correct (inclut l'espace de fin, cohérent A6) ou régression build .2 ; re-capturer + bénir. Orthogonal à l'intra-cellule. | 📋 à investiguer |
+| **A2/A4-postsel-golden** | goldens de **sélection** A2/A4 PÉRIMÉS (build .1) : le vif donne 17/12/0→8. **Pré-existant** (build .2), pas une régression du chantier. | ✅ **RÉSOLU (Ben, option 1, 2026-07-17)** : la post-sél INCLUT l'espace de collage adjacent (A2 ` XXX`, A4 `XXX `), cohérent avec A6. 4 goldens A2/A4 re-capturés (build .12, preuves fraîches) + **bénis** pass. | ✅ FAIT |
 | **T-reduc** (T2a/T2b/T2c/T5/T6) | copie de tableau partiel : **supprimer** les lignes/colonnes sans cellule sélectionnée ; factoriser ; gérer fusions (§4bis) | — | chantier dédié (risque + questions fusions) ; challenger §4bis avec tests ; boucle indépendante | 📋 chantier à cadrer |
 
 ## Hors cas identifiés

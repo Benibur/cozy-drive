@@ -7,9 +7,11 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v3 (§5bis fix; injectAtSelection atomic; paraMarks+grabFocus+forcesave docx)",
-  "capturedAt": "2026-06-24",
+  "capturedVia": "Chrome DevTools MCP (build 2026-07-16.12; injectAtSelection atomic; option-1 selection incl. paste-space)",
+  "capturedAt": "2026-07-17",
   "verdict": "pass",
-  "comment": "§5bis OK. Curseur @mid (offset 9, sur l'espace quick|brown) -> 'The quick XXX brown fox', pas de double espace, plus de ¶ vide. Place correctement grace au hook atomique injectAtSelection (le curseur collapsed ne retombe plus a l'offset 0). .docx = 3 <w:p>.",
-  "captureVersion": "v3"
+  "comment": "Post-selection = injecte + espace(s) de collage adjacent(s) (A2: ' XXX' espace avant ; A4: 'XXX ' espace apres). DECISION Ben (option 1, 2026-07-17) : la selection INCLUT l'espace de collage auto-insere, par COHERENCE avec A6 beni. Ancien golden (build .1 : A2 9->15 / A4 4->10) etait PERIME (la post-sel inline a change au build .2) ; ce n'etait PAS une regression du chantier intra-cellule (verifie sur code committe .9). Re-capture build .12 : A2 9->17, A4/insert 4->12, A4/replace 0->8. Preuves fraiches (before=selection, after=post-sel, after.docx forcesave).",
+  "captureVersion": "v6-postsel-space",
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-17"
 }
