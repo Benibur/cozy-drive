@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.9 — T-intra V3 (harnais dev-hook) : dumpState.locate situe desormais une selection INTRA-CELLULE -> {block:<idx table>, cell:{r,c}, cellBlock:<¶ dans la cellule>, offset} (avant : block:-1, post-sel intra-cellule aveugle). Inert en prod (flag-gated dumpState). — 2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.12 — T-intra V2 : re-collapse para-relatif GATE intra-cellule seulement (top-level garde doc.GetRange(insPos,insPos) — sinon +2 sur la post-sel inline A2/A4). — 2026-07-16.11 — T-intra V2 : fix curseur @end dernier ¶ de cellule (GetText renvoie 'texte\\t' -> l'offset @end depassait le texte des runs -> fallback offset 0 = XXXAlpha). Strip du \\t terminateur de cellule dans host-detection + test-hook. — 2026-07-16.10 — T-intra V2 (regles A intra-cellule) : host-detection cell-aware (findHostParaAt descend dans les cellules) -> smart-spacing + bord->nouveau ¶ (insCaretAtEnd) s'appliquent intra-cellule ; re-collapse du curseur via hostPara.GetRange(off,off) (para-relatif, fiable en cellule) au lieu de doc.GetRange(insPos,insPos) absolu (retombait a 0 -> XXXAlpha). — 2026-07-16.9 — T-intra V3 (harnais dev-hook) : dumpState.locate situe desormais une selection INTRA-CELLULE -> {block:<idx table>, cell:{r,c}, cellBlock:<¶ dans la cellule>, offset} (avant : block:-1, post-sel intra-cellule aveugle). Inert en prod (flag-gated dumpState). — 2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -722,7 +722,9 @@
             }
           }
           if (_ttgt) {
-            var _ttxt = (_ttgt.GetText ? _ttgt.GetText() : "").replace(/[\r\n]+$/, "");
+            // Strip the cell-terminator \t too (a cell's last ¶ reports "text\t"): else
+            // @end offset overshoots the run text and _tat() falls back to offset 0.
+            var _ttxt = (_ttgt.GetText ? _ttgt.GetText() : "").replace(/[\r\n\t]+$/, "");
             var _tlen = _ttxt.length;
             var _toff = function(k) {
               if (/^\d+$/.test(k)) { var _n = parseInt(k, 10); return _n > _tlen ? _tlen : _n; }
@@ -831,6 +833,46 @@
       var insCaretAtEnd = false;
       var WS = /[\s\n\r\t\u00A0]/;
 
+      // Find the host paragraph whose range covers `pos`, searching BOTH top-level
+      // elements AND table-cell paragraphs (T-r\u00E8gles-intra V2). The old inline search
+      // only iterated doc.GetElement (top-level), so for a cursor inside a cell it
+      // returned null \u2192 the smart-spacing / insCaretAtEnd / hostStyle logic was skipped
+      // \u2192 intra-cell injects lost spacing and the \u00B6-edge\u2192new-\u00B6 rule. Returns
+      // { para, start } or null. Positions within a single paragraph compose reliably,
+      // so the caller can GetRange(start, pos) inside the returned paragraph.
+      function findHostParaAt(pos) {
+        var n = doc.GetElementsCount();
+        for (var hi = 0; hi < n; hi++) {
+          var hel = doc.GetElement(hi);
+          var hct = hel.GetClassType ? hel.GetClassType() : "";
+          if (hct === "paragraph") {
+            var hr = hel.GetRange ? hel.GetRange() : null;
+            if (hr && pos >= hr.GetStartPos() && pos <= hr.GetEndPos()) return { para: hel, start: hr.GetStartPos() };
+          } else if (hct === "table") {
+            try {
+              var hrc = hel.GetRowsCount ? hel.GetRowsCount() : 0;
+              for (var hr2 = 0; hr2 < hrc; hr2++) {
+                var hrow = hel.GetRow(hr2);
+                var hcc = hrow && hrow.GetCellsCount ? hrow.GetCellsCount() : 0;
+                for (var hc = 0; hc < hcc; hc++) {
+                  var hcell = hel.GetCell(hr2, hc);
+                  var hcont = hcell && hcell.GetContent ? hcell.GetContent() : null;
+                  if (!hcont) continue;
+                  var hpn = hcont.GetElementsCount ? hcont.GetElementsCount() : 0;
+                  for (var hpi = 0; hpi < hpn; hpi++) {
+                    var hcp = hcont.GetElement(hpi);
+                    if (!hcp || !hcp.GetClassType || hcp.GetClassType() !== "paragraph") continue;
+                    var hcr = hcp.GetRange ? hcp.GetRange() : null;
+                    if (hcr && pos >= hcr.GetStartPos() && pos <= hcr.GetEndPos()) return { para: hcp, start: hcr.GetStartPos() };
+                  }
+                }
+              }
+            } catch (eHost) {}
+          }
+        }
+        return null;
+      }
+
       // Insert mode (\u00A75bis): SYMMETRIC spacing \u2014 add a space before/after the
       // inserted runs only when the adjacent char is non-whitespace, never doubled.
       // OO document positions are ELEMENT units (not chars), so reading the char
@@ -849,15 +891,11 @@
           // before/after directly from the paragraph text. aChar = "" at end-of-
           // paragraph → no trailing space (the previous range-based read leaked into
           // the NEXT paragraph and wrongly added a space at @end).
-          var hostPara = null, hostStart = -1;
-          var ecount = doc.GetElementsCount();
-          for (var ei = 0; ei < ecount; ei++) {
-            var eel = doc.GetElement(ei);
-            if (!eel.GetClassType || eel.GetClassType() !== "paragraph") continue;
-            var er = eel.GetRange ? eel.GetRange() : null;
-            if (!er) continue;
-            if (insPos >= er.GetStartPos() && insPos <= er.GetEndPos()) { hostPara = eel; hostStart = er.GetStartPos(); break; }
-          }
+          // Cell-aware host search (V2): also descends into table cells, so an
+          // insertion inside a cell finds its host ¶ (not null) → spacing + ¶-edge rule
+          // apply intra-cell too.
+          var hostHit = findHostParaAt(insPos);
+          var hostPara = hostHit ? hostHit.para : null, hostStart = hostHit ? hostHit.start : -1;
           // Insert host ¶ = the one at the insertion point (selection END). hostStyle
           // was seeded from the selection START (§5bis, lines ~701-716); for a multi-¶
           // selection that is the WRONG paragraph — e.g. select H1+H2 and Insert: the
@@ -866,9 +904,13 @@
           // left split half, bumping the last selected ¶ to the first's heading level.
           if (hostPara && hostPara.GetStyle) hostStyle = hostPara.GetStyle();
           if (hostPara) {
-            var hpText = (hostPara.GetText ? hostPara.GetText() : "").replace(/[\r\n]+$/, "");
+            // Strip trailing ¶ mark (\r\n) AND the cell-terminator \t: a cell's LAST
+            // paragraph reports "text\t" from GetText, so without stripping the \t the
+            // @end offset overshoots the run text → the caret falls back to offset 0
+            // (XXX lands at the cell start). Treat the cell \t like a ¶ boundary.
+            var hpText = (hostPara.GetText ? hostPara.GetText() : "").replace(/[\r\n\t]+$/, "");
             var prefR = doc.GetRange(hostStart, insPos);
-            var pref = prefR ? (prefR.GetText() || "").replace(/[\r\n]+$/, "") : "";
+            var pref = prefR ? (prefR.GetText() || "").replace(/[\r\n\t]+$/, "") : "";
             var off = pref.length;
             var bChar = off > 0 ? hpText.charAt(off - 1) : "";
             var aChar = off < hpText.length ? hpText.charAt(off) : "";
@@ -884,7 +926,19 @@
             if (insCaretAtEnd) needSpaceBefore = false;
           }
           // Collapse the cursor to the insertion point (end of the selection).
-          var collapseRange = doc.GetRange(insPos, insPos);
+          // Top-level: keep the document-absolute doc.GetRange(insPos,insPos) — it is
+          // exact there and the A0–A6 selection goldens depend on it (a paragraph-
+          // relative collapse shifts the inline sentinel selection by +2). INTRA-CELL:
+          // an absolute doc.GetRange does NOT compose across the cell boundary (L#2) —
+          // it collapses to offset 0 and the insert lands at the cell start
+          // ("XXXAlpha"). There, build the collapsed range from the host ¶ itself
+          // (paragraph-relative offset), which is reliable inside a cell.
+          var hostCell = hostPara && hostPara.GetParentTableCell ? hostPara.GetParentTableCell() : null;
+          var collapseRange = null;
+          if (hostCell && hostPara && typeof off === "number" && hostPara.GetRange) {
+            collapseRange = hostPara.GetRange(off, off);
+          }
+          if (!collapseRange) collapseRange = doc.GetRange(insPos, insPos);
           if (collapseRange) collapseRange.Select();
         }
       }
