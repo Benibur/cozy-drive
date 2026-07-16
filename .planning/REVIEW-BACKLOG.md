@@ -40,7 +40,7 @@ style du **1ᵉʳ ¶ partiellement sélectionné** (tend §5bis qui n'émet le m
 | **A5** insert | 1ᵉʳ ¶ injecté après P3 sur une nouvelle ligne | ✅ | corrigé (même mécanisme qu'A1) | ✅ FAIT |
 | **A6** insert+replace | dernier ¶ injecté **fusionné** dans le suffixe (pas de saut final) | ✅ | corrigé (build .4 ; goldens multi-¶ re-capturés, formatage preservé) | ✅ FAIT |
 | **A7** ¶ vides de bord | (exigence à relâcher) | ❌ extraction préserve (`\n\nMiddle\n\n`) ; perte = **trim LLM** | 🔵 hors périmètre harnais → relâcher l'exigence + noter la frontière | ⏳ à documenter |
-| **A8** select-all | garder le md même avec des tableaux | ✅ (106 `<w:p>` cellules incluses > 100) | corriger : garde sur **blocs top-level** (option a) | 📋 à faire |
+| **A8** select-all | garder le md même avec des tableaux | ✅ (101 ¶ cellules incl. > 100) | corrigé (build .5 : garde sur ¶ top-level + backstop >500) ; validé live fichier Ben. TODO fixture table-heavy + golden | ✅ FAIT (golden à ajouter) |
 
 **Découverte transverse (A3/A7)** : le harnais **court-circuite le LLM** (fixture déterministe).
 Il est donc **aveugle** aux pertes de fidélité **causées par le comportement normal du LLM** (trim des

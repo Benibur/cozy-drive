@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -4085,8 +4085,19 @@
 
       var paragraphs = range.GetAllParagraphs();
 
-      // Performance guard: fall back to simple text for large selections
-      if (paragraphs.length > 100) {
+      // Performance guard: fall back to simple text for large selections (UAT A8).
+      // Count TOP-LEVEL paragraphs (NOT those inside table cells), not every paragraph:
+      // GetAllParagraphs() includes cell-paragraphs, so a modest document with a few
+      // small tables (e.g. 25 body ¶ + 9 tables = 106 cell-incl. ¶) wrongly tripped the
+      // >100 guard and lost all markdown on select-all. A hard backstop on the raw count
+      // (>500) still protects against a pathological table-heavy selection.
+      var topLevelParaCount = 0;
+      for (var pgi = 0; pgi < paragraphs.length; pgi++) {
+        var inCell = false;
+        try { inCell = !!(paragraphs[pgi].GetParentTableCell && paragraphs[pgi].GetParentTableCell()); } catch (e) {}
+        if (!inCell) topLevelParaCount++;
+      }
+      if (topLevelParaCount > 100 || paragraphs.length > 500) {
         return JSON.stringify({ text: range.GetText(), md: "" });
       }
 
