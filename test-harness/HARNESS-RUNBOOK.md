@@ -157,6 +157,12 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
 - **Cache immutable** : toute édition de `code.js` exige une page **neuve**
   (`new_page({ isolatedContext })`), pas un hard-reload. OO régénère aussi `code.js.gz` ;
   `oo-dev-setup.sh` nettoie le `.gz`.
+- **Hygiène des onglets Chrome MCP** (préférence Ben — mémoire `feedback-chrome-mcp-tabs`) :
+  **UN seul `isolatedContext` à la fois** + `new_page({ background: true })`. Chaque nom
+  d'`isolatedContext` distinct = une **fenêtre** séparée. Le workflow de capture enchaîne les
+  redéploiements `code.js` (chacun exige un contexte FROID) → à chaque redéploiement :
+  **fermer l'ancien contexte** (`close_page` sur ses onglets) AVANT d'ouvrir le nouveau ; ne
+  jamais laisser les contextes s'accumuler. En fin de tâche, fermer tous les onglets de test.
 - **`SCRIBE_BUILD`** (en tête de `code.js`, loggé `[Scribe] build …` + exposé `window.__scribeBuild`) :
   **à bumper à chaque changement notable** de `code.js`. Sert à vérifier quelle version est chargée
   malgré le cache.
