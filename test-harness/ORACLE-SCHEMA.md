@@ -43,6 +43,10 @@ Cell = { blocks: Block[], vmerge?: "master"|"cont", hspan?: number }
 Selection = { start: Pos, end: Pos }     // collapsed ajouté par la normalisation si start==end
 Pos = { block: int, run?: int, offset?: int }
   // STABLE & block-relatif. Ne JAMAIS stocker les positions OO absolues (volatiles).
+  // INTRA-CELLULE (T-règles-intra V3) : quand la position tombe dans un tableau,
+  //   Pos = { block: <idx du bloc table>, cell: {r,c}, cellBlock: <idx ¶ dans la cellule>, offset }
+  //   offset = position DANS ce ¶ de cellule (même convention que top-level).
+  //   block:-1 = position introuvable (sélection perdue / hors modèle).
 ```
 
 ## 3. Normalisation (forme canonique comparable)

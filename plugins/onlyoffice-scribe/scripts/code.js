@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.9 — T-intra V3 (harnais dev-hook) : dumpState.locate situe desormais une selection INTRA-CELLULE -> {block:<idx table>, cell:{r,c}, cellBlock:<¶ dans la cellule>, offset} (avant : block:-1, post-sel intra-cellule aveugle). Inert en prod (flag-gated dumpState). — 2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -5192,7 +5192,7 @@
           return { type: "table", grid: grid };
         }
 
-        var blocks = [], blockRanges = [];
+        var blocks = [], blockRanges = [], cellRanges = [];
         var bc = doc.GetElementsCount();
         for (var i = 0; i < bc; i++) {
           var el = doc.GetElement(i);
@@ -5207,8 +5207,35 @@
               end: rg && rg.GetEndPos ? rg.GetEndPos() : -1
             });
           } else if (ct === "table") {
+            var tblIdx = blocks.length;
             blocks.push(tableToBlock(el));
-            // table selection-mapping deferred to T4-T6 work
+            // Index every cell paragraph's range so an intra-cell selection can be
+            // located (§ T-règles-intra V3). Without this, a selection inside a cell
+            // matches no top-level range and reports block:-1 (post-selection blind).
+            try {
+              var trc = el.GetRowsCount ? el.GetRowsCount() : 0;
+              for (var tr = 0; tr < trc; tr++) {
+                var trow = el.GetRow(tr);
+                var tcc = trow && trow.GetCellsCount ? trow.GetCellsCount() : 0;
+                for (var tc = 0; tc < tcc; tc++) {
+                  var tcell = el.GetCell(tr, tc);
+                  var tcont = tcell && tcell.GetContent ? tcell.GetContent() : null;
+                  if (!tcont) continue;
+                  var tpn = tcont.GetElementsCount ? tcont.GetElementsCount() : 0;
+                  for (var tpi = 0; tpi < tpn; tpi++) {
+                    var tcp = tcont.GetElement(tpi);
+                    if (!tcp || !tcp.GetClassType || tcp.GetClassType() !== "paragraph") continue;
+                    var tcr = tcp.GetRange ? tcp.GetRange() : null;
+                    if (!tcr) continue;
+                    cellRanges.push({
+                      block: tblIdx, cell: { r: tr, c: tc }, cellBlock: tpi,
+                      start: tcr.GetStartPos ? tcr.GetStartPos() : -1,
+                      end: tcr.GetEndPos ? tcr.GetEndPos() : -1
+                    });
+                  }
+                }
+              }
+            } catch (eCells) {}
           }
         }
 
@@ -5221,6 +5248,13 @@
             for (var k = 0; k < blockRanges.length; k++) {
               var br = blockRanges[k];
               if (pos >= br.start && pos <= br.end) return { block: br.idx, offset: pos - br.start };
+            }
+            // Intra-cell: report the table block index + cell coords + the paragraph
+            // index within the cell + offset within that paragraph (§ T-règles-intra V3).
+            for (var kc = 0; kc < cellRanges.length; kc++) {
+              var cr = cellRanges[kc];
+              if (pos >= cr.start && pos <= cr.end)
+                return { block: cr.block, cell: cr.cell, cellBlock: cr.cellBlock, offset: pos - cr.start };
             }
             return { block: -1, offset: -1 };
           };
