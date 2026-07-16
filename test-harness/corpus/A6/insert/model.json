@@ -37,7 +37,15 @@
           "t": " "
         },
         {
-          "t": "Mid insert"
+          "t": "First"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Second"
         },
         {
           "t": " "
@@ -51,11 +59,11 @@
   "selection": {
     "start": {
       "block": 2,
-      "offset": 8
+      "offset": 0
     },
     "end": {
-      "block": 2,
-      "offset": 22
+      "block": 3,
+      "offset": 20
     }
   }
 }

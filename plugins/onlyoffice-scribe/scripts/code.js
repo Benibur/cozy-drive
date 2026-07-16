@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -1872,6 +1872,31 @@
           try { var sr = Api.CreateRun(); sr.AddText(SCRIBE_SEL_SENT); para.AddElement(sr); } catch (e) {}
         }
 
+        // §5bis A6 (UAT 2026-07-16) : append a source paragraph's runs (preserving char
+        // formatting: bold/italic/underline/strike/font) to a target paragraph. Used to
+        // MERGE the last injected para into the surviving suffix so they share one line.
+        function appendRunsPreserving(target, source) {
+          var n = source && source.GetElementsCount ? source.GetElementsCount() : 0;
+          for (var i = 0; i < n; i++) {
+            var el = source.GetElement(i);
+            var ct = el && el.GetClassType ? el.GetClassType() : "";
+            var nr = Api.CreateRun();
+            nr.AddText(el && el.GetText ? el.GetText() : "");
+            if (ct === "run") {
+              var tp = el.GetTextPr ? el.GetTextPr() : null;
+              if (tp) {
+                try { if (tp.GetBold && tp.GetBold()) nr.SetBold(true); } catch (e) {}
+                try { if (tp.GetItalic && tp.GetItalic()) nr.SetItalic(true); } catch (e) {}
+                try { if (tp.GetUnderline && tp.GetUnderline()) nr.SetUnderline(true); } catch (e) {}
+                try { if (tp.GetStrikeout && tp.GetStrikeout()) nr.SetStrikeout(true); } catch (e) {}
+                try { var ff = tp.GetFontFamily && tp.GetFontFamily(); if (ff) nr.SetFontFamily(ff); } catch (e) {}
+                try { var fsz = tp.GetFontSize && tp.GetFontSize(); if (fsz) nr.SetFontSize(fsz); } catch (e) {}
+              }
+            }
+            try { target.AddElement(nr); } catch (e) {}
+          }
+        }
+
         // §5bis: after a BLOCK InsertContent, OO splits the host ¶ at the insertion
         // point and the right remainder becomes a trailing paragraph. Remove it ONLY
         // if it is EMPTY (insertion at the host's start/end) so no empty ¶ is left at
@@ -1893,8 +1918,16 @@
                 var trailText = (scanRange.GetText() || "").replace(/[\r\n]+$/, "");
                 if (trailText.length === 0) {
                   doc.RemoveElement(si); // empty right half -> no ¶ vide at the edge
+                } else if (!blockHasParaStyle(blocks[blocks.length - 1])) {
+                  // §5bis A6 : the paste point is a true MIDDLE (suffix survives) AND the
+                  // LAST injected para is PLAIN → merge that last para INTO the suffix so
+                  // they land on ONE line (« Second » + « er flows » → « Second er flows »),
+                  // instead of two paragraphs. The merged ¶ keeps the host ¶ style.
+                  appendRunsPreserving(lastContentPara, scanEl);
+                  if (hostStyle && lastContentPara.SetStyle) lastContentPara.SetStyle(hostStyle);
+                  doc.RemoveElement(si); // suffix content now lives in lastContentPara
                 } else if (hostStyle && scanEl.SetStyle) {
-                  scanEl.SetStyle(hostStyle); // §5bis split invariant: right half keeps host ¶ style
+                  scanEl.SetStyle(hostStyle); // §5bis split invariant: right half keeps host ¶ style (styled last block stays separate)
                 }
                 break;
               }
@@ -2032,10 +2065,12 @@
           // have been substituted with a TABLE clone (table-only Insert: T2a/T3).
           // Inserting a table in inline mode at a collapsed cursor is a silent no-op
           // → only treat as inline when the actual content element is a paragraph.
+          // §5bis: single plain paragraph -> INLINE (runs spliced into the host ¶);
+          // multi-¶ / styled / non-text -> BLOCK. At a ¶-END caret, force BLOCK+spacer
+          // so a single plain para becomes a NEW ¶ (A1/A5). The last-para→suffix merge
+          // for the multi-¶ mid case (A6) is handled by cleanupTrailingBlockPara.
           var insSimpleInline = (content.length === 1 && blocks.length === 1 && blocks[0].type === "paragraph"
             && !(content[0] && content[0].GetClassType && content[0].GetClassType() === "table"));
-          // §5bis: at a ¶-END caret, force the BLOCK path (spacer trick) so a single
-          // plain para becomes a NEW ¶ instead of merging inline at end-of-line (A1/A5).
           if (insSimpleInline && !insCaretAtEnd) {
             appendSelSentinel(content[0]); useSentinelSel = true;
             doc.InsertContent(content, true);

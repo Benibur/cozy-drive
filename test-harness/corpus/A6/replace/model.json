@@ -14,7 +14,15 @@
           "t": " "
         },
         {
-          "t": "Mid replaced"
+          "t": "First"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Second"
         },
         {
           "t": " "
@@ -31,8 +39,8 @@
       "offset": 10
     },
     "end": {
-      "block": 0,
-      "offset": 26
+      "block": 1,
+      "offset": 21
     }
   }
 }
