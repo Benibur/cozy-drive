@@ -35,7 +35,7 @@ style du **1ᵉʳ ¶ partiellement sélectionné** (tend §5bis qui n'émet le m
 |----|-------------|:-----:|----------|--------|
 | **A1** insert | nouveau ¶ en dessous (pas de fusion en fin de P1) | ✅ | corrigé (build 2026-07-16.2 ; golden re-capturé) | ✅ FAIT |
 | **A2** | — (OK) | — | rien | ✅ |
-| **A3** extract | le md démarre à la **sélection**, pas au ¶ | ❌ (extraction clippe correctement, même sur titre) | te demander le repro exact (souris ? doc ?) — sinon classe round-trip LLM | ⏳ attente Ben |
+| **A3** extract | le md démarre à la **sélection**, pas au ¶ | ✅ (UAT souris : sélection @end inclut la marque ¶ \r\n) | corrigé (build .6 : strip \r\n de rangeText avant le clip). TROU HARNAIS: setSelection API ne met pas le \r\n → test de non-reg à ajouter | ✅ FAIT (test à ajouter) |
 | **A4** | — (OK) | — | rien | ✅ |
 | **A5** insert | 1ᵉʳ ¶ injecté après P3 sur une nouvelle ligne | ✅ | corrigé (même mécanisme qu'A1) | ✅ FAIT |
 | **A6** insert+replace | dernier ¶ injecté **fusionné** dans le suffixe (pas de saut final) | ✅ | corrigé (build .4 ; goldens multi-¶ re-capturés, formatage preservé) | ✅ FAIT |
