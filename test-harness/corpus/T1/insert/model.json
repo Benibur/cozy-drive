@@ -19,7 +19,12 @@
                 "runs": [
                   {
                     "t": "Alpha"
-                  },
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
                   {
                     "t": "XXX"
                   }
@@ -87,13 +92,22 @@
   ],
   "selection": {
     "start": {
-      "block": -1,
-      "offset": -1
+      "block": 1,
+      "cell": {
+        "r": 0,
+        "c": 0
+      },
+      "cellBlock": 1,
+      "offset": 0
     },
     "end": {
-      "block": -1,
-      "offset": -1
-    },
-    "collapsed": true
+      "block": 1,
+      "cell": {
+        "r": 0,
+        "c": 0
+      },
+      "cellBlock": 1,
+      "offset": 5
+    }
   }
 }

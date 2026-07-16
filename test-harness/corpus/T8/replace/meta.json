@@ -7,9 +7,9 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v4 (build 2026-06-26.4; extract+injectAtSelection atomic; snapshots cabled; forcesave docx; no grabFocus)",
-  "capturedAt": "2026-06-26",
-  "verdict": "pass",
-  "comment": "Replace dans cellule MULTI-¶ (1,1) : sélection du 1er ¶ 'Delta' remplacée par multi-¶ 'CCC\\n\\nDDD' -> cellule = 'CCC' / 'DDD' / [¶ vide] / 'Delta2'. ZÉRO débordement (blockCount=3) -> infirme L#3. Delta2 (2e ¶ non sélectionné) préservé. Résidu ¶ vide = L#7 (cosmétique).",
-  "captureVersion": "v4"
+  "capturedVia": "Chrome DevTools MCP (build 2026-07-16.12; injectAtSelection atomic; V2 A-rules intra-cell; V3 dumpState cell-locate)",
+  "capturedAt": "2026-07-16",
+  "verdict": "pending",
+  "comment": "INTRA-CELLULE multi-¶ (V2, build 2026-07-16.12). Insert @end de \"Delta\" -> \"Delta\"¶\"AAA\"¶\"BBB\", Delta2 preserve (regle bord->nouveau ¶ + multi-¶). Replace cellule -> \"CCC\"¶\"DDD\", Delta2 preserve. Outro intact (regression V1 corrigee : plus d'aspiration du ¶ top-level). Post-selection dans la cellule (V3).",
+  "captureVersion": "v5-intracell"
 }
