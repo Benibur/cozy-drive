@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -1916,14 +1916,23 @@
             var lcRange = lastContentPara && lastContentPara.GetRange ? lastContentPara.GetRange() : null;
             if (!lcRange) return;
             var lcEndPos = lcRange.GetEndPos();
-            var total = doc.GetElementsCount();
+            // Scan the container that HOLDS the injected content, not the document.
+            // When the injection host is inside a table cell, the trailing (split-right)
+            // ¶ is a CELL paragraph — NOT a top-level doc element — so a doc.GetElement
+            // scan skips it and matches the first TOP-LEVEL element after the table
+            // instead (e.g. the paragraph following the table), then merges/removes THAT
+            // — pulling unrelated body content into the cell (T8 corruption). Scanning
+            // the host cell's own content keeps the cleanup inside the cell boundary.
+            var lcCell = lastContentPara.GetParentTableCell ? lastContentPara.GetParentTableCell() : null;
+            var scanDoc = (lcCell && lcCell.GetContent) ? lcCell.GetContent() : doc;
+            var total = scanDoc.GetElementsCount();
             for (var si = 0; si < total; si++) {
-              var scanEl = doc.GetElement(si);
+              var scanEl = scanDoc.GetElement(si);
               var scanRange = scanEl && scanEl.GetRange ? scanEl.GetRange() : null;
               if (scanRange && scanRange.GetStartPos() >= lcEndPos) {
                 var trailText = (scanRange.GetText() || "").replace(/[\r\n]+$/, "");
                 if (trailText.length === 0) {
-                  doc.RemoveElement(si); // empty right half -> no ¶ vide at the edge
+                  scanDoc.RemoveElement(si); // empty right half -> no ¶ vide at the edge
                 } else if (!blockHasParaStyle(blocks[blocks.length - 1])) {
                   // §5bis A6 : the paste point is a true MIDDLE (suffix survives) AND the
                   // LAST injected para is PLAIN → merge that last para INTO the suffix so
@@ -1939,7 +1948,7 @@
                     if (lcPostMergeEnd > lcPreMergeEnd) mergedTrailingLen = lcPostMergeEnd - lcPreMergeEnd;
                   }
                   if (hostStyle && lastContentPara.SetStyle) lastContentPara.SetStyle(hostStyle);
-                  doc.RemoveElement(si); // suffix content now lives in lastContentPara
+                  scanDoc.RemoveElement(si); // suffix content now lives in lastContentPara
                 } else if (hostStyle && scanEl.SetStyle) {
                   scanEl.SetStyle(hostStyle); // §5bis split invariant: right half keeps host ¶ style (styled last block stays separate)
                 }
@@ -2016,20 +2025,26 @@
             var frRange = firstReal && firstReal.GetRange ? firstReal.GetRange() : null;
             if (!frRange) return;
             var frStart = frRange.GetStartPos();
-            var total = doc.GetElementsCount();
+            // Same cell-boundary reasoning as cleanupTrailingBlockPara: scan the host
+            // cell's content (not the doc) when the spacer landed inside a cell, so the
+            // "element before the 1st real block" is a cell paragraph, never a top-level
+            // body element preceding the whole table.
+            var frCell = firstReal.GetParentTableCell ? firstReal.GetParentTableCell() : null;
+            var scanDoc = (frCell && frCell.GetContent) ? frCell.GetContent() : doc;
+            var total = scanDoc.GetElementsCount();
             var prevIdx = -1;
             for (var i = 0; i < total; i++) {
-              var el = doc.GetElement(i);
+              var el = scanDoc.GetElement(i);
               var r = el && el.GetRange ? el.GetRange() : null;
               if (!r) continue;
               if (r.GetStartPos() >= frStart) break;
               prevIdx = i; // last element starting before the 1st real block
             }
             if (prevIdx >= 0) {
-              var prevEl = doc.GetElement(prevIdx);
+              var prevEl = scanDoc.GetElement(prevIdx);
               var pr = prevEl && prevEl.GetRange ? prevEl.GetRange() : null;
               var ptext = pr ? (pr.GetText() || "").replace(/[\r\n]+$/, "") : "";
-              if (ptext.length === 0) doc.RemoveElement(prevIdx);
+              if (ptext.length === 0) scanDoc.RemoveElement(prevIdx);
             }
           } catch (e) {}
         }
