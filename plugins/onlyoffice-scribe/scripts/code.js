@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -818,6 +818,11 @@
       // flags to inject space runs at content boundaries.
       var needSpaceBefore = false;
       var needSpaceAfter = false;
+      // \u00A75bis r\u00E8gle d'insertion (2026-07-16, UAT Ben) : quand le point de collage est
+      // au BORD d'un \u00B6 non-vide (curseur en fin de \u00B6 \u2192 s\u00E9lection couvrant des \u00B6 entiers),
+      // le contenu inject\u00E9 devient un NOUVEAU \u00B6 au lieu d'\u00EAtre fusionn\u00E9 inline en fin de
+      // ligne (bug A1/A5). Au MILIEU d'un \u00B6, on garde la fusion inline. Cf REVIEW-BACKLOG.
+      var insCaretAtEnd = false;
       var WS = /[\s\n\r\t\u00A0]/;
 
       // Insert mode (\u00A75bis): SYMMETRIC spacing \u2014 add a space before/after the
@@ -863,6 +868,14 @@
             var aChar = off < hpText.length ? hpText.charAt(off) : "";
             if (bChar && !WS.test(bChar)) needSpaceBefore = true;
             if (aChar && !WS.test(aChar)) needSpaceAfter = true;
+            // Caret at the END of a non-empty host ¶ = a paragraph boundary → the
+            // injected content must start on a NEW ¶ (not glue to the sentence).
+            // Empty host ¶ (off===len===0) is EXCLUDED so an insert into a blank ¶
+            // still fills it inline (A7). @start (off===0, len>0) is left untouched.
+            insCaretAtEnd = (hpText.length > 0 && off === hpText.length);
+            // New-¶ insertion: the ¶ break IS the separator → no leading space run
+            // (otherwise the new ¶ starts with a spurious " XXX").
+            if (insCaretAtEnd) needSpaceBefore = false;
           }
           // Collapse the cursor to the insertion point (end of the selection).
           var collapseRange = doc.GetRange(insPos, insPos);
@@ -1924,7 +1937,10 @@
         // merge target), and the real styled 1st block stays a separate ¶. Mutually
         // exclusive with the Cas A inline-style fix.
         function prepareFirstBlockForMerge() {
-          if (firstBlockStyled) {
+          // Spacer trick when the 1st block is styled (Cas B) OR when inserting at a
+          // ¶-END caret (A1/A5): unshift an empty host-styled ¶ so OO merges IT into
+          // the host (host unchanged) and content[0] stays a separate NEW ¶.
+          if (firstBlockStyled || insCaretAtEnd) {
             try {
               var sp = Api.CreateParagraph();
               if (hostStyle && sp.SetStyle) sp.SetStyle(hostStyle);
@@ -2018,7 +2034,9 @@
           // → only treat as inline when the actual content element is a paragraph.
           var insSimpleInline = (content.length === 1 && blocks.length === 1 && blocks[0].type === "paragraph"
             && !(content[0] && content[0].GetClassType && content[0].GetClassType() === "table"));
-          if (insSimpleInline) {
+          // §5bis: at a ¶-END caret, force the BLOCK path (spacer trick) so a single
+          // plain para becomes a NEW ¶ instead of merging inline at end-of-line (A1/A5).
+          if (insSimpleInline && !insCaretAtEnd) {
             appendSelSentinel(content[0]); useSentinelSel = true;
             doc.InsertContent(content, true);
             // useSentinelSel -> sentinel-based post-selection (robust vs run-boundary positions)

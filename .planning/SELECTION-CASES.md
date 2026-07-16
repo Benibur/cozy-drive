@@ -301,6 +301,10 @@ Spec validée avec Ben. Concerne le plugin Scribe (`code.js`) : injection `build
 
 **Bord de ¶ = saut de ligne (précision normative 2026-06-24) :** le **début de ¶** (aucun caractère avant le point d'insertion) et la **fin de ¶** (le caractère *suivant* est la marque ¶ = retour à la ligne) comptent **comme un blanc** ⇒ **aucune espace ajoutée de ce côté**. C'est ce qui rend `A1 replace` (tout P1 supprimé puis insertion dans un ¶ vide) = **`XXX`** strict, sans espace traînant.
 
+### ⭐ Raffinement UAT (2026-07-16, build `2026-07-16.2`) — bord de ¶ ⇒ NOUVEAU ¶
+> **Précision de la règle A.1.** La fusion **inline** du 1ᵉʳ para ne s'applique que si le point de collage est **au MILIEU** d'un ¶. Si le point est un **bord de ¶ non-vide** (curseur en **fin** de ¶ → sélection couvrant des ¶ entiers, cas **A1/A5**), le contenu injecté devient un **NOUVEAU ¶** (via le spacer trick, comme le Cas B) — au lieu de coller à la fin de la phrase. Aucune espace de tête (le saut de ligne est le séparateur). Le style du nouveau ¶ = celui du **md injecté** (Normal pour un para plain — on ne duplique pas un titre hôte). Un ¶ hôte **vide** reste rempli inline (A7). Le collage `@start` n'est pas modifié.
+> *(Symptôme avant : `A1 insert` = « The quick brown fox **XXX** » collé sur la même ligne, contredisant l'attendu documenté « nouveau ¶ ». Le golden avait été gelé à tort sur l'inline.)* Énoncé complet + illustrations : `REVIEW-BACKLOG.md`.
+
 ### Unification
 **Remplacer = supprimer la sélection (OO gère la suppression/fusion comme il veut), puis insérer** au curseur réduit résultant. → une seule logique : l'**insertion**.
 

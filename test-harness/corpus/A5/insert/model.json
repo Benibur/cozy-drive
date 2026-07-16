@@ -21,12 +21,6 @@
       "runs": [
         {
           "t": "Lazy river flows"
-        },
-        {
-          "t": " "
-        },
-        {
-          "t": "Alpha edit"
         }
       ]
     },
@@ -34,19 +28,19 @@
       "type": "p",
       "runs": [
         {
-          "t": "Beta edit"
+          "t": "XXX"
         }
       ]
     }
   ],
   "selection": {
     "start": {
-      "block": 2,
+      "block": 3,
       "offset": 0
     },
     "end": {
       "block": 3,
-      "offset": 11
+      "offset": 5
     }
   }
 }

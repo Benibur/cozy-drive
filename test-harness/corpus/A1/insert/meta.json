@@ -8,8 +8,8 @@
   "stable": true,
   "setSelectionOk": true,
   "capturedVia": "Chrome DevTools MCP v3 (§5bis fix; injectAtSelection atomic; paraMarks+grabFocus+forcesave docx)",
-  "capturedAt": "2026-06-24",
+  "capturedAt": "2026-07-16",
   "verdict": "pass",
-  "comment": "§5bis OK. Insert sur ¶ entier -> point d'insertion @end -> 'The quick brown fox XXX'. 1 espace avant XXX, AUCUN espace trainant (fix (b) @end), plus de ¶ vide. .docx = 3 <w:p>. (Avant-fix: ¶ vide en queue.)",
+  "comment": "REGLE D'INSERTION UAT (2026-07-16, build 2026-07-16.2) : collage en FIN de ¶ (bord) -> le contenu injecte devient un NOUVEAU ¶ (au lieu de fusionner inline en fin de ligne). Conforme a l'attendu deja documente. Fix: detection curseur en fin de ¶ non-vide -> chemin bloc + spacer, suppression de l'espace de tete. Style du nouveau ¶ = md injecte (Normal pour plain). Non-regression A2/A4/A0 (inline) + styled (nouveau ¶ Normal apres titre) verifiee.",
   "captureVersion": "v3"
 }

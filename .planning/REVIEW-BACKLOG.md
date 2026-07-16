@@ -33,11 +33,11 @@ style du **1ᵉʳ ¶ partiellement sélectionné** (tend §5bis qui n'émet le m
 
 | ID | Cible (Ben) | Repro | Décision | Statut |
 |----|-------------|:-----:|----------|--------|
-| **A1** insert | nouveau ¶ en dessous (pas de fusion en fin de P1) | ✅ | corriger (la doc disait déjà « nouveau ¶ » ; golden gelé à tort sur inline) | 🔨 en cours |
+| **A1** insert | nouveau ¶ en dessous (pas de fusion en fin de P1) | ✅ | corrigé (build 2026-07-16.2 ; golden re-capturé) | ✅ FAIT |
 | **A2** | — (OK) | — | rien | ✅ |
 | **A3** extract | le md démarre à la **sélection**, pas au ¶ | ❌ (extraction clippe correctement, même sur titre) | te demander le repro exact (souris ? doc ?) — sinon classe round-trip LLM | ⏳ attente Ben |
 | **A4** | — (OK) | — | rien | ✅ |
-| **A5** insert | 1ᵉʳ ¶ injecté après P3 sur une nouvelle ligne | ✅ | corriger (même règle qu'A1) | 🔨 en cours |
+| **A5** insert | 1ᵉʳ ¶ injecté après P3 sur une nouvelle ligne | ✅ | corrigé (même mécanisme qu'A1) | ✅ FAIT |
 | **A6** insert+replace | dernier ¶ injecté **fusionné** dans le suffixe (pas de saut final) | ✅ | corriger | 🔨 en cours |
 | **A7** ¶ vides de bord | (exigence à relâcher) | ❌ extraction préserve (`\n\nMiddle\n\n`) ; perte = **trim LLM** | 🔵 hors périmètre harnais → relâcher l'exigence + noter la frontière | ⏳ à documenter |
 | **A8** select-all | garder le md même avec des tableaux | ✅ (106 `<w:p>` cellules incluses > 100) | corriger : garde sur **blocs top-level** (option a) | 📋 à faire |
