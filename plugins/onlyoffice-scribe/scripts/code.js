@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -765,6 +765,12 @@
                                      // merge inline; host keeps its own style.
       var leadSpacerInserted = false; // §5bis Cas B: a host-styled empty spacer was
                                       // unshifted into content[] to absorb OO's merge.
+      var firstParaMergedInline = false; // §5bis A6 (post-sel): the 1st injected block
+                                         // is plain and MERGES into the host prefix (Cas A).
+                                         // The block-insert post-selection must then start
+                                         // at the merge junction (preSelStart), NOT at the
+                                         // merged paragraph's offset 0 (which would cover the
+                                         // surviving host prefix — the A6-postsel bug).
       try {
         var selRange = doc.GetRangeBySelect();
         if (selRange) {
@@ -1923,7 +1929,15 @@
                   // LAST injected para is PLAIN → merge that last para INTO the suffix so
                   // they land on ONE line (« Second » + « er flows » → « Second er flows »),
                   // instead of two paragraphs. The merged ¶ keeps the host ¶ style.
+                  // Record the POSITION span of the appended suffix (measured, not char-
+                  // counted, so it stays exact with multi-run/formatted suffixes) so the
+                  // post-selection can exclude the surviving host suffix (§5bis A6-postsel).
+                  var lcPreMergeEnd = lastContentPara.GetRange ? lastContentPara.GetRange().GetEndPos() : -1;
                   appendRunsPreserving(lastContentPara, scanEl);
+                  if (lcPreMergeEnd >= 0 && lastContentPara.GetRange) {
+                    var lcPostMergeEnd = lastContentPara.GetRange().GetEndPos();
+                    if (lcPostMergeEnd > lcPreMergeEnd) mergedTrailingLen = lcPostMergeEnd - lcPreMergeEnd;
+                  }
                   if (hostStyle && lastContentPara.SetStyle) lastContentPara.SetStyle(hostStyle);
                   doc.RemoveElement(si); // suffix content now lives in lastContentPara
                 } else if (hostStyle && scanEl.SetStyle) {
@@ -1943,10 +1957,14 @@
         // untouched: it stays a block with its own style.
         function applyHostStyleToFirstParaIfPlain() {
           try {
-            if (hostStyle && blocks[0] && blocks[0].type === "paragraph"
-                && content[0] && content[0].SetStyle && content[0].GetClassType
+            if (blocks[0] && blocks[0].type === "paragraph"
+                && content[0] && content[0].GetClassType
                 && content[0].GetClassType() === "paragraph") {
-              content[0].SetStyle(hostStyle);
+              // content[0] is a plain paragraph → OO's block InsertContent merges it
+              // into the host's (left) split half. Flag it so the post-selection starts
+              // at the merge junction, not the merged paragraph's start (§5bis A6-postsel).
+              firstParaMergedInline = true;
+              if (hostStyle && content[0].SetStyle) content[0].SetStyle(hostStyle);
             }
           } catch (e) {}
         }
@@ -2180,12 +2198,15 @@
           if (!selectFirst || !selectLast) return;
 
           var startRange;
-          if (mode === "insert") {
+          if (mode === "insert" && !firstParaMergedInline) {
             startRange = selectFirst.GetRange(0, 0);
           } else {
-            // In block-mode replace, OO merges content[0] with the text that
-            // precedes the selection. content[0].GetRange(0,0) would therefore
-            // start too early. Use the saved pre-insertion position instead.
+            // Block-mode replace, OR a block-mode insert whose 1st plain block merges
+            // into the host prefix (§5bis A6): OO merges content[0] with the text that
+            // precedes the insertion point, so content[0].GetRange(0,0) starts too early
+            // (it covers the surviving host prefix). Use the saved pre-insertion position
+            // — the merge junction — instead. Consistent with the inline path (A2/A4),
+            // which also anchors the selection start at preSelStart.
             startRange = doc.GetRange(preSelStart, preSelStart);
           }
 

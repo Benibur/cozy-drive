@@ -7,10 +7,10 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v4 (build 2026-06-26.8; multi-¶ driver; extract+injectAtSelection atomic; forcesave docx; no grabFocus)",
+  "capturedVia": "Chrome DevTools MCP v5 (build 2026-07-16.7; multi-¶ driver; extract+injectAtSelection atomic; capture-driver.js)",
   "capturedAt": "2026-07-16",
-  "verdict": "xfail-postselection",
-  "comment": "A6 MULTI-¶ (UAT Ben, build 2026-07-16.4) : injection 'First\\n\\nSecond' au milieu (P1@mid..P3@mid). 1er para fusionne le prefixe, DERNIER para fusionne le SUFFIXE (au lieu d'un ¶ separe). Fix: merge du dernier para injecte dans le suffixe (cleanupTrailingBlockPara + appendRunsPreserving, formatage gras/ital preserve). Ancienne fixture mono-¶ ('Mid insert') ne testait pas le merge (chemin inline). Non-regression A1/A2/A5.",
-  "captureVersion": "v4",
-  "postSelectionKnownBug": "La post-selection couvre TOUT le 1er et le dernier ¶ d'injection (prefixe/suffixe hote inclus) : live = 'Lazy riv First\\r\\nSecond er flows\\r\\n', model.selection block2:0->block3:20. DESIRE = uniquement l'injecte ('First'..'Second'), frontieres au milieu (start ~block2 offset9 'First', end ~block3 offset6 apres 'Second'). Le champ selection de model.json est la capture BUGGEE, NON benie. Fix = bracketing SCRIBE_XSEL_A/B (cf backlog A6-postsel). Le TEXTE reste correct (pass)."
+  "verdict": "pending",
+  "comment": "A6-postsel CORRIGE (build 2026-07-16.7). La post-selection couvre maintenant UNIQUEMENT le contenu injecte (First\\n\\nSecond) + les espaces de collage aux frontieres, PAS le prefixe/suffixe hote. Insert: block2:8->block3:10 (etait block2:0->block3:20). Replace: block0:10->block1:10 (etait block0:10->block1:21, start deja OK, end corrige). Fix SANS sentinelle: (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion preSelStart, comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure le span de position du suffixe fusionne dans cleanupTrailingBlockPara -> exclusion du suffixe hote.",
+  "captureVersion": "v5",
+  "postSelectionFixed": "QUESTION BLESSING (Ben) : la selection INCLUT les espaces de collage aux frontieres (block2:8 = juste avant l'espace ' First', block3:10 = juste apres 'Second '), par COHERENCE avec les goldens inline benis A2/A4 (qui demarrent aussi a l'espace). Le backlog notait 'offset 9' (exclure l'espace) ; j'ai prefere la coherence inline. A trancher a la benediction."
 }
