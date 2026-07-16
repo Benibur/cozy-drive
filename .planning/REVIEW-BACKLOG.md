@@ -42,6 +42,10 @@ style du **1ᵉʳ ¶ partiellement sélectionné** (tend §5bis qui n'émet le m
 | **A7** ¶ vides de bord | (exigence à relâcher) | ❌ extraction préserve (`\n\nMiddle\n\n`) ; perte = **trim LLM** | 🔵 hors périmètre harnais → relâcher l'exigence + noter la frontière | ⏳ à documenter |
 | **A8** select-all | garder le md même avec des tableaux | ✅ (101 ¶ cellules incl. > 100) | corrigé (build .5 : garde sur ¶ top-level + backstop >500) ; validé live fichier Ben. TODO fixture table-heavy + golden | ✅ FAIT (golden à ajouter) |
 
+| **A6-postsel** | post-sélection = **seul l'injecté** (frontières au milieu), pas tout le 1er/dernier ¶ | ✅ (live) | corriger : bracketing `SCRIBE_XSEL_A/B` autour de content[0]..content[dernier] dans le chemin bloc (comme mixte T4/T5) → sélectionner entre les 2 sentinelles, les retirer ; puis re-capturer + **bénir** la sélection. NB: le golden A6 actuel gèle la sélection BUGGÉE (verdict xfail-postselection) | 🔴 À FAIRE (prochaine session, 1er) |
+
+**Leçon blessing (A1/A6-postsel)** : je capture ET je m'auto-blesse (verdict pending + mon analyse) → un golden peut geler un champ BUGGÉ (ici la `selection`) si je scrute le texte mais pas la sélection. → la passe de blessing par Ben est nécessaire (elle attrape ce que « le texte est bon » laisse passer).
+
 **Découverte transverse (A3/A7)** : le harnais **court-circuite le LLM** (fixture déterministe).
 Il est donc **aveugle** aux pertes de fidélité **causées par le comportement normal du LLM** (trim des
 lignes vides, perte de style) — ce n'est pas de la « qualité LLM » mais un vrai trou. À combler :
