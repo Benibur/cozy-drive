@@ -71,3 +71,7 @@ test-results/
 
 # LibreOffice lock files (accidentally captured when a .docx golden is open)
 .~lock.*#
+
+# Blessing console — generated build artifact (see test-harness/tools/gen_blessing.py)
+blessing.html
+test-harness/**/blessing.html

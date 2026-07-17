@@ -152,6 +152,52 @@ Sélections multi-¶ A5/A6 et à-cheval texte+tableau T4–T6 : l'API OO ne sait
 
 ---
 
+## 4bis. Vérifier une passe de capture (contrôle mécanique)
+
+Avant de présenter des bundles au blessing, passer `verify-bundles.py` : il **juge l'évidence,
+jamais le comportement** — 7 fichiers présents, `selText` non-null (l'oracle de sélection est bien
+là), `model.json` = normalisation de CE `capture.json` (pas un frère périmé), `after.docx` contient
+vraiment le texte injecté (via les **nœuds de texte**, car OO ajoute `xml:space="preserve"` → une
+regex brute sur `<w:t>w</w:t>` matche faussement), PNG non-blancs.
+
+```sh
+python3 test-harness/tools/verify-bundles.py                 # tout le corpus
+python3 test-harness/tools/verify-bundles.py --date 2026-07-17  # exige cette date de capture
+```
+Sort non-zéro si un bundle est incomplet. C'est le garde-fou contre le mode d'échec récurrent du
+chantier : une preuve qui **manque silencieusement** (screenshots `Pending`, `model.json` vieux de
+11 builds, `after.docx` sans le texte injecté).
+
+## 4ter. Générer la console de blessing (le « défilé »)
+
+`gen_blessing.py` produit **une** page HTML autonome présentant les 62 bundles au gabarit
+(REVIEW-LOG §Format) — c'est une **vue** sur `test-harness/corpus/`, régénérée à chaque appel, pas
+une synthèse figée. À lancer **à chaque passe de blessing**.
+
+```sh
+python3 test-harness/tools/gen_blessing.py -o /tmp/…/blessing.html --baseline <ref-dernier-béni>
+```
+- `-o` : où écrire le HTML (défaut `./blessing.html`). **Ne pas committer** ce HTML (~1,7 Mo d'images
+  encodées) — c'est un livrable jetable ; seul le générateur est versionné.
+- `--baseline REF` : ref git de l'**état corpus dernièrement béni**. Chaque cas compare ses `blocks`
+  de résultat à cette ref → *blocks identiques* (seul l'oracle de sélection est neuf à bénir) vs
+  *écart de règle bénie* (le vif applique une règle déjà validée que ce golden précédait). Omis ⇒ pas
+  de classement. **Astuce : taguer l'état béni après chaque passe** (`git tag blessed-AAAA-MM-JJ`) et
+  passer ce tag ici la fois suivante.
+- Les **cas image** sont auto-détectés (`after.docx` avec un `<a:blip>`) ; l'image y est prouvée par
+  `after.docx`, **jamais** par `model.json` (aveugle aux images).
+
+Ce que la page apporte au blessing (état **non persisté au repo** — les verdicts qui font foi restent
+dans `meta.json`, posés par l'assistant) : filtres (axe / à statuer / écart / non jugés / KO), bouton
+**OK/KO** + **commentaire** par cas (sauvegardés en `localStorage` pour survivre à un reload), clic sur
+une capture → **modale avant+après en grand côte à côte**, et **« Compte-rendu »** qui assemble un bloc
+markdown copiable de tous les KO + commentaires → le recoller dans la conversation pour que l'assistant
+pose les verdicts.
+
+Publier ensuite le HTML en artifact (Claude Code) ou l'ouvrir dans un navigateur.
+
+---
+
 ## 5. Dev-env — gotchas OO
 
 - **Cache immutable** : toute édition de `code.js` exige une page **neuve**
