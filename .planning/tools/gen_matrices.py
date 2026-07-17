@@ -93,6 +93,7 @@ BLOCKS = {
     "paragraph": lambda: gen_cases({"paragraph"}),
     "table": lambda: gen_cases({"table", "guard"}),
     "header": lambda: gen_cases({"header"}),
+    "intracell": lambda: gen_cases({"intracell"}),
     "content": gen_content,
 }
 

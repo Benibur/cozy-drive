@@ -70,6 +70,7 @@ de bord extraits, indépendamment de la réponse).
 
 | ID | Constat | Décision | Statut |
 |----|---------|----------|--------|
+| **A3/insert-golden** | golden top-level A3/insert = `The quick brown fox XXX` (**inline**) PÉRIMÉ : le vif (build .3) donne `…fox`¶`XXX` (**nouveau ¶**, règle @end→nouveau ¶ du build .2). Découvert en couvrant l'axe A intra-cellule (Ac3/insert = nouveau ¶, correct). | Re-capturer + bénir A3/insert (nouveau ¶). Même famille que A2/A4 (drift post-build .2). | 📋 à re-capturer |
 | **A2/A4-postsel-golden** | goldens de **sélection** A2/A4 PÉRIMÉS (build .1) : le vif donne 17/12/0→8. **Pré-existant** (build .2), pas une régression du chantier. | ✅ **RÉSOLU (Ben, option 1, 2026-07-17)** : la post-sél INCLUT l'espace de collage adjacent (A2 ` XXX`, A4 `XXX `), cohérent avec A6. 4 goldens A2/A4 re-capturés (build .12, preuves fraîches) + **bénis** pass. | ✅ FAIT |
 | **T-reduc** (T2a/T2b/T2c/T5/T6) | copie de tableau partiel : **supprimer** les lignes/colonnes sans cellule sélectionnée ; factoriser ; gérer fusions (§4bis) | — | chantier dédié (risque + questions fusions) ; challenger §4bis avec tests ; boucle indépendante | 📋 chantier à cadrer |
 

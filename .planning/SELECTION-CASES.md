@@ -242,6 +242,23 @@ Cibles sur `table-header.docx` : tableau du corps **en haut** (collision) pour H
 
 ---
 
+## 4quinquies. Matrice — axe A **intra-cellule** (règles d'insertion DANS une cellule)
+
+L'axe A (règles d'insertion §5bis) appliqué **à l'intérieur d'une cellule** de tableau, sur la fixture `table-arules.docx` (cellule `C(0,0)` = phrase « The quick brown fox » pour A1–A4 ; cellule `C(1,1)` = 3 ¶ miroir a-family pour A5/A6 multi-¶). Comportement **identique au top-level a-family**, borné à la cellule (Intro/Outro intacts). Grammaire driver : `T1.C(r,c)@kind` (mono-¶) et `T1.C(r,c).P<m>@kind` (multi-¶). Notation cellule **0-indexée**.
+
+<!-- cases:table:intracell:start -->
+| # | Sélection *(description)* | Insérer | Remplacer | État / limite |
+|---|---|---|---|---|
+| Ac1 | `T1.C(0,0)@start..@end` *(¶ entier de cellule (A1 intra))* | ✅ nouveau ¶ sous le ¶ de cellule (bord) | ✅ remplace le ¶ de cellule | ✅ · Axe A DANS une cellule (fixture table-arules, cellule-phrase (0,0)). Miroir A1. Beni Ben 2026-07-17. |
+| Ac2 | `T1.C(0,0)@mid..@mid` *(milieu d'un mot (A2 intra))* | ✅ insere au point, &nbsp; des 2 cotes | ✅ idem (curseur collapsed), &nbsp; des 2 cotes | ✅ · Miroir A2. Espaces OK insert ET replace (fix smart-spacing replace intra-cellule build .1). |
+| Ac3 | `T1.C(0,0)@space..@end` *(apres espace -> fin (A3 intra))* | ✅ nouveau ¶ en fin (@end=bord) | ✅ remplace la queue | ✅ · Miroir A3. |
+| Ac4 | `T1.C(0,0)@start..@space` *(debut -> mot (A4 intra))* | ✅ insere au point, espace apres | ✅ remplace la tete + espace | ✅ · Miroir A4. |
+| Ac5 | `T1.C(1,1).P1@start..P3@end` *(3 ¶ entiers de cellule (A5 intra))* | ✅ blocs inseres apres P3 | ✅ remplace P1..P3 | ✅ · MULTI-¶ intra-cellule (cellule (1,1) 3 ¶). Grammaire driver .P<m> (build .2). Miroir A5. |
+| Ac6 | `T1.C(1,1).P1@mid..P3@mid` *(partiel -> entiers -> partiel (A6 intra))* | ✅ 1er para fusionne prefixe, dernier fusionne suffixe | ✅ remplace la plage multi-¶ | ✅ · MULTI-¶ intra-cellule. Miroir A6. |
+<!-- cases:table:intracell:end -->
+
+---
+
 ## 5. Matrice — axe « contenu réinjecté » (transversal à tous les cas A/T)
 
 Ces limites dépendent du **type de contenu**, pas de la géométrie de sélection — elles s'appliquent par-dessus n'importe quelle ligne A/T.
