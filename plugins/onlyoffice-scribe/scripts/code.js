@@ -9,7 +9,7 @@
   // If the console shows an OLDER build than expected, the editor served a CACHED
   // code.js → reopen the editor in a fresh tab / private window (a plain F5 won't
   // refetch the async plugin iframe).
-  var SCRIBE_BUILD = "2026-07-17.1 — T-intra axe A complet : replace-mode smart-spacing rendu cell-aware (hostAt via findHostParaAt) — corrige 'The quickXXX'/'XXXquick' (espace de collage manquant au REPLACE intra-cellule, A2/A4 replace). Fixture table-arules.docx (cellule-phrase + cellule 3-¶). — 2026-07-16.12 — T-intra V2 : re-collapse para-relatif GATE intra-cellule seulement (top-level garde doc.GetRange(insPos,insPos) — sinon +2 sur la post-sel inline A2/A4). — 2026-07-16.11 — T-intra V2 : fix curseur @end dernier ¶ de cellule (GetText renvoie 'texte\\t' -> l'offset @end depassait le texte des runs -> fallback offset 0 = XXXAlpha). Strip du \\t terminateur de cellule dans host-detection + test-hook. — 2026-07-16.10 — T-intra V2 (regles A intra-cellule) : host-detection cell-aware (findHostParaAt descend dans les cellules) -> smart-spacing + bord->nouveau ¶ (insCaretAtEnd) s'appliquent intra-cellule ; re-collapse du curseur via hostPara.GetRange(off,off) (para-relatif, fiable en cellule) au lieu de doc.GetRange(insPos,insPos) absolu (retombait a 0 -> XXXAlpha). — 2026-07-16.9 — T-intra V3 (harnais dev-hook) : dumpState.locate situe desormais une selection INTRA-CELLULE -> {block:<idx table>, cell:{r,c}, cellBlock:<¶ dans la cellule>, offset} (avant : block:-1, post-sel intra-cellule aveugle). Inert en prod (flag-gated dumpState). — 2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
+  var SCRIBE_BUILD = "2026-07-17.2 — T-intra axe A : grammaire driver `T<n>.C(r,c).P<m>@kind` (¶ m-ieme d'une cellule) + resolution multi-¶ intra-cellule (ExpandTo de 2 offsets par-¶) dans le test-hook -> permet A5/A6 DANS une cellule. — 2026-07-17.1 — T-intra axe A complet : replace-mode smart-spacing rendu cell-aware (hostAt via findHostParaAt) — corrige 'The quickXXX'/'XXXquick' (espace de collage manquant au REPLACE intra-cellule, A2/A4 replace). Fixture table-arules.docx (cellule-phrase + cellule 3-¶). — 2026-07-16.12 — T-intra V2 : re-collapse para-relatif GATE intra-cellule seulement (top-level garde doc.GetRange(insPos,insPos) — sinon +2 sur la post-sel inline A2/A4). — 2026-07-16.11 — T-intra V2 : fix curseur @end dernier ¶ de cellule (GetText renvoie 'texte\\t' -> l'offset @end depassait le texte des runs -> fallback offset 0 = XXXAlpha). Strip du \\t terminateur de cellule dans host-detection + test-hook. — 2026-07-16.10 — T-intra V2 (regles A intra-cellule) : host-detection cell-aware (findHostParaAt descend dans les cellules) -> smart-spacing + bord->nouveau ¶ (insCaretAtEnd) s'appliquent intra-cellule ; re-collapse du curseur via hostPara.GetRange(off,off) (para-relatif, fiable en cellule) au lieu de doc.GetRange(insPos,insPos) absolu (retombait a 0 -> XXXAlpha). — 2026-07-16.9 — T-intra V3 (harnais dev-hook) : dumpState.locate situe desormais une selection INTRA-CELLULE -> {block:<idx table>, cell:{r,c}, cellBlock:<¶ dans la cellule>, offset} (avant : block:-1, post-sel intra-cellule aveugle). Inert en prod (flag-gated dumpState). — 2026-07-16.8 — T8/intra-cell corruption : l'injection multi-¶ (chemin bloc) DANS une cellule aspirait le ¶ top-level apres le tableau (Outro) dans la cellule. Cause : cleanupTrailingBlockPara/cleanupLeadingSpacer scannaient doc.GetElement (top-level) -> traversaient la frontiere de cellule. Fix : scanner le contenu de la CELLULE hote (GetParentTableCell().GetContent()) quand l'injecte est intra-cellule. Regression latente depuis build .4 (branche merge A6). NB : autres regles A intra-cellule (bord->nouveau ¶, espaces, post-sel) encore non portees (host-detection l.852 = top-level only). — 2026-07-16.7 — A6-postsel : la post-selection du chemin BLOC couvrait TOUT le 1er/dernier ¶ d'injection (prefixe/suffixe hote inclus). Fix sans sentinelle : (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion (preSelStart), comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure (span de position, pas char) le suffixe fusionne dans cleanupTrailingBlockPara -> la selection exclut le suffixe hote. Replace-start deja OK (preSelStart). — 2026-07-16.6 — A3 : extraction d'une selection partielle finissant en fin de ¶ (souris = marque ¶ \r\n dans GetText) -> strip du \r\n traînant de rangeText avant le clip (sinon indexOf echoue et le ¶ ENTIER est extrait). — 2026-07-16.5 — A8 : garde de perf sur ¶ top-level (hors cellules) + backstop >500 ; corrige la perte de md au select-all sur doc a tableaux. — 2026-07-16.4 — §5bis A6 : dernier para injecté fusionne le suffixe (merge dans cleanupTrailingBlockPara, formatage preserve). — 2026-07-16.3 — §5bis A6 : insertion multi-¶ au milieu -> inline splice (1er para fusionne prefixe, DERNIER fusionne suffixe). — 2026-07-16.2 — §5bis règle d'insertion (UAT A1/A5) : collage en fin de ¶ non-vide -> NOUVEAU ¶ (spacer trick) au lieu de fusion inline. — 2026-07-16.1 — fix(§4quater): mixed cross-table<->paragraph REPLACE no longer corrupts a top-of-body table under header/footer position collision (H2/replace). Root cause: the non-table-paragraph classification used a raw-position test against GetAllTables (incl. header/footer tables) -> top-of-body paragraph misclassified as in-table -> mixed in-place path skipped -> destructive full-range InsertContent deleted a table row. Fix: element-based GetParentTableCell() membership test. — 2026-07-15.3 dev-probe: probeTables hook (GetAllTables position-collision diagnostic for header/footer-table docs, flag-gated, inert in prod; harness §4quater fixture calibration) — 2026-07-15.2 fix: insert-after-table via body elements + intra_cell only when whole selection is in the cell — header/footer table position-collision (no_cell_match false-positive -> not_involved fall-through; cross-table cell-coord crash -> table-identity filter + GetCell bounds guard; not_involved no longer breaks table scan) — MERGE of feat/image-reinjection into feat/scribe-in-right-panel: combines the \"Assistant\" ribbon tab (2026-07-06.4 — two explicit Inline/Side-panel buttons + Ctrl+Maj+I hints, native OO AI plugin hidden host-side) with the image re-injection chantier (2026-07-09.6 — save-fidelity fix: recalculate=true so the FromJSON+AddDrawing blip is transmitted to the co-editing/x2t save = <a:blip r:embed> + a word/media part; single undo via History.TurnOff/On; live render via blip=ret.url + insert-free warming). See .planning/phases/28-image-reinjection-plugin-only/ + debug/resolved/inject-blip-lost-at-save.md.";
   try { window.__scribeBuild = SCRIBE_BUILD; } catch (e) {}
 
   // ---- State ----
@@ -706,31 +706,39 @@
               }
             }
           } else {
+          var _tEndTgt = null; // end ¶ for multi-¶ intra-cell (A5/A6); else same as _ttgt
           if (_tsp.startCell) {
-            // §4ter intra-cell: n-th TABLE → cell (r,c) → 1st ¶.
+            // intra-cell: n-th TABLE → cell (r,c) → start ¶ (startPara, default 1) and
+            // end ¶ (endPara, default 1). Different paras ⇒ multi-¶ intra-cell selection.
             var _tcc = doc.GetElementsCount(), _tsn = 0, _tbl = null;
             for (var _ti = 0; _ti < _tcc; _ti++) {
               var _tel = doc.GetElement(_ti);
               if (_tel.GetClassType && _tel.GetClassType() === "table") { _tsn++; if (_tsn === _tsp.startN) { _tbl = _tel; break; } }
             }
-            if (_tbl) { try { _ttgt = _tbl.GetCell(_tsp.startCell.r, _tsp.startCell.c).GetContent().GetElement(0); } catch (e) {} }
+            if (_tbl) {
+              try {
+                var _tcont = _tbl.GetCell(_tsp.startCell.r, _tsp.startCell.c).GetContent();
+                _ttgt = _tcont.GetElement((_tsp.startPara || 1) - 1);
+                _tEndTgt = _tcont.GetElement((_tsp.endPara || 1) - 1);
+              } catch (e) {}
+            }
           } else {
             var _tcnt = doc.GetElementsCount(), _tseen = 0;
             for (var _tj = 0; _tj < _tcnt; _tj++) {
               var _tel2 = doc.GetElement(_tj);
               if (_tel2.GetClassType && _tel2.GetClassType() === "paragraph") { _tseen++; if (_tseen === _tsp.startN) { _ttgt = _tel2; break; } }
             }
+            _tEndTgt = _ttgt;
           }
           if (_ttgt) {
-            // Strip the cell-terminator \t too (a cell's last ¶ reports "text\t"): else
-            // @end offset overshoots the run text and _tat() falls back to offset 0.
-            var _ttxt = (_ttgt.GetText ? _ttgt.GetText() : "").replace(/[\r\n\t]+$/, "");
-            var _tlen = _ttxt.length;
-            var _toff = function(k) {
-              if (/^\d+$/.test(k)) { var _n = parseInt(k, 10); return _n > _tlen ? _tlen : _n; }
-              if (k === "end") return _tlen;
-              if (k === "mid") return Math.floor(_tlen / 2);
-              if (k === "space") { var _ix = _ttxt.indexOf(" "); return _ix >= 0 ? _ix + 1 : 0; }
+            // Offset within a GIVEN ¶ from its own text (strip ¶ mark + cell \t so
+            // @end doesn't overshoot the run text → _tat() fallback to offset 0).
+            var _offIn = function(paraEl, k) {
+              var _txt = (paraEl && paraEl.GetText ? paraEl.GetText() : "").replace(/[\r\n\t]+$/, ""), _ln = _txt.length;
+              if (/^\d+$/.test(k)) { var _n = parseInt(k, 10); return _n > _ln ? _ln : _n; }
+              if (k === "end") return _ln;
+              if (k === "mid") return Math.floor(_ln / 2);
+              if (k === "space") { var _ix = _txt.indexOf(" "); return _ix >= 0 ? _ix + 1 : 0; }
               return 0;
             };
             var _tat = function(para, off) {
@@ -745,10 +753,21 @@
               }
               return null;
             };
-            var _ts = _toff(_tsp.startKind), _te = _toff(_tsp.endKind), _trng = null;
-            if (_ts === 0 && _te === _tlen) _trng = _ttgt.GetRange ? _ttgt.GetRange() : null;
-            else if (_ts === _te) _trng = _tat(_ttgt, _ts) || (_ttgt.GetRange ? _ttgt.GetRange(0, 0) : null);
-            else { var _ra = _tat(_ttgt, _ts), _rb = _tat(_ttgt, _te); _trng = (_ra && _rb && _ra.ExpandTo) ? _ra.ExpandTo(_rb) : (_ra || _rb); }
+            var _trng = null;
+            if (_tEndTgt && _tEndTgt !== _ttgt) {
+              // MULTI-¶ intra-cell (A5/A6): ExpandTo the two per-¶ collapsed offsets.
+              var _mrA = _tat(_ttgt, _offIn(_ttgt, _tsp.startKind));
+              var _mrB = _tat(_tEndTgt, _offIn(_tEndTgt, _tsp.endKind));
+              _trng = (_mrA && _mrB && _mrA.ExpandTo) ? _mrA.ExpandTo(_mrB) : (_mrA || _mrB);
+            } else {
+              // SINGLE ¶ (A0-A4 intra-cell + intra-¶ top-level) — unchanged behaviour.
+              var _ttxt = (_ttgt.GetText ? _ttgt.GetText() : "").replace(/[\r\n\t]+$/, "");
+              var _tlen = _ttxt.length;
+              var _ts = _offIn(_ttgt, _tsp.startKind), _te = _offIn(_ttgt, _tsp.endKind);
+              if (_ts === 0 && _te === _tlen) _trng = _ttgt.GetRange ? _ttgt.GetRange() : null;
+              else if (_ts === _te) _trng = _tat(_ttgt, _ts) || (_ttgt.GetRange ? _ttgt.GetRange(0, 0) : null);
+              else { var _ra = _tat(_ttgt, _ts), _rb = _tat(_ttgt, _te); _trng = (_ra && _rb && _ra.ExpandTo) ? _ra.ExpandTo(_rb) : (_ra || _rb); }
+            }
             if (_trng && _trng.Select) _trng.Select();
           }
           }
@@ -4904,16 +4923,20 @@
   }
 
   // Parse a SELECTION-CASES spec into endpoints. Two endpoint forms:
-  //   "P<n>@<pos>"            → n-th TOP-LEVEL paragraph
-  //   "T<n>.C(<r>,<c>)@<pos>" → 1st ¶ of cell (r,c) of the n-th TABLE (intra-cell)
+  //   "P<n>@<pos>"                  → n-th TOP-LEVEL paragraph
+  //   "T<n>.C(<r>,<c>)@<pos>"       → 1st ¶ of cell (r,c) of the n-th TABLE (intra-cell)
+  //   "T<n>.C(<r>,<c>).P<m>@<pos>"  → m-th ¶ of that cell (multi-¶ intra-cell, A5/A6)
   // <pos> = start|space|mid|end|x|<int>. A range "<a>..<b>" must stay within the
-  // SAME target (same paragraph, or same table+cell) — intra-cell only for now.
+  // SAME target (same paragraph, same table+cell — possibly ACROSS ¶s of that cell).
   function parseSelSpec(spec) {
     if (!spec) return null;
     var parts = String(spec).split("..");
     function one(p) {
       var m = /^\s*P(\d+)@(\w+)\s*$/.exec(p);
       if (m) return { n: parseInt(m[1], 10), kind: m[2], cell: null };
+      // Cell + explicit ¶ index (multi-¶ intra-cell) — try BEFORE the plain cell form.
+      var mcp = /^\s*T(\d+)\.C\((\d+),(\d+)\)\.P(\d+)@(\w+)\s*$/.exec(p);
+      if (mcp) return { n: parseInt(mcp[1], 10), kind: mcp[5], cell: { r: parseInt(mcp[2], 10), c: parseInt(mcp[3], 10) }, para: parseInt(mcp[4], 10) };
       var mc = /^\s*T(\d+)\.C\((\d+),(\d+)\)@(\w+)\s*$/.exec(p);
       if (mc) return { n: parseInt(mc[1], 10), kind: mc[4], cell: { r: parseInt(mc[2], 10), c: parseInt(mc[3], 10) } };
       // Whole-table selection (T3): T<n>.full — no endpoint position.
@@ -4924,7 +4947,7 @@
     var a = one(parts[0]);
     var b = parts.length > 1 ? one(parts[1]) : a;
     if (!a || !b) return null;
-    return { startN: a.n, startKind: a.kind, startCell: a.cell, endN: b.n, endKind: b.kind, endCell: b.cell, full: !!(a.full || b.full) };
+    return { startN: a.n, startKind: a.kind, startCell: a.cell, startPara: a.para, endN: b.n, endKind: b.kind, endCell: b.cell, endPara: b.para, full: !!(a.full || b.full) };
   }
 
   // Which selection specs the driver can establish:
