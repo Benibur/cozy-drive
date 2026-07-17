@@ -90,6 +90,25 @@ Parti pour bénir l'axe H, découvert que ses 10 bundles n'avaient **aucune preu
 
 **Note axe H** : les 10 cas H ont une **structure identique aux goldens** sur le build `.4` (seul le champ `selection` diffère) ⇒ l'axe H est **comportementalement correct**, il lui manque les preuves et le blessing. La post-sélection **se rend dans `after.png` sans `grabFocus`** (donc sans vol de focus) → le screenshot est la preuve visuelle qui manquait, `selMarkup` l'oracle machine.
 
+## Session 2026-07-17 (quater) — passe de blessing Ben sur les 62 (console) : 52 OK / 10 KO
+
+Ben a fait le défilé dans la console de blessing. Triage des 10 KO (⚠️ tous ne sont PAS des verdicts à
+basculer — 2 questions, 2 fixtures dégénérées, 1 artefact de screenshot, 2 vrais bugs de sélection).
+
+| Cas KO | Nature | Constat | Action |
+|--------|--------|---------|--------|
+| **T1/insert, T1/replace** | ❓ question | « quelle différence avec A1 ? » | Réponse : même règle (bord de ¶ → nouveau ¶ / replace intra-¶) mais **DANS une cellule** vs A1 top-level. Le chantier T-intra (V1/V2/V3) a montré que ce n'est pas gratuit (host-detection était top-level-only). Pas redondant, pas un bug → **rester OK**. |
+| **A2/replace, Ac2/replace** | 🔧 fixture dégénérée | sélection `@mid..@mid` = **curseur vide** → en replace il n'y a rien à supprimer ⇒ se comporte comme insert ⇒ le cas **ne démontre pas le replace**. | Le matrix a déjà des replace-sur-texte (A1/replace tout le ¶, A3/replace partiel). **Ajouter/adapter une fixture replace-sur-mot** (before avec ≥1 mot sélectionné). Amélioration de couverture, **pas un verdict KO du golden**. |
+| **A8/insert** | 🖼️ artefact screenshot | « il manque la sélection dans le after » | La sélection **EST** dans l'oracle (`selMarkup «A8 tail line»` au ¶120, le ¶ ajouté) ; mais `after.png` cadre le HAUT du doc (120 ¶) et le ¶ ajouté est tout en bas, **hors cadrage**. Pas un bug Scribe. **Amélioration harnais** : re-screenshotter A8 scrollé en bas. → rester OK. |
+| **T3/insert, T9/insert, H-reg/insert** (+ **H1/insert**, même défaut, passé OK par erreur) | 🔴 **VRAI BUG sélection** | **Insert d'un clone de tableau ENTIER → la post-sélection couvre N−1 des N cellules, OMET la DERNIÈRE** (T3 : `«w»«x»«y»` sans z ; T9 : image + `«BetaI»«GammaI»` sans DeltaI ; H-reg/H1 : `«w»«x»«y»` sans z). Cohérent (toujours la dernière) ⇒ **une seule cause**. Cible = la sélection couvre TOUT le tableau inséré. | **À corriger** puis re-capturer. Ces goldens ont figé la sortie buggée ⇒ **NE PAS bénir pass**. ⚠️ **H1/insert a le même bug** → l'axe H n'est pas bénissable en l'état. |
+| **T2b/insert, T2c/insert** | 🔴 **VRAI BUG + T-reduc** | Deux problèmes, tableaux **fusionnés** : (a) la post-sélection porte sur les **MAUVAISES cellules** (T2b édite la ligne 3 `Hi/Hj` mais la sél. couvre le HAUT `H00..B2` ; T2c édite les lignes 1-2 `Va..Ve`, sél. sur le haut) ; (b) le clone reprend **TOUT** le tableau au lieu de se réduire aux lignes/cols sélectionnées. **(b) = chantier T-reduc DÉJÀ au backlog**, compliqué par les fusions (§4bis clone entier EXPRÈS : `RemoveRow/Col` corrompt les spans). **Contrôle** : T2a (NON-fusionné) **réduit bien** (clone 1×2, sél. `«AA»«BB»` correcte) ⇒ le souci de réduction est **spécifique aux fusions**. | (a) bug sélection à corriger ; (b) chantier T-reduc à cadrer (risque spans). **NE PAS bénir pass.** |
+
+**Récapitulatif verdicts** : 52 OK confirmés (dont beaucoup déjà `pass`). **5 goldens à NE PAS bénir** (bug sélection) : T3/insert, T9/insert, H-reg/insert, T2b/insert, T2c/insert — **+ H1/insert** (même bug full-table, OK par erreur). **2 fixtures à améliorer** (A2/replace, Ac2/replace). **1 amélioration harnais** (A8/insert screenshot). **2 questions** répondues (T1). Axe H **non bénissable** tant que le bug full-table-insert n'est pas corrigé (touche H1 + H-reg).
+
+**2 bugs de sélection à cadrer** (prochaine tâche) :
+1. 🔴 **full-table clone insert : post-sél omet la dernière cellule** (T3/T9/H-reg/H1 insert) — 1 cause, 4 cas.
+2. 🔴 **partial-merged clone insert : post-sél sur les mauvaises cellules** (T2b/T2c) — distinct de la non-réduction (T-reduc).
+
 ## Session 2026-07-17 (ter) — la passe de re-capture des 62 (build `.9`) FAITE
 
 Les 62 goldens re-capturés en une passe (aucun `code.js` touché ⇒ build inchangé `.9`). Preuves complètes partout (`verify-bundles.py` : **62/62 complete**), oracle **34/34**. Le corpus a **enfin** un oracle de sélection (`selText`/`selMarkup` peuplés partout). Verdicts humains **jamais** touchés ; un bloc `blessing` ajouté à chaque `meta.json` dit ce qui reste à bénir. Présentation au gabarit = `test-harness/tools/render-review.py --all`.
