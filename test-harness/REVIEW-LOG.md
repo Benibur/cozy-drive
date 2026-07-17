@@ -89,8 +89,20 @@ Gabarit fixe pour présenter un bundle :
 - **After — état obtenu (langage naturel)** : décrire le résultat ¶ par ¶, **expliciter** chaque
   espace / ¶ ajouté ou manquant (ex. « ¶1 = “XXX” + un espace traînant + marque ¶ ; ¶2/¶3 inchangés ;
   3 ¶, aucun ¶ vide. »). Preuves : `after.png`, `after.docx`, `model.json` (golden), `capture.json` (brut).
-- **Attendu (§5bis)** : le texte cible.
-- **Verdict + écart** : pass, ou xfail/review **avec l'écart précis** (chaque espace/¶ doit être *statué*).
+- **Post-sélection — OBLIGATOIRE (ajouté 2026-07-17)** : montrer `selMarkup` **verbatim**, une ligne par ¶
+  touché (ex. `Lazy riv« First»` / `«Second »er flows`), + `selText`. C'est un champ à **statuer** comme les
+  espaces et les ¶ : la sélection mord-elle sur le texte hôte ? l'espace de collage est-il dedans ou dehors ?
+  ⛔️ **NE JAMAIS présenter la sélection en unités de position** (`{block, offset}`) : illisible ⇒ imbénissable.
+  C'est ce qui a fait bénir, le 2026-07-16/17, une post-sélection qui **avalait un caractère de l'hôte** sur
+  A6/insert, Ac6/insert **et** T5/insert — trois goldens, invisibles sous « `end: {block:3, offset:10}` ».
+  `selMarkup` l'a rendu évident en une ligne. Les unités de position restent dans `capture.json` (debug seul,
+  hors modèle) — cf `ORACLE-SCHEMA.md` §2 et l'en-tête de `oracle/normalizeModel.js`.
+- **Images — OBLIGATOIRE si le cas en contient** : `model.json` **ne voit PAS les images** (`dumpState` ne les
+  capture pas) ⇒ une cellule vide et une cellule avec image y sont **identiques**. Prouver l'image par
+  `GetAllDrawingObjects().GetName()` ou `after.docx` (`a:blip` + `word/media/*`), **jamais** par le modèle.
+- **Attendu (§5bis)** : le texte cible **et** la post-sélection cible (en `« »`).
+- **Verdict + écart** : pass, ou xfail/review **avec l'écart précis** (chaque espace/¶/frontière de sélection
+  doit être *statué*).
 
 **Layout normalisé du bundle** (≥7 fichiers, before/after symétriques) :
 `before.png` · `after.png` · `before.docx` (= **document initial**, copie de la fixture pristine) ·
