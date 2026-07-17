@@ -559,6 +559,31 @@ FIXTURES = [
             [{'t': 'Outro paragraph'}],
         ],
     },
+    {
+        # Famille A INTRA-CELLULE — porte l'axe A COMPLET (règles d'insertion) DANS
+        # une cellule de tableau, avec un CONTENU RICHE (phrases), là où table-plain
+        # n'a que des mots isolés (Alpha…) qui rendent @mid/@space non parlants.
+        # Doc : ¶ Intro + tableau 2×2 + ¶ Outro (table en milieu, encadrée pour
+        # vérifier le non-débordement §4ter). MIROIR EXACT de a-family :
+        #   - (0,0) = "The quick brown fox" (¶ unique) → A0–A4 via T1.C(0,0)@kind
+        #     (mêmes offsets qu'a-family : @start=0 @space=4 @mid=9 @end=19) ;
+        #   - (1,1) = 3 ¶ "The quick brown fox"/"Jumps over the dog"/"Lazy river flows"
+        #     → A5/A6 multi-¶ via T1.C(1,1).P<n>@kind (grammaire driver étendue) ;
+        #   - (0,1)="Beta" (1,0)="Gamma" = remplissage.
+        'name': 'table-arules.docx',
+        'paras': [
+            [{'t': 'Intro paragraph'}],
+            {'table': [
+                [[[{'t': 'The quick brown fox'}]], [[{'t': 'Beta'}]]],
+                [[[{'t': 'Gamma'}]], [
+                    [{'t': 'The quick brown fox'}],
+                    [{'t': 'Jumps over the dog'}],
+                    [{'t': 'Lazy river flows'}],
+                ]],
+            ]},
+            [{'t': 'Outro paragraph'}],
+        ],
+    },
 ]
 
 
