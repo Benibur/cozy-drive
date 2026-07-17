@@ -299,15 +299,6 @@
       ]
     }
   ],
-  "selection": {
-    "start": {
-      "block": -1,
-      "offset": -1
-    },
-    "end": {
-      "block": -1,
-      "offset": -1
-    },
-    "collapsed": true
-  }
+  "selText": null,
+  "selMarkup": []
 }

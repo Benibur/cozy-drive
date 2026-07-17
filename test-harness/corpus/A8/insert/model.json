@@ -968,14 +968,6 @@
       ]
     }
   ],
-  "selection": {
-    "start": {
-      "block": 119,
-      "offset": 8
-    },
-    "end": {
-      "block": 119,
-      "offset": 23
-    }
-  }
+  "selText": null,
+  "selMarkup": []
 }

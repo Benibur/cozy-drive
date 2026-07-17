@@ -50,8 +50,18 @@ describe('RÉGRESSION A9 — Insert multi-¶ hôte styles hétérogènes (H1+H2)
     })
   })
 
-  it('post-sélection = les 2 ¶ injectés (block 2 -> 3), non collapsed', () => {
-    expect(golden.selection.start).toEqual({ block: 2, offset: 0 })
-    expect(golden.selection.end).toEqual({ block: 3, offset: 13 })
+  // Les unités de position ne sont plus un champ de MODÈLE (démonétisées le
+  // 2026-07-17 : elles comptent les runs vides que `blocks` supprime, et sont
+  // illisibles donc imbénissables — cf normalizeModel.js § sélection). Elles
+  // restent dans capture.json, où cette garde historique les lit encore.
+  // ⚠️ Cette capture (build 2026-06-29.2) est ANTÉRIEURE à selText/selMarkup ET au
+  // fix A6-postsel (build .7). Elle a la même forme que A6/insert (block2 -> block3),
+  // dont on a montré le 2026-07-17 qu'il mordait d'UN caractère sur le suffixe hôte.
+  // Ce spec ne peut donc PAS certifier « exactement les 2 ¶ injectés » — il gèle un
+  // nombre, pas une couverture. À re-capturer avec selMarkup pour être concluant.
+  it('post-sélection : garde historique en unités de position (à re-capturer)', () => {
+    expect(capture.selection.start).toEqual({ block: 2, offset: 0 })
+    expect(capture.selection.end).toEqual({ block: 3, offset: 13 })
+    expect(golden.selection).toBeUndefined() // hors modèle : jamais comparé
   })
 })

@@ -36,14 +36,6 @@
       ]
     }
   ],
-  "selection": {
-    "start": {
-      "block": 0,
-      "offset": 4
-    },
-    "end": {
-      "block": 0,
-      "offset": 10
-    }
-  }
+  "selText": null,
+  "selMarkup": []
 }

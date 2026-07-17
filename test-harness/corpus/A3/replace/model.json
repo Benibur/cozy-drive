@@ -28,14 +28,6 @@
       ]
     }
   ],
-  "selection": {
-    "start": {
-      "block": 0,
-      "offset": 4
-    },
-    "end": {
-      "block": 0,
-      "offset": 9
-    }
-  }
+  "selText": null,
+  "selMarkup": []
 }

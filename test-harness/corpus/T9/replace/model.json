@@ -70,5 +70,6 @@
       ]
     }
   ],
-  "selection": null
+  "selText": null,
+  "selMarkup": []
 }

@@ -40,13 +40,30 @@ Cell = { blocks: Block[], vmerge?: "master"|"cont", hspan?: number }
   // fusion V : le maître porte le contenu, la continuation = cellule vide distincte (sonde S3/S4)
   // fusion H : la ligne a MOINS de cellules logiques ; hspan>1 sur la cellule fusionnée
 
-Selection = { start: Pos, end: Pos }     // collapsed ajouté par la normalisation si start==end
-Pos = { block: int, run?: int, offset?: int }
-  // STABLE & block-relatif. Ne JAMAIS stocker les positions OO absolues (volatiles).
-  // INTRA-CELLULE (T-règles-intra V3) : quand la position tombe dans un tableau,
-  //   Pos = { block: <idx du bloc table>, cell: {r,c}, cellBlock: <idx ¶ dans la cellule>, offset }
-  //   offset = position DANS ce ¶ de cellule (même convention que top-level).
-  //   block:-1 = position introuvable (sélection perdue / hors modèle).
+// ---- SÉLECTION : on décrit le TEXTE COUVERT (révisé 2026-07-17) --------------
+selText   = string | null   // le texte que la sélection couvre (GetRangeBySelect().GetText())
+                            // '' ⇒ curseur replié → la normalisation ajoute collapsed:true
+                            // '\n' = frontière de ¶ FRANCHIE (signifiante, conservée)
+selMarkup = MarkLine[]      // ce texte EN SITU, encadré « » — la forme relisible/bénissable
+MarkLine  = { at: Pos, text: string }   // un ¶ touché par la sélection, en ordre document
+  // ex. { at:{block:0}, text:"The quick« XXX» brown fox" }
+  // ex. { at:{block:1, cell:{r:1,c:1}, cellBlock:3}, text:"«Second »er flows" }
+  // seuls les ¶ TOUCHÉS sont émis ; plafond MARK_CAP=8 → selMarkupTruncated:true (jamais silencieux)
+Pos       = { block: int, cell?: {r,c}, cellBlock?: int }   // localisation, sans offset
+
+Selection = { start: Pos, end: Pos }   // ⚠️ DEBUG ONLY — présent dans capture.json,
+                                       //    ABSENT du modèle normalisé, jamais comparé.
+  // Pourquoi démonétisé (2026-07-17) : `offset` = pos - blockStart en UNITÉS DE POSITION OO,
+  // qui comptent chaque frontière d'élément — runs VIDES inclus. Or paraToBlock les saute
+  // (code.js ~5237) et normalizeModel les refiltre : `blocks` déclare qu'un run vide est du
+  // bruit pendant qu'`offset` le compte. Les deux champs sont en désaccord sur ce qui est du
+  // bruit → la litière de runs vides du chemin replace (4 runs vides observés sur A1/replace,
+  // ¶ « XXX » à 5 éléments, span 9) décale les nombres SANS que rien ne change à l'écran.
+  // La promesse « STABLE & block-relatif » de l'ancien schéma était donc fausse.
+  // Et surtout : un nombre opaque est IMBÉNISSABLE. Le golden A6/insert a figé — et fait
+  // bénir — une post-sélection qui mangeait un caractère du suffixe hôte (« Second e » au
+  // lieu de « Second »), invisible sous la forme « end: {block:3, offset:10} ». selMarkup
+  // l'a rendu évident en une ligne. Idem son miroir intra-cellule Ac6/insert.
 ```
 
 ## 3. Normalisation (forme canonique comparable)
@@ -59,7 +76,16 @@ Pos = { block: int, run?: int, offset?: int }
 2. **Texte** : retrait de `\t`, `\r\n`/`\r` (artefacts) ; nbsp (` `) → espace.
 3. **Runs** : flags falsy supprimés ; runs purement vides supprimés (bruit), la
    structure du ¶ est conservée (¶ vide → `runs: []`).
-4. **Sélection** : `start == end` → `collapsed: true` (cas A0 / curseur).
+4. **Sélection** : le modèle porte `selText` + `selMarkup` ; `selText === ''` →
+   `collapsed: true` (cas A0 / curseur). Dans `selText`, `\r\n` → `\n` : contrairement
+   à `blocks` (où c'est un artefact), un saut dans une SÉLECTION signifie qu'elle
+   franchit un ¶ — c'est l'information qu'on veut bénir, pas du bruit.
+   Les unités de position (`selection`) **ne sont pas recopiées** (règle 1 : volatiles).
+
+**Règle du modèle : `model.json` ne contient QUE ce qu'on affirme.** Un champ qu'on
+ne veut pas comparer n'y a pas sa place — il reste dans `capture.json` (brut). C'est
+la leçon du champ `selection` : gelé faute d'avoir été questionné, il a fait échouer
+des goldens pour des raisons invisibles ET fait bénir un vrai bug.
 
 Propriété garantie (testée) : **idempotence** — `normalize(normalize(x)) === normalize(x)`.
 

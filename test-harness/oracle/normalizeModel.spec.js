@@ -91,26 +91,37 @@ describe('oracle/normalizeModel', () => {
   })
 
   describe('sélection', () => {
-    it('marque collapsed quand start==end (curseur, cas A0)', () => {
+    // L'oracle décrit le TEXTE COUVERT, pas les unités de position OO.
+    // Voir l'en-tête de normalizeModel.js (§ sélection) pour le pourquoi.
+    it('les unités de position ne sont PAS un champ de modèle (debug only)', () => {
       const r = normalizeModel({
         blocks: [],
-        selection: { start: { block: 0, offset: 3 }, end: { block: 0, offset: 3 } }
+        selection: { start: { block: 0, offset: 3 }, end: { block: 0, offset: 7 } },
+        selText: 'XXX'
       })
-      expect(r.selection).toEqual({
-        start: { block: 0, offset: 3 },
-        end: { block: 0, offset: 3 },
-        collapsed: true
-      })
+      expect(r.selection).toBeUndefined() // reste dans capture.json, jamais comparé
     })
-    it('pas de collapsed quand start!=end', () => {
+    it('selText = le texte couvert ; selMarkup le situe', () => {
       const r = normalizeModel({
         blocks: [],
-        selection: { start: { block: 0, offset: 3 }, end: { block: 0, offset: 7 } }
+        selText: ' XXX',
+        selMarkup: [{ at: { block: 0 }, text: 'The quick« XXX» brown fox' }]
       })
-      expect(r.selection.collapsed).toBeUndefined()
+      expect(r.selText).toBe(' XXX')
+      expect(r.selMarkup).toEqual([{ at: { block: 0 }, text: 'The quick« XXX» brown fox' }])
+      expect(r.collapsed).toBeUndefined()
     })
-    it('selection absente → null', () => {
-      expect(normalizeModel({ blocks: [] }).selection).toBeNull()
+    it('curseur replié : selText vide → collapsed', () => {
+      expect(normalizeModel({ blocks: [], selText: '' }).collapsed).toBe(true)
+    })
+    it('frontière de ¶ SIGNIFIANTE dans selText : \\r\\n → \\n (pas supprimé)', () => {
+      // contrairement à blocks (où \r\n est un artefact), un \n dans selText dit
+      // que la sélection franchit un ¶ — c'est l'information qu'on veut bénir.
+      const r = normalizeModel({ blocks: [], selText: ' First\r\nSecond ' })
+      expect(r.selText).toBe(' First\nSecond ')
+    })
+    it('selText absent → null (capture qui ne l’a pas enregistré)', () => {
+      expect(normalizeModel({ blocks: [] }).selText).toBeNull()
     })
   })
 

@@ -60,17 +60,47 @@ function normBlock(b) {
   return b && b.type === 'table' ? normTable(b) : normParagraph(b)
 }
 
-function normSelection(s) {
-  if (!s) return null
-  const out = { start: s.start, end: s.end }
-  if (JSON.stringify(s.start) === JSON.stringify(s.end)) out.collapsed = true
+/**
+ * Sélection : on décrit le TEXTE COUVERT, pas les unités de position OO.
+ *
+ * `selection.{block,offset}` a longtemps été le seul champ gelé. C'était un
+ * mauvais oracle, pour deux raisons découvertes le 2026-07-17 :
+ *  1. `offset` compte les frontières d'éléments — runs VIDES inclus — alors que
+ *     `blocks` les supprime comme du bruit (normParagraph ci-dessus + dumpState
+ *     qui les saute déjà). Les deux champs sont donc en désaccord sur ce qui est
+ *     du bruit : une litière de runs vides (laissée par le chemin replace) décale
+ *     les nombres sans que rien ne change à l'écran → golden « cassé » à tort.
+ *  2. Illisible ⇒ imbénissable : « offset: 10 » ne dit pas si la sélection mord
+ *     sur le texte hôte. Le golden A6/insert a ainsi figé, béni, une post-sélection
+ *     qui avalait un caractère de l'hôte (« Second e » au lieu de « Second »).
+ *
+ * → `selText` (le texte couvert) et `selMarkup` (ce texte en situ, encadré « »)
+ *   sont les champs d'oracle. Les unités de position restent dans `capture.json`
+ *   (brut) comme aide au diagnostic, et ne sont plus comparées.
+ */
+function normSelText(t) {
+  if (t == null) return null
+  return (t || '')
+    .replace(/ /g, ' ')
+    .replace(/\t/g, '')
+    .replace(/\r\n/g, '\n') // frontière de ¶ : SIGNIFIANTE dans une sélection → gardée, normalisée
+    .replace(/\r/g, '\n')
+}
+
+function normMarkLine(m) {
+  const out = { at: m.at, text: normText(m.text) }
   return out
 }
 
 export function normalizeModel(captured) {
   captured = captured || {}
-  return {
+  const selText = normSelText(captured.selText != null ? captured.selText : null)
+  const out = {
     blocks: (captured.blocks || []).map(normBlock),
-    selection: normSelection(captured.selection || null)
+    selText,
+    selMarkup: (captured.selMarkup || []).map(normMarkLine)
   }
+  if (selText === '') out.collapsed = true // curseur replié : rien de couvert
+  if (captured.selMarkupTruncated) out.selMarkupTruncated = true
+  return out
 }

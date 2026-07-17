@@ -98,24 +98,6 @@
       ]
     }
   ],
-  "selection": {
-    "start": {
-      "block": 1,
-      "cell": {
-        "r": 0,
-        "c": 0
-      },
-      "cellBlock": 1,
-      "offset": 0
-    },
-    "end": {
-      "block": 1,
-      "cell": {
-        "r": 0,
-        "c": 0
-      },
-      "cellBlock": 1,
-      "offset": 5
-    }
-  }
+  "selText": null,
+  "selMarkup": []
 }

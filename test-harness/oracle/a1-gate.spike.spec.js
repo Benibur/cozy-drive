@@ -23,6 +23,13 @@ import { normalizeModel } from './normalizeModel'
 
 // --- Capture live BRUTE (telle que renvoyée par le hook dumpState) -------------
 // Slice pertinente pour A1 : le 1er bloc (le ¶ remplacé) + la sélection post-action.
+// NB (2026-07-17) : cette capture DATE du 2026-06-23, donc d'AVANT selText/selMarkup.
+// Elle ne porte que les unités de position — désormais démonétisées (debug only, cf
+// normalizeModel.js § sélection). On la garde telle quelle (c'est une pièce
+// historique, on n'invente pas de preuve live a posteriori) : le gate verrouille
+// donc ici la normalisation des `blocks` + l'idempotence, et l'absence de selText
+// est le constat honnête que cette capture n'a jamais enregistré ce que la
+// sélection couvrait.
 const LIVE_CAPTURE = {
   blocks: [
     { type: 'p', runs: [{ t: 'XXX' }, { t: ' ' }] }
@@ -36,7 +43,8 @@ const A1_REPLACE_GOLDEN = {
   blocks: [
     { type: 'p', runs: [{ t: 'XXX' }, { t: ' ' }] }
   ],
-  selection: { start: { block: 0, offset: 0 }, end: { block: 0, offset: 6 } }
+  selText: null,
+  selMarkup: []
 }
 
 describe('GATE T-03 — oracle round-trip (A1/replace, capture live OO)', () => {
@@ -49,10 +57,15 @@ describe('GATE T-03 — oracle round-trip (A1/replace, capture live OO)', () => 
     expect(normalizeModel(once)).toEqual(once)
   })
 
-  it('sélection block-relative et NON collapsed (start != end)', () => {
-    const { selection } = normalizeModel(LIVE_CAPTURE)
-    expect(selection.collapsed).toBeUndefined()
-    expect(selection.start).toEqual({ block: 0, offset: 0 })
-    expect(selection.end).toEqual({ block: 0, offset: 6 })
+  it('les unités de position sont exclues du modèle (démonétisées 2026-07-17)', () => {
+    // Ce gate assertait `selection.end == {block:0, offset:6}`. Ce champ s'est
+    // révélé être un mauvais oracle : `offset` compte les runs VIDES que `blocks`
+    // supprime comme du bruit → il bouge sans que rien ne change à l'écran, et il
+    // est illisible donc imbénissable (le golden A6/insert a figé sous « offset:10 »
+    // une post-sélection qui mangeait un caractère de l'hôte). Il reste dans
+    // capture.json pour le diagnostic ; l'oracle, c'est selText/selMarkup.
+    const m = normalizeModel(LIVE_CAPTURE)
+    expect(m.selection).toBeUndefined()
+    expect(m.selText).toBeNull() // capture de 2026-06-23 : antérieure au champ
   })
 })
