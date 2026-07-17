@@ -147,6 +147,57 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "AABB\nCCDD\nZZZtail\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 4
+      },
+      "text": "«ZZZtail»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«AA»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BB»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«CC»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
 }

@@ -98,6 +98,29 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "AAA\nBBB\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 1
+      },
+      "text": "«AAA»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 2
+      },
+      "text": "«BBB»"
+    }
+  ]
 }

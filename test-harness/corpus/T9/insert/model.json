@@ -123,6 +123,40 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "\nGammaI\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": ""
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BetaI»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GammaI»"
+    }
+  ]
 }

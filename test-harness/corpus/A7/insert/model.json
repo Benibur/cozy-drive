@@ -37,6 +37,13 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "Added line",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 3
+      },
+      "text": "«Added line»"
+    }
+  ]
 }

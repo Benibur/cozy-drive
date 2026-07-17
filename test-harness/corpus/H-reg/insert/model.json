@@ -284,6 +284,40 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "w\ny\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 15,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«w»"
+    },
+    {
+      "at": {
+        "block": 15,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«x»"
+    },
+    {
+      "at": {
+        "block": 15,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«y»"
+    }
+  ]
 }

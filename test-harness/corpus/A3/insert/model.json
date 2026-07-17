@@ -33,6 +33,13 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "XXX\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«XXX»"
+    }
+  ]
 }

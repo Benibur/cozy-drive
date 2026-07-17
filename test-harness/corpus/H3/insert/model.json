@@ -11,7 +11,12 @@
                 "runs": [
                   {
                     "t": "Alpha"
-                  },
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
                   {
                     "t": "XXX"
                   }
@@ -230,6 +235,18 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "XXX\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 1
+      },
+      "text": "«XXX»"
+    }
+  ]
 }

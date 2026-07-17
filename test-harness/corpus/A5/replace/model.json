@@ -25,6 +25,25 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "Replaced one\nReplaced two\nReplaced three\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "«Replaced one»"
+    },
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«Replaced two»"
+    },
+    {
+      "at": {
+        "block": 2
+      },
+      "text": "«Replaced three»"
+    }
+  ]
 }

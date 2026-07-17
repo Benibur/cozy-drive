@@ -7,11 +7,15 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP (build 2026-07-17.3)",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
   "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "RE-CAPTURE 2026-07-17 : A3/insert = @space..@end, insert collapse a @end (bord de ¶) -> NOUVEAU ¶ 'XXX' sous P1 (regle @end->nouveau ¶ du build .2). Ancien golden 'The quick brown fox XXX' (inline) etait PERIME (pre-build .2). Coherent avec Ac3/insert intra-cellule. Preuves fraiches (before/after/docx, save-fidelity OK).",
-  "captureVersion": "v-newpara-2026-07-17",
+  "captureVersion": "v5",
   "blessedBy": "Ben",
-  "blessedAt": "2026-07-17"
+  "blessedAt": "2026-07-17",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

@@ -158,6 +158,29 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "HkHl\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 3,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«Hk»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 3,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«Hl»"
+    }
+  ]
 }

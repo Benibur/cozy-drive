@@ -56,6 +56,19 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": " First\nSecond ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2
+      },
+      "text": "Lazy riv« First»"
+    },
+    {
+      "at": {
+        "block": 3
+      },
+      "text": "«Second »er flows"
+    }
+  ]
 }

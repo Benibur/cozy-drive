@@ -29,6 +29,13 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "New middle",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«New middle»"
+    }
+  ]
 }

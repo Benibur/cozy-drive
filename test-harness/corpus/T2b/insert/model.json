@@ -299,6 +299,96 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "H00\nVmaster\nHi\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«H00»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«H01»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«H02»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vmaster»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«B1»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«C1»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 2,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": ""
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 2,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«B2»"
+    }
+  ],
+  "selMarkupTruncated": true
 }

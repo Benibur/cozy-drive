@@ -28,6 +28,13 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "XXX",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "The «XXX»"
+    }
+  ]
 }

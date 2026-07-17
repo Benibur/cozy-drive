@@ -7,9 +7,14 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v5 (build 2026-06-27.10; insert at selection end; forcesave docx)",
-  "capturedAt": "2026-06-28",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "RE-CAPTURÉ 2026-06-28 (build .10) après le fix insert T7 (commit 31bdc2806). Sélection T1.C(1,0)..P2@mid = queue du tableau (Gamma/Delta) + tête du ¶ Outro. L'Insert place DÉSORMAIS la réponse à la FIN DE LA SÉLECTION (P2@mid) — conforme à expected_insert « après la fin de sélection » — au lieu de l'ancien comportement (build .7) qui l'insérait à tort APRÈS LE TABLEAU (avant Outro). docElementOrder = [Intro, T1(orig Alpha), Outro-tête('Outro p'), TABLE(GG/DD), 'Tail edit', Outro-queue('aragraph')] : la réponse scinde Outro au point @mid. Original (tableau) intact, after.docx contient Gamma puis Outro puis GG/Tail edit (ordre correct). NB : le @mid du harnais tombe en milieu de mot ('Outro p|aragraph') — artefact du spec de test, pas un bug ; le comportement testé = insertion au point de fin de sélection.",
-  "captureVersion": "v5"
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "behaviour": "règle A6 « le dernier ¶ fusionne le suffixe » (build .4) que le golden précède",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

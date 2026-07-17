@@ -7,11 +7,16 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "capture-driver.js v1 (build 2026-07-15.3, setSelection+extractSelection+injectAtSelection; table-header)",
-  "capturedAt": "2026-07-15",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
   "verdict": "pending",
   "claudeAnalysis": "pass",
   "comment": "intra-cellule (0,0) : 'XXX' remplace 'Alpha'. Comme T1.",
   "afterDocxPending": true,
-  "screenshotsPending": true
+  "screenshotsPending": true,
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

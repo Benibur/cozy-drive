@@ -7,12 +7,16 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP (build 2026-07-16.12; injectAtSelection atomic; V2 A-rules intra-cell; V3 dumpState cell-locate)",
-  "capturedAt": "2026-07-16",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "INTRA-CELLULE regles A (V2, build 2026-07-16.12). Insert (sel cellule entiere -> point de collage = fin de cellule = bord de ¶) -> NOUVEAU ¶ \"XXX\" apres \"Alpha\" (regle A1/A5). Replace -> \"XXX\" remplace tout. Outro/Intro intacts. Post-selection resolue DANS la cellule (V3 dumpState). Ancien golden = build .5 (pre-regles A), perime. Notation cellule 0-indexee : C(0,0)=Alpha (haut-gauche), C(0,1)=Beta, C(1,0)=Gamma, C(1,1)=Delta/Delta2 (bas-droite).",
-  "captureVersion": "v5-intracell",
+  "captureVersion": "v5",
   "screenshotsRecaptured": "2026-07-16 build .12 (before=selection visible, after=resultat, after.docx=forcesave verifie)",
   "blessedBy": "Ben",
-  "blessedAt": "2026-07-16"
+  "blessedAt": "2026-07-16",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

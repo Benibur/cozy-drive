@@ -7,12 +7,16 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v5 (build 2026-07-16.7; multi-¶ driver; extract+injectAtSelection atomic; capture-driver.js)",
-  "capturedAt": "2026-07-16",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "A6-postsel CORRIGE (build 2026-07-16.7). La post-selection couvre maintenant UNIQUEMENT le contenu injecte (First\\n\\nSecond) + les espaces de collage aux frontieres, PAS le prefixe/suffixe hote. Insert: block2:8->block3:10 (etait block2:0->block3:20). Replace: block0:10->block1:10 (etait block0:10->block1:21, start deja OK, end corrige). Fix SANS sentinelle: (1) INSERT dont le 1er para plain fusionne le prefixe (firstParaMergedInline) demarre la selection au point de fusion preSelStart, comme le chemin inline A2/A4 ; (2) mergedTrailingLen mesure le span de position du suffixe fusionne dans cleanupTrailingBlockPara -> exclusion du suffixe hote.",
   "captureVersion": "v5",
   "postSelectionFixed": "QUESTION BLESSING (Ben) : la selection INCLUT les espaces de collage aux frontieres (block2:8 = juste avant l'espace ' First', block3:10 = juste apres 'Second '), par COHERENCE avec les goldens inline benis A2/A4 (qui demarrent aussi a l'espace). Le backlog notait 'offset 9' (exclure l'espace) ; j'ai prefere la coherence inline. A trancher a la benediction. BENI par Ben (2026-07-16) : cohérence inline A2/A4 (espaces de frontière inclus) acceptée.",
   "blessedBy": "Ben",
-  "blessedAt": "2026-07-16"
+  "blessedAt": "2026-07-16",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

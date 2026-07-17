@@ -7,9 +7,13 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP v4 (build 2026-06-26.4; extract+injectAtSelection atomic; snapshots cabled; forcesave docx; no grabFocus)",
-  "capturedAt": "2026-06-26",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "Replace cellules partielles, fusion V (région C(1,0)..C(2,2)) : in-place -> maître ligne1 = Vf/Vg/Vh, ligne2 = Vi/Vj ; continuation (2,0) restée VIDE (jamais écrite, conforme §4bis), lignes 0/3 intactes. blockCount=3, 1 tableau.",
-  "captureVersion": "v4"
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

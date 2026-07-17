@@ -120,18 +120,42 @@
         },
         {
           "t": " "
-        }
-      ]
-    },
-    {
-      "type": "p",
-      "runs": [
+        },
         {
           "t": "aragraph"
         }
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "GGDD\nTail edit ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 4
+      },
+      "text": "«Tail edit »aragraph"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GG»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
 }

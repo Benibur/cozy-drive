@@ -958,16 +958,25 @@
       "runs": [
         {
           "t": "Para 120"
-        },
-        {
-          "t": " "
-        },
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
         {
           "t": "A8 tail line"
         }
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "A8 tail line\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 120
+      },
+      "text": "«A8 tail line»"
+    }
+  ]
 }

@@ -209,6 +209,57 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "aabb\nMid edit\nccdd\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 5
+      },
+      "text": "«Mid edit»"
+    },
+    {
+      "at": {
+        "block": 4,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«aa»"
+    },
+    {
+      "at": {
+        "block": 4,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«bb»"
+    },
+    {
+      "at": {
+        "block": 6,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«cc»"
+    },
+    {
+      "at": {
+        "block": 6,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«dd»"
+    }
+  ]
 }

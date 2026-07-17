@@ -158,6 +158,73 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "VfVgVh\nViVj\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vf»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vg»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vh»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 2,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": ""
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 2,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vi»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 2,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«Vj»"
+    }
+  ]
 }

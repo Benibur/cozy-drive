@@ -13,7 +13,12 @@
       "runs": [
         {
           "t": "Photo "
-        },
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
         {
           "t": "Extra "
         }
@@ -32,6 +37,13 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "Extra \n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2
+      },
+      "text": "«Extra »"
+    }
+  ]
 }

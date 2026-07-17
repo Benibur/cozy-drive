@@ -227,6 +227,35 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "GGDD\nIntro edit",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«Intro edit»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GG»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
 }

@@ -99,6 +99,18 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": " XXX",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "The quick« XXX» brown fox"
+    }
+  ]
 }

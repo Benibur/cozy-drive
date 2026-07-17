@@ -82,6 +82,29 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": "CCDD\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«CC»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
 }

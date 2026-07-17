@@ -7,10 +7,15 @@
   "statusFromCsv": "pass",
   "stable": true,
   "setSelectionOk": true,
-  "capturedVia": "Chrome DevTools MCP (build 2026-07-17.3; T<n>.C(r,c).P<m> grammar; intra-cell A-axis)",
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
   "capturedAt": "2026-07-17",
   "verdict": "pass",
   "comment": "AXE A INTRA-CELLULE. partiel->entiers->partiel MULTI-¶ (miroir A6) : 1er para fusionne prefixe, dernier fusionne suffixe. Comportement IDENTIQUE au top-level a-family (verifie par equivalence). Notation cellule 0-indexee C(0,0)=phrase, C(1,1)=cellule 3-¶. Fixture table-arules.docx.",
   "blessedBy": "Ben",
-  "blessedAt": "2026-07-17"
+  "blessedAt": "2026-07-17",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
 }

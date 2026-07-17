@@ -94,6 +94,29 @@
       ]
     }
   ],
-  "selText": null,
-  "selMarkup": []
+  "selText": " First\nSecond ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "The quick« First»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 1
+      },
+      "text": "«Second »er flows"
+    }
+  ]
 }
