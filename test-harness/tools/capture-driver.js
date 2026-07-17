@@ -5,7 +5,9 @@
  * It drives the flag-gated Scribe dev-hooks (injectAtSelection / dumpState) inside
  * the OnlyOffice EXAMPLE editor (http://localhost/example/editor?fileName=…) via a
  * single Chrome-DevTools-MCP evaluate_script, and returns one capture object per
- * (case, mode) — the same shape as the committed corpus/*/capture.json goldens.
+ * (case, mode) — the same shape as the committed corpus/<case>/<mode>/capture.json
+ * goldens. (Do not write that path with a glob star: `*` followed by `/` closes this
+ * block comment and the file stops parsing — it silently did until 2026-07-17.)
  *
  * WHY a committed file (vs an ad-hoc pasted snippet): the driver is the reusable,
  * error-prone part (frame walking, undo-reset, spec grammar, stability double-read,
@@ -29,11 +31,26 @@
  * The selection specs the dev-hook accepts and which cases ride which branch are
  * documented in code.js `parseSelSpec` / `selSpecSupported`.
  *
- * The whole file is one IIFE that installs three globals on the editor window:
+ * The whole file is one IIFE that installs these globals on the editor window:
  *   __scribeFindHook()      -> the plugin window exposing __scribeTest, or null
  *   __scribeCaptureOne(c,o) -> Promise<captureObj> for one { id, mode, spec, md }
  *   __scribeCaptureBatch(cs,o) -> Promise<captureObj[]> (undo-resets between cases)
+ *   __scribeCaptureBefore(c) -> Promise<{ok, extractedMd, md}>  [phase 1 of 2]
+ *   __scribeCaptureAfter(c,b) -> Promise<captureObj>            [phase 2 of 2]
  * Flag-gated end to end: does nothing unless the plugin's test hooks are enabled.
+ *
+ * WHY the two-phase split (Before/After) on top of captureOne: before.png must show the
+ * POSED SELECTION, which only exists between setSelection and injectAtSelection. A single
+ * evaluate_script cannot be interrupted to let MCP take a screenshot, so the phases are
+ * separate calls: captureBefore -> take_screenshot(before.png) -> captureAfter ->
+ * take_screenshot(after.png). captureOne stays as the un-screenshotted fast path.
+ *
+ * IMAGE CASES: never hard-code an image name. The extraction RENAMES images on every pass
+ * (scribe-img-4 -> scribe-img-5) and the rename SURVIVES undo (it is outside the history),
+ * so a hard-coded name resolves to nothing and the marker silently drops. Write the case md
+ * with the literal placeholder __IMG__ and captureBefore substitutes the name the live
+ * extraction just emitted. Only `![IMG:name](placeholder)` / `{{IMG:name}}` are image
+ * markdown -- a bare `![IMG:name]` is literal text.
  */
 (function () {
   var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
@@ -70,6 +87,93 @@
     return { error: "dumpState failed" };
   }
 
+  // Turn on paragraph marks so before/after.png show the ¶ boundaries the rules are about.
+  function paraMarks() {
+    (function walk(w) {
+      try { if (w.Asc && w.Asc.editor && w.Asc.editor.put_ShowParaMarks) w.Asc.editor.put_ShowParaMarks(true); } catch (e) {}
+      try { for (var i = 0; i < w.frames.length; i++) walk(w.frames[i]); } catch (e) {}
+    })(window);
+  }
+
+  // Substitute the __IMG__ placeholder with the image name the live extraction just emitted.
+  // See the IMAGE CASES note in the header: names drift across passes and survive undo.
+  function resolveMd(md, extractedMd) {
+    if (!md || md.indexOf("__IMG__") === -1) return md;
+    var m = /(?:!\[IMG:|\{\{IMG:)(scribe-img-\d+)/.exec(extractedMd || "");
+    if (!m) return { error: "no image marker in extraction", extractedMd: extractedMd };
+    return md.split("__IMG__").join(m[1]);
+  }
+
+  // Phase 1: reset, pose the selection, run the REAL extraction. Leaves the doc showing
+  // the selection so the caller can screenshot before.png. See captureOne for why the
+  // extraction is mandatory (parsedTables).
+  async function captureBefore(c) {
+    var sw = findHook();
+    if (!sw) return { ok: false, error: "no scribe hook" };
+    sw.__scribeTestForce = true;
+
+    undoAll(); await sleep(600);
+    await sw.__scribeTest({ action: "dumpState" }); await sleep(250);
+    paraMarks();
+
+    var setRes = null, extRes = null;
+    try { setRes = await sw.__scribeTest({ action: "setSelection", spec: c.spec }); } catch (e) { setRes = { ok: false, error: String(e) }; }
+    await sleep(250);
+    try { extRes = await sw.__scribeTest({ action: "extractSelection" }); } catch (e) { extRes = { ok: false, error: String(e) }; }
+    await sleep(300);
+
+    var md = resolveMd(c.md, extRes && extRes.md);
+    if (md && md.error) return { ok: false, error: md.error, extractedMd: md.extractedMd, setRes: setRes };
+    return { ok: true, setRes: setRes, extractedMd: extRes && extRes.md, md: md };
+  }
+
+  // Phase 2: inject the (resolved) md at the selection posed by captureBefore, then read
+  // back. Returns the corpus capture.json shape.
+  async function captureAfter(c, before, opts) {
+    opts = opts || {};
+    var sw = findHook();
+    if (!sw) return { id: c.id, mode: c.mode, error: "no scribe hook" };
+    sw.__scribeTestForce = true;
+    var md = (before && before.md) || c.md;
+
+    var inj = null;
+    try {
+      inj = await sw.__scribeTest({ action: "injectAtSelection", spec: c.spec, md: md, mode: c.mode });
+    } catch (e) { inj = { ok: false, error: String(e) }; }
+    await sleep(1300);
+
+    var a = await dump(sw, "full");
+    await sleep(400);
+    var b = await dump(sw, "full");
+    var stable = JSON.stringify(a.blocks) === JSON.stringify(b.blocks)
+      && JSON.stringify(a.selText) === JSON.stringify(b.selText)
+      && JSON.stringify(a.selMarkup) === JSON.stringify(b.selMarkup);
+
+    return {
+      id: c.id,
+      spec: c.spec,
+      mode: c.mode,
+      fixture: md,
+      fixtureTemplate: c.md !== md ? c.md : undefined,
+      setRes: before && before.setRes,
+      extractedMd: before && before.extractedMd,
+      inj: inj,
+      injOk: !!(inj && inj.ok !== false),
+      injErr: inj && inj.error,
+      stable: stable,
+      blocks: b.blocks,
+      selection: b.selection,
+      // THE oracle of selection (build .5). dumpState returns these as TOP-LEVEL siblings of
+      // `selection` — forwarding only `blocks`+`selection` (as this driver and normalize.mjs
+      // both did until 2026-07-17) silently drops them and every model.json lands selText:null.
+      selText: b.selText,
+      selMarkup: b.selMarkup,
+      selMarkupTruncated: b.selMarkupTruncated,
+      capturedVia: opts.capturedVia || "capture-driver.js two-phase (Chrome DevTools MCP)",
+      capturedAt: opts.capturedAt || null
+    };
+  }
+
   // Capture ONE (case, mode). Returns the corpus capture.json shape.
   async function captureOne(c, opts) {
     opts = opts || {};
@@ -104,7 +208,8 @@
     await sleep(400);
     var b = await dump(sw, "full");
     var stable = JSON.stringify(a.blocks) === JSON.stringify(b.blocks)
-      && JSON.stringify(a.selection) === JSON.stringify(b.selection);
+      && JSON.stringify(a.selText) === JSON.stringify(b.selText)
+      && JSON.stringify(a.selMarkup) === JSON.stringify(b.selMarkup);
 
     return {
       id: c.id,
@@ -119,6 +224,9 @@
       stable: stable,
       blocks: b.blocks,
       selection: b.selection,
+      selText: b.selText,
+      selMarkup: b.selMarkup,
+      selMarkupTruncated: b.selMarkupTruncated,
       capturedVia: opts.capturedVia || "capture-driver.js (Chrome DevTools MCP)",
       capturedAt: opts.capturedAt || null
     };
@@ -136,4 +244,6 @@
   window.__scribeFindHook = findHook;
   window.__scribeCaptureOne = captureOne;
   window.__scribeCaptureBatch = captureBatch;
+  window.__scribeCaptureBefore = captureBefore;
+  window.__scribeCaptureAfter = captureAfter;
 })();
