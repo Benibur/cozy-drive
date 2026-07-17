@@ -5,10 +5,12 @@
       "runs": [
         {
           "t": "The quick brown fox"
-        },
-        {
-          "t": " "
-        },
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
         {
           "t": "XXX"
         }
@@ -33,12 +35,12 @@
   ],
   "selection": {
     "start": {
-      "block": 0,
-      "offset": 19
+      "block": 1,
+      "offset": 0
     },
     "end": {
-      "block": 0,
-      "offset": 25
+      "block": 1,
+      "offset": 5
     }
   }
 }
