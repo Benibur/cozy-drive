@@ -8,12 +8,13 @@
   "stable": true,
   "setSelectionOk": true,
   "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
-  "capturedAt": "2026-07-17",
+  "capturedAt": "2026-07-19",
   "verdict": "pass",
   "comment": "Insert tableau entier (T1.full) : clone COMPLET (toutes cellules modifiées [[w,x],[y,z]]) inséré APRÈS le tableau ; original Alpha/Beta/Gamma/Delta intact. blockCount=4, 2 tableaux adjacents. (no-op antérieur = bug insSimpleInline, corrigé build .3 ; cf t3-insert-fixed.png.)",
   "captureVersion": "v5",
   "blessing": {
     "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
-    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
+    "behaviour": "sélection full-table CORRIGÉE (build 2026-07-19.4, 5348469ab) : la post-sélection couvre désormais TOUT le tableau inséré (dernière cellule incluse). blocks byte-identiques ; re-capturé build .4. À RE-BÉNIR sur selMarkup."
   }
 }

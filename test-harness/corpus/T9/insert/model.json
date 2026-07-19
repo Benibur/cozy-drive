@@ -123,7 +123,7 @@
       ]
     }
   ],
-  "selText": "\nGammaI\n",
+  "selText": "BetaI\nGammaIDeltaI\n",
   "selMarkup": [
     {
       "at": {
@@ -157,6 +157,17 @@
         "cellBlock": 0
       },
       "text": "«GammaI»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DeltaI»"
     }
   ]
 }

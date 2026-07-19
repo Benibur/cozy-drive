@@ -140,7 +140,11 @@
     try {
       inj = await sw.__scribeTest({ action: "injectAtSelection", spec: c.spec, md: md, mode: c.mode });
     } catch (e) { inj = { ok: false, error: String(e) }; }
-    await sleep(1300);
+    // 2500ms, not 1300: a full-table INSERT re-selects the whole inserted table in a DEFERRED
+    // follow-up callCommand (the freshly-inserted table's cell positions only settle after the
+    // injection callCommand's recalc — build 2026-07-19.4). Dumping too early captures the
+    // intermediate N-1-cell selection. The stability double-read below still guards the rest.
+    await sleep(2500);
 
     var a = await dump(sw, "full");
     await sleep(400);

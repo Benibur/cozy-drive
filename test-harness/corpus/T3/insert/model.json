@@ -139,7 +139,7 @@
       ]
     }
   ],
-  "selText": "w\ny\n",
+  "selText": "wx\nyz\n",
   "selMarkup": [
     {
       "at": {
@@ -173,6 +173,17 @@
         "cellBlock": 0
       },
       "text": "«y»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«z»"
     }
   ]
 }

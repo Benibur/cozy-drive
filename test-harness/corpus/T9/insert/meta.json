@@ -8,13 +8,14 @@
   "stable": true,
   "setSelectionOk": true,
   "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
-  "capturedAt": "2026-07-17",
+  "capturedAt": "2026-07-19",
   "verdict": "pass",
   "comment": "Insert tableau avec IMAGE (T1.full) : copie complète insérée APRÈS ; tableau original (avec image) NON touché -> son média survit. after.docx = 2 tableaux, a:blip=2 / media=image1.png (les 2 images persistent, la copie partage le média de l'original). Image PRÉSERVÉE car l'original n'est pas reconstruit via ToJSON.",
   "captureVersion": "v5",
   "blessing": {
     "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
     "image": "fixture corrigée (marqueur réel ![IMG:...](placeholder) au lieu du marqueur nu) -> l'image est DÉSORMAIS ré-injectée : after.docx a:blip 1 -> 2. Le golden béni ne prouvait aucune image.",
-    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
+    "behaviour": "sélection full-table CORRIGÉE (build 2026-07-19.4, 5348469ab) : la post-sélection couvre désormais TOUT le tableau inséré (dernière cellule incluse). blocks byte-identiques ; re-capturé build .4. À RE-BÉNIR sur selMarkup."
   }
 }
