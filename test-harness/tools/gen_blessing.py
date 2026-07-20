@@ -43,7 +43,7 @@ CORPUS = os.path.join(ROOT, "test-harness", "corpus")
 # Crop the OO screenshot to the document region (drop toolbar/ruler/side panels/empty page),
 # kept at native resolution so the modal reads crisply. Tuned to the example editor at its
 # default zoom; widen the right edge if a fixture's table gets clipped.
-BOX = (72, 188, 640, 655)
+BOX = (72, 188, 640, 720)
 
 AXES = [("A", "Axe A — paragraphes"), ("Ac", "Axe Ac — intra-cellule"),
         ("T", "Axe T — tableaux"), ("H", "Axe H — en-tête/pied"), ("C", "Axe C — images")]
