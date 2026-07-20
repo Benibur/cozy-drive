@@ -242,15 +242,15 @@ Extraire les prompts hors de Scribe vers un module de prompts partagé (pendant 
 
 **Important** : ni bug ni faille de sécurité — architecture/cohérence. Aucune urgence, indépendant de la PR #2 (JSON) et du fix JWT.
 
-### Phase 999.2: Sélection de tableaux partiels fusionnés — post-sélection + réduction du clone (T-reduc) (BACKLOG)
+### Phase 999.2: Sélection de tableaux partiels fusionnés — post-sélection ✅ (2026-07-20) + réduction du clone (T-reduc) ⏳ RESTE
 
 **Goal:** Corriger, pour l'**insertion d'un clone de tableau partiel dont les cellules sont fusionnées** (cas T2b/T2c), la post-sélection qui porte sur les **mauvaises cellules**, puis cadrer la **réduction du clone** aux seules lignes/colonnes sélectionnées en présence de fusions (chantier « T-reduc »).
 **Requirements:** TBD (issu du backlog UAT — bug ⑤ de la passe de blessing Ben du 2026-07-17)
 **Depends on:** suite de la Phase 26 (selections-partielles-de-tableaux) + [[oo-merged-cells-model]]. Le fix ④ full-table-insert (`5348469ab`, re-sélection différée element-based) **ne touche pas** ce cas.
-**Plans:** 0 plans
 
-Plans:
-- [ ] TBD (promouvoir avec `/gsd-review-backlog` quand cadré)
+**Fait (2026-07-20, commit `8c3815b30`, build `2026-07-20.1`)** — ⑤(a) POST-SÉLECTION corrigée :
+- [x] **⑤(a) post-sél sur les mauvaises cellules** — RÉSOLU par band-aid (a), clone laissé COMPLET. L'insert partiel d'un tableau fusionné posait la post-sél sur le HAUT du clone (via selectByRefs) ; désormais la branche merged-partial-insert retourne `selectedCellCoords`, republiées plugin-side, et `reselectFullTableAfterInsert` sélectionne le **rectangle des cellules éditées** (ExpandTo element-based, span-safe). Vérifié LIVE : T2b `«Hi»«Hj»`, T2c `«Va»«Vb»«Vc»,∅,«Vd»«Ve»`. Non-régression LIVE : T2b/T2c replace, T2a insert (réduit), T3/H1 insert (tableau entier). 2 goldens re-capturés (verdict pending → blessing Ben).
+- [ ] **⑤(b) non-réduction du clone fusionné (T-reduc)** — RESTE OUVERT. Le clone reprend TOUT le tableau au lieu de se réduire aux lignes/cols sélectionnées ; risqué (§4bis clone entier exprès car `RemoveRow/Col` corrompt les spans). Chantier délicat à cadrer (challenger §4bis avec tests). Promouvoir via `/gsd-review-backlog` quand prêt.
 
 **Contexte / constat** (source de vérité : `.planning/REVIEW-BACKLOG.md` § « Session 2026-07-17 (quater) », ligne T2b/T2c)
 
