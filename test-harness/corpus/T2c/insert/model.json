@@ -299,41 +299,8 @@
       ]
     }
   ],
-  "selText": "H00\nVa\nM30\n",
+  "selText": "VaVbVc\nVdVe\n",
   "selMarkup": [
-    {
-      "at": {
-        "block": 2,
-        "cell": {
-          "r": 0,
-          "c": 0
-        },
-        "cellBlock": 0
-      },
-      "text": "«H00»"
-    },
-    {
-      "at": {
-        "block": 2,
-        "cell": {
-          "r": 0,
-          "c": 1
-        },
-        "cellBlock": 0
-      },
-      "text": "«H01»"
-    },
-    {
-      "at": {
-        "block": 2,
-        "cell": {
-          "r": 0,
-          "c": 2
-        },
-        "cellBlock": 0
-      },
-      "text": "«H02»"
-    },
     {
       "at": {
         "block": 2,
@@ -388,7 +355,17 @@
         "cellBlock": 0
       },
       "text": "«Vd»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 2,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«Ve»"
     }
-  ],
-  "selMarkupTruncated": true
+  ]
 }
