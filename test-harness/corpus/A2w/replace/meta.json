@@ -9,12 +9,15 @@
   "setSelectionOk": true,
   "capturedVia": "inline word-replace driver (Chrome DevTools MCP) — build 2026-07-19.4",
   "capturedAt": "2026-07-20",
-  "verdict": "pending",
+  "verdict": "pass",
   "comment": "NOUVEAU cas (backlog 999.3) — LA demonstration du 'replace sur un mot' qui manquait. A2/replace a une selection @mid..@mid (CURSEUR VIDE) -> rien a supprimer -> se comporte comme insert ('The quick XXX brown fox') -> NE demontre PAS le replace. Ici le mot 'brown' (offsets 10..15) est reellement SUPPRIME et remplace par XXX -> 'The quick XXX fox' ; prefixe 'The quick ' ET suffixe ' fox' survivent ; PAS de double espace (smart-spacing). post-sel = 'The quick «XXX» fox' (couvre l'injecte seul). Aucun changement code.js.",
   "captureVersion": "v5",
   "blessing": {
     "selection": "a benir — selMarkup 'The quick «XXX» fox'",
     "behaviour": "replace supprime le mot + smart-spacing (pas de double espace) ; prefixe/suffixe conserves",
-    "note": "cas NEUF (pas de golden anterieur) — benir blocks ET selection ; c'est le remplacant demonstratif de A2/replace degenere"
-  }
+    "note": "cas NEUF (pas de golden anterieur) — benir blocks ET selection ; c'est le remplacant demonstratif de A2/replace degenere",
+    "blessedScope": "blocks + selMarkup (post-selection) benis par Ben le 2026-07-20 dans la console gen_blessing"
+  },
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-20"
 }

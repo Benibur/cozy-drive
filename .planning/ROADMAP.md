@@ -263,7 +263,7 @@ Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la pas
 
 ⚠️ **NE PAS bénir** T2b/insert ni T2c/insert dans la console de blessing tant que ce chantier n'est pas traité (goldens buggés).
 
-### Phase 999.3: Dette de couverture du harnais selection-cases — ✅ EXÉCUTÉE (2026-07-20, blessing Ben en attente)
+### Phase 999.3: Dette de couverture du harnais selection-cases — ✅ TERMINÉE (2026-07-20, béni Ben)
 
 **Goal:** Combler deux trous de **couverture/preuve** du harnais selection-cases identifiés par la passe de blessing Ben (ni l'un ni l'autre n'est un bug produit Scribe).
 **Requirements:** TBD (issu du backlog UAT — items « fixtures dégénérées » + « artefact screenshot » de la passe du 2026-07-17)
@@ -273,7 +273,7 @@ Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la pas
 **Fait (2026-07-20)** — `verify-bundles` 66/66, oracle 39/39, build inchangé `2026-07-19.4` :
 - [x] Cas **`A2w`** (top-level) + **`Ac2w`** (intra-cellule) « replace sur un mot » : sélectionnent le mot « brown » (offsets 10..15) via la grammaire d'offsets numériques existante ; 4 goldens capturés (insert+replace) ; `cases.csv` + matrice + manifeste `word-replace-cases.json`. Comble la dégénérescence A2/replace + Ac2/replace (sélection = curseur vide).
 - [x] **A8/insert** `after.png` re-capturé scrollé en bas → la post-sélection `«A8 tail line»` (¶120) est visible ; oracle inchangé.
-- [ ] **Blessing Ben** des 4 nouveaux goldens + revérif A8 (console `gen_blessing.py`) — seul reste-à-faire.
+- [x] **Blessing Ben** des 4 nouveaux goldens (`A2w`/`Ac2w` insert+replace = `pass`, béni 2026-07-20 via `gen_blessing.py`) + A8 after.png revérifié. **Phase close.**
 
 **Contexte / constat** (source de vérité : `.planning/REVIEW-BACKLOG.md` § « Session 2026-07-17 (quater) »)
 
