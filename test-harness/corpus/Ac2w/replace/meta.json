@@ -1,0 +1,20 @@
+{
+  "caseId": "Ac2w",
+  "mode": "replace",
+  "spec": "T1.C(0,0)@10..T1.C(0,0)@15",
+  "fixture": "XXX",
+  "source": "table-arules.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "inline word-replace driver (Chrome DevTools MCP) — build 2026-07-19.4",
+  "capturedAt": "2026-07-20",
+  "verdict": "pending",
+  "comment": "NOUVEAU cas (backlog 999.3) — miroir intra-cellule de A2w/replace : LA demonstration du 'replace sur un mot' DANS une cellule, qui manquait (Ac2/replace = curseur @mid vide). Mot 'brown' (offsets 10..15) reellement SUPPRIME dans la cellule (0,0) et remplace par XXX -> 'The quick XXX fox' ; prefixe/suffixe survivent, PAS de double espace (smart-spacing intra-cellule, fix build .1) ; autres cellules + Intro/Outro intacts. post-sel intra-cellule = 'The quick «XXX» fox'. Aucun changement code.js.",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "a benir — selMarkup intra-cellule 'The quick «XXX» fox'",
+    "behaviour": "replace intra-cellule supprime le mot + smart-spacing ; prefixe/suffixe conserves",
+    "note": "cas NEUF — remplacant demonstratif de Ac2/replace degenere"
+  }
+}

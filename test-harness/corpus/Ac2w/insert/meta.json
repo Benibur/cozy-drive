@@ -1,0 +1,20 @@
+{
+  "caseId": "Ac2w",
+  "mode": "insert",
+  "spec": "T1.C(0,0)@10..T1.C(0,0)@15",
+  "fixture": "XXX",
+  "source": "table-arules.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "inline word-replace driver (Chrome DevTools MCP) — build 2026-07-19.4",
+  "capturedAt": "2026-07-20",
+  "verdict": "pending",
+  "comment": "NOUVEAU cas (backlog 999.3) — miroir intra-cellule de A2w/insert. Cellule (0,0) de table-arules = 'The quick brown fox' ; mot 'brown' (offsets 10..15) selectionne via le chemin intra-cellule same-target (cellmultipara sPara=ePara=1, rangeAtChar) — PAS le chemin cross _xEndpoint (qui prendrait la cellule entiere). INSERT colle au bout de la selection -> 'The quick brown XXX fox' dans la cellule ; autres cellules (Beta, Gamma, cellule 3-¶) + Intro/Outro intacts. post-sel intra-cellule {block:1,cell:(0,0),cellBlock:0}. Comble la degenerescence Ac2/insert-replace (@mid..@mid). Aucun changement code.js.",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "a benir — selMarkup intra-cellule 'The quick brown« XXX» fox'",
+    "behaviour": "insert intra-cellule au bout de selection + smart-spacing",
+    "note": "cas NEUF — benir blocks ET selection"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "_comment": "Word-replace capture definitions for capture-driver.js (backlog 999.3 — closes the A2/replace + Ac2/replace degeneracy: their @mid..@mid selection is a COLLAPSED cursor -> replace behaves like insert -> does not demonstrate replace). Here an ENTIRE interior word ('brown', offsets 10..15 of 'The quick brown fox') is selected, bounded on BOTH sides by surviving text. Numeric-offset specs = existing parseSelSpec grammar, NO code.js change. Two fixture docs: a-family (top-level, A2w) and table-arules cell (0,0) (intra-cell, Ac2w).",
+  "cases": [
+    { "id": "A2w",  "mode": "insert",  "fixtureDoc": "a-family.docx",     "spec": "P1@10..P1@15",              "md": "XXX", "note": "insert at end-of-selection (offset 15, after 'brown') -> 'The quick brown XXX fox'." },
+    { "id": "A2w",  "mode": "replace", "fixtureDoc": "a-family.docx",     "spec": "P1@10..P1@15",              "md": "XXX", "note": "replace 'brown' -> 'The quick XXX fox' (prefix 'The quick ' + suffix ' fox' survive)." },
+    { "id": "Ac2w", "mode": "insert",  "fixtureDoc": "table-arules.docx", "spec": "T1.C(0,0)@10..T1.C(0,0)@15", "md": "XXX", "note": "intra-cell mirror of A2w insert (same-cell same-target path -> rangeAtChar, not the whole-cell cross path)." },
+    { "id": "Ac2w", "mode": "replace", "fixtureDoc": "table-arules.docx", "spec": "T1.C(0,0)@10..T1.C(0,0)@15", "md": "XXX", "note": "intra-cell mirror of A2w replace." }
+  ]
+}

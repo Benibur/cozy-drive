@@ -117,6 +117,17 @@ Le reste-à-faire de la passe de blessing est désormais **suivi comme entrées 
 
 Reste hors-gsd (à bénir par Ben, artefact déjà à jour) : **re-bénir T3/T9/H1/H-reg insert** (sélection corrigée par le fix ④ `5348469ab`) dans la console de blessing (`gen_blessing.py`).
 
+### Session 2026-07-20 — Phase 999.3 EXÉCUTÉE (dette harnais comblée)
+
+Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — build inchangé `2026-07-19.4`, `verify-bundles` **66/66**, oracle jest **39/39**) :
+
+| Item | Action | Statut |
+|------|--------|--------|
+| **Fixtures dégénérées A2/replace + Ac2/replace** | 2 nouveaux cas **`A2w`** (top-level, `P1@10..P1@15`, fixture a-family) + **`Ac2w`** (intra-cellule, `T1.C(0,0)@10..T1.C(0,0)@15`, fixture table-arules) : sélectionnent un **mot entier intérieur** (« brown », offsets 10..15 de « The quick brown fox ») borné des DEUX côtés. Grammaire d'offsets numériques **déjà supportée** par `parseSelSpec` ⇒ 0 changement `code.js`. 4 goldens capturés (insert+replace × 2), preuves complètes. **Replace vérifié** : « brown » réellement supprimé → « The quick XXX fox » (préfixe/suffixe survivent, pas de double espace) — vs A2/replace dégénéré « The quick XXX brown fox » (curseur vide = se comporte comme insert). Ajoutés à `cases.csv` (matrice régénérée) + manifeste reproductible `test-harness/tools/word-replace-cases.json`. **verdict `pending`** (à bénir par Ben). | ✅ **FAIT** |
+| **Artefact screenshot A8/insert** | `after.png` **re-capturé scrollé en bas** (canvas OO → `m_oScrollVerApi.scrollToY(max)`) : la post-sélection `«A8 tail line»` (¶120, tout en bas) est désormais **dans le cadrage**, surlignée sous « Para 120 ». `capture.json`/`model.json` **inchangés** (l'oracle `selMarkup` était déjà correct — c'était un pur artefact de cadrage, pas un bug Scribe). meta.json annoté. | ✅ **FAIT** |
+
+**À bénir par Ben (console `gen_blessing.py`)** : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) + revérifier `A8/insert` (nouveau `after.png`). Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis).
+
 ## Session 2026-07-17 (ter) — la passe de re-capture des 62 (build `.9`) FAITE
 
 Les 62 goldens re-capturés en une passe (aucun `code.js` touché ⇒ build inchangé `.9`). Preuves complètes partout (`verify-bundles.py` : **62/62 complete**), oracle **34/34**. Le corpus a **enfin** un oracle de sélection (`selText`/`selMarkup` peuplés partout). Verdicts humains **jamais** touchés ; un bloc `blessing` ajouté à chaque `meta.json` dit ce qui reste à bénir. Présentation au gabarit = `test-harness/tools/render-review.py --all`.
