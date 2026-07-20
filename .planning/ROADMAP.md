@@ -9,6 +9,7 @@
 - ✅ **v3.1 Contrat de réponse structurée LLM (MCP-ready)** -- Phases v3.1-01 to v3.1-07 (shipped 2026-06-24)
 - 🚧 **v3.2 Contexte enrichi du prompt** -- Phases v3.2-01 to v3.2-03 (planning, started 2026-06-24)
 - 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`) — core observables + IMG-04 save-fidelity VERIFIED live 2026-07-09 (build `2026-07-09.6`); residual follow-ups Q1/Q3/T9 deferred
+- 🧪 **Campagne QA harnais selection-cases** (transverse, non-milestone) -- `test-harness/` sur cette branche : 62 goldens, oracle `selMarkup`, blessing Ben 52 OK/10 KO triagé (bugs prod corrigés dans `code.js` : ④ full-table-insert, extraction cellule −1 char). Détail = `.planning/REVIEW-BACKLOG.md` ; reste-à-faire = Phases **999.2** (bug ⑤ T-reduc) + **999.3** (dette harnais) au Backlog.
 
 ## Phases
 
@@ -240,3 +241,41 @@ Extraire les prompts hors de Scribe vers un module de prompts partagé (pendant 
 - **Moyen/gros** si vrai partage via `cozy-viewer` + alignement du chemin d'appel (`chatCompletion` + `AbortController`) → touche une lib externe, coordination/publication.
 
 **Important** : ni bug ni faille de sécurité — architecture/cohérence. Aucune urgence, indépendant de la PR #2 (JSON) et du fix JWT.
+
+### Phase 999.2: Sélection de tableaux partiels fusionnés — post-sélection + réduction du clone (T-reduc) (BACKLOG)
+
+**Goal:** Corriger, pour l'**insertion d'un clone de tableau partiel dont les cellules sont fusionnées** (cas T2b/T2c), la post-sélection qui porte sur les **mauvaises cellules**, puis cadrer la **réduction du clone** aux seules lignes/colonnes sélectionnées en présence de fusions (chantier « T-reduc »).
+**Requirements:** TBD (issu du backlog UAT — bug ⑤ de la passe de blessing Ben du 2026-07-17)
+**Depends on:** suite de la Phase 26 (selections-partielles-de-tableaux) + [[oo-merged-cells-model]]. Le fix ④ full-table-insert (`5348469ab`, re-sélection différée element-based) **ne touche pas** ce cas.
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promouvoir avec `/gsd-review-backlog` quand cadré)
+
+**Contexte / constat** (source de vérité : `.planning/REVIEW-BACKLOG.md` § « Session 2026-07-17 (quater) », ligne T2b/T2c)
+
+Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la passe de blessing Ben (console `gen_blessing.py`) sur T2b/insert et T2c/insert :
+
+1. **(a) Post-sélection sur les mauvaises cellules** — bug ⑤. T2b édite la ligne 3 (`Hi/Hj`) mais la post-sélection couvre le **haut** du tableau (`H00..B2`) ; T2c édite les lignes 1-2 (`Va..Ve`) et la sélection retombe aussi sur le haut. C'est un **vrai bug de sélection** à corriger. **Distinct** de la non-réduction ci-dessous.
+2. **(b) Non-réduction du clone (chantier T-reduc)** — le clone reprend **TOUT** le tableau au lieu de se réduire aux lignes/colonnes réellement sélectionnées. Contrôle : T2a (**non**-fusionné) réduit correctement (clone 1×2, sél. `«AA»«BB»`) ⇒ le défaut de réduction est **spécifique aux fusions**. Délicat : le §4bis clone le tableau **entier exprès** parce que `RemoveRow/RemoveCol` corrompt les spans de fusion (`V-merge` continuation = cellule vide, cf. [[oo-merged-cells-model]]). Il faut **challenger §4bis** avec des tests avant de réduire, en boucle indépendante (risque spans).
+
+**Coût indicatif** : (a) petit/moyen (une correction de sélection, même famille que le fix ④ mais sur un tableau existant à positions stables) ; (b) moyen/gros (réécriture de la logique de clone partiel sous contrainte de fusions, à cadrer + tests avant tout code).
+
+⚠️ **NE PAS bénir** T2b/insert ni T2c/insert dans la console de blessing tant que ce chantier n'est pas traité (goldens buggés).
+
+### Phase 999.3: Dette de couverture du harnais selection-cases (BACKLOG)
+
+**Goal:** Combler deux trous de **couverture/preuve** du harnais selection-cases identifiés par la passe de blessing Ben (ni l'un ni l'autre n'est un bug produit Scribe).
+**Requirements:** TBD (issu du backlog UAT — items « fixtures dégénérées » + « artefact screenshot » de la passe du 2026-07-17)
+**Depends on:** harnais selection-cases (`test-harness/`, sur cette branche). Aucun changement de `code.js` attendu.
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promouvoir avec `/gsd-review-backlog` quand prêt)
+
+**Contexte / constat** (source de vérité : `.planning/REVIEW-BACKLOG.md` § « Session 2026-07-17 (quater) »)
+
+1. **Fixtures dégénérées A2/replace + Ac2/replace** — leur sélection est `@mid..@mid` (**curseur vide**) : en replace il n'y a rien à supprimer ⇒ le cas se comporte comme un insert et **ne démontre pas le replace**. Le corpus a déjà des replace-sur-texte (A1/replace = tout le ¶, A3/replace = partiel), mais il manque un **replace-sur-un-mot**. Action : **ajouter/adapter une fixture « replace sur un mot »** (before avec ≥1 mot sélectionné). Amélioration de couverture, **pas** un verdict KO du golden existant.
+2. **Artefact screenshot A8/insert** — l'oracle de sélection est **correct** (`selMarkup «A8 tail line»` au ¶120, le ¶ ajouté), mais `after.png` cadre le **haut** du document (120 ¶) ⇒ la sélection, tout en bas, est **hors cadrage**. Pas un bug Scribe. Action : **re-screenshotter A8 scrollé en bas** pour que la preuve visuelle montre la post-sélection.
+
+**Coût indicatif** : petit (travail de harnais/fixtures, faible risque, pas de code prod).

@@ -109,6 +109,14 @@ basculer — 2 questions, 2 fixtures dégénérées, 1 artefact de screenshot, 2
 1. ✅ **full-table clone insert : post-sél omet la dernière cellule** (T3/T9/H-reg/H1 insert) — **CORRIGÉ** (`5348469ab`, build `.4`, re-sélection différée element-based). 4 goldens re-capturés.
 2. 🔴 **partial-merged clone insert : post-sél sur les mauvaises cellules** (T2b/T2c) — **RESTE**, distinct de la non-réduction (T-reduc). Prochaine tâche sélection.
 
+### → Câblé dans le workflow gsd (2026-07-20)
+
+Le reste-à-faire de la passe de blessing est désormais **suivi comme entrées de backlog** dans `.planning/ROADMAP.md` (§ Backlog), promouvables via `/gsd-review-backlog` :
+- **Phase 999.2** — bug ⑤ (T2b/T2c) : post-sélection sur mauvaises cellules **+** non-réduction du clone fusionné (chantier T-reduc). Ce document reste la **source de vérité du détail** (diagnostic, contrôle T2a).
+- **Phase 999.3** — dette de couverture harnais : fixtures A2/Ac2 replace-sur-mot **+** re-screenshot A8/insert scrollé.
+
+Reste hors-gsd (à bénir par Ben, artefact déjà à jour) : **re-bénir T3/T9/H1/H-reg insert** (sélection corrigée par le fix ④ `5348469ab`) dans la console de blessing (`gen_blessing.py`).
+
 ## Session 2026-07-17 (ter) — la passe de re-capture des 62 (build `.9`) FAITE
 
 Les 62 goldens re-capturés en une passe (aucun `code.js` touché ⇒ build inchangé `.9`). Preuves complètes partout (`verify-bundles.py` : **62/62 complete**), oracle **34/34**. Le corpus a **enfin** un oracle de sélection (`selText`/`selMarkup` peuplés partout). Verdicts humains **jamais** touchés ; un bloc `blessing` ajouté à chaque `meta.json` dit ce qui reste à bénir. Présentation au gabarit = `test-harness/tools/render-review.py --all`.
