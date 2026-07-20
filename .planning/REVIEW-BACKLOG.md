@@ -128,6 +128,10 @@ Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — bui
 
 **Béni par Ben le 2026-07-20** (console `gen_blessing.py`) : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) → verdict **`pass`** (blocks + selMarkup). A8/insert after.png revérifié OK. Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis). **Phase 999.3 close.** Reste au corpus 10 `pending` = **axe H** (chantier distinct, non lié à 999.3).
 
+### Session 2026-07-20 (bis) — AXE H BÉNI → corpus intégralement validé
+
+Les **10 bundles axe H** (tableaux en **en-tête/pied** : `H1`/`H2`/`H3`/`H4`/`H-reg`, insert+replace) **bénis par Ben** via la console `gen_blessing.py` (baseline `blessed-2026-07-20`) : **10/10 OK, 0 KO**. Verdicts `pending → pass`, jugés sur `selMarkup` (commit `c7a732e05`, tag `blessed-2026-07-20-H`). Couvre au passage la re-bénédiction de `H1`/`H-reg` insert (sélection full-table corrigée par le fix ④ `5348469ab`) et le cross-frontière en-tête↔corps `H2`, l'intra-cellule d'en-tête `H3`, les cellules partielles `H4`, la régression de ciblage §4quater `H-reg`. **Corpus désormais 68/68 `pass`, 0 `pending`.** Seul reste-à-faire de la campagne = bug **⑤(b) T-reduc** (cadré, parké au backlog Phase 999.2, décision produit en attente).
+
 ## Session 2026-07-17 (ter) — la passe de re-capture des 62 (build `.9`) FAITE
 
 Les 62 goldens re-capturés en une passe (aucun `code.js` touché ⇒ build inchangé `.9`). Preuves complètes partout (`verify-bundles.py` : **62/62 complete**), oracle **34/34**. Le corpus a **enfin** un oracle de sélection (`selText`/`selMarkup` peuplés partout). Verdicts humains **jamais** touchés ; un bloc `blessing` ajouté à chaque `meta.json` dit ce qui reste à bénir. Présentation au gabarit = `test-harness/tools/render-review.py --all`.
