@@ -9,7 +9,7 @@
   "setSelectionOk": true,
   "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
   "capturedAt": "2026-07-19",
-  "verdict": "pending",
+  "verdict": "pass",
   "claudeAnalysis": "pass",
   "comment": "clone [[w,x],[y,z]] insere APRES le tableau du haut ; original Alpha/Beta/Gamma/Delta intact (blockCount 16->17). Le bug DEFERE §4quater (insert apres tableau en haut du corps) est CORRIGE (aa8772310/build .2) : le clone atterrit juste apres la table, pas loin.",
   "afterDocxPending": true,
@@ -18,6 +18,7 @@
   "blessing": {
     "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
     "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
-    "behaviour": "sélection full-table CORRIGÉE (build 2026-07-19.4, 5348469ab) : la post-sélection couvre désormais TOUT le tableau inséré (dernière cellule incluse). blocks byte-identiques ; re-capturé build .4. À RE-BÉNIR sur selMarkup."
+    "behaviour": "sélection full-table CORRIGÉE (build 2026-07-19.4, 5348469ab) : la post-sélection couvre désormais TOUT le tableau inséré (dernière cellule incluse). blocks byte-identiques ; re-capturé build .4. À RE-BÉNIR sur selMarkup.",
+    "blessedOnSelection": "Ben 2026-07-20 (console gen_blessing, baseline blessed-2026-07-20) — axe H 10/10 OK, 0 KO ; verdict pass désormais sur selMarkup ET blocks"
   }
 }

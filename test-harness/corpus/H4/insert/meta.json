@@ -9,7 +9,7 @@
   "setSelectionOk": true,
   "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
   "capturedAt": "2026-07-17",
-  "verdict": "pending",
+  "verdict": "pass",
   "claudeAnalysis": "pass",
   "comment": "cellules partielles (ligne 0) : copie reduite [AA|BB] apres le tableau ; original intact. Comme T2a.",
   "afterDocxPending": true,
@@ -17,6 +17,7 @@
   "captureVersion": "v5",
   "blessing": {
     "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
-    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
+    "blessedOnSelection": "Ben 2026-07-20 (console gen_blessing, baseline blessed-2026-07-20) — axe H 10/10 OK, 0 KO ; verdict pass désormais sur selMarkup ET blocks"
   }
 }
