@@ -145,7 +145,7 @@ export const ScribeSelectionButton = ({ rect, onTriggerScribe }) => {
       >
         {hovered && (
           <ScribeHoverTooltip
-            label={t('Scribe.button.text_ai')}
+            label={t('Scribe.button.selection_menu')}
             shortcut="(Ctrl+Shift+I)"
             align="center"
             gap={TOOLTIP_GAP}
