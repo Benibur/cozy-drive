@@ -28,7 +28,21 @@ def injected_pieces(md):
         md = re.sub(r"!\[IMG:[^\]]*\]\([^)]*\)", "", md)
         md = re.sub(r"\{\{IMG:[^}]*\}\}", "", md)
     md = re.sub(r"\[/?CELL[^\]]*\]|\[/?TABLE[^\]]*\]", "\n", md)
-    return [p for p in (x.strip() for x in md.split("\n")) if p]
+    lines = [p for p in (x.strip() for x in md.split("\n")) if p]
+
+    # A GFM pipe table does not survive as literal text: it becomes a REAL table whose
+    # cells hold the individual values. Checking for "| A | B | C |" in after.docx would
+    # always fail. Expand such a line into its cell texts and drop the separator row.
+    expanded = []
+    for line in lines:
+        if line.startswith("|") and line.endswith("|"):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            if all(set(c) <= set("-: ") for c in cells):
+                continue  # separator row (|---|---|) — no text in the document
+            expanded.extend(c for c in cells if c)
+        else:
+            expanded.append(line)
+    return expanded
 
 
 def fail(bundle, msg, out):

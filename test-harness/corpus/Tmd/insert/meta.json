@@ -1,0 +1,20 @@
+{
+  "caseId": "Tmd",
+  "spec": "P1@start..P1@end",
+  "fixture": "| A | B | C |\n| --- | --- | --- |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n| 7 | 8 | 9 |",
+  "source": "a-family.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "test hook injectAtSelection (Chrome DevTools MCP) — build 2026-07-21.4",
+  "capturedAt": "2026-07-21",
+  "verdict": "pending",
+  "captureVersion": "v5",
+  "mode": "insert",
+  "comment": "NOUVEAU cas (2026-07-21) — premier golden du chemin TABLEAU MARKDOWN EN PIPES (Api.CreateTable), jamais couvert : les 25 goldens tableaux existants passent tous par les marqueurs [CELL:r,c], un chemin DIFFERENT. Tableau volontairement NON CARRE (3 colonnes x 4 lignes : entete + 3 lignes) : c'est exactement la forme qui echouait. Avant le fix, Api.CreateTable recevait (nCols, nRows) alors qu'il attend (LIGNES, COLONNES) -> 'Row index N is out of bounds' -> TOUTE l'injection echouait (le texte autour compris), et le carre 2x2 masquait le defaut. Attendu ici : les 3 ¶ hotes intacts, tableau 4L x 3C insere APRES le ¶ selectionne, entete A/B/C en gras, post-selection couvrant les 12 cellules.",
+  "blessing": {
+    "selection": "a benir — post-selection couvrant les 12 cellules du tableau insere",
+    "behaviour": "chemin markdown-pipe (Api.CreateTable) — NOUVEAU dans le corpus",
+    "note": "cas NEUF : benir blocks ET selMarkup. Regression-test du fix (LIGNES, COLONNES) du 2026-07-21."
+  }
+}
