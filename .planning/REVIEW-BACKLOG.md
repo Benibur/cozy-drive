@@ -128,6 +128,24 @@ Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — bui
 
 **Béni par Ben le 2026-07-20** (console `gen_blessing.py`) : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) → verdict **`pass`** (blocks + selMarkup). A8/insert after.png revérifié OK. Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis). **Phase 999.3 close.** Reste au corpus 10 `pending` = **axe H** (chantier distinct, non lié à 999.3).
 
+### Session 2026-07-21 (bis) — PANNEAU LATÉRAL : Insérer/Remplacer perdait TABLEAUX et IMAGES — CORRIGÉ
+
+**Symptôme (Ben)** : dans le side panel, les boutons *Insérer*/*Remplacer* d'une carte de fragment contenant une image ou un tableau **perdent** l'image et le tableau ; **le texte autour est bien inséré**.
+
+**Reproduction déterministe, sans Drive ni LLM** : le listener `PANEL_ACTION` du plugin est un simple `addEventListener("message")` → on lui poste directement le message que le panneau enverrait (`{type:'cozy-bridge:intent', version:1, action:'PANEL_ACTION', source:'cozy-drive-panel', data:{action,text,html,md}}`, forme donnée par `src/lib/cozy-bridge/protocol.js:84`). Reproduit du premier coup sur `table-plain` : `Avant.` + `Apres.` insérés, **tableau absent**.
+
+**CAUSE RACINE UNIQUE (elle explique les deux)** — le contexte du chat est extrait en **mode « document »**, un mode conçu **lecture seule / non réinjectable**, mais le panneau **réinjecte** ses marqueurs. Le code l'assumait déjà noir sur blanc (`scripts/code.js:3674` : « *CONTEXT (whole-document) extraction … **never SetName — its markers are never reinjected*** »). Invariant violé : **un marqueur est une référence à un état du document que seule l'extraction de SÉLECTION matérialise.**
+- **Tableaux** : `buildDocumentExtractionResult` émet `[TABLE:N]`/`[CELL:r,c]` **sans** produire `tableSnapshots` ni `tableDocIndices` → `reconstructTable` n'avait ni snapshot ni table d'origine → renvoyait `null` → les **3** sites d'appel faisaient `continue` → placeholder **sauté silencieusement**. (La branche `replace` perdait aussi le tableau par un autre chemin : `isStructuralFull` faux + `if (origTable)` faux ⇒ rien.)
+- **Images** : le nom `scribe-img-N` émis en mode document est **fictif** — prouvé live sur `img-para` : contexte annonçant `scribe-img-1/2/3` alors que le document a **2 dessins TOUS SANS NOM** → `injectDrawingInto` ne résout rien → paragraphe image **jeté sans trace**.
+
+**Correctifs** (décision produit Ben : reconstruire les tableaux depuis les marqueurs ; pour les images, ne plus perdre en silence) :
+- `574b4ff60` — `createTableFromMarkers()` construit un tableau neuf à partir des seuls marqueurs (dimensions = max r/c + 1, style aligné sur le chemin markdown-pipe) ; `reconstructTable()` prend les cellules en 3ᵉ argument et l'utilise **en dernier recours** ; `fillTableCells()` factorise ; branche `replace` : nouveau cas `!origTable` → on insère le tableau reconstruit. ⚠️ La mise en forme d'origine (polices/largeurs/**fusions**) n'est pas récupérable sur ce chemin — **fidélité du CONTENU préférée à la perte silencieuse**.
+- `a6f65d550` — mode document : plus de handle réinjectable, un token descriptif **`[image]`** (4 sites : 1 bloc + 3 inline) ; + **filet de sécurité** à l'injection : un marqueur image non résolu laisse un paragraphe **visible** `[image]` (italique) + log + compteur.
+
+**Vérifié LIVE** (builds `2026-07-21.1` / `.2`) : panneau insert → `Avant.` / `TABLE[AA,BB,CC,DD]` / `Apres.` ; panneau replace → tableau inséré **et original intact** (⚠️ le 1ᵉʳ essai montrait l'original disparu = artefact d'`asc_undoAllChanges` sur un insert de tableau, **re-uploader une fixture fraîche entre cas de table**) ; contexte document → `Photo [image][image]`, **zéro handle fictif** ; extraction SÉLECTION → `{{IMG:scribe-img-0}}` préservé ; **aller-retour image inline → drawings 2→3, vraie image réinjectée**. Non-régression inline **identique aux goldens** : `T3/insert` (clone complet + post-sél `«w»«x»«y»«z»`), `T2a/insert` (clone réduit 1×2 + `«AA»«BB»`), `T3/replace` (in-place `[p,q,r,s]`). Oracle **39/39**, verify-bundles **66/66**, specs hôte Scribe **296/296**.
+
+**Reste ouvert (non corrigé, à cadrer)** : `castEmptySelection` (`scripts/code.js:3233`) remet `lastTableSnapshots` à `null` mais **oublie `lastTableDocIndices`** → des indices périmés peuvent survivre et faire reconstruire un `[TABLE:0]` du chat à partir d'**un autre tableau du document** (corruption silencieuse et non déterministe, pire que la perte). Non déclenché par les cas testés, mais réel.
+
 ### Session 2026-07-21 — « litière de runs vides » INVESTIGUÉE → reclassée COSMÉTIQUE (contagion infirmée)
 
 **Question posée** : la litière est-elle un vrai bug utilisateur ? Le backlog affirmait qu'un run vide **gras** rend gras le texte tapé ensuite. **Réponse : NON, non reproductible.**
@@ -189,7 +207,8 @@ Les 62 goldens re-capturés en une passe (aucun `code.js` touché ⇒ build inch
 
 | ID | Cible (Ben) | Repro | Décision | Statut |
 |----|-------------|:-----:|----------|--------|
-| **HIST-img** | fragment d'historique (inline→side-panel) réutilisé : la référence image **n'est pas ré-injectée** (perdue dans l'historique ?) | — | investigation dédiée | 📋 à investiguer |
+| **HIST-img** | fragment d'historique (inline→side-panel) réutilisé : la référence image **n'est pas ré-injectée** (perdue dans l'historique ?) | ✅ **RÉSOLU 2026-07-21** — cause identifiée et corrigée (`a6f65d550`) : ce n'était pas « perdu dans l'historique » mais un **handle fictif** émis par l'extraction de contexte (mode document, qui n'appelle jamais `SetName`). Voir § Session 2026-07-21 (bis). | corrigé | ✅ FAIT |
+| **PANEL-tbl/img** | panneau latéral : les boutons **Insérer/Remplacer** d'un fragment contenant un **tableau** ou une **image** perdaient le tableau et l'image (le texte autour passait) | ✅ (live, `PANEL_ACTION` posté au plugin) | **CORRIGÉ** (`574b4ff60` tableaux, `a6f65d550` images) | ✅ FAIT |
 
 ---
 
