@@ -128,6 +128,65 @@ Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — bui
 
 **Béni par Ben le 2026-07-20** (console `gen_blessing.py`) : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) → verdict **`pass`** (blocks + selMarkup). A8/insert after.png revérifié OK. Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis). **Phase 999.3 close.** Reste au corpus 10 `pending` = **axe H** (chantier distinct, non lié à 999.3).
 
+### Chantier RESSOURCES D'UN FRAGMENT — état, décisions et mode d'emploi (2026-07-21)
+
+**Principe directeur (décision Ben)** : pour réinjecter une ressource référencée par un fragment,
+**une COPIE sérialisée vaut mieux qu'une RÉFÉRENCE**. Motif : une référence peut pointer vers une
+ressource **modifiée depuis** la question — réinjecter « ce qui est là maintenant » au lieu de « ce
+dont on parlait » est **pire** qu'une perte (silencieux et faux). La copie fige l'état au moment de
+l'extraction.
+
+#### Tableaux — ✅ FAIT (copie sérialisée), `79a720a8e`
+`table.ToJSON(true, true)` est une opération de **LECTURE** ⇒ compatible avec la contrainte « le
+contexte ne mute pas le document » (celle qui interdit `SetName`), et **préserve les fusions**.
+Câblage : extraction document → `docTableSnapshots[tableIndex]` → réponse
+`cozy-bridge:document-extracted` → `docTableSnapshotsRef` (hôte) → `snapshotsForFragment(text)` au
+clic, **filtré aux seuls `[TABLE:N]` du fragment** (canal retour plafonné à **1 Mo**,
+`validateIntent`). Résultat live : clone **strictement identique** à l'original.
+
+#### Images — ⏸️ ON RESTE SUR LES RÉFÉRENCES (décision Ben 2026-07-21)
+La copie n'est **pas** transposable en l'état. Deux obstacles **durs**, mesurés :
+1. **`drawing.ToJSON()` perd le bitmap** — documenté phase 23.1 : « *ToJSON preserves dimensions but
+   **loses the bitmap data** — images appear as white rectangles* ». Seul `Copy()` préserve le
+   contenu, et c'est un objet **en mémoire**, non sérialisable à travers `postMessage`.
+2. **Plafond de 1 Mo sur le canal retour** (`PANEL_ACTION` est un `cozy-bridge:intent`,
+   `MAX_DATA_SIZE = 1_000_000` dans `src/lib/cozy-bridge/protocol.js:35`). Le canal d'extraction
+   (`cozy-bridge:extract-document`) contourne délibérément cette limite, **mais pas le retour**.
+   Une photo en base64 le dépasse couramment.
+
+**État livré** (`a6f65d550`) : pas de handle fictif en mode document (token `[image]`) + filet de
+sécurité (paragraphe `[image]` visible si un marqueur ne résout pas). Le flux **sélection** garde ses
+**vraies** références (`SetName` → `scribe-img-N`) et réinjecte pour de bon.
+
+**MODE D'EMPLOI si on reprend le sujet** (ordre recommandé) :
+1. **Mesurer d'abord** la distribution de taille des images des documents réels — si la majorité
+   passe sous ~700 Ko en base64, la copie devient viable pour le cas courant.
+2. **Copie avec garde-fou de taille** : sérialiser `{géométrie (ToJSON), bytes base64}` à
+   l'extraction de contexte ; au-delà du seuil → ne pas embarquer, retomber sur le placeholder
+   visible actuel. Ne JAMAIS dépasser le plafond : le message serait rejeté **en silence** par
+   `validateIntent`.
+3. **Réinjection** : réutiliser le pipeline image existant (pré-passe `getLocalImagePath` →
+   `imageMediaMap {json, rasterId}` → `FromJSON`+`AddDrawing` en **un seul** callCommand), en le
+   semant depuis les octets transportés au lieu du nom. ⚠️ Le `rasterId` est **une ressource de
+   session** du serveur documentaire, pas un identifiant portable — il doit être **re-créé** côté
+   injection, jamais transporté.
+4. **Ne pas** activer `SetName` en mode document pour « faire marcher les références » : c'est une
+   **mutation** du document pendant une extraction de contexte (pollution de l'historique d'undo et
+   de la co-édition). C'est la contrainte qui a créé tout ce bug au départ.
+5. **Prouver au SAVE**, pas seulement au live : `after.docx` doit contenir `<a:blip>` **et** une
+   partie `word/media/` (angle mort connu : `model.json` ne voit pas les images).
+
+#### ❓ Question OUVERTE — écart non expliqué sur les tableaux markdown non carrés
+Ben rapporte avoir vu, **dans le document**, un tableau markdown **3×4** correctement injecté avant
+le fix. Mes mesures disent l'inverse : bug remis temporairement + **vrai** HTML converti (donc repli
+`PasteHtml` inclus) + code servi vérifié → **rien** ne s'insère (ni tableau ni texte) ; arguments
+inversés → insertion correcte. **Les deux observations n'ont pas été réconciliées.** Hypothèses non
+tranchées : aperçu de la carte (`MarkdownPreview`) confondu avec le document ; table venue en
+marqueurs `[TABLE:N]` (chemin différent, fonctionnel) ; décompte incluant la ligne d'en-tête (un
+« 3×4 » pouvant être carré côté code). **Décision Ben : on en reste là** puisque le fix résout le
+cas mesuré sans régression — mais l'écart est consigné ici, et les goldens `Tmd` (insert+replace)
+servent désormais de test de non-régression sur ce chemin.
+
 ### Session 2026-07-21 (ter) — FIDÉLITÉ des ressources réinjectées + bug `Api.CreateTable`
 
 **Question de Ben** : « ne peut-on pas faire mieux que le tableau à plat ? peut-on avoir une *copie* sérialisée des ressources référencées par un fragment, fournie à Scribe et renvoyée à l'injection ? » — **Oui, et c'était déjà à moitié câblé** (`79a720a8e`).
