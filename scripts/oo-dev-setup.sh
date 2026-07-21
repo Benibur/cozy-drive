@@ -50,10 +50,12 @@ else
 
   # Patched SDK (OO 9.4): mount ONLY sdk-all.js with the GetInlineDrawings patch.
   # On 9.4 apiBuilder.js (the builder API + our patch) lives only in sdk-all.js,
-  # not sdk-all-min.js; sdk-all.js has no .gz in the image so the bind mount is
-  # served directly. Built from sdkjs v9.4.0.129 + the patch + the sdkjs-forms
+  # not sdk-all-min.js. Built from sdkjs v9.4.0.129 + the patch + the sdkjs-forms
   # addon (see ~/Dev-local/onlyoffice-sdkjs-integ [branch integration/scribe-oo-9.4.0.129]
   # and plugins/onlyoffice-scribe/oo-api-proposal.md).
+  # NB: mounting the file is NOT enough to have it served — the image also ships a
+  # sdk-all.js.gz that nginx prefers for every gzip-capable client. See the
+  # "Refreshing the patched SDK .gz" section below, which re-derives it on every run.
   SDKJS_PATCHED_94="$(cd "$(dirname "$0")/.." && pwd)/../onlyoffice-sdkjs-integ/dist/sdkjs-patch-9.4.0.129/sdk-all.js"
   SDKJS_CONTAINER_DIR="/var/www/onlyoffice/documentserver/sdkjs/word"
   SDKJS_VOLUMES=""
@@ -221,6 +223,39 @@ else
   echo "WARNING: could not apply plugin no-cache override — a hard refresh may serve a stale plugin."
   echo "  Fallback: open the editor in a fresh browser context/incognito to load new code.js."
 fi
+
+echo ""
+echo "=== Refreshing the patched SDK .gz ==="
+# The image ships /var/www/.../sdkjs/word/sdk-all.js.gz, and nginx's gzip_static
+# serves THAT to every gzip-capable client — i.e. every browser. Bind-mounting the
+# patched sdk-all.js therefore changes NOTHING on its own: the browser keeps getting
+# the stale .gz, silently, with a 200 and no warning anywhere. (This cost a full UAT
+# cycle on 2026-07-21: a coordinate fix was rebuilt, installed, verified byte-for-byte
+# inside the container — and the browser still ran the old code.)
+# So re-derive the .gz from the mounted file on EVERY run. Cheap (~2 s) and idempotent.
+# Verify by hand with:
+#   curl -sH 'Accept-Encoding: gzip' http://localhost/<ver>/sdkjs/word/sdk-all.js \
+#     | gunzip | sha256sum      # must equal the host dist sha256
+SDKJS_WORD_DIR="/var/www/onlyoffice/documentserver/sdkjs/word"
+if docker exec -u root "${CONTAINER_NAME}" sh -c '
+      D="'"${SDKJS_WORD_DIR}"'"
+      [ -f "$D/sdk-all.js" ] || exit 1
+      # Nothing to do when no .gz shadows the file (e.g. a future image without one).
+      [ -f "$D/sdk-all.js.gz" ] || exit 0
+      # Already in sync? compare the .gz payload against the live file.
+      if gunzip -c "$D/sdk-all.js.gz" 2>/dev/null | cmp -s - "$D/sdk-all.js"; then exit 0; fi
+      gzip -9 -c "$D/sdk-all.js" > "$D/sdk-all.js.gz.new" \
+        && mv "$D/sdk-all.js.gz.new" "$D/sdk-all.js.gz"
+    ' 2>/dev/null; then
+  echo "Patched sdk-all.js.gz is in sync with the mounted sdk-all.js."
+else
+  echo "WARNING: could not refresh sdk-all.js.gz — the browser may still run the OLD SDK."
+  echo "  The mount alone is not enough: nginx gzip_static prefers the .gz."
+  echo "  Fix by hand: docker exec -u root ${CONTAINER_NAME} sh -c \\"
+  echo "    'cd ${SDKJS_WORD_DIR} && gzip -9 -c sdk-all.js > sdk-all.js.gz'"
+fi
+# Reminder: the SDK is served `immutable` under an UNCHANGED url, so even a correct
+# .gz will not reach a browser that already cached it — use a fresh context for UAT.
 
 echo ""
 echo "=== Setup Complete ==="
