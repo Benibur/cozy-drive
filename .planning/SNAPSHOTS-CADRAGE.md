@@ -122,3 +122,42 @@ le plugin, aucun impact sur le contrat. **Filet, pas solution.**
 3. **Promouvoir en vraie phase gsd** (`/gsd-review-backlog` → `/gsd-plan-phase`) : ça touche le
    stockage du chat, la composition du prompt et le pont hôte↔plugin — trop large pour de l'inline.
 4. **Ne pas** toucher à la grammaire des marqueurs tant que S-1 suffit.
+
+---
+
+## 10. Images référençables — tentative du 2026-07-21 : **conception validée, implémentation BLOQUÉE**
+
+**Origine** : UAT Ben (B6/B7). Le contexte n'émettait qu'un `[image]` **indifférencié** ⇒ le modèle ne
+pouvait **littéralement pas** désigner « la première image ». Ce n'était pas un défaut de
+compréhension du LLM mais une **absence d'identifiant**. Décision Ben : **référence positionnelle +
+empreinte**.
+
+### Ce qui a été implémenté ET vérifié live (puis **reverté**, cf. blocage)
+- Émission `![IMG:doc-img-N](placeholder)` en mode document (rang, aucun `SetName`, aucune mutation).
+- **Empreinte** `{w, h}` par rang capturée à l'extraction — mesuré live : `{"1":{"w":457200,"h":457200}, "2":{…}}`.
+- Transport complet : `document-extracted.imageRefs` → `docImageRefsRef` (hôte) → `imageRefsForFragment(text)`
+  (filtré aux rangs cités) → `PANEL_ACTION.imageRefs` → `Asc.scope.imageRefs`.
+- **Garde-fou** dans `imageSpecFor` : rang `doc-img-N` dont l'empreinte ne correspond plus ⇒ capture
+  abandonnée ⇒ placeholder visible, **jamais** une mauvaise image.
+- Parseur + regex `{{IMG:}}` élargis à `doc-img-\d+`. Index par rang ajouté à la pré-passe
+  (`drawingIndex["doc-img-"+ord]`, même parcours `GetAllParagraphs`).
+
+### 🔴 BLOCAGE — la numérotation des rangs n'est pas cohérente
+Il existe **deux** chemins d'émission de marqueur image, et un seul a été migré :
+1. `getDrawingMarker(para)` — branche bloc **et** inline (migré) ;
+2. **3 sites** `annotatedParts.push({text:"{{IMG:"…})` dans `paragraphToMarkdown` (**non migrés** —
+   ils émettaient encore `[image]`).
+
+Pire, un **compteur d'ordre d'appel** ne suffit pas : mesuré live sur `img-para` (3 dessins : 2 inline
++ 1 bloc), l'image **bloc** a reçu le rang **2**, car `getDrawingMarker` avait déjà consommé un rang
+pour un paragraphe dont la sortie a ensuite été **remplacée** par le chemin `annotatedParts`. Des
+rangs sont donc **consommés sans être émis** ⇒ décalage silencieux entre extraction et injection.
+
+### Correctif à faire (avant toute reprise)
+Ne **pas** numéroter par compteur d'appel. Faire **un seul pré-scan document** utilisant **exactement
+la même énumération que la pré-passe de capture** (`doc.GetAllParagraphs()` → `GetAllDrawingObjects()`),
+puis faire **rechercher** son rang par chaque site d'émission (identité du dessin, ou décalages
+cumulés par paragraphe) au lieu d'incrémenter. Migrer **les 3 sites `annotatedParts`** en même temps.
+
+⚠️ **Le worktree sert le plugin en direct** : ne jamais laisser cet état intermédiaire en place
+pendant une UAT. Le lot a été **reverté** (`git checkout --`), build servi = `2026-07-21.4` (vérifié).
