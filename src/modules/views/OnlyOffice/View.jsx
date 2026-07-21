@@ -74,6 +74,11 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
 
   const partialTableInfoRef = useRef(null)
   const tableSnapshotsRef = useRef(null)
+  // Snapshots ToJSON des tableaux renvoyes par la DERNIERE extraction de contexte
+  // (document entier). Le flux chat pur n'a pas de selection, donc pas de
+  // tableSnapshotsRef : sans ceux-ci, un fragment portant des marqueurs [TABLE:N]
+  // ne pouvait etre reinjecte qu'en tableau "a plat" (fusions perdues).
+  const docTableSnapshotsRef = useRef(null)
 
   // Feed selection data from pendingIntent into ScribeContext
   useEffect(() => {
@@ -165,6 +170,7 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
             return
           clearTimeout(timeoutId)
           window.removeEventListener('message', onMsg)
+          docTableSnapshotsRef.current = m.tableSnapshots || null
           resolve({ md: m.md || '', error: m.error || null })
         }
         window.addEventListener('message', onMsg)
@@ -213,6 +219,28 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
     return () => clearTimeout(id)
   }, [pendingIntent])
 
+  // Snapshots a joindre a une reinjection. Priorite a la SELECTION (flux inline) ;
+  // a defaut, ceux du contexte document, FILTRES aux seuls [TABLE:N] presents dans le
+  // fragment — le canal retour PANEL_ACTION est plafonne a 1 Mo (validateIntent),
+  // contrairement au canal d'extraction qui le contourne.
+  const snapshotsForFragment = useCallback(text => {
+    if (tableSnapshotsRef.current) return tableSnapshotsRef.current
+    const all = docTableSnapshotsRef.current
+    if (!all || !text) return undefined
+    const out = []
+    let found = false
+    const re = /\[TABLE:(\d+)\]/g
+    let m
+    while ((m = re.exec(text)) !== null) {
+      const n = Number(m[1])
+      if (all[n]) {
+        out[n] = all[n]
+        found = true
+      }
+    }
+    return found ? out : undefined
+  }, [])
+
   // Track pendingIntent in a ref so handleReplace/handleInsert can decide
   // at call time whether to respond() to an inline popover intent or cast
   // a one-way PANEL_ACTION for a pure panel chat flow — without causing
@@ -226,12 +254,13 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
   const handleReplace = useCallback(
     text => {
       const html = unwrapSingleParagraph(markdownToHtml(text).trim())
+      const snaps = snapshotsForFragment(text)
       const data = { text, html, md: text }
       if (partialTableInfoRef.current) {
         data.partialTableInfo = partialTableInfoRef.current
       }
-      if (tableSnapshotsRef.current) {
-        data.tableSnapshots = tableSnapshotsRef.current
+      if (snaps) {
+        data.tableSnapshots = snaps
       }
       if (pendingIntentRef.current) {
         // Inline popover flow: answer the pending AI_TEXT_ASSISTANT intent.
@@ -245,23 +274,24 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
           html,
           md: text,
           partialTableInfo: partialTableInfoRef.current || undefined,
-          tableSnapshots: tableSnapshotsRef.current || undefined
+          tableSnapshots: snaps
         })
       }
       setTimeout(focusEditor, 100)
     },
-    [respond, castPanelAction, focusEditor]
+    [respond, castPanelAction, focusEditor, snapshotsForFragment]
   )
 
   const handleInsert = useCallback(
     text => {
       const html = unwrapSingleParagraph(markdownToHtml(text).trim())
+      const snaps = snapshotsForFragment(text)
       const data = { text, html, md: text }
       if (partialTableInfoRef.current) {
         data.partialTableInfo = partialTableInfoRef.current
       }
-      if (tableSnapshotsRef.current) {
-        data.tableSnapshots = tableSnapshotsRef.current
+      if (snaps) {
+        data.tableSnapshots = snaps
       }
       if (pendingIntentRef.current) {
         respond({ status: 'ok', action: 'insert', data })
@@ -272,12 +302,12 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
           html,
           md: text,
           partialTableInfo: partialTableInfoRef.current || undefined,
-          tableSnapshots: tableSnapshotsRef.current || undefined
+          tableSnapshots: snaps
         })
       }
       setTimeout(focusEditor, 100)
     },
-    [respond, castPanelAction, focusEditor]
+    [respond, castPanelAction, focusEditor, snapshotsForFragment]
   )
 
   // Wire respond-based handlers into ScribeContext so MessageActions can call them
