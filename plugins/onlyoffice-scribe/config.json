@@ -15,7 +15,7 @@
       "initDataType": "html",
       "initOnSelectionChanged": true,
       "buttons": [],
-      "events": ["onContextMenuShow", "onContextMenuClick", "onToolbarMenuClick"]
+      "events": ["onContextMenuShow", "onContextMenuClick", "onToolbarMenuClick", "onSelectionGeometryChanged"]
     }
   ]
 }
