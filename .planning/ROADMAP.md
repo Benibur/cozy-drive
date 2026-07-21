@@ -9,6 +9,7 @@
 - ✅ **v3.1 Contrat de réponse structurée LLM (MCP-ready)** -- Phases v3.1-01 to v3.1-07 (shipped 2026-06-24)
 - 🚧 **v3.2 Contexte enrichi du prompt** -- Phases v3.2-01 to v3.2-03 (planning, started 2026-06-24)
 - 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`) — core observables + IMG-04 save-fidelity VERIFIED live 2026-07-09 (build `2026-07-09.6`); residual follow-ups Q1/Q3/T9 deferred
+- ✅ **Bouton Scribe sous la sélection** -- Phase 29 (livré 2026-07-21, worktree `cozy-drive-scribe-assistant-menu`) — patch sdkjs + événement poussé `onSelectionGeometryChanged` ; UAT Ben OK
 - 🧪 **Campagne QA harnais selection-cases** (transverse, non-milestone) -- `test-harness/` sur cette branche : 62 goldens, oracle `selMarkup`, blessing Ben 52 OK/10 KO triagé (bugs prod corrigés dans `code.js` : ④ full-table-insert, extraction cellule −1 char). Détail = `.planning/REVIEW-BACKLOG.md` ; reste-à-faire = Phases **999.2** (bug ⑤ T-reduc) + **999.3** (dette harnais) au Backlog.
 
 ## Phases
@@ -203,11 +204,37 @@ Plans:
 - [x] 28-01-PLAN.md — code.js surgery: full-ToJSON capture + async getLocalImagePath media pre-pass, swap all image sites to Api.FromJSON+AddDrawing (cell + paragraph shared path), remove marker/injectPendingImages + undo-group stub, dormant floating fallback hook [IMG-01..05] (wave 1)
 - [x] 28-02-PLAN.md — live UAT: core observables (single undo ✅ / selection covers content ✅) + IMG-04 save-fidelity ✅ (bug found+fixed, `recalculate=true`), Q4 blip value ✅; regression C1 ¶ + Insert ✅. Deferred: Q1 floating, Q3 cross-origin, IMG-02 no-flicker formal, T9 cell re-run [IMG-01..05] (wave 2) — see `28-02-SUMMARY.md`
 
+### Phase 29: Bouton Scribe flottant SOUS la sélection (Route A) — ✅ LIVRÉ 2026-07-21
+
+**Goal:** remplacer le déclencheur inline en bas à droite par un bouton discret ancré **sous la sélection**, qui la suit au scroll et au zoom, sans dégrader le redo.
+**Worktree:** `cozy-drive-scribe-assistant-menu` (branche `feat/scribe-assistant-menu`, rebasée sur `feat/scribe-in-right-panel` le 2026-07-21).
+**Étude de cadrage:** `plugins/onlyoffice-scribe/study-floating-button-under-selection.md` — ⚠️ lire son **§9 « Ce que la réalisation a démenti »** avant de s'y fier.
+
+**Livré**
+- **Patch sdkjs** (brique `feature/get-selection-screen-rect-9.4.0.129`, artefact `4629ca98…`) : `Api.GetSelectionScreenRect()` (relais) → `DrawingDocument.GetSelectionScreenRect()` renvoyant `{left, top, width, height, corners, viewport}` ; événement plugin **poussé** `onSelectionGeometryChanged`.
+- **Plugin** (`code.js` build `2026-07-21.6`) : consomme l'événement, relaie en intent `SELECTION_GEOMETRY` ; l'ancien piggyback sur l'extraction debouncée reste en **fallback** pour un SDK non patché et se tait au premier événement reçu.
+- **Drive** : `ScribeSelectionButton` (asset design, ancrage sur le coin de fin de sélection, masquage hors zone visible) + `ScribeHoverTooltip` partagé avec le bouton du panneau ; ancien bouton inline retiré.
+- **Environnement** : `oo-dev-setup.sh` régénère le `.gz` du SDK et retire `sdkjs/` du cache service-worker (deux caches qui servaient silencieusement l'ancien SDK).
+
+**Mesuré en live** — sélection → plugin **~125 ms** (vs ~1 s), 0 émission à l'arrêt, suivi correct scroll + zoom, **aucun `callCommand`** ⇒ redo intact. Résiduel de positionnement (0.10, −0.46) px = arrondi `>> 0` de OO.
+
+**Leçons transverses (coût réel : 4 allers-retours d'UAT)**
+1. **`word/api.js` et `common/apiBase_plugins.js` ne sont PAS dans le bundle patché** — le code y est chargé en version stock, sans erreur. Piège tombé 2×. Contrôle mécanique dans `SDKJS-PATCH.md` §1.
+2. **Trois caches** superposés servent l'ancien SDK (`.gz` de l'image, service worker, cache disque `immutable`). Vérifier **sur le fil**, pas dans le conteneur.
+3. **Une sélection programmatique n'est pas un substitut d'une sélection à la souris** : elle empruntait le seul chemin qui marchait et a masqué un trou entier.
+
+**Limites connues (assumées, non planifiées)**
+- Sélection d'**image seule** → pas de bouton : `asc_GetSelectionBounds` est texte-seulement. Traitable via `GetSelectionType()==="drawing"` + `getSelectedObjectsBounds()` si le besoin se confirme.
+- `Api.GetSelectionScreenRect()` (chemin builder) ne filtre pas sur `IsSelectionUse()` et renvoie donc le rect du **caret** quand la sélection est vide ; sans effet ici car le consommateur est gaté sur `hasText`.
+- Brique sdkjs prête pour une **PR upstream**, non ouverte.
+
 ## Backlog
 
 > ### ▶️ REPRISE — à lire en premier (état au 2026-07-21)
 >
-> **Vérifier d'abord** : `python3 .planning/tools/check-backlog-sync.py` (exit 0) · corpus **70/70 pass, 0 pending** (tag `blessed-2026-07-21`) · build plugin `2026-07-21.4` · arbre propre.
+> **Vérifier d'abord** : `python3 .planning/tools/check-backlog-sync.py` (exit 0) · corpus **70/70 pass, 0 pending** (tag `blessed-2026-07-21`) · build plugin **`2026-07-21.6`** · artefact sdkjs **`4629ca98…`** · arbre propre.
+>
+> ⚠️ **Le worktree `cozy-drive-scribe-assistant-menu` (Phase 29) sert oo-dev en direct** et porte un **SDK patché plus récent** que celui décrit ailleurs. Après tout changement de SDK : **contexte navigateur neuf obligatoire** et vérification **sur le fil** (`curl -sH 'Accept-Encoding: gzip' … | gunzip | sha256sum`), jamais dans le conteneur.
 >
 > **⚠️ 2 phases sont BLOQUÉES sur une décision produit — les traiter en premier, elles ne coûtent rien :**
 > - **999.2 (T-reduc)** — trancher **S-A** (planifier la réduction span-aware) vs **S-C** (statu quo assumé, coût nul). Cf. `.planning/T-REDUC-CADRAGE.md` §3.

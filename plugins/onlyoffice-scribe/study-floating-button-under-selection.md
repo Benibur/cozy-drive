@@ -118,11 +118,14 @@ Côté React :
 
 ## 6. Points durs / risques
 
-1. **Repère de coordonnées.** Le rect est en px de la **fenêtre éditeur OO** ; le bouton est rendu dans la **fenêtre Drive** (portal body). Il faut ajouter l'offset de l'iframe éditeur (`getBoundingClientRect`). (Injecter le bouton directement dans le DOM de l'iframe OO est bloqué : origine différente.)
-2. **Scroll / zoom = LE vrai point dur.** Le rect n'est valide qu'à l'instant de l'appel. `onTargetPositionChanged` couvre le **mouvement du caret**, PAS le **scroll pur** du document. Or le scroll a lieu dans l'iframe OO (cross-origin) → ni le plugin ni Drive ne peuvent l'écouter facilement.
-   - MVP : re-query sur `onTargetPositionChanged` + polling ; le bouton peut « traîner » pendant un scroll.
-   - Robuste : **étendre le patch** pour émettre un événement plugin `onSelectionGeometryChanged` (avec le rect frais) depuis le handler de scroll/zoom du word-control OO → bouton collé. Patch un peu plus gros mais propre. (agent : un event *uniquement* sur selection-change shipperait des pixels périmés après scroll → il DOIT aussi couvrir scroll/zoom.)
-3. **Throttling iframe background.** Le plugin tourne dans une iframe background dont les `setTimeout` sont fortement throttlés (piège connu du projet) → un polling côté plugin est peu fiable. Argument de plus pour la variante push (event) côté patch.
+> **⚠️ ÉTAT AU 2026-07-21 — l'étude ci-dessous est le document de CADRAGE d'origine.
+> Le chantier est LIVRÉ et plusieurs prévisions se sont révélées fausses à
+> l'implémentation.** Voir le **§9 « Ce que la réalisation a démenti »** en fin de
+> document avant de se fier à un point de cette section.
+
+1. **Repère de coordonnées.** Le rect est en px de la **fenêtre éditeur OO** ; le bouton est rendu dans la **fenêtre Drive** (portal body). Il faut ajouter l'offset de l'iframe éditeur (`getBoundingClientRect`). (Injecter le bouton directement dans le DOM de l'iframe OO est bloqué : origine différente.) → ⚠️ **incomplet, cf. §9.1** : le rect brut n'est PAS en px fenêtre éditeur.
+2. **Scroll / zoom = LE vrai point dur.** ✅ **RÉSOLU** (cf. §9.3) — mais pas comme prévu ici : l'événement n'est pas émis « depuis le handler de scroll/zoom du word-control » mais depuis `CheckTargetDraw`, et il a fallu un **second** site d'émission pour la souris.
+3. **Throttling iframe background.** Confirmé, et c'était bien un argument décisif : le chemin debouncé arrivait ~1 s en retard. Le push le contourne entièrement.
 4. **Sélection multi-lignes / multi-pages.** Les coins sont *début-1re-ligne* et *fin-dernière-ligne* → parallélogramme, la bbox min/max paraît trop large. Pour ancrer un bouton, préférer le **coin de fin** (`corners[3]`) ou le bas-centre plutôt que la bbox brute.
 5. **Curseur collapsé / image sélectionnée.** Collapsé : rect fin (le bouton ne s'affiche de toute façon que si `hasText`). Image : `asc_GetSelectionBounds` est **texte seulement** → gérer via `GetSelectionType()==="drawing"` + `getSelectedObjectsBounds()` si un jour on veut ancrer sur image.
 
@@ -146,6 +149,65 @@ Côté React :
 4. **Scroll-glue** (incrément 2, si le MVP « traîne » trop) : patch event `onSelectionGeometryChanged` sur scroll/zoom du word-control → push du rect frais.
 
 Décision produit (tranchée 2026-07-06) : **le clic ouvre directement le popover inline** (`AI_TEXT_ASSISTANT`) sur la sélection — pas de mini-menu. Corollaire : l'ancien bouton flottant bas-droite (`ScribeFloatingButton`) perd sa raison d'être pour l'inline ; on prévoit de **retirer** sa fonction inline (le nouveau bouton sous-sélection la remplace). Le panneau latéral reste accessible par ailleurs.
+
+---
+
+## 9. Ce que la réalisation a démenti (2026-07-21, chantier LIVRÉ)
+
+Les §5-§8 ci-dessus sont le cadrage *avant* implémentation. Quatre prévisions étaient
+fausses, chacune découverte en **mesurant**, jamais en relisant la source. Le fil rouge :
+*la source dit ce que le code veut faire, la mesure dit ce qu'il fait.*
+
+### 9.1 Le rect stock n'est PAS en coordonnées fenêtre éditeur
+`asc_GetSelectionBounds` finit sur `ConvertCoordsToCursorWR`, relatif au **conteneur
+word-control**. Il manque **deux** offsets, pas un :
+- `m_oWordControl.X/Y` (toute la hauteur du ruban) ;
+- l'**offset des règles** — piège fin : `…WR(x, y, page, undefined, false)`, ce dernier
+  `false` étant `id_ruler_no_use`, fait **sauter** les règles dans `GetMainOffset`, alors
+  que la variante globale `ConvertCoordsToCursor3` appelle `GetMainOffset()` **sans
+  argument** et les inclut. Ne corriger que le premier laisse une erreur **constante de
+  (19, 26) px**.
+
+**Méthode de mesure à réutiliser** : OO place son propre curseur via le même pipeline, donc
+`TargetHtmlElement.getBoundingClientRect()` **moins** `{TargetHtmlElementLeft, …Top}`
+**EST** l'offset à ajouter. Résiduel après correction : (0.10, −0.46) px = l'arrondi `>> 0`
+de OO.
+
+### 9.2 Le canal `pluginMethod_*` était le mauvais — et `word/api.js` aussi
+Le §5 et l'annexe proposent `pluginMethod_GetSelectionScreenRect` dans
+`common/apiBase_plugins.js`. **Ce fichier n'est pas dans le bundle patché** : il n'existe
+que dans `sdk-all-min.js` (stock). Même piège, retombé une seconde fois en déplaçant le
+calcul dans `word/api.js`. Le code y était bien présent dans le bundle mais **jamais
+chargé**, sans aucune erreur. Sont patchables : `apiBuilder.js`,
+`Drawing/DrawingDocument.js`, `Drawing/HtmlPage.js`, `Editor/Document.js`.
+Détail + contrôle mécanique : `SDKJS-PATCH.md` §1.
+
+### 9.3 Un seul point d'accroche ne suffit pas
+Le §6.2 prévoyait un événement « depuis le handler de scroll/zoom ». En réalité il en faut
+**deux**, pour deux causes distinctes :
+
+| Site | Couvre | Sans lui |
+|---|---|---|
+| `DrawingDocument.CheckTargetDraw` | la sélection **BOUGE** (scroll, zoom) | le bouton reste planté au scroll |
+| `CDocument.private_UpdateSelection` | la sélection **CHANGE** (souris, clavier, API) | le bouton **n'apparaît qu'après un scroll** |
+
+⚠️ **Piège de test** : une sélection **programmatique** (`MoveCursorToEndOfLine` +
+`UpdateSelection`) passe par `UpdateTarget` → `CheckTargetDraw` et **masque exactement**
+le second trou. Pour éprouver la vraie voie souris sans DOM (les événements souris
+synthétiques ne pilotent pas OO) : `Selection_SetStart` / `Selection_SetEnd` avec un
+`AscCommon.CMouseEventHandler`.
+
+### 9.4 Il fallait aussi la zone visible
+Non anticipé : scroller une sélection hors vue **n'arrête pas** la remontée de sa
+géométrie — le rect décrit alors une position au-dessus de la barre d'outils, et le bouton
+(portal `position: fixed`) n'est clippé par rien. Le patch remonte donc `viewport` dans le
+même repère ; Drive n'affiche le bouton que si le **disque tient entièrement** dedans
+(masquer plutôt que rogner : un demi-bouton n'est pas cliquable).
+
+### 9.5 Résultat mesuré
+Sélection → plugin en **~125 ms** de bout en bout (contre ~1 s par le chemin debouncé),
+**0 émission** à l'arrêt (déduplication), suivi correct au scroll et au zoom, et **aucun
+`callCommand`** ⇒ pile de redo intacte.
 
 ## Annexe — ancres clés
 - `word/api.js:14232` / `:15670` — `asc_GetSelectionBounds` (à wrapper)
