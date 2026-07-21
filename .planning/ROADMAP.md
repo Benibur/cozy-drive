@@ -205,6 +205,29 @@ Plans:
 
 ## Backlog
 
+> ### ▶️ REPRISE — à lire en premier (état au 2026-07-21)
+>
+> **Vérifier d'abord** : `python3 .planning/tools/check-backlog-sync.py` (exit 0) · corpus **70/70 pass, 0 pending** (tag `blessed-2026-07-21`) · build plugin `2026-07-21.4` · arbre propre.
+>
+> **⚠️ 2 phases sont BLOQUÉES sur une décision produit — les traiter en premier, elles ne coûtent rien :**
+> - **999.2 (T-reduc)** — trancher **S-A** (planifier la réduction span-aware) vs **S-C** (statu quo assumé, coût nul). Cf. `.planning/T-REDUC-CADRAGE.md` §3.
+> - **999.7 (A7 / frontière LLM)** — trancher : relâcher l'exigence et documenter, *ou* post-traitement plugin, *ou* test avec vrai appel LLM.
+>
+> **Ordre recommandé ensuite** (valeur utilisateur décroissante / risque croissant) :
+> 1. **999.5** — commencer par le **garde-fou** cohérence snapshot ↔ marqueur (~15 lignes, sans risque) : il convertit le pire scénario (« mauvais tableau réinjecté, silencieux ») en « tableau à plat honnête ». À faire **avant** tout le reste de la phase.
+> 2. **999.4** — images référençables. ⚠️ **Ne PAS re-dériver** : la conception est validée et le blocage identifié (numérotation des rangs) — le correctif est écrit dans `.planning/SNAPSHOTS-CADRAGE.md` **§10**. Zone la plus fragile du code ⇒ contexte frais, preuve au **SAVE**.
+> 3. **999.6** — dette de couverture (mécanique, long, faible risque ⇒ contexte dédié).
+> 4. **999.1** — centralisation des prompts (indépendant du reste).
+>
+> **🔒 Garde-fous d'environnement, non négociables :**
+> - le worktree **sert le plugin en direct** (`oo-dev` y est monté) ⇒ **ne jamais laisser de WIP dans `plugins/onlyoffice-scribe/`** pendant une UAT de Ben ; en cas de doute `git checkout --` + purge des `.gz`.
+> - après toute édition de `code.js` : bumper `SCRIBE_BUILD`, `rm` les `.gz`, et ouvrir un **contexte navigateur NEUF** (cache `immutable`).
+> - entre deux cas de **tableau**, **ré-uploader une fixture fraîche** (`asc_undoAllChanges` ne défait pas proprement un insert de tableau).
+> - `log()` dans un `callCommand` peut lever une `ReferenceError` — ne pas en mettre dans un `try/catch` qui retournerait `null`.
+>
+> **Restes hors backlog** : bénir — *rien* (corpus complet) ; UAT — *rien* (A1→E12 tous PASS le 2026-07-21). Question ouverte non réconciliée : le tableau 3×4 vu par Ben avant le fix `Api.CreateTable` (goldens `Tmd` = filet).
+
+
 ### Phase 999.1: Centralisation des prompts IA (Scribe → module partagé) (BACKLOG)
 
 **Goal:** [Captured for future planning]
