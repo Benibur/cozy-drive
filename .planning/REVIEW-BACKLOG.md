@@ -128,6 +128,29 @@ Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — bui
 
 **Béni par Ben le 2026-07-20** (console `gen_blessing.py`) : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) → verdict **`pass`** (blocks + selMarkup). A8/insert after.png revérifié OK. Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis). **Phase 999.3 close.** Reste au corpus 10 `pending` = **axe H** (chantier distinct, non lié à 999.3).
 
+### ⚠️ Snapshots — 2 failles CADRÉES (2026-07-21), non corrigées
+
+Deux questions de Ben pendant la prépa d'UAT ont mis au jour deux failles du correctif `79a720a8e` :
+- **(A) snapshots dans un `ref`, pas dans le message** (`View.jsx:81/173`) → réutiliser un fragment
+  **remonté du fil** prend les snapshots d'une extraction **postérieure** ⇒ au mieux repli à plat, au
+  pire **mauvais tableau réinjecté sans signal**. Équivalent tableaux de **HIST-img**.
+- **(B) collision de numérotation** : extraction **sélection** (`[TABLE:N]` = N-ième table *touchée
+  par la sélection*) vs extraction **document** (N-ième table *du corps*) — et le prompt supporte
+  **les deux ensemble** (`scribeAI.js:142`) ⇒ deux tableaux différents peuvent être `[TABLE:0]` dans
+  le même prompt. Ma règle `snapshotsForFragment` aggrave en préférant **aveuglément** la sélection.
+
+**Cadrage complet** : `.planning/SNAPSHOTS-CADRAGE.md` (contraintes dures — contrat v3.1 + son corpus,
+plafond 1 Mo, mémoire ; décisions D1 *où vivent les snapshots* / D2 *lever la collision* / D3
+*rétention* ; garde-fou transversal ; stratégie de test ; recommandation).
+**Décision Ben** : « traiter le fond, pas le symptôme » ⇒ **à promouvoir en phase gsd**, ne pas
+bricoler inline. Recommandation : poser d'abord le **garde-fou de cohérence snapshot ↔ marqueur**
+(convertit « mauvais tableau silencieux » en « tableau à plat honnête »), puis D1=(b) table par
+`contextId` + D2=(S-1) renumérotation unique à la composition (**grammaire des marqueurs intacte**).
+
+**Consignes UAT en attendant** : ne pas cocher « document » **et** « sélection » ensemble ; insérer
+depuis la **dernière** réponse, pas depuis un fragment remonté du fil. Un tableau **inattendu** (ni
+absent, ni à plat) pendant l'UAT = très probablement ces failles, pas le correctif principal.
+
 ### Chantier RESSOURCES D'UN FRAGMENT — état, décisions et mode d'emploi (2026-07-21)
 
 **Principe directeur (décision Ben)** : pour réinjecter une ressource référencée par un fragment,
