@@ -116,6 +116,10 @@ Le reste-à-faire de la passe de blessing est désormais **suivi comme entrées 
 - **Phase 999.3** — dette de couverture harnais : fixtures A2/Ac2 replace-sur-mot **+** re-screenshot A8/insert scrollé.
 - **Phase 999.4** *(ajoutée 2026-07-21)* — **images référençables depuis le contexte document** (référence positionnelle `doc-img-N` + empreinte) : conception validée et vérifiée live, **implémentation bloquée** sur la numérotation des rangs ; inclut l'item annexe « le prompt ne dit rien des marqueurs image ». Détail : `.planning/SNAPSHOTS-CADRAGE.md` §10.
 - **Phase 999.5** *(ajoutée 2026-07-21)* — **snapshots : rattacher au message + lever la collision de numérotation** (+ `castEmptySelection` qui oublie `lastTableDocIndices`). Détail : `.planning/SNAPSHOTS-CADRAGE.md` §2-§9.
+- **Phase 999.6** *(ajoutée 2026-07-21)* — **dette de COUVERTURE** : test non-rég A3, golden A8 table-heavy, Q1 (¶ stylés), Q2 (images × A1–A8), Q3 (multi-¶ + multi-tableaux), couverture **A-intra** complète.
+- **Phase 999.7** *(ajoutée 2026-07-21)* — **angles morts de l'ORACLE + frontière LLM** : goldens aveugles aux images, A7 / trim du LLM (décision produit), `Delta2` fantôme de T3/insert.
+
+> ⚠️ **Règle de tenue** : ce fichier est la **source de vérité du DÉTAIL** (diagnostic, preuves, historique) ; le **ROADMAP § Backlog** est la **liste promouvable** lue par `/gsd-review-backlog`. **Tout item ouvert ici doit avoir une phase 999.x correspondante** — sinon il est invisible du workflow gsd (piège tombé 2 fois : le 2026-07-20 pour la campagne selection-cases, le 2026-07-21 pour les images).
 
 Reste hors-gsd (à bénir par Ben, artefact déjà à jour) : **re-bénir T3/T9/H1/H-reg insert** (sélection corrigée par le fix ④ `5348469ab`) dans la console de blessing (`gen_blessing.py`).
 

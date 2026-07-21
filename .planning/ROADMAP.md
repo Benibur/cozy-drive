@@ -319,3 +319,28 @@ Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la pas
 
 **Coût indicatif** : moyen à gros (stockage du chat + composition du prompt + pont hôte↔plugin).
 
+### Phase 999.6: Dette de COUVERTURE du harnais selection-cases (BACKLOG)
+
+**Goal:** Combler les trous de couverture identifiés au fil des sessions UAT — aucun n'est un bug produit ouvert, ce sont des **cas jamais testés** (donc des angles morts où une régression passerait inaperçue, motif déjà vécu 3 fois sur ce projet).
+**Source de vérité du détail:** `.planning/REVIEW-BACKLOG.md` (tables « Axe A », « Questions transverses », « Axe T »).
+
+- [ ] **A3 — test de non-régression manquant** : le fix (strip du `\r\n` de fin) est livré, mais `setSelection` de l'API **ne met pas** le `\r\n` que produit une sélection souris ⇒ le harnais **ne peut pas** reproduire le cas. Trou d'outillage à combler avant de pouvoir le tester.
+- [ ] **A8 — golden manquant** : fixture **table-heavy** + golden (le fix « garde sur ¶ top-level + backstop >500 » a été validé sur un fichier de Ben, jamais figé dans le corpus).
+- [ ] **Q1 — ¶ stylés** : les cas A* sont **plain uniquement** ; matrice {plain × styles} à couvrir (`styled-family`, `corpus-styled*` existent déjà).
+- [ ] **Q2 — images dans les ¶** : **un seul** cas (`C1`), jamais croisé avec A1–A8.
+- [ ] **Q3 — sélection multi-¶ + multi-tableaux** : le plus proche est `T6` (2 tables + ¶ au milieu) ; pas de cas large.
+- [ ] **A-intra — couverture complète de l'axe A dans les cellules** : A0/A2/A3/A4/A6/A7 + multi-¶ intra-cellule ; nécessite une fixture « cellule-phrase » et l'extension du driver (`T1.C(r,c).P<n>@kind`). Les volets V1/V2/V3 sont faits, T1/T8 bénis — c'est la **couverture** qui reste.
+
+**Coût indicatif** : moyen, mécanique, faible risque (travail de fixtures/goldens, peu ou pas de `code.js`). **À faire sur un contexte frais** (tâche longue et répétitive).
+
+### Phase 999.7: Angles morts de l'ORACLE + frontière LLM (BACKLOG)
+
+**Goal:** Traiter ce que le harnais **ne peut pas voir** — donc ce qu'un golden peut geler en silence. Motif structurel : *« le modèle tait ce qu'il ne sait pas voir, et le golden gèle ce silence »* (déjà payé sur le champ `selection`, puis sur les images).
+**Source de vérité du détail:** `.planning/REVIEW-BACKLOG.md` (« Goldens aveugles aux images », « Découverte transverse A3/A7 », « Trouvaille T3/insert »).
+
+- [ ] **Goldens aveugles aux images** 🟠 : `dumpState` **ne capture pas** les dessins ⇒ un `model.json` ne distingue pas « cellule vide » de « cellule avec image ». Les goldens image (T9, C1) ne prouvent **rien** sur l'image ; la preuve vient d'`after.docx`. **À cadrer** : ajouter le nom/les dimensions des drawings au modèle, ou rendre la vérification `after.docx` systématique.
+- [ ] **A7 / frontière LLM** 🔵 : la perte des ¶ vides de bord vient du **trim du LLM**, pas de Scribe. Le harnais **court-circuite le LLM** (fixture déterministe) ⇒ il est **aveugle** aux pertes causées par le comportement normal du modèle (trim, perte de style). **Décision à prendre** : relâcher l'exigence et documenter la frontière, **ou** post-traitement plugin (ré-imposer les vides extraits), **ou** un test avec vrai appel LLM.
+- [ ] **T3/insert — `Delta2` fantôme** (pré-existant, à investiguer) : l'`after.docx` sauvé contient un `Delta2` dans la cellule (1,1) du tableau **inséré**, alors que le modèle vif **et** `after.png` disent `['z']` seul. Visible **uniquement** au save. Byte-identique au golden béni ⇒ ancien, non régressif, mais réel.
+
+**Coût indicatif** : petit à moyen ; la partie « A7 / frontière LLM » est surtout une **décision produit** à documenter.
+
