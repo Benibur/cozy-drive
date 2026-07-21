@@ -53,9 +53,9 @@ else
   # not sdk-all-min.js. Built from sdkjs v9.4.0.129 + the patch + the sdkjs-forms
   # addon (see ~/Dev-local/onlyoffice-sdkjs-integ [branch integration/scribe-oo-9.4.0.129]
   # and plugins/onlyoffice-scribe/oo-api-proposal.md).
-  # NB: mounting the file is NOT enough to have it served — the image also ships a
-  # sdk-all.js.gz that nginx prefers for every gzip-capable client. See the
-  # "Refreshing the patched SDK .gz" section below, which re-derives it on every run.
+  # NB: mounting the file is not the whole story — OO gzips the static tree at every
+  # container start and nginx then prefers the .gz. See "Refreshing the patched SDK .gz"
+  # below for when that bites and why this script re-derives it on every run.
   SDKJS_PATCHED_94="$(cd "$(dirname "$0")/.." && pwd)/../onlyoffice-sdkjs-integ/dist/sdkjs-patch-9.4.0.129/sdk-all.js"
   SDKJS_CONTAINER_DIR="/var/www/onlyoffice/documentserver/sdkjs/word"
   SDKJS_VOLUMES=""
@@ -235,13 +235,25 @@ fi
 
 echo ""
 echo "=== Refreshing the patched SDK .gz ==="
-# The image ships /var/www/.../sdkjs/word/sdk-all.js.gz, and nginx's gzip_static
-# serves THAT to every gzip-capable client — i.e. every browser. Bind-mounting the
-# patched sdk-all.js therefore changes NOTHING on its own: the browser keeps getting
-# the stale .gz, silently, with a 200 and no warning anywhere. (This cost a full UAT
-# cycle on 2026-07-21: a coordinate fix was rebuilt, installed, verified byte-for-byte
-# inside the container — and the browser still ran the old code.)
+# At every container start OO runs /usr/bin/documentserver-static-gzip.sh, which does
+#   find ./sdkjs ./web-apps ./sdkjs-plugins ./dictionaries -name '*.js' ... -exec gzip -kf9
+# and turns on nginx's gzip_static. So a .gz twin is generated for sdk-all.js from
+# whatever is mounted AT THAT MOMENT, and nginx then serves that twin to every
+# gzip-capable client — i.e. every browser.
+#
+# Consequence: the mount is only correct while the container is young. REPLACE the
+# mounted sdk-all.js on a running container — exactly what iterating on the patch does
+# — and the .gz keeps its startup content, silently shadowing the new file with a 200
+# and no warning anywhere. (Cost a full UAT cycle on 2026-07-21: a coordinate fix was
+# rebuilt, installed, verified byte-for-byte INSIDE the container, and the browser
+# still ran two-week-old code. Verifying in the container proves nothing; verify on
+# the wire.)
+#
+# Same mechanism explains the plugin .gz files this script already deletes further up:
+# sdkjs-plugins is in that same find.
+#
 # So re-derive the .gz from the mounted file on EVERY run. Cheap (~2 s) and idempotent.
+# It is a no-op on a fresh container, where the startup gzip already used our file.
 # Verify by hand with:
 #   curl -sH 'Accept-Encoding: gzip' http://localhost/<ver>/sdkjs/word/sdk-all.js \
 #     | gunzip | sha256sum      # must equal the host dist sha256

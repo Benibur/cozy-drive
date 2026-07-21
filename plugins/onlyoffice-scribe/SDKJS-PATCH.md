@@ -181,9 +181,21 @@ L'artefact remplace `/var/www/onlyoffice/documentserver/sdkjs/word/sdk-all.js`.
 
 Trois caches se superposent ; chacun sert silencieusement l'ancien code, sans erreur :
 
-1. **`sdk-all.js.gz` de l'image** — nginx (`gzip_static`) le **préfère** pour tout client
-   qui accepte gzip, c'est-à-dire tous les navigateurs. Un bind-mount du seul `.js` est
-   donc **invisible**. `oo-dev-setup.sh` régénère désormais le `.gz` à chaque lancement.
+1. **Le jumeau `sdk-all.js.gz`** — à **chaque démarrage** du conteneur, OO exécute
+   `/usr/bin/documentserver-static-gzip.sh` :
+   ```sh
+   find ./sdkjs ./web-apps ./sdkjs-plugins ./dictionaries -name '*.js' … -exec gzip -kf9 {} \;
+   # puis active gzip_static dans nginx
+   ```
+   Un `.gz` est donc fabriqué depuis ce qui est monté **à cet instant**, et nginx sert
+   ensuite ce jumeau à tout client qui accepte gzip — tous les navigateurs.
+   ⇒ **Remplacer le `sdk-all.js` monté sur un conteneur déjà démarré** (c'est-à-dire :
+   itérer sur le patch) laisse le `.gz` figé sur son contenu de démarrage, qui **masque
+   silencieusement** le nouveau fichier — réponse 200, aucun avertissement.
+   `oo-dev-setup.sh` régénère le `.gz` à chaque lancement (sans effet sur un conteneur
+   neuf, où le gzip de démarrage a déjà pris notre fichier).
+   *Le même mécanisme explique les `.gz` du plugin* (`sdkjs-plugins` est dans le même
+   `find`) — d'où leur purge, déjà présente dans le script.
 2. **Cache du service worker OO** — `sdkjs/` était dans `g_cacheablePrefixes`, servi en
    *cache-first*, **avant** le réseau. `oo-dev-setup.sh` retire ce préfixe.
 3. **Cache disque `immutable` du navigateur**, sous une **URL inchangée** ⇒ un
