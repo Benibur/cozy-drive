@@ -7,7 +7,8 @@ import { ScribeHoverTooltip } from '@/modules/views/OnlyOffice/Scribe/ScribeHove
 import {
   ScribeSelectionButtonIcon,
   DISC_INSET_LEFT,
-  DISC_INSET_TOP
+  DISC_INSET_TOP,
+  DISC_SIZE
 } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButtonIcon'
 import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
 
@@ -43,6 +44,34 @@ const getAnchor = rect => {
 }
 
 /**
+ * Is the whole disc inside the visible document area?
+ *
+ * Scrolling a selection out of view does not stop the geometry from being
+ * reported — the box keeps describing where the selection *would* be, which is
+ * over OnlyOffice's toolbar or outside the editor entirely. The button is a
+ * `position: fixed` portal on document.body, so nothing clips it: it would float
+ * over the application chrome.
+ *
+ * We hide rather than clip. A disc sliced by an invisible edge reads as a
+ * rendering glitch, and a half-button is not clickable in any useful way.
+ * Requiring the disc to be FULLY inside also means it never overlaps the rulers
+ * or the scrollbars, which sit just outside this area.
+ *
+ * `viewport` comes from the same sdkjs patch, in the same coordinate frame. When
+ * it is absent (older SDK) we keep the previous behaviour and show the button.
+ */
+const isDiscFullyVisible = (rect, discLeft, discTop, discSize) => {
+  const vp = rect.viewport
+  if (!vp) return true
+  return (
+    discLeft >= vp.left &&
+    discTop >= vp.top &&
+    discLeft + discSize <= vp.left + vp.width &&
+    discTop + discSize <= vp.top + vp.height
+  )
+}
+
+/**
  * Floating Scribe button anchored just below-right of the current text
  * selection.
  *
@@ -73,12 +102,18 @@ export const ScribeSelectionButton = ({ rect, onTriggerScribe }) => {
 
   const anchor = getAnchor(rect)
 
-  // Place the visible DISC at (gap right of, gap below) the selection end, then
-  // shift by the asset's internal insets so the svg box lands where that disc
-  // ends up. Without this the shadow padding pushes the disc up and left, which
-  // is exactly the offset the design does not want.
-  const left = frame.left + anchor.x + SELECTION_GAP - DISC_INSET_LEFT
-  const top = frame.top + anchor.y + SELECTION_GAP - DISC_INSET_TOP
+  // Disc position in the EDITOR frame — this is what gets clipped against the
+  // document viewport, which is expressed in that same frame.
+  const discLeft = anchor.x + SELECTION_GAP
+  const discTop = anchor.y + SELECTION_GAP
+  if (!isDiscFullyVisible(rect, discLeft, discTop, DISC_SIZE)) return null
+
+  // Editor frame -> Drive viewport, then shift by the asset's internal insets so
+  // the svg box lands where the disc should be. Without this the shadow padding
+  // pushes the disc up and left, which is exactly the offset the design does not
+  // want.
+  const left = frame.left + discLeft - DISC_INSET_LEFT
+  const top = frame.top + discTop - DISC_INSET_TOP
 
   return createPortal(
     <div

@@ -46,6 +46,14 @@ export const ScribeHoverTooltip = ({
         background: isDark ? '#555' : '#333',
         borderRadius: 6,
         fontSize: 12,
+        // Typography is stated, never inherited. The under-selection button sets
+        // line-height: 0 on itself to kill the inline gap under its svg, and the
+        // tooltip is a CHILD of that button — inheriting it crushed the text to a
+        // zero-height line. A shared component must not depend on what its host
+        // button happens to do to typography.
+        lineHeight: 1.4,
+        fontFamily: 'inherit',
+        fontWeight: 'normal',
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
         display: 'flex',
