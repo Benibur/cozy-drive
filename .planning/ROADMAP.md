@@ -281,3 +281,41 @@ Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la pas
 2. **Artefact screenshot A8/insert** — l'oracle de sélection est **correct** (`selMarkup «A8 tail line»` au ¶120, le ¶ ajouté), mais `after.png` cadre le **haut** du document (120 ¶) ⇒ la sélection, tout en bas, est **hors cadrage**. Pas un bug Scribe. Action : **re-screenshotter A8 scrollé en bas** pour que la preuve visuelle montre la post-sélection.
 
 **Coût indicatif** : petit (travail de harnais/fixtures, faible risque, pas de code prod).
+### Phase 999.4: Images référençables depuis le contexte document (référence positionnelle + empreinte) — ⏳ CONCEPTION VALIDÉE, IMPLÉMENTATION BLOQUÉE
+
+**Goal:** Permettre au LLM de **désigner** une image du document (« la première image ») depuis le panneau latéral, et de la **réinjecter réellement** — sans jamais muter le document pendant l'extraction de contexte.
+**Depends on:** `a6f65d550` (plus de handle fictif, placeholder visible), `79a720a8e` (même patron de transport que les snapshots de tableaux).
+**Source de vérité du détail:** `.planning/SNAPSHOTS-CADRAGE.md` **§10** + `.planning/REVIEW-BACKLOG.md` § « Chantier RESSOURCES D'UN FRAGMENT ».
+
+**Constat (UAT Ben B6/B7, 2026-07-21)** : le contexte n'émet qu'un `[image]` **indifférencié** ⇒ le modèle ne peut **littéralement pas** désigner « la première image ». Ce n'est **pas** un défaut de compréhension du LLM mais une **absence d'identifiant**. ⚠️ Corollaire important : **améliorer le prompt ne peut PAS résoudre ça** — demander au modèle d'utiliser « la référence de l'image » alors que le contexte n'en contient aucune le pousserait à **inventer** des `scribe-img-N`, c'est-à-dire à recréer le bug de perte silencieuse corrigé par `a6f65d550`. Le levier est en amont, pas dans le prompt.
+
+**Décision produit (Ben)** : **référence positionnelle + empreinte** (les copies base64 d'images sont écartées : `ToJSON` perd le bitmap, et le canal retour est plafonné à 1 Mo).
+
+**Vérifié live puis REVERTÉ** (une UAT était en cours et le worktree sert le plugin en direct) :
+- [x] émission `![IMG:doc-img-N](placeholder)` en mode document — **aucun `SetName`, aucune mutation**
+- [x] **empreinte** `{w,h}` par rang capturée à l'extraction (mesuré : `{"1":{"w":457200,"h":457200},…}`)
+- [x] transport complet `document-extracted.imageRefs` → hôte → filtré par fragment → `PANEL_ACTION`
+- [x] **garde-fou** `imageSpecFor` : empreinte différente ⇒ pas d'injection ⇒ placeholder visible, **jamais** une mauvaise image
+
+**🔴 Blocage à lever en premier** : la **numérotation des rangs** est incohérente. Deux chemins d'émission coexistent (`getDrawingMarker` **et 3 sites** `annotatedParts.push` dans `paragraphToMarkdown`, non migrés), et un **compteur d'ordre d'appel se désynchronise** — mesuré : l'image bloc reçoit le rang **2** sur un document à **3** dessins (des rangs sont consommés sans être émis).
+**Correctif identifié** : **un seul pré-scan document** utilisant **exactement la même énumération que la pré-passe de capture** (`doc.GetAllParagraphs()` → `GetAllDrawingObjects()`), puis **recherche** du rang par chaque site d'émission au lieu d'un compteur ; migrer **les 3 sites `annotatedParts` en même temps**.
+
+**Item annexe (petit, indépendant, bénéficie au flux SÉLECTION)** : le prompt impose de préserver `[TABLE:N]/[CELL:r,c]` **exactement** (`scribeAI.js:99`) mais **ne dit rien des marqueurs image** — que l'inline fonctionne aujourd'hui tient à l'imitation, pas à une consigne. Ajouter une instruction de préservation des marqueurs image **quand ils sont présents**.
+
+**Coût indicatif** : moyen. ⚠️ Zone la plus fragile du code (pipeline image) — à faire sur un contexte frais, avec preuve au **SAVE** (`a:blip` + `word/media/`), jamais pendant une UAT.
+
+### Phase 999.5: Snapshots — rattacher au message + lever la collision de numérotation (BACKLOG)
+
+**Goal:** Rendre la réinjection de ressources **correcte entre les tours** et **entre les sources de contexte**, pas seulement au sein d'un tour.
+**Source de vérité du détail:** `.planning/SNAPSHOTS-CADRAGE.md` (§2 à §9).
+
+**Deux failles (révélées par 2 questions de Ben en prépa d'UAT)** :
+1. **(A)** les snapshots vivent dans un **`ref`** (`View.jsx:81/173`, dernière extraction gagne), pas dans le message ⇒ insérer un fragment **remonté du fil** peut réinjecter **un autre tableau**, silencieusement. Équivalent tableaux de **HIST-img**.
+2. **(B)** **collision de numérotation** `[TABLE:N]` entre extraction **sélection** (N-ième table *touchée par la sélection*) et extraction **document** (N-ième table *du corps*) — le prompt supporte **les deux ensemble** (`scribeAI.js:142`).
+
+**Reco du cadrage** : (0) **garde-fou** cohérence snapshot ↔ marqueur **d'abord** (~15 lignes, convertit « mauvais tableau silencieux » en « tableau à plat honnête ») ; (1) **D1=(b)** table `contextId → snapshots` + id porté par le message ; (2) **D2=(S-1)** renumérotation unique à la composition ⇒ **grammaire des marqueurs INTACTE** (le contrat v3.1 a un corpus de régression). ⚠️ Le modèle n'est **pas fiable** sur les index ⇒ le garde-fou est **non négociable**.
+
+**À traiter dans la même famille** : `castEmptySelection` (`scripts/code.js:3233`) remet `lastTableSnapshots = null` mais **oublie `lastTableDocIndices`** ⇒ indices périmés ⇒ reconstruction depuis **un autre tableau** du document (corruption silencieuse, non déterministe).
+
+**Coût indicatif** : moyen à gros (stockage du chat + composition du prompt + pont hôte↔plugin).
+
