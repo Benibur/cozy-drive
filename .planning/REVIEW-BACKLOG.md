@@ -128,6 +128,24 @@ Les deux items de la Phase 999.3 sont **faits** (aucun `code.js` touché — bui
 
 **Béni par Ben le 2026-07-20** (console `gen_blessing.py`) : les 4 nouveaux goldens `A2w`/`Ac2w` (insert+replace) → verdict **`pass`** (blocks + selMarkup). A8/insert after.png revérifié OK. Ces cas **remplacent démonstrativement** A2/replace + Ac2/replace dégénérés (qui restent au corpus comme cas « curseur collapsed », légitimes et déjà bénis). **Phase 999.3 close.** Reste au corpus 10 `pending` = **axe H** (chantier distinct, non lié à 999.3).
 
+### Session 2026-07-21 (ter) — FIDÉLITÉ des ressources réinjectées + bug `Api.CreateTable`
+
+**Question de Ben** : « ne peut-on pas faire mieux que le tableau à plat ? peut-on avoir une *copie* sérialisée des ressources référencées par un fragment, fournie à Scribe et renvoyée à l'injection ? » — **Oui, et c'était déjà à moitié câblé** (`79a720a8e`).
+
+**Le levier** : `table.ToJSON(true, true)` est une opération de **LECTURE** ⇒ elle ne viole PAS la contrainte « le contexte ne mute pas le document » (celle qui interdit `SetName`), et elle **préserve les fusions**. C'est déjà le format `tableSnapshots`, déjà un champ de `PANEL_ACTION` (`protocol.js:87`) et déjà consommé **en priorité** par `reconstructTable`. Manquait seulement : que l'extraction document les produise et que l'hôte les renvoie.
+
+- **Plugin** : `buildDocumentExtractionResult` collecte `docTableSnapshots[tableIndex] = el.ToJSON(true,true)` au moment où il émet `[TABLE:N]`, et la réponse `cozy-bridge:document-extracted` les transporte.
+- **Hôte** (`View.jsx`) : `docTableSnapshotsRef` les conserve ; `snapshotsForFragment(text)` les renvoie au clic, **filtrés aux seuls `[TABLE:N]` présents dans le fragment** — le canal retour `PANEL_ACTION` est plafonné à **1 Mo** (`validateIntent`), contrairement au canal d'extraction qui le contourne délibérément.
+- Le rebuild à plat (`createTableFromMarkers`) devient le **dernier recours**.
+
+**Résultat live** : clone **strictement identique** à l'original — `identique: true` (fusion H ligne 3 = 2 cellules logiques au lieu de 3 ; continuation V = cellule vide). Fidélité **complète**, y compris fusions.
+
+**🔴 BUG PRÉEXISTANT TROUVÉ AU PASSAGE — `Api.CreateTable` prend `(LIGNES, COLONNES)`**, pas `(colonnes, lignes)`. Le code passait `Api.CreateTable(nCols, nRows)` ⇒ **tout tableau NON CARRÉ** levait `Row index N is out of bounds` et faisait échouer **TOUTE l'injection, le texte autour compris**. Invisible jusqu'ici car **tous les cas testés étaient carrés (2×2)**. Prouvé en live : un markdown **3 colonnes × 2 lignes** n'insérait **rien** ; arguments inversés ⇒ `2 lignes × 3 colonnes`, contenu `A B C / 1 2 3` correct. Corrigé aux **2** sites (chemin markdown-pipe + `createTableFromMarkers`).
+
+**Piège re-payé** : `log()` dans le bac à sable d'un `callCommand` peut lever une `ReferenceError` — mon `try/catch` la transformait en `return null` (= tableau perdu). Logs retirés de `createTableFromMarkers`.
+
+Non-régression : `T3/insert` identique au golden ; repli à plat OK même avec des **trous** de grille ; oracle **39/39**, verify-bundles **66/66**, specs hôte OnlyOffice **340/340**, `yarn build` OK.
+
 ### Session 2026-07-21 (bis) — PANNEAU LATÉRAL : Insérer/Remplacer perdait TABLEAUX et IMAGES — CORRIGÉ
 
 **Symptôme (Ben)** : dans le side panel, les boutons *Insérer*/*Remplacer* d'une carte de fragment contenant une image ou un tableau **perdent** l'image et le tableau ; **le texte autour est bien inséré**.
