@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 
-import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
 
+import { ScribeHoverTooltip } from '@/modules/views/OnlyOffice/Scribe/ScribeHoverTooltip'
 import {
   ScribeSelectionButtonIcon,
   DISC_INSET_LEFT,
@@ -16,22 +16,10 @@ import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
 // asset's own shadow padding is compensated separately.
 const SELECTION_GAP = 4
 
-const getTooltipStyle = isDark => ({
-  position: 'absolute',
-  bottom: '100%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  marginBottom: 4,
-  padding: '6px 10px',
-  background: isDark ? '#555' : '#333',
-  borderRadius: 6,
-  fontSize: 12,
-  whiteSpace: 'nowrap',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4
-})
+// Tooltips anchor on the button BOX, but this button's box has DISC_INSET_TOP
+// px of transparent shadow padding above the disc. Subtract it so the gap the
+// eye sees matches the side-panel button's.
+const TOOLTIP_GAP = 8 - DISC_INSET_TOP
 
 /**
  * Anchor point of the button = the END of the selection (its bottom-right
@@ -74,8 +62,6 @@ const getAnchor = rect => {
  */
 export const ScribeSelectionButton = ({ rect, onTriggerScribe }) => {
   const { t } = useI18n()
-  const theme = useTheme()
-  const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
   const [hovered, setHovered] = useState(false)
 
   if (!rect) return null
@@ -123,10 +109,12 @@ export const ScribeSelectionButton = ({ rect, onTriggerScribe }) => {
         type="button"
       >
         {hovered && (
-          <span style={getTooltipStyle(isDark)}>
-            <span style={{ color: 'white' }}>{t('Scribe.button.text_ai')}</span>
-            <span style={{ color: '#999' }}>(Ctrl+Shift+I)</span>
-          </span>
+          <ScribeHoverTooltip
+            label={t('Scribe.button.text_ai')}
+            shortcut="(Ctrl+Shift+I)"
+            align="center"
+            gap={TOOLTIP_GAP}
+          />
         )}
         <ScribeSelectionButtonIcon />
       </button>

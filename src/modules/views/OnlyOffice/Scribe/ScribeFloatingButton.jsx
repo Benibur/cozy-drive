@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
 
+import { ScribeHoverTooltip } from '@/modules/views/OnlyOffice/Scribe/ScribeHoverTooltip'
+
 const getButtonStyle = isDark => ({
   cursor: 'pointer',
   borderRadius: 20,
@@ -20,22 +22,6 @@ const getButtonStyle = isDark => ({
   fontFamily: 'inherit',
   color: isDark ? '#e0e0e0' : '#333',
   transition: 'opacity 200ms ease'
-})
-
-const getTooltipStyle = isDark => ({
-  position: 'absolute',
-  bottom: '100%',
-  right: 0,
-  marginBottom: 8,
-  padding: '6px 10px',
-  background: isDark ? '#555' : '#333',
-  borderRadius: 6,
-  fontSize: 12,
-  whiteSpace: 'nowrap',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4
 })
 
 const PanelIcon = () => (
@@ -93,7 +79,6 @@ export const ScribeFloatingZone = ({ visible, onTogglePanel }) => {
   if (!visible) return null
 
   const buttonStyle = getButtonStyle(isDark)
-  const tooltipStyle = getTooltipStyle(isDark)
 
   return createPortal(
     <div
@@ -119,12 +104,11 @@ export const ScribeFloatingZone = ({ visible, onTogglePanel }) => {
         type="button"
       >
         {hoveredPanel && (
-          <span style={tooltipStyle}>
-            <span style={{ color: 'white' }}>
-              {t('Scribe.button.open_panel')}
-            </span>
-            <span style={{ color: '#999' }}>(Ctrl+Shift+I x2)</span>
-          </span>
+          <ScribeHoverTooltip
+            label={t('Scribe.button.open_panel')}
+            shortcut="(Ctrl+Shift+I x2)"
+            align="right"
+          />
         )}
         <PanelIcon />
       </button>

@@ -30,15 +30,13 @@ export const ScribeSelectionButtonIcon = () => (
     focusable="false"
   >
     <g filter="url(#scribe_selection_button_shadow)">
-      <rect
-        x="12"
-        y="9"
-        width="24"
-        height="24"
-        rx="12"
-        fill="white"
-        shapeRendering="crispEdges"
-      />
+      {/*
+        The design export carried shape-rendering="crispEdges" here. That
+        DISABLES antialiasing, which is why the disc's edge came out jagged:
+        it snaps a 12px-radius curve to whole pixels. Dropped deliberately —
+        do not restore it from a fresh export without re-checking the edge.
+      */}
+      <rect x="12" y="9" width="24" height="24" rx="12" fill="white" />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
