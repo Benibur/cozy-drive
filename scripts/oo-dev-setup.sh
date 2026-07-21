@@ -172,26 +172,35 @@ docker exec "${CONTAINER_NAME}" bash -c "chown -R $(id -u):$(id -g) '${PLUGIN_CO
 rm -f "${PLUGIN_HOST_PATH}"/*.gz "${PLUGIN_HOST_PATH}"/scripts/*.gz 2>/dev/null
 
 echo ""
-echo "=== Disabling service-worker caching of plugin assets ==="
-# OO's editor service worker caches sdkjs-plugins with a CACHE-FIRST strategy in
-# the Cache API, which serves a stale code.js even when nginx says no-store (the
-# SW intercepts the fetch before it reaches the network). Drop "sdkjs-plugins/"
-# from its cacheable prefixes so plugin requests always go to the network; every
-# other asset (web-apps/sdkjs/fonts) stays SW-cached for speed. Idempotent and
-# re-applied every run — the SW file is static in the image, so a fresh container
-# ships it pristine (with sdkjs-plugins) and this re-patches it.
+echo "=== Disabling service-worker caching of patched assets ==="
+# OO's editor service worker caches with a CACHE-FIRST strategy in the Cache API and
+# intercepts the fetch BEFORE the network, so it serves stale files even when nginx
+# says no-store. Its gate (matchesCacheablePath) runs before the cache lookup, so
+# dropping a prefix from g_cacheablePrefixes is enough to make those URLs bypass the
+# SW entirely — the already-cached entries simply stop being consulted.
+# We drop BOTH prefixes we patch at runtime:
+#   "sdkjs-plugins/"  the Scribe plugin (code.js)
+#   "sdkjs/"          the patched sdk-all.js  <- added 2026-07-21
+# "sdkjs/" was the third stale copy of the SDK, after the image's .gz and the browser
+# HTTP cache: a coordinate patch could be correct in the container AND correct on the
+# wire and STILL not run, because the SW answered from its own cache with
+# transferSize 0. Cost: web-apps/fonts/dictionaries stay SW-cached, but sdkjs assets
+# (AllFonts.js, sdk-all.js) now hit the network each load — slower, and correct.
+# Idempotent, re-applied every run: the SW file is static in the image, so a fresh
+# container ships it pristine and this re-patches it.
 SW_FILE="/var/www/onlyoffice/documentserver/sdkjs/common/serviceworker/document_editor_service_worker.js"
 if docker exec "${CONTAINER_NAME}" sh -c '
       SW="'"${SW_FILE}"'"
       [ -f "$SW" ] || exit 1
-      if grep -q "\"sdkjs-plugins/\"," "$SW"; then
-        sed -i "/^[[:space:]]*\"sdkjs-plugins\/\",[[:space:]]*\$/d" "$SW"
-      fi
-      ! grep -q "\"sdkjs-plugins/\"," "$SW"   # confirm it is gone
+      # Delete each prefix entry from the g_cacheablePrefixes array literal.
+      sed -i "/^[[:space:]]*\"sdkjs-plugins\/\",[[:space:]]*\$/d" "$SW"
+      sed -i "/^[[:space:]]*\"sdkjs\/\",[[:space:]]*\$/d" "$SW"
+      # confirm both are gone
+      ! grep -q "\"sdkjs-plugins/\"," "$SW" && ! grep -q "\"sdkjs/\"," "$SW"
     ' 2>/dev/null; then
-  echo "Service worker no longer caches sdkjs-plugins (plugin edits reach the network)."
+  echo "Service worker no longer caches sdkjs-plugins nor sdkjs (plugin + SDK edits reach the network)."
 else
-  echo "WARNING: could not patch the editor service worker — a browser 'Clear site data' may be needed to drop old plugin code.js."
+  echo "WARNING: could not patch the editor service worker — a browser 'Clear site data' may be needed to drop the old plugin code.js / sdk-all.js."
 fi
 
 echo ""
