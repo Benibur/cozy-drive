@@ -31,7 +31,23 @@ export const INTENT_ACTIONS = {
   // Lightweight { rect, hasText } geometry, emitted on every selection change
   // (independent of the panel) to place the under-selection floating button.
   SELECTION_GEOMETRY: 'SELECTION_GEOMETRY',
+  // { viewer, page } boxes of the document area, in the same editor-window px.
+  // Lets the host place the side-panel button inside the document instead of
+  // guessing offsets against OO chrome it cannot measure.
+  DOCUMENT_GEOMETRY: 'DOCUMENT_GEOMETRY',
   PANEL_ACTION: 'PANEL_ACTION'
+}
+
+/**
+ * Who asked for an intent. Carried in the intent DATA (the plugin echoes back
+ * whatever `source` the host put on its trigger message), because the host has to
+ * treat the same action differently depending on where it came from: an
+ * AI_TEXT_ASSISTANT from the keyboard closes an open side panel, while the same
+ * action from the under-selection button opens its menu ON TOP of the panel.
+ * @type {Object<string,string>}
+ */
+export const INTENT_SOURCES = {
+  SELECTION_BUTTON: 'selection-button'
 }
 
 /** @type {number} Maximum allowed size for message data payload (1MB) */

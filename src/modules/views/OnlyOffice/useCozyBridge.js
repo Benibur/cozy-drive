@@ -1,7 +1,10 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 
 import { CozyBridge } from '@/lib/cozy-bridge'
-import { createPanelActionIntent } from '@/lib/cozy-bridge/protocol'
+import {
+  createPanelActionIntent,
+  INTENT_SOURCES
+} from '@/lib/cozy-bridge/protocol'
 
 /**
  * React hook wrapping CozyBridge lifecycle with intent state.
@@ -20,7 +23,16 @@ import { createPanelActionIntent } from '@/lib/cozy-bridge/protocol'
  * @param {Function} [options.onSelectionChanged] - Called when plugin reports selection change
  * @returns {{ pendingIntent: object|null, respond: Function }}
  */
-export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSelectionChanged, onSelectionGeometry } = {}) {
+export function useCozyBridge(
+  allowedOrigins,
+  {
+    onTogglePanel,
+    isPanelOpen,
+    onSelectionChanged,
+    onSelectionGeometry,
+    onDocumentGeometry
+  } = {}
+) {
   const [pendingIntent, setPendingIntent] = useState(null)
   const bridgeRef = useRef(null)
   const respondRef = useRef(null)
@@ -28,6 +40,7 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
   const isPanelOpenRef = useRef(isPanelOpen)
   const onSelectionChangedRef = useRef(onSelectionChanged)
   const onSelectionGeometryRef = useRef(onSelectionGeometry)
+  const onDocumentGeometryRef = useRef(onDocumentGeometry)
 
   // Keep refs current to avoid stale closures in bridge handlers
   useEffect(() => {
@@ -42,6 +55,9 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
   useEffect(() => {
     onSelectionGeometryRef.current = onSelectionGeometry
   }, [onSelectionGeometry])
+  useEffect(() => {
+    onDocumentGeometryRef.current = onDocumentGeometry
+  }, [onDocumentGeometry])
 
   useEffect(() => {
     const bridge = new CozyBridge(allowedOrigins)
@@ -49,8 +65,13 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
 
     bridge.onIntent('AI_TEXT_ASSISTANT', (intentMessage, respondFn) => {
       // If panel is open, Ctrl+Shift+I should close the panel
-      // instead of opening a popover
-      if (isPanelOpenRef.current) {
+      // instead of opening a popover — but the under-selection BUTTON is the way
+      // to the menu actions, so its intent opens the menu over the open panel
+      // instead of closing it. Hence the source check rather than a plain
+      // "panel wins" rule.
+      const fromSelectionButton =
+        intentMessage.data?.source === INTENT_SOURCES.SELECTION_BUTTON
+      if (isPanelOpenRef.current && !fromSelectionButton) {
         respondFn({ status: 'ok', action: 'cancel', data: {} })
         if (togglePanelRef.current) togglePanelRef.current()
         return
@@ -74,6 +95,14 @@ export function useCozyBridge(allowedOrigins, { onTogglePanel, isPanelOpen, onSe
     bridge.onIntent('SELECTION_GEOMETRY', intentMessage => {
       if (onSelectionGeometryRef.current) {
         onSelectionGeometryRef.current(intentMessage.data)
+      }
+    })
+
+    // Where the document area (and the page inside it) currently sit on screen.
+    // Emitted on layout/zoom changes only — not on selection, not on scroll.
+    bridge.onIntent('DOCUMENT_GEOMETRY', intentMessage => {
+      if (onDocumentGeometryRef.current) {
+        onDocumentGeometryRef.current(intentMessage.data)
       }
     })
 
