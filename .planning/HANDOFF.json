@@ -1,0 +1,112 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-07-22T11:34:43.073Z",
+  "phase": "30",
+  "phase_name": "Menu Scribe inline ancré à la sélection",
+  "phase_dir": ".planning/phases/30-menu-inline-ancre-selection",
+  "plan": 1,
+  "task": 3,
+  "total_tasks": 3,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Retouches UI + géométrie du bouton panneau (DOCUMENT_GEOMETRY)",
+      "status": "done",
+      "commit": null,
+      "note": "UAT Ben OK. Tooltips temporisés 500ms ; menu compacté (dense/13px) ; bouton panneau placé dans la zone document via l'intent DOCUMENT_GEOMETRY poussé par le plugin (build 2026-07-22.1)."
+    },
+    {
+      "id": 2,
+      "name": "4 corrections UX (clic≠sélection, menu ancré, toggle, bouton panneau permanent)",
+      "status": "done",
+      "commit": null,
+      "note": "UAT Ben OK (« c'est nickel »). Builds plugin 2026-07-22.2 et .3."
+    },
+    {
+      "id": 3,
+      "name": "Phase 30 — menu ancré à la sélection (Popper + flèche, sans overlay)",
+      "status": "in_progress",
+      "progress": "Code + tests + docs GSD terminés, itération 2 des retours Ben appliquée. UAT Ben PAS ENCORE FAITE."
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": 4,
+      "name": "UAT Ben de la Phase 30 (checklist 30-UAT.md, 14 points)",
+      "status": "not_started"
+    },
+    {
+      "id": 5,
+      "name": "Commits atomiques de toute la série (rien n'est commité)",
+      "status": "not_started"
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Le rendu ancré (flip, recadrage latéral, flèche, bascule des sous-menus) n'a JAMAIS été vu en live — aucun navigateur piloté cette session",
+      "type": "human_action",
+      "workaround": "Checklist 30-UAT.md ; Ben mène les UAT (cf. mémoire feedback_ben_drives_uat)"
+    }
+  ],
+  "human_actions_pending": [
+    {
+      "action": "Dérouler .planning/phases/30-menu-inline-ancre-selection/30-UAT.md",
+      "context": "14 points, dont 4 ajoutés à l'itération 2 (bouton masqué, largeur constante en tapant, sous-menu près du bord droit, prompt multi-ligne)",
+      "blocking": true
+    },
+    {
+      "action": "Décider du découpage en commits (rien n'est commité : 14 fichiers modifiés + 3 nouveaux, ~910 insertions)",
+      "context": "Les lots 1 et 2 sont validés en UAT et peuvent être commités tels quels ; la Phase 30 attend l'UAT",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Aucune modification de l'addon pour la Phase 30",
+      "rationale": "L'API de géométrie de la Phase 29 satisfait déjà le besoin — audit des sources dans 30-RESEARCH.md §1",
+      "phase": "30"
+    },
+    {
+      "decision": "Popper (MUI v4 / popper.js v1) plutôt que @floating-ui/react",
+      "rationale": "Déjà dans l'arbre via cozy-ui et déjà utilisé dans le repo ; flip + preventOverflow + arrow couvrent le besoin. Éviter 2 moteurs de positionnement",
+      "phase": "30"
+    },
+    {
+      "decision": "L'ancre est la partie VISIBLE de la sélection, pas le bouton",
+      "rationale": "Ancrer au bouton cumulait ses offsets (gap 4px + disque + gap menu) et se lisait « poussé en bas à droite »",
+      "phase": "30"
+    },
+    {
+      "decision": "Largeur du menu FIXE (280) + pilule de prompt qui remplit son hôte",
+      "rationale": "Une décision de placement n'est valide que pour la taille avec laquelle elle a été calculée ; la pilule s'élargissait au 1er caractère APRÈS le calcul",
+      "phase": "30"
+    },
+    {
+      "decision": "Provenance de l'intent (INTENT_SOURCES.SELECTION_BUTTON) portée par les données de l'intent",
+      "rationale": "L'hôte doit traiter AI_TEXT_ASSISTANT différemment selon la source : clavier = ferme le panneau, bouton = ouvre le menu par-dessus le panneau",
+      "phase": "30"
+    }
+  ],
+  "uncommitted_files": [
+    ".planning/ROADMAP.md",
+    ".planning/phases/30-menu-inline-ancre-selection/ (nouveau)",
+    "plugins/onlyoffice-scribe/scripts/code.js",
+    "src/lib/cozy-bridge/protocol.js",
+    "src/modules/views/OnlyOffice/View.jsx",
+    "src/modules/views/OnlyOffice/useCozyBridge.js",
+    "src/modules/views/OnlyOffice/Scribe/ScribeActionMenu.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribeContainer.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribeContainer.spec.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribeFloatingButton.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribeHoverTooltip.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribePopover.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribePromptInput.jsx",
+    "src/modules/views/OnlyOffice/Scribe/ScribeSelectionButton.jsx",
+    "src/modules/views/OnlyOffice/Scribe/scribe.styl",
+    "src/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry.js (nouveau)",
+    "src/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry.spec.js (nouveau)"
+  ],
+  "next_action": "Ben déroule 30-UAT.md dans oo-dev (hard-reload d'abord). Selon le verdict : corriger, puis commiter la série en commits atomiques.",
+  "context_notes": "Tout est buildé et servi : build/ régénéré à 11:34, oo-dev sert le plugin build 2026-07-22.3 depuis CE worktree. 359 tests / 21 suites passent. Le plugin n'a PAS changé pendant la Phase 30 (seul Drive a bougé) — un simple hard-reload suffit, pas de restart OO."
+}
