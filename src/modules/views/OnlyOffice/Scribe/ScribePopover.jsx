@@ -442,9 +442,10 @@ const ScribePopover = ({
   // draggable, and pinning those to a point near the bottom of the screen would
   // fight the viewport instead of using it — they stay centred and modal.
   //
-  // No anchor -> `anchorEl` is undefined -> ScribeContainer falls back to the
-  // centred modal. That covers an editor that reports no geometry AND a selection
-  // scrolled out of view.
+  // No anchor -> `anchorEl` is undefined. At opening time ScribeContainer falls
+  // back to the centred modal (an editor that reports no geometry at all); once
+  // the menu is open and anchored, losing the anchor CLOSES it — a cleared
+  // selection or one scrolled out of view leaves nothing to point at.
   const menuAnchorBox =
     step === 'menu' ? getVisibleSelectionBox(selectionRect) : null
   const menuAnchorKey = menuAnchorBox

@@ -31,6 +31,14 @@ jest.mock('cozy-ui/transpiled/react/Popper', () => {
       data-open={String(open)}
       data-placement={placement}
       data-modifiers={JSON.stringify(Object.keys(modifiers || {}))}
+      // `arrow.element` is a DOM node, so only the serialisable modifiers are
+      // exposed — but their VALUES matter, not just their names (see the flip
+      // test below).
+      data-modifier-config={JSON.stringify({
+        offset: (modifiers || {}).offset,
+        flip: (modifiers || {}).flip,
+        preventOverflow: (modifiers || {}).preventOverflow
+      })}
     >
       {typeof children === 'function'
         ? children({ placement: 'bottom-start' })
@@ -231,6 +239,109 @@ describe('ScribeContainer', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(handleClose).toHaveBeenCalledTimes(1)
+  })
+
+  // popper.js v1 matches every `behavior` entry against
+  // `data.placement.split('-')[0]`, i.e. the BASE placement. Listing
+  // 'bottom-start' there never matches 'bottom', so flip returns on its first
+  // line and silently does nothing: the menu stops flipping and is merely
+  // shoved back into the window by preventOverflow — over the selection it is
+  // supposed to point at. Popper re-applies the variation itself.
+  it('gives flip BASE placements, without the variation', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+
+    render(
+      <ScribeContainer
+        open={true}
+        onClose={jest.fn()}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    const config = JSON.parse(
+      screen.getByTestId('popper').dataset.modifierConfig
+    )
+    expect(config.flip.behavior).toEqual(['bottom', 'top'])
+    config.flip.behavior.forEach(placement => {
+      expect(placement).not.toContain('-')
+    })
+  })
+
+  // An anchored menu whose anchor disappears has nothing left to point at. It
+  // used to silently re-render as the centred modal: clicking in the document
+  // (which clears the selection, and which ClickAwayListener cannot see because
+  // the click lands in a cross-origin iframe) teleported the menu to the middle
+  // of the screen behind a backdrop instead of dismissing it.
+  it('closes an anchored menu when it loses its anchor', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    const handleClose = jest.fn()
+
+    const { rerender } = render(
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(handleClose).not.toHaveBeenCalled()
+
+    rerender(
+      <ScribeContainer open={true} onClose={handleClose} anchorEl={undefined}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    expect(handleClose).toHaveBeenCalledTimes(1)
+  })
+
+  // The centred modal remains legitimate for an editor that reports no geometry
+  // at all: never anchored, so there is no anchor to lose.
+  it('leaves an unanchored menu open', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    const handleClose = jest.fn()
+
+    const { rerender } = render(
+      <ScribeContainer open={true} onClose={handleClose}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    rerender(
+      <ScribeContainer open={true} onClose={handleClose}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    expect(screen.getByTestId('popover')).toBeInTheDocument()
+    expect(handleClose).not.toHaveBeenCalled()
+  })
+
+  // Mobile never anchors — its bottom sheet must not be dismissed by a selection
+  // that went away.
+  it('keeps the mobile Drawer open when the anchor disappears', () => {
+    useBreakpoints.mockReturnValue({ isMobile: true })
+    const handleClose = jest.fn()
+
+    const { rerender } = render(
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    rerender(
+      <ScribeContainer open={true} onClose={handleClose} anchorEl={undefined}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+    expect(handleClose).not.toHaveBeenCalled()
   })
 
   it('calls onClose when Drawer backdrop is clicked on mobile', () => {

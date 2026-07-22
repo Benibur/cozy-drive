@@ -98,7 +98,14 @@ const ScribeAnchoredContainer = ({
       style={{ zIndex: ANCHORED_Z_INDEX }}
       modifiers={{
         offset: { enabled: true, offset: `0, ${ANCHOR_OFFSET}` },
-        flip: { enabled: true, behavior: ['bottom-start', 'top-start'] },
+        // BASE placements, without the variation: popper compares each entry
+        // against `data.placement.split('-')[0]`, so a behavior of
+        // ['bottom-start', 'top-start'] never matches 'bottom' and flip returns
+        // on its first line — silently disabling itself. The menu then only got
+        // pushed back into the window by preventOverflow, which slid it up OVER
+        // the selection with the arrow left pointing at an unrelated line.
+        // Popper re-applies the variation itself (placement + '-' + variation).
+        flip: { enabled: true, behavior: ['bottom', 'top'] },
         preventOverflow: {
           enabled: true,
           boundariesElement: 'viewport',
@@ -161,6 +168,39 @@ const ScribeContainer = ({
 }) => {
   const { isMobile } = useBreakpoints()
   const touchStartY = useRef(null)
+
+  // An anchored menu that LOSES its anchor must close, not fall back to the
+  // centred modal.
+  //
+  // The fallback below is a decision taken when the menu OPENS ("this editor
+  // reports no geometry"). Reaching it mid-life means something else: the thing
+  // the menu was pointing at is gone — the selection was cleared, or scrolled
+  // out of the visible document area — and the honest answer to "point at
+  // nothing" is to stop pointing, not to teleport the menu to the middle of the
+  // screen behind a backdrop (which is what it did).
+  //
+  // It is also the ONLY dismissal available for a click inside the document:
+  // that click lands in a cross-origin iframe, so the ClickAwayListener above —
+  // which listens on the parent document — never sees it. Clearing the selection
+  // is what a click in the document does, so closing on a lost anchor is what
+  // makes "click outside to dismiss" work at all.
+  //
+  // Trade-off, deliberate: this also closes the menu when the user scrolls the
+  // selection out of view while a prompt is half-typed. Keeping it open would
+  // mean floating it over the ribbon, which the UAT rules out.
+  const wasAnchored = useRef(false)
+  useEffect(() => {
+    if (isMobile) return
+    if (!open) {
+      wasAnchored.current = false
+      return
+    }
+    if (anchorEl) {
+      wasAnchored.current = true
+    } else if (wasAnchored.current) {
+      onClose()
+    }
+  }, [isMobile, open, anchorEl, onClose])
 
   const handleTouchStart = useCallback(e => {
     touchStartY.current = e.touches[0].clientY
@@ -232,6 +272,9 @@ const ScribeContainer = ({
   // Anchored when the editor tells us where the selection is; centred and modal
   // when it does not (see scribeSelectionGeometry: the fallback is what happens
   // on its own, not a case anyone has to remember to handle).
+  //
+  // This is an OPENING-time choice only. Losing the anchor later closes the menu
+  // (see wasAnchored above) rather than dropping it into this branch.
   if (anchorEl) {
     return (
       <ScribeAnchoredContainer
