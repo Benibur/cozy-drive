@@ -10,6 +10,7 @@
 - 🚧 **v3.2 Contexte enrichi du prompt** -- Phases v3.2-01 to v3.2-03 (planning, started 2026-06-24)
 - 🚧 **v3.3 Fidélité d'injection image** -- Phase 28 (started 2026-07-06, worktree `cozy-drive-image-reinject`) — core observables + IMG-04 save-fidelity VERIFIED live 2026-07-09 (build `2026-07-09.6`); residual follow-ups Q1/Q3/T9 deferred
 - ✅ **Bouton Scribe sous la sélection** -- Phase 29 (livré 2026-07-21, worktree `cozy-drive-scribe-assistant-menu`) — patch sdkjs + événement poussé `onSelectionGeometryChanged` ; UAT Ben OK
+- ✅ **Menu Scribe inline ancré à la sélection** -- Phase 30 (implémenté 2026-07-22, UAT Ben en attente) — contrat de géométrie isolé + Popper (flip/preventOverflow/arrow), overlay retiré ; **aucune modification addon** (l'API de la Phase 29 suffisait — audit dans `.planning/phases/30-menu-inline-ancre-selection/30-RESEARCH.md`).
 - 🧪 **Campagne QA harnais selection-cases** (transverse, non-milestone) -- `test-harness/` sur cette branche : 62 goldens, oracle `selMarkup`, blessing Ben 52 OK/10 KO triagé (bugs prod corrigés dans `code.js` : ④ full-table-insert, extraction cellule −1 char). Détail = `.planning/REVIEW-BACKLOG.md` ; reste-à-faire = Phases **999.2** (bug ⑤ T-reduc) + **999.3** (dette harnais) au Backlog.
 
 ## Phases
@@ -255,6 +256,26 @@ Plans:
 > **Restes hors backlog** : bénir — *rien* (corpus complet) ; UAT — *rien* (A1→E12 tous PASS le 2026-07-21). Question ouverte non réconciliée : le tableau 3×4 vu par Ben avant le fix `Api.CreateTable` (goldens `Tmd` = filet).
 
 
+### Phase 30: Menu Scribe inline ancré à la sélection — ✅ IMPLÉMENTÉ 2026-07-22, ⏳ UAT Ben
+
+**Goal:** poser le menu inline **sur la sélection**, avec une flèche pointant vers elle et **sans overlay**, au lieu de l'ouvrir au centre de la fenêtre derrière un fond noir.
+**Origine:** demande Ben + maquette (`~/Downloads/scribe inline positionning.png`).
+**Docs:** `.planning/phases/30-menu-inline-ancre-selection/` (CONTEXT, RESEARCH, 01-SUMMARY, UAT).
+
+**Deux prérequis, traités avant d'écrire du code**
+1. **API de géométrie de l'addon : déjà là.** Audit des sources (RESEARCH §1) : `onSelectionGeometryChanged` pousse `{left, top, width, height, corners, viewport}` quand la sélection **change** (`private_UpdateSelection`) **et quand elle bouge** (`CheckTargetDraw` — scroll/zoom), dédupliqué, **0 `callCommand`**. ⇒ **aucune modification addon dans cette phase.**
+2. **Bibliothèque de positionnement : `Popper` (MUI v4 / popper.js v1), déjà dans l'arbre**, déjà utilisé dans le repo. `flip` + `preventOverflow` = « là où il y a de la place », `arrow` = la flèche, `anchorEl` virtuel = pas d'élément DOM fantôme. `@floating-ui/react` écarté (dépendance en plus, 2 moteurs de positionnement).
+
+**Livré**
+- `scribeSelectionGeometry.js` — **le contrat** : ce qu'un éditeur doit produire pour que l'UI s'ancre, et le repli (modal centré) qui se produit **tout seul** en son absence. Fin de la duplication conversion/clipping entre le bouton et le menu.
+- `ScribeContainer` — 3ᵉ branche « ancrée non modale » (Popper + flèche + `ClickAwayListener` + Échap + passation de focus), `Popover` centré en repli, `Drawer` inchangé sur mobile.
+- `ScribePopover` — ancre **stable** à lecture tardive + `anchorKey` ⇒ le menu suit la sélection au scroll sans détruire/recréer l'instance popper.
+- Seule l'étape `menu` est ancrée ; `loading`/`result` restent centrées et modales.
+
+**Vérifié :** 355 tests (21 suites) dont 15 nouveaux ; `ScribeContainer.jsx` rendu lint-clean.
+
+**Reste :** UAT Ben (`30-UAT.md`) ; la **refonte visuelle** du menu montrée par la maquette (en-tête « Scribe » + pastille de contexte « CELLULE ») est **hors périmètre** → Phase **999.9** au Backlog.
+
 ### Phase 999.1: Centralisation des prompts IA (Scribe → module partagé) (BACKLOG)
 
 **Goal:** [Captured for future planning]
@@ -394,3 +415,28 @@ Deux problèmes distincts sur les tableaux **fusionnés**, révélés par la pas
 
 **Coût indicatif** : petit à moyen ; la partie « A7 / frontière LLM » est surtout une **décision produit** à documenter.
 
+### Phase 999.8: Ancrer le bouton flottant « panneau » sur la PAGE (géométrie éditeur) — ✅ LIVRÉ 2026-07-22 (route B), ⏳ UAT Ben
+
+**Goal:** Poser le bouton d'ouverture du panneau **en haut de la zone document, contre le bord droit de la page** — au lieu de le deviner (il atterrissait sur le ruban) ou de le coller au bord droit du viewport (par-dessus la bande d'icônes OO).
+
+**Le blocage initial :** Drive ne peut mesurer **aucun** élément de chrome OO (autre origine), les pages sont dessinées sur un **canvas** (aucun nœud DOM par page), et une constante en dur devient fausse dès que l'utilisateur bascule le **ruban compact**.
+
+**Débloqué par l'idée de Ben — `id_viewer_overlay`.** Vérifié dans `word/Drawing/HtmlPage.js` : `id_viewer` et `id_viewer_overlay` sont deux contrôles **frères ancrés aux 4 côtés du même conteneur** ⇒ leur box **EST** la zone document (ruban, règles et bande d'icônes de droite tombent dehors). Et l'iframe du plugin est **même origine** que la page éditeur, créée **sans `sandbox`** (`common/plugins.js`) ⇒ lecture DOM directe sur `window.parent`, **sans patch sdkjs** et surtout **sans `callCommand`** (qui tronquerait le redo).
+
+**Livré (route B) :** intent `DOCUMENT_GEOMETRY` `{viewer, page}` poussé par le plugin (build `2026-07-22.1`) → `useCozyBridge` → `View.jsx` → `ScribeFloatingButton`. Box **page** en refinement via `m_arrPages` + `ConvertCoordsToCursor3(...,true)` (mêmes primitives que `GetSelectionScreenRect`), sous `try/catch` : à défaut, l'hôte retombe sur la box viewer, puis sur le coin bas-droit. Rafraîchissement **100 % événementiel** (`ResizeObserver` sur `id_viewer` ; `asc_onZoom`/`asc_onZoomChange` car le zoom ne redimensionne pas le viewer mais la page) — pas de polling, le `setTimeout` d'une iframe de fond étant bridé.
+
+- [ ] **UAT Ben** : position au chargement, fenêtre étroite (marge trop mince ⇒ repli sur le bord droit de la zone document), zoom, ruban compact, ouverture du panneau droit OO.
+- [ ] **Durcissement éventuel (route A)** : la box **page** dépend d'internes **non publics** (`m_arrPages`, `ConvertCoordsToCursor3`) — sans filet de repo versionné. Si une montée de version OO les casse, le repli viewer tient, mais la version durable est de faire **pousser `{viewer, page}` par le patch sdkjs** (même hook de peinture que `onSelectionGeometryChanged`, indépendamment de la sélection). **À traiter** seulement si le repli se manifeste.
+
+**Coût indicatif** : fait ; le reste est de l'UAT et une décision de durcissement.
+
+### Phase 999.9: Refonte visuelle du menu inline (en-tête + pastille de contexte) (BACKLOG)
+
+**Goal:** aligner le CONTENU du menu inline sur la maquette de la Phase 30, dont seul le **positionnement** a été implémenté.
+**Source:** maquette `~/Downloads/scribe inline positionning.png` (2026-07-22).
+
+- [ ] En-tête « Scribe » (icône + titre) en haut de la carte.
+- [ ] **Pastille de contexte** (« CELLULE », et par extension : sélection / paragraphe / tableau / image) — indique à l'utilisateur ce sur quoi Scribe va agir. L'information existe déjà côté extraction (`tableAmbiguity`, `partialTableInfo`, marqueurs `[CELL:r,c]`) ; **à cadrer** : quel vocabulaire, et quel cas fait foi quand la sélection est mixte.
+- [ ] Ligne active en surbrillance pleine (violet, texte blanc) au lieu du `selected` MUI.
+
+**Coût indicatif** : petit à moyen, purement visuel ; la seule vraie question est la dérivation de la pastille de contexte.
