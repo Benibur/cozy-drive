@@ -4,6 +4,7 @@ import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
 import flag from 'cozy-flags'
 import Spinner from 'cozy-ui/transpiled/react/Spinner'
 
+import { INTENT_SOURCES } from '@/lib/cozy-bridge/protocol'
 import Error from '@/modules/views/OnlyOffice/Error'
 import OnlyOfficeAIAssistantPanel from '@/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel'
 import { useOnlyOfficeContext } from '@/modules/views/OnlyOffice/OnlyOfficeProvider'
@@ -77,21 +78,49 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
     })
   }, [])
 
+  // Where the document area (and the page inside it) sit, in editor-window px.
+  // The side-panel button is placed from this instead of from a guessed offset:
+  // OO's ribbon and right-hand icon strip are unmeasurable from Drive, and their
+  // sizes change with the user's compact-ribbon setting.
+  const [documentGeometry, setDocumentGeometry] = useState(null)
+  const handleDocumentGeometry = useCallback(data => {
+    setDocumentGeometry(data && data.viewer ? data : null)
+  }, [])
+
   const { pendingIntent, respond, castPanelAction } = useCozyBridge(
     allowedOrigins,
     {
       onTogglePanel: togglePanel,
       isPanelOpen,
       onSelectionChanged: handleSelectionChanged,
-      onSelectionGeometry: handleSelectionGeometry
+      onSelectionGeometry: handleSelectionGeometry,
+      onDocumentGeometry: handleDocumentGeometry
     }
   )
 
-  const showFloatingZone = isScribeEnabled && !isPanelOpen
-  // Under-selection button: only while Scribe is on, the panel is closed, and the
-  // plugin reports a non-empty selection with a usable rect.
+  // Scribe shows ONE surface at a time — the popover yields to the panel — with a
+  // single exception: a popover opened FROM THE UNDER-SELECTION BUTTON. That button
+  // is how the menu actions are reached, and it stays available while the panel is
+  // open, so its menu has to be able to show over the panel.
+  const fromSelectionButton =
+    pendingIntent?.data?.source === INTENT_SOURCES.SELECTION_BUTTON
+  const popoverOpen = !!pendingIntent && (!isPanelOpen || fromSelectionButton)
+
+  // The panel button is shown whether the panel is open or not: it is the way OUT
+  // of the panel as much as the way in (togglePanel closes it when open). Hiding
+  // it while the panel was open left the panel with no affordance of its own.
+  const showFloatingZone = isScribeEnabled
+  // Under-selection button: only while Scribe is on and the plugin reports a
+  // non-empty selection with a usable rect.
+  // Shown whether the panel is open or not: reaching the menu actions on a fresh
+  // selection should not cost a panel close first. Hidden while its own menu is
+  // open, though — the menu is anchored to the selection and would cover it, and
+  // a trigger for something already on screen is just clutter.
   const showSelectionButton =
-    isScribeEnabled && !isPanelOpen && selectionGeometry.hasText && !!selectionGeometry.rect
+    isScribeEnabled &&
+    !popoverOpen &&
+    selectionGeometry.hasText &&
+    !!selectionGeometry.rect
 
   const partialTableInfoRef = useRef(null)
   const tableSnapshotsRef = useRef(null)
@@ -204,10 +233,20 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
     [broadcastToFrames]
   )
 
-  // Send trigger-intent to plugin iframe
-  const triggerScribe = useCallback(() => {
-    broadcastToFrames({ type: 'cozy-bridge:trigger-intent', action: 'AI_TEXT_ASSISTANT' })
-  }, [broadcastToFrames])
+  // Send trigger-intent to plugin iframe. `source` travels to the plugin and comes
+  // back inside the intent data (the plugin just echoes it), so the host can tell
+  // a button press from a keyboard press — they must not do the same thing when
+  // the side panel is open.
+  const triggerScribe = useCallback(
+    source => {
+      broadcastToFrames({
+        type: 'cozy-bridge:trigger-intent',
+        action: 'AI_TEXT_ASSISTANT',
+        source
+      })
+    },
+    [broadcastToFrames]
+  )
 
   const focusEditor = useCallback(() => {
     const iframe = document.getElementsByName(FRAME_EDITOR_NAME)[0]
@@ -351,14 +390,28 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
     setTimeout(focusEditor, 100)
   }, [respond, focusEditor])
 
-  // Close popover when panel opens while popover is active.
+  // The under-selection button TOGGLES: a second click closes the menu it opened.
+  // It can be clicked while the menu is open because it sits above the popover's
+  // backdrop (z-index 100000 vs MUI's 1300), so the click lands on the button and
+  // never on the backdrop — without this it re-cast the intent and the menu just
+  // stayed open.
+  const toggleScribe = useCallback(() => {
+    if (popoverOpen) {
+      handleCancel()
+      return
+    }
+    triggerScribe(INTENT_SOURCES.SELECTION_BUTTON)
+  }, [popoverOpen, handleCancel, triggerScribe])
+
+  // Close popover when panel opens while popover is active — except the button's
+  // own menu, which is allowed to coexist with the panel (see popoverOpen).
   // Use respond() directly instead of handleCancel to avoid focusEditor
   // stealing focus from the panel.
   useEffect(() => {
-    if (isPanelOpen && pendingIntent) {
+    if (isPanelOpen && pendingIntent && !fromSelectionButton) {
       respond({ status: 'ok', action: 'cancel', data: {} })
     }
-  }, [isPanelOpen, pendingIntent, respond])
+  }, [isPanelOpen, pendingIntent, fromSelectionButton, respond])
 
   // Focus management: return focus to editor when panel closes
   const prevPanelOpenRef = useRef(isPanelOpen)
@@ -373,7 +426,6 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
 
   // Ctrl+Shift+I single-press from open popover: open panel and close popover
   useEffect(() => {
-    const popoverOpen = !!pendingIntent && !isPanelOpen
     if (!popoverOpen) return
 
     const handler = e => {
@@ -390,7 +442,7 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
 
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [pendingIntent, isPanelOpen, openPanel, respond])
+  }, [popoverOpen, openPanel, respond])
 
   // Ctrl+Shift+I when focus is inside the Drive app (e.g. the side panel input)
   // never reaches the plugin's keydown listener — that one is registered on the
@@ -403,13 +455,13 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
       const isCtrlShiftI =
         (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')
       if (!isCtrlShiftI) return
-      if (pendingIntent && !isPanelOpen) return
+      if (popoverOpen) return
       e.preventDefault()
       if (togglePanel) togglePanel()
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [togglePanel, pendingIntent, isPanelOpen])
+  }, [togglePanel, popoverOpen])
 
   const initEditor = useCallback(() => {
     new window.DocsAPI.DocEditor('onlyOfficeEditor', docEditorConfig)
@@ -460,21 +512,23 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
         <>
           <ScribeFloatingZone
             visible={showFloatingZone}
+            geometry={documentGeometry}
             onTogglePanel={togglePanel}
           />
           {showSelectionButton && (
             <ScribeSelectionButton
               rect={selectionGeometry.rect}
-              onTriggerScribe={triggerScribe}
+              onTriggerScribe={toggleScribe}
             />
           )}
           <ScribePopover
-            open={!!pendingIntent && !isPanelOpen}
+            open={popoverOpen}
             visible={scribeVisible}
             selectedText={pendingIntent?.data?.text || ''}
             selectedHtml={pendingIntent?.data?.html || ''}
             enrichedMd={pendingIntent?.data?.enrichedMd || ''}
             tableAmbiguity={pendingIntent?.data?.tableAmbiguity || null}
+            selectionRect={selectionGeometry.rect}
             partialTableInfo={pendingIntent?.data?.partialTableInfo || null}
             onReplace={handleReplace}
             onInsert={handleInsert}

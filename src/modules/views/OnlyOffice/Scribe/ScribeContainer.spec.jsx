@@ -23,6 +23,24 @@ jest.mock('cozy-ui/transpiled/react/Popover', () => {
   return { __esModule: true, default: MockPopover }
 })
 
+jest.mock('cozy-ui/transpiled/react/Popper', () => {
+  const MockPopper = ({ children, anchorEl, placement, modifiers, open }) => (
+    <div
+      data-testid="popper"
+      data-anchored={anchorEl ? 'yes' : 'no'}
+      data-open={String(open)}
+      data-placement={placement}
+      data-modifiers={JSON.stringify(Object.keys(modifiers || {}))}
+    >
+      {typeof children === 'function'
+        ? children({ placement: 'bottom-start' })
+        : children}
+    </div>
+  )
+  MockPopper.displayName = 'MockPopper'
+  return { __esModule: true, default: MockPopper }
+})
+
 jest.mock('cozy-ui/transpiled/react/Drawer', () => {
   const MockDrawer = ({ children, ...props }) => {
     // Serialize ModalProps and PaperProps for assertion
@@ -133,6 +151,86 @@ describe('ScribeContainer', () => {
         borderRadius: '12px 12px 0 0'
       })
     )
+  })
+
+  // The anchored branch is what makes the inline menu sit ON the selection with an
+  // arrow instead of dimming the document behind a centred modal.
+  it('renders an anchored Popper (not the modal Popover) when given an anchor', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+
+    render(
+      <ScribeContainer
+        open={true}
+        onClose={jest.fn()}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+        anchorKey="10,20"
+      >
+        <div data-testid="content">Hello</div>
+      </ScribeContainer>
+    )
+
+    expect(screen.getByTestId('popper')).toBeInTheDocument()
+    expect(screen.queryByTestId('popover')).not.toBeInTheDocument()
+    expect(screen.getByTestId('content')).toBeInTheDocument()
+
+    const popper = screen.getByTestId('popper')
+    expect(popper.dataset.anchored).toBe('yes')
+    expect(popper.dataset.placement).toBe('bottom-start')
+    // Placement is delegated: flip picks the side with room, preventOverflow keeps
+    // the menu in the window, arrow keeps pointing at the selection.
+    expect(JSON.parse(popper.dataset.modifiers)).toEqual(
+      expect.arrayContaining(['flip', 'preventOverflow', 'arrow'])
+    )
+  })
+
+  // No geometry from the editor -> the old centred modal, unchanged.
+  it('falls back to the centred Popover when no anchor is given', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+
+    render(
+      <ScribeContainer open={true} onClose={jest.fn()}>
+        <div data-testid="content">Hello</div>
+      </ScribeContainer>
+    )
+
+    expect(screen.getByTestId('popover')).toBeInTheDocument()
+    expect(screen.queryByTestId('popper')).not.toBeInTheDocument()
+  })
+
+  // Mobile keeps its bottom sheet: a menu anchored to a caret is a desktop idea.
+  it('keeps the Drawer on mobile even with an anchor', () => {
+    useBreakpoints.mockReturnValue({ isMobile: true })
+
+    render(
+      <ScribeContainer
+        open={true}
+        onClose={jest.fn()}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div data-testid="content">Hello</div>
+      </ScribeContainer>
+    )
+
+    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+    expect(screen.queryByTestId('popper')).not.toBeInTheDocument()
+  })
+
+  it('closes the anchored menu on Escape', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    const handleClose = jest.fn()
+
+    render(
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(handleClose).toHaveBeenCalledTimes(1)
   })
 
   it('calls onClose when Drawer backdrop is clicked on mobile', () => {

@@ -119,3 +119,38 @@
   text-align center
   font-style italic
 
+
+// -- Anchored inline menu: the arrow pointing back at the selection --
+//
+// A BORDER TRIANGLE, not a rotated square. The square version was invisible: a
+// white lozenge on a white page, separated from it by a 6% shadow, with its
+// outer edge lost in the menu's own soft shadow. A triangle can be outlined with
+// `drop-shadow`, which follows the alpha SHAPE instead of the box — so the arrow
+// gets a real edge on any background, and no seam where it meets the card.
+//
+// Only the triangle is ours. Its position along the menu's edge is written by
+// popper.js (inline `left`), because it has to follow the anchor when the menu is
+// shifted sideways to stay in the window — an arrow pinned to a corner would end
+// up pointing at nothing.
+//
+// The fill colour comes from a CSS variable set on the wrapper: this file cannot
+// read the MUI theme, and the arrow MUST match the menu's paper in both themes.
+.scribe-anchor-arrow
+  position absolute
+  width 0
+  height 0
+  pointer-events none
+  border-left 9px solid transparent
+  border-right 9px solid transparent
+
+// The wrapper carries the resolved placement, so the arrow sits on the edge
+// FACING the selection whichever way popper decided to flip.
+[data-scribe-placement^='bottom'] .scribe-anchor-arrow
+  top -9px
+  border-bottom 9px solid var(--scribe-arrow-bg, #fff)
+  filter drop-shadow(0 -2px 1.5px rgba(0,0,0,0.22))
+
+[data-scribe-placement^='top'] .scribe-anchor-arrow
+  bottom -9px
+  border-top 9px solid var(--scribe-arrow-bg, #fff)
+  filter drop-shadow(0 2px 1.5px rgba(0,0,0,0.22))

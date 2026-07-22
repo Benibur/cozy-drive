@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useI18n } from 'twake-i18n'
 
 import { useClient } from 'cozy-client'
@@ -14,6 +14,10 @@ import { ScribeActionMenu } from '@/modules/views/OnlyOffice/Scribe/ScribeAction
 import { ScribeContainer } from '@/modules/views/OnlyOffice/Scribe/ScribeContainer'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ScribeResultPanel } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
+import {
+  createVirtualAnchor,
+  getVisibleSelectionBox
+} from '@/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry'
 import {
   callScribeAIWithReask,
   buildMessages,
@@ -51,7 +55,8 @@ const ScribePopover = ({
   onInsert,
   onCancel,
   onOpenPanel,
-  tableAmbiguity
+  tableAmbiguity,
+  selectionRect
 }) => {
   const { t } = useI18n()
   const client = useClient()
@@ -401,6 +406,23 @@ const ScribePopover = ({
   const menuRef = useRef(null)
   const loadingRef = useRef(null)
 
+  // Popper must read the CURRENT rect every time it recomputes, so the anchor is
+  // a stable object over a ref written at render time. Rebuilding the anchor on
+  // each new rect would tear down and re-create the popper instance several times
+  // a second while the user scrolls.
+  //
+  // The anchor is the SELECTION, not the button that opened the menu: hanging the
+  // menu off the button added the button's own offset from the text (its gap, its
+  // disc, then the menu's gap), which read as "pushed down and to the right"
+  // rather than "attached to what I selected". The button is hidden while the menu
+  // is open anyway.
+  const selectionRectRef = useRef(selectionRect)
+  selectionRectRef.current = selectionRect
+  const menuAnchor = useMemo(
+    () => createVirtualAnchor(() => getVisibleSelectionBox(selectionRectRef.current)),
+    []
+  )
+
   const handleEntered = useCallback(() => {
     if (document.activeElement) {
       document.activeElement.blur()
@@ -414,6 +436,23 @@ const ScribePopover = ({
 
   const devMode = isScribeDevMd()
 
+  // The MENU is anchored to the selection (through the button that opens it,
+  // which sits on the selection's end corner) and carries an arrow pointing back
+  // at it. Only the menu: the loading and result surfaces are large and
+  // draggable, and pinning those to a point near the bottom of the screen would
+  // fight the viewport instead of using it — they stay centred and modal.
+  //
+  // No anchor -> `anchorEl` is undefined -> ScribeContainer falls back to the
+  // centred modal. That covers an editor that reports no geometry AND a selection
+  // scrolled out of view.
+  const menuAnchorBox =
+    step === 'menu' ? getVisibleSelectionBox(selectionRect) : null
+  const menuAnchorKey = menuAnchorBox
+    ? `${Math.round(menuAnchorBox.left)},${Math.round(menuAnchorBox.top)},${Math.round(
+        menuAnchorBox.width
+      )},${Math.round(menuAnchorBox.height)}`
+    : ''
+
   return (
     <ScribeContainer
       open={open}
@@ -422,6 +461,8 @@ const ScribePopover = ({
       TransitionProps={{ onEntered: handleEntered }}
       disableAutoFocus
       disableEnforceFocus
+      anchorEl={menuAnchorBox ? menuAnchor : undefined}
+      anchorKey={menuAnchorKey}
       anchorReference="anchorPosition"
       anchorPosition={{
         top:
@@ -520,7 +561,8 @@ ScribePopover.propTypes = {
   onReplace: PropTypes.func.isRequired,
   onInsert: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  onOpenPanel: PropTypes.func
+  onOpenPanel: PropTypes.func,
+  selectionRect: PropTypes.object
 }
 
 export { ScribePopover }

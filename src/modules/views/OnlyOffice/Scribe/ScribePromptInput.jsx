@@ -12,24 +12,19 @@ import PropTypes from 'prop-types'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
 
-const LINE_HEIGHT = 20
-const TEXTAREA_VPAD = 12 // 6px top + 6px bottom
+const LINE_HEIGHT = 18
+const TEXTAREA_VPAD = 10 // 5px top + 5px bottom
 const INNER_VPAD = 4 // 2px top + 2px bottom on the content row
 const BORDER = 2
 // Single-line content height (one text line) and the resulting pill height.
-const SINGLE_LINE = LINE_HEIGHT + TEXTAREA_VPAD // 32
-const PILL_HEIGHT = SINGLE_LINE + INNER_VPAD + BORDER * 2 // 40
+const SINGLE_LINE = LINE_HEIGHT + TEXTAREA_VPAD // 28
+const PILL_HEIGHT = SINGLE_LINE + INNER_VPAD + BORDER * 2 // 36
 // Fixed corner radius = half the single-line height → a pill when one line,
 // a rounded RECTANGLE (constant corner radius) once it grows taller. A 9999px
 // radius would instead keep rounding the left/right edges into half-circles.
-const PILL_RADIUS = PILL_HEIGHT / 2 // 20
-// The pill stays compact while empty and jumps straight to its full
-// (viewport-capped) width the instant the first character is typed. Going
-// directly to the max — rather than growing per-keystroke — means the text
-// never wraps at an intermediate width, so there is no flicker.
-const COMPACT_WIDTH = 240
-const MAX_WIDTH = 420
-const SEND_BUTTON = 30
+const PILL_RADIUS = PILL_HEIGHT / 2 // 18
+const SEND_BUTTON = 26
+const FONT_SIZE = 13
 
 // Gradient liseré: softened (pastel) while idle, vivid only when the input is
 // focused. The four stops are driven by registered @property colors so the
@@ -43,14 +38,6 @@ const gradVars = focused => {
   return { '--scribe-g1': g1, '--scribe-g2': g2, '--scribe-g3': g3, '--scribe-g4': g4 }
 }
 const VIEWPORT_MARGIN = 24 // keep the popover off the very edge of the screen
-
-// Pill width = the cap, but never wider than the viewport allows (smaller
-// screens get a smaller pill, and `maxWidth:100%` still clamps inside a narrow
-// mobile drawer).
-const computePillWidth = () => {
-  if (typeof window === 'undefined') return MAX_WIDTH
-  return Math.min(MAX_WIDTH, window.innerWidth - VIEWPORT_MARGIN * 2)
-}
 
 // The animated gradient liseré can't be expressed with inline styles: it needs
 // @property (so the conic-gradient angle interpolates smoothly) and @keyframes.
@@ -101,10 +88,7 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
   const theme = useTheme()
   const [value, setValue] = useState('')
   const [focused, setFocused] = useState(false)
-  const [maxPillWidth, setMaxPillWidth] = useState(computePillWidth)
   const [maxHeight, setMaxHeight] = useState(LINE_HEIGHT * 6 + TEXTAREA_VPAD)
-  // Compact until something is typed, then snap to the full width.
-  const effectiveWidth = value.length > 0 ? maxPillWidth : COMPACT_WIDTH
   const inputRef = useRef(null)
   const wrapperRef = useRef(null)
   // Pending caret position to restore after a controlled-value newline insert.
@@ -165,7 +149,6 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
 
   useEffect(() => {
     const onResize = () => {
-      setMaxPillWidth(computePillWidth())
       setMaxHeight(computeMaxHeight())
     }
     window.addEventListener('resize', onResize)
@@ -243,14 +226,17 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
           '--scribe-inner': innerBg,
           ...gradVars(focused),
           position: 'relative',
-          width: effectiveWidth,
-          maxWidth: '100%',
+          // The pill FILLS its host — the action menu, its only caller, owns the
+          // width. It used to size itself, snapping from a compact width to a
+          // wide one on the first keystroke; inside a menu anchored to the
+          // selection that snap resized the menu AFTER its position had been
+          // computed, and pushed it off the right edge of the window. A constant
+          // footprint is what keeps a placement decision valid.
+          width: '100%',
           borderRadius: PILL_RADIUS,
           boxSizing: 'border-box',
           boxShadow: focused ? '0 0 0 3px rgba(139, 92, 246, 0.18)' : 'none',
-          // Width only ever toggles compact<->max (max always fits the content),
-          // so animating it cannot cause a wrap-flicker.
-          transition: `width 140ms ease, box-shadow 150ms ease, ${GRAD_TRANSITION}`
+          transition: `box-shadow 150ms ease, ${GRAD_TRANSITION}`
         }}
       >
         <div
@@ -281,12 +267,12 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
               background: 'transparent',
               color: textColor,
               fontFamily: 'inherit',
-              fontSize: 14,
+              fontSize: FONT_SIZE,
               lineHeight: `${LINE_HEIGHT}px`,
               resize: 'none',
               outline: 'none',
               margin: 0,
-              padding: '6px 0',
+              padding: `${TEXTAREA_VPAD / 2}px 0`,
               minHeight: SINGLE_LINE,
               maxHeight,
               overflowY: 'auto',

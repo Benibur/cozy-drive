@@ -10,7 +10,11 @@ import {
   DISC_INSET_TOP,
   DISC_SIZE
 } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButtonIcon'
-import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
+import {
+  editorBoxToViewport,
+  getSelectionEndCorner,
+  isBoxInEditorView
+} from '@/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry'
 
 // Gap (px) between the end of the text selection and the visible disc, both
 // horizontally and vertically. Applies to the DISC, not to the svg box — the
@@ -23,52 +27,43 @@ const SELECTION_GAP = 4
 const TOOLTIP_GAP = 8 - DISC_INSET_TOP
 
 /**
- * Anchor point of the button = the END of the selection (its bottom-right
- * corner), not the centre of the bounding box.
+ * Screen box of the button, in VIEWPORT px, or null when it is not on screen
+ * (no geometry from the editor, editor not mounted, or the selection scrolled
+ * out of the visible document area — see isBoxInEditorView).
  *
- * The bbox centre reads as "bottom-left" as soon as the selection spans more
- * than a few words: for a multi-line selection the box is as wide as the
- * paragraph, so its centre sits far from where the user stopped dragging. The
- * end corner is where the eye — and the mouse — already are.
+ * Two boxes, because they are not the same thing: `left`/`top` is the SVG BOX
+ * (which carries transparent shadow padding and is what gets positioned), while
+ * `disc` is the visible disc inside it. Anything that has to line up with the
+ * button must align to the DISC, or it lines up with padding nobody can see.
  *
- * corners are [start-TL, start-BL, end-TR, end-BR] as produced by the sdkjs
- * patch, already in editor-window px. Fall back to the bbox corner when the
- * payload predates the corners field.
+ * Exported so those callers cannot re-derive the position with their own copy of
+ * the insets, which is exactly how the tooltip gaps drifted apart before.
  */
-const getAnchor = rect => {
-  const end = rect.corners && rect.corners[3]
-  if (end && typeof end[0] === 'number' && typeof end[1] === 'number') {
-    return { x: end[0], y: end[1] }
-  }
-  return { x: rect.left + rect.width, y: rect.top + rect.height }
-}
+export const getSelectionButtonBox = rect => {
+  if (!rect) return null
 
-/**
- * Is the whole disc inside the visible document area?
- *
- * Scrolling a selection out of view does not stop the geometry from being
- * reported — the box keeps describing where the selection *would* be, which is
- * over OnlyOffice's toolbar or outside the editor entirely. The button is a
- * `position: fixed` portal on document.body, so nothing clips it: it would float
- * over the application chrome.
- *
- * We hide rather than clip. A disc sliced by an invisible edge reads as a
- * rendering glitch, and a half-button is not clickable in any useful way.
- * Requiring the disc to be FULLY inside also means it never overlaps the rulers
- * or the scrollbars, which sit just outside this area.
- *
- * `viewport` comes from the same sdkjs patch, in the same coordinate frame. When
- * it is absent (older SDK) we keep the previous behaviour and show the button.
- */
-const isDiscFullyVisible = (rect, discLeft, discTop, discSize) => {
-  const vp = rect.viewport
-  if (!vp) return true
-  return (
-    discLeft >= vp.left &&
-    discTop >= vp.top &&
-    discLeft + discSize <= vp.left + vp.width &&
-    discTop + discSize <= vp.top + vp.height
-  )
+  const anchor = getSelectionEndCorner(rect)
+
+  // Disc box in the EDITOR frame — this is what gets clipped against the
+  // document viewport, which is expressed in that same frame.
+  const discInEditor = {
+    left: anchor.x + SELECTION_GAP,
+    top: anchor.y + SELECTION_GAP,
+    width: DISC_SIZE,
+    height: DISC_SIZE
+  }
+  if (!isBoxInEditorView(rect, discInEditor)) return null
+
+  const disc = editorBoxToViewport(discInEditor)
+  if (!disc) return null
+
+  return {
+    // The svg box: shifted by the asset's internal insets so the DISC lands where
+    // it should. Without this the shadow padding pushes the disc up and left.
+    left: disc.left - DISC_INSET_LEFT,
+    top: disc.top - DISC_INSET_TOP,
+    disc
+  }
 }
 
 /**
@@ -93,27 +88,10 @@ export const ScribeSelectionButton = ({ rect, onTriggerScribe }) => {
   const { t } = useI18n()
   const [hovered, setHovered] = useState(false)
 
-  if (!rect) return null
+  const box = getSelectionButtonBox(rect)
+  if (!box) return null
 
-  // Editor-window px -> Drive viewport px: add the editor iframe's offset.
-  const iframe = document.getElementsByName(FRAME_EDITOR_NAME)[0]
-  if (!iframe) return null
-  const frame = iframe.getBoundingClientRect()
-
-  const anchor = getAnchor(rect)
-
-  // Disc position in the EDITOR frame — this is what gets clipped against the
-  // document viewport, which is expressed in that same frame.
-  const discLeft = anchor.x + SELECTION_GAP
-  const discTop = anchor.y + SELECTION_GAP
-  if (!isDiscFullyVisible(rect, discLeft, discTop, DISC_SIZE)) return null
-
-  // Editor frame -> Drive viewport, then shift by the asset's internal insets so
-  // the svg box lands where the disc should be. Without this the shadow padding
-  // pushes the disc up and left, which is exactly the offset the design does not
-  // want.
-  const left = frame.left + discLeft - DISC_INSET_LEFT
-  const top = frame.top + discTop - DISC_INSET_TOP
+  const { left, top } = box
 
   return createPortal(
     <div

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo, useEffect, forwardRef, useImperativeHandle } from 'react'
+import React, { useState, useCallback, useRef, useMemo, useEffect, useLayoutEffect, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 
 import { useI18n } from 'twake-i18n'
@@ -35,6 +35,36 @@ const PanelIcon = () => (
   </svg>
 )
 
+// Compact metrics for the whole menu. MUI's default list row (48px tall, a 56px
+// icon gutter, a 16px label) is sized for a full-page list; in a popover
+// floating over the document it reads as if a zoom factor had been applied.
+// Kept here so the main rows and the flyout rows cannot drift apart.
+const ICON_GUTTER = 32
+const LABEL_FONT_SIZE = 13
+// FIXED, not a minimum: the menu is anchored to the selection, and a placement is
+// only valid for the size it was computed with. A menu that grows after the fact
+// (the prompt pill used to snap wider on the first keystroke) drifts off the right
+// edge of the window with nothing to catch it. One width, decided here.
+const MENU_WIDTH = 280
+const SUBMENU_MIN_WIDTH = 164
+// Below this much free space on the right, the flyout opens to the LEFT instead.
+// Submenus are absolutely positioned, so they escape the menu's box entirely —
+// popper never sees them and cannot keep them in the window on our behalf.
+const SUBMENU_EDGE_MARGIN = 8
+
+const MenuRow = props => <ListItem button dense {...props} />
+
+const MenuRowIcon = ({ children }) => (
+  <ListItemIcon style={{ minWidth: ICON_GUTTER }}>{children}</ListItemIcon>
+)
+
+const MenuRowLabel = props => (
+  <ListItemText
+    primaryTypographyProps={{ style: { fontSize: LABEL_FONT_SIZE } }}
+    {...props}
+  />
+)
+
 const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedText: _selectedText }, ref) => {
   const { t, lang } = useI18n()
   const theme = useTheme()
@@ -47,6 +77,18 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
   const promptRef = useRef(null)
   const customLangRef = useRef(null)
   const mouseMoveEnabledRef = useRef(false)
+  const [submenuOnLeft, setSubmenuOnLeft] = useState(false)
+
+  // Decide the flyout side BEFORE paint, or the submenu shows on the right for a
+  // frame and jumps.
+  useLayoutEffect(() => {
+    if (!activeSubmenu || isMobile) return
+    const paper = paperRef.current
+    if (!paper || typeof window === 'undefined') return
+    const right = paper.getBoundingClientRect().right
+    const roomOnRight = window.innerWidth - right
+    setSubmenuOnLeft(roomOnRight < SUBMENU_MIN_WIDTH + SUBMENU_EDGE_MARGIN)
+  }, [activeSubmenu, isMobile])
 
   // Gate mouse hover: suppress highlight until mouse physically moves after menu opens
   useEffect(() => {
@@ -458,27 +500,25 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
       <Paper
         ref={paperRef}
         tabIndex={-1}
-        style={{ minWidth: isMobile ? undefined : 220, width: isMobile ? '100%' : undefined, outline: 'none', borderRadius: isMobile ? 0 : 8, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)' }}
+        style={{ width: isMobile ? '100%' : MENU_WIDTH, boxSizing: 'border-box', outline: 'none', borderRadius: isMobile ? 0 : 8, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)' }}
         elevation={0}
         onKeyDown={handleKeyDown}
       >
         {isMobile && activeParent ? (
           // Mobile: submenu replaces main menu entirely
           <>
-            <ListItem
-              button
+            <MenuRow
               selected={submenuFocusIndex === -1}
               onClick={() => { setActiveSubmenu(null); setSubmenuFocusIndex(0); focusMenu() }}
             >
-              <ListItemIcon>
+              <MenuRowIcon>
                 <Icon icon={LeftIcon} />
-              </ListItemIcon>
-              <ListItemText primary={t(activeParent.labelKey)} />
-            </ListItem>
+              </MenuRowIcon>
+              <MenuRowLabel primary={t(activeParent.labelKey)} />
+            </MenuRow>
             {activeParent.children.map((child, childIndex) =>
               child.type === 'input' ? (
-                <ListItem
-                  button
+                <MenuRow
                   key={child.id}
                   selected={submenuFocusIndex === childIndex}
                   onClick={() => {
@@ -504,12 +544,11 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                     }}
                     onFocus={() => setSubmenuFocusIndex(childIndex)}
                     fullWidth
-                    style={{ fontSize: 14 }}
+                    style={{ fontSize: LABEL_FONT_SIZE }}
                   />
-                </ListItem>
+                </MenuRow>
               ) : (
-                <ListItem
-                  button
+                <MenuRow
                   key={child.id}
                   selected={submenuFocusIndex === childIndex}
                   onClick={() => {
@@ -519,7 +558,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                   }}
                 >
                   {child.icon && (
-                    <ListItemIcon>
+                    <MenuRowIcon>
                       {child.icon === 'emoji' ? (
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
@@ -530,10 +569,10 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                       ) : (
                         <Icon icon={child.icon} />
                       )}
-                    </ListItemIcon>
+                    </MenuRowIcon>
                   )}
-                  <ListItemText primary={child.labelKey ? t(child.labelKey) : child.label} />
-                </ListItem>
+                  <MenuRowLabel primary={child.labelKey ? t(child.labelKey) : child.label} />
+                </MenuRow>
               )
             )}
           </>
@@ -553,8 +592,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
               }}
               style={{ position: 'relative' }}
             >
-              <ListItem
-                button
+              <MenuRow
                 selected={(focusIndex === index && !activeSubmenu) || activeSubmenu === action.id}
                 style={{
                   // First action keeps the top corners; the bottom corners now
@@ -571,22 +609,27 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                       }
                 }
               >
-                <ListItemIcon>
+                <MenuRowIcon>
                   <Icon icon={action.icon} />
-                </ListItemIcon>
-                <ListItemText primary={action.labelKey ? t(action.labelKey) : action.label} />
+                </MenuRowIcon>
+                <MenuRowLabel primary={action.labelKey ? t(action.labelKey) : action.label} />
                 {action.children && <Icon icon={RightIcon} size={16} />}
-              </ListItem>
+              </MenuRow>
 
               {action.children && activeSubmenu === action.id && (
                 <Paper
-                  style={{ position: 'absolute', left: '100%', top: 0, minWidth: 180, zIndex: 1 }}
+                  style={{
+                    position: 'absolute',
+                    ...(submenuOnLeft ? { right: '100%' } : { left: '100%' }),
+                    top: 0,
+                    minWidth: SUBMENU_MIN_WIDTH,
+                    zIndex: 1
+                  }}
                   elevation={4}
                 >
                   {action.children.map((child, childIndex) =>
                     child.type === 'input' ? (
-                      <ListItem
-                        button
+                      <MenuRow
                         key={child.id}
                         selected={submenuFocusIndex === childIndex}
                         onMouseEnter={() => {
@@ -620,12 +663,11 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                           }}
                           onFocus={() => setSubmenuFocusIndex(childIndex)}
                           fullWidth
-                          style={{ fontSize: 14 }}
+                          style={{ fontSize: LABEL_FONT_SIZE }}
                         />
-                      </ListItem>
+                      </MenuRow>
                     ) : (
-                      <ListItem
-                        button
+                      <MenuRow
                         key={child.id}
                         selected={submenuFocusIndex === childIndex}
                         style={{
@@ -640,7 +682,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                         onMouseEnter={() => { if (!mouseMoveEnabledRef.current) return; setSubmenuFocusIndex(childIndex) }}
                       >
                         {child.icon && (
-                          <ListItemIcon>
+                          <MenuRowIcon>
                             {child.icon === 'emoji' ? (
                               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
@@ -651,10 +693,10 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                             ) : (
                               <Icon icon={child.icon} />
                             )}
-                          </ListItemIcon>
+                          </MenuRowIcon>
                         )}
-                        <ListItemText primary={child.labelKey ? t(child.labelKey) : child.label} />
-                      </ListItem>
+                        <MenuRowLabel primary={child.labelKey ? t(child.labelKey) : child.label} />
+                      </MenuRow>
                     )
                   )}
                 </Paper>
@@ -688,19 +730,18 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
             </div>
 
             {hasOpenPanel && (
-              <ListItem
-                button
+              <MenuRow
                 data-scribe-open-panel
                 selected={focusIndex === OPEN_PANEL_INDEX && !activeSubmenu}
                 style={{ borderRadius: '0 0 8px 8px' }}
                 onClick={openPanelWithDraft}
                 onMouseEnter={() => { if (!mouseMoveEnabledRef.current) return; setFocusIndex(OPEN_PANEL_INDEX); focusMenu() }}
               >
-                <ListItemIcon>
+                <MenuRowIcon>
                   <PanelIcon />
-                </ListItemIcon>
-                <ListItemText primary={t('Scribe.button.open_panel')} />
-              </ListItem>
+                </MenuRowIcon>
+                <MenuRowLabel primary={t('Scribe.button.open_panel')} />
+              </MenuRow>
             )}
           </>
         )}
