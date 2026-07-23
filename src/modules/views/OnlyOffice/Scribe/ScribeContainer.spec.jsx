@@ -302,12 +302,13 @@ describe('ScribeContainer', () => {
     })
   })
 
-  // An anchored menu whose anchor disappears has nothing left to point at. It
-  // used to silently re-render as the centred modal: clicking in the document
-  // (which clears the selection, and which ClickAwayListener cannot see because
-  // the click lands in a cross-origin iframe) teleported the menu to the middle
-  // of the screen behind a backdrop instead of dismissing it.
-  it('closes an anchored menu when it loses its anchor', () => {
+  // An anchored menu whose anchor disappears WHILE STILL THE MENU STEP has
+  // nothing left to point at — the selection was cleared or scrolled away. It
+  // used to silently re-render as the centred modal (clicking in the document
+  // clears the selection, and ClickAwayListener can't see that click — it lands
+  // in a cross-origin iframe — so it teleported the menu to the middle of the
+  // screen behind a backdrop). anchoredStep stays true: this IS a dismissal.
+  it('closes an anchored menu when it loses its anchor on the menu step', () => {
     useBreakpoints.mockReturnValue({ isMobile: false })
     const handleClose = jest.fn()
 
@@ -316,6 +317,7 @@ describe('ScribeContainer', () => {
         open={true}
         onClose={handleClose}
         anchorEl={{ getBoundingClientRect: () => ({}) }}
+        anchoredStep={true}
       >
         <div>Content</div>
       </ScribeContainer>
@@ -323,12 +325,52 @@ describe('ScribeContainer', () => {
     expect(handleClose).not.toHaveBeenCalled()
 
     rerender(
-      <ScribeContainer open={true} onClose={handleClose} anchorEl={undefined}>
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={undefined}
+        anchoredStep={true}
+      >
         <div>Content</div>
       </ScribeContainer>
     )
 
     expect(handleClose).toHaveBeenCalledTimes(1)
+  })
+
+  // REGRESSION: picking an action (e.g. translate → English) advances the flow
+  // from the anchored menu to the centred loading modal. The caller stops
+  // supplying an anchor AS PART OF that transition (anchoredStep flips false in
+  // the same render). That is NOT a dismissal — closing here cancelled the
+  // intent and shut the menu the instant any action was clicked.
+  it('does NOT close when the anchor disappears because the step advanced', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    const handleClose = jest.fn()
+
+    const { rerender } = render(
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+        anchoredStep={true}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    // step 'menu' -> 'loading': anchor gone AND anchoredStep false, together.
+    rerender(
+      <ScribeContainer
+        open={true}
+        onClose={handleClose}
+        anchorEl={undefined}
+        anchoredStep={false}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+
+    expect(handleClose).not.toHaveBeenCalled()
   })
 
   // The centred modal remains legitimate for an editor that reports no geometry

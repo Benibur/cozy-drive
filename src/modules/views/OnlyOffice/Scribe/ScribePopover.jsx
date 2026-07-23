@@ -464,6 +464,12 @@ const ScribePopover = ({
       disableEnforceFocus
       anchorEl={menuAnchorBox ? menuAnchor : undefined}
       anchorKey={menuAnchorKey}
+      // Only the menu step is anchored. Telling the container this lets it keep
+      // the "close when the anchor is lost" rule (cleared/scrolled selection)
+      // WITHOUT firing it when the anchor legitimately disappears because an
+      // action was picked and the flow advanced to the centred loading modal —
+      // which otherwise closed the menu and cancelled the intent on every click.
+      anchoredStep={step === 'menu'}
       anchorReference="anchorPosition"
       anchorPosition={{
         top:

@@ -194,6 +194,7 @@ const ScribeContainer = ({
   TransitionProps,
   anchorEl,
   anchorKey,
+  anchoredStep = true,
   ...popoverProps
 }) => {
   const { isMobile } = useBreakpoints()
@@ -218,6 +219,15 @@ const ScribeContainer = ({
   // Trade-off, deliberate: this also closes the menu when the user scrolls the
   // selection out of view while a prompt is half-typed. Keeping it open would
   // mean floating it over the ribbon, which the UAT rules out.
+  //
+  // BUT the anchor also disappears for a legitimate, non-dismissal reason: the
+  // flow leaving the menu step. Selecting an action moves the surface from the
+  // anchored menu to the centred loading/result modal, and the caller stops
+  // supplying an anchor as part of that transition. `anchoredStep` is the
+  // caller telling us the anchored menu is still its current surface; when it
+  // flips false, the missing anchor is the modal taking over, not the user
+  // dismissing — so we must NOT close (that closed the menu and cancelled the
+  // intent the instant an action was clicked).
   const wasAnchored = useRef(false)
   useEffect(() => {
     if (isMobile) return
@@ -227,10 +237,10 @@ const ScribeContainer = ({
     }
     if (anchorEl) {
       wasAnchored.current = true
-    } else if (wasAnchored.current) {
+    } else if (wasAnchored.current && anchoredStep) {
       onClose()
     }
-  }, [isMobile, open, anchorEl, onClose])
+  }, [isMobile, open, anchorEl, anchoredStep, onClose])
 
   const handleTouchStart = useCallback(e => {
     touchStartY.current = e.touches[0].clientY
@@ -339,7 +349,12 @@ ScribeContainer.propTypes = {
   // Popper virtual element. Present = anchored & non-modal, absent = centred modal.
   anchorEl: PropTypes.object,
   // Changes whenever the anchor has MOVED; the anchor object itself is stable.
-  anchorKey: PropTypes.string
+  anchorKey: PropTypes.string,
+  // True while the anchored menu is the caller's current surface. When it flips
+  // false the anchor legitimately disappears (the flow advanced to a centred
+  // loading/result modal) — so a lost anchor then is NOT a dismissal and must
+  // not auto-close. Defaults true (assume anchored) for callers that don't care.
+  anchoredStep: PropTypes.bool
 }
 
 export { ScribeContainer }
