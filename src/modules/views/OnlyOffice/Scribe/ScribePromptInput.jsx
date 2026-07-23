@@ -83,7 +83,7 @@ const injectStyles = () => {
   document.head.appendChild(el)
 }
 
-const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
+const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape, onActiveChange }, ref) => {
   const { t } = useI18n()
   const theme = useTheme()
   const [value, setValue] = useState('')
@@ -101,6 +101,16 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
   const placeholderColor = '#9aa0a6'
 
   useEffect(() => { injectStyles() }, [])
+
+  // Tell the host menu when the pill goes from empty to non-empty, so it can
+  // WIDEN to give the prompt room (and back when cleared). The menu is anchored,
+  // so popper repositions on the resize (its ResizeObserver -> scheduleUpdate,
+  // then preventOverflow shifts the left anchor to keep it on screen and the
+  // arrow on the selection). A snap between two widths, like the original.
+  const hasContent = value.length > 0
+  useEffect(() => {
+    if (onActiveChange) onActiveChange(hasContent)
+  }, [hasContent, onActiveChange])
 
   useImperativeHandle(ref, () => ({
     focus: () => {
@@ -349,12 +359,16 @@ ScribePromptInput.displayName = 'ScribePromptInput'
 ScribePromptInput.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onArrow: PropTypes.func,
-  onEscape: PropTypes.func
+  onEscape: PropTypes.func,
+  // Called with true when the pill becomes non-empty, false when cleared — lets
+  // the menu widen while there is a prompt.
+  onActiveChange: PropTypes.func
 }
 
 ScribePromptInput.defaultProps = {
   onArrow: null,
-  onEscape: null
+  onEscape: null,
+  onActiveChange: null
 }
 
 export { ScribePromptInput }

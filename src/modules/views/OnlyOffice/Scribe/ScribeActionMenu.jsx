@@ -44,11 +44,14 @@ const PanelIcon = () => (
 // Kept here so the main rows and the flyout rows cannot drift apart.
 const ICON_GUTTER = 32
 const LABEL_FONT_SIZE = 14
-// FIXED, not a minimum: the menu is anchored to the selection, and a placement is
-// only valid for the size it was computed with. A menu that grows after the fact
-// (the prompt pill used to snap wider on the first keystroke) drifts off the right
-// edge of the window with nothing to catch it. One width, decided here.
+// Two widths: COMPACT while the prompt is empty, WIDE once the user types into
+// it — the menu snaps wider to give the prompt room (the original behaviour).
+// Safe now that the menu is anchored: on the resize, popper's ResizeObserver
+// fires scheduleUpdate, preventOverflow shifts the left anchor back into the
+// window, and the arrow keeps pointing at the selection. So a menu near the
+// right edge slides left instead of overflowing.
 const MENU_WIDTH = 280
+const MENU_WIDTH_WIDE = 380
 const SUBMENU_MIN_WIDTH = 164
 // The flyout is a DETACHED card, like the reference menu: a small transparent
 // gap separates it from the main panel. The gap is padding on the flyout's
@@ -81,6 +84,8 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
   const { isMobile } = useBreakpoints()
   const [activeSubmenu, setActiveSubmenu] = useState(null)
   const [focusIndex, setFocusIndex] = useState(0)
+  // Widen the menu once the prompt has content (reported by ScribePromptInput).
+  const [promptWide, setPromptWide] = useState(false)
   const [submenuFocusIndex, setSubmenuFocusIndex] = useState(0)
   const [customLang, setCustomLang] = useState('')
   const paperRef = useRef(null)
@@ -534,7 +539,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
       <Paper
         ref={paperRef}
         tabIndex={-1}
-        style={{ width: isMobile ? '100%' : MENU_WIDTH, boxSizing: 'border-box', outline: 'none', borderRadius: isMobile ? 0 : MENU_CORNER, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)' }}
+        style={{ width: isMobile ? '100%' : (promptWide ? MENU_WIDTH_WIDE : MENU_WIDTH), boxSizing: 'border-box', outline: 'none', borderRadius: isMobile ? 0 : MENU_CORNER, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)', transition: 'width 120ms ease' }}
         elevation={0}
         onKeyDown={handleKeyDown}
       >
@@ -771,6 +776,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                 onSubmit={handlePromptSubmit}
                 onArrow={handlePromptArrow}
                 onEscape={onClose}
+                onActiveChange={setPromptWide}
               />
             </div>
 

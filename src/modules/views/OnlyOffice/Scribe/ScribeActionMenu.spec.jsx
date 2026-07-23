@@ -140,6 +140,25 @@ describe('ScribeActionMenu', () => {
     expect(onSelect).toHaveBeenCalledWith('free-prompt', 'do a thing', 'do a thing')
   })
 
+  // The menu snaps to a wider width once the prompt has content, then back to
+  // compact when cleared. (Anchored placement stays valid: popper repositions on
+  // the resize — see ScribeActionMenu's width comment.)
+  it('widens the menu while the prompt has content, and narrows back when cleared', () => {
+    const { container } = renderMenu()
+    const menuPaper = [...container.querySelectorAll('*')].find(
+      el => el.style && (el.style.width === '280px' || el.style.width === '380px')
+    )
+    expect(menuPaper).toBeTruthy()
+    expect(menuPaper.style.width).toBe('280px') // compact when empty
+
+    const input = screen.getByPlaceholderText('Scribe.prompt.placeholder')
+    fireEvent.change(input, { target: { value: 'hi' } })
+    expect(menuPaper.style.width).toBe('380px') // wide with content
+
+    fireEvent.change(input, { target: { value: '' } })
+    expect(menuPaper.style.width).toBe('280px') // back to compact
+  })
+
   // Type-ahead: start typing with the menu (not the pill) focused and the first
   // keystroke must LAND in the prompt — it was preventDefault'd, so without the
   // insertText hand-off it would be lost.
