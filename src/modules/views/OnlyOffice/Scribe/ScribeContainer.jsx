@@ -100,45 +100,13 @@ const ScribeAnchoredContainer = ({
     return () => observer.disconnect()
   }, [open])
 
-  // The menu is mounted but invisible during the deferred keyboard-open window
-  // (paperStyle.opacity === 0); the veil must not flash on before it. Gate both
-  // on the same signal.
-  const revealed = !(paperStyle && paperStyle.opacity === 0)
-
-  // Keep the veil in the DOM across a close so it can fade OUT instead of being
-  // yanked. When `open` flips false we colour it transparent (the transition
-  // does the fade) and only unmount once the fade has run. A re-open cancels the
-  // pending unmount. (This covers the common dismissals — Escape, re-click,
-  // click-away — that keep the container mounted; a close that also drops the
-  // anchor unmounts the whole container and is instantaneous by nature.)
-  const [veilMounted, setVeilMounted] = useState(false)
-  useEffect(() => {
-    if (open) {
-      setVeilMounted(true)
-      return
-    }
-    const id = setTimeout(() => setVeilMounted(false), VEIL_FADE_MS + 40)
-    return () => clearTimeout(id)
-  }, [open])
-
+  // The veil is NOT rendered here: this component unmounts the instant the anchor
+  // is lost (a click in the document clears the selection), which would yank the
+  // veil out of the DOM mid-close — no CSS transition can fade a removed node.
+  // It lives in ScribeContainer, which is mounted for the whole editor session,
+  // so it can fade both ways. See paintVeil there.
   return (
     <>
-      {veilMounted &&
-        typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            aria-hidden
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: open && revealed ? VEIL_COLOR : 'transparent',
-              pointerEvents: 'none',
-              zIndex: VEIL_Z_INDEX,
-              transition: `background-color ${VEIL_FADE_MS}ms ease`
-            }}
-          />,
-          document.body
-        )}
       <Popper
         open={open}
         anchorEl={anchorEl}
@@ -278,6 +246,41 @@ const ScribeContainer = ({
     [onClose]
   )
 
+  // A single, PERSISTENT dimming veil. It lives HERE — not in the anchored
+  // container, which unmounts the instant the anchor is lost (a click in the
+  // document clears the selection) — so on desktop it is always in the DOM and
+  // can transition its COLOUR both ways. Mounting/unmounting a node can't be
+  // CSS-transitioned; that abrupt appear/disappear was the flicker, on open AND
+  // close. It only darkens while the anchored menu is actually revealed;
+  // pointer-events:none keeps scroll and clicks passing straight through.
+  //
+  // `revealed` mirrors the menu's own deferred-open reveal (paperStyle.opacity),
+  // so the veil fades in WITH the menu, not before it.
+  const revealed = !(
+    popoverProps.PaperProps &&
+    popoverProps.PaperProps.style &&
+    popoverProps.PaperProps.style.opacity === 0
+  )
+  const veilActive = open && !!anchorEl && revealed
+  const veil =
+    typeof document === 'undefined'
+      ? null
+      : createPortal(
+          <div
+            aria-hidden
+            data-scribe-veil
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: veilActive ? VEIL_COLOR : 'transparent',
+              pointerEvents: 'none',
+              zIndex: VEIL_Z_INDEX,
+              transition: `background-color ${VEIL_FADE_MS}ms ease`
+            }}
+          />,
+          document.body
+        )
+
   if (isMobile) {
     return (
       <Drawer
@@ -335,30 +338,39 @@ const ScribeContainer = ({
   //
   // This is an OPENING-time choice only. Losing the anchor later closes the menu
   // (see wasAnchored above) rather than dropping it into this branch.
+  // The veil is the FIRST child in both desktop branches so React keeps the same
+  // DOM node when the surface flips anchored<->centred (menu -> loading/result):
+  // only the second child swaps, the veil persists and its colour transitions.
   if (anchorEl) {
     return (
-      <ScribeAnchoredContainer
-        open={open}
-        onClose={onClose}
-        anchorEl={anchorEl}
-        anchorKey={anchorKey}
-        paperStyle={popoverProps.PaperProps && popoverProps.PaperProps.style}
-        onEntered={TransitionProps && TransitionProps.onEntered}
-      >
-        {children}
-      </ScribeAnchoredContainer>
+      <>
+        {veil}
+        <ScribeAnchoredContainer
+          open={open}
+          onClose={onClose}
+          anchorEl={anchorEl}
+          anchorKey={anchorKey}
+          paperStyle={popoverProps.PaperProps && popoverProps.PaperProps.style}
+          onEntered={TransitionProps && TransitionProps.onEntered}
+        >
+          {children}
+        </ScribeAnchoredContainer>
+      </>
     )
   }
 
   return (
-    <Popover
-      open={open}
-      onClose={onClose}
-      TransitionProps={TransitionProps}
-      {...popoverProps}
-    >
-      {children}
-    </Popover>
+    <>
+      {veil}
+      <Popover
+        open={open}
+        onClose={onClose}
+        TransitionProps={TransitionProps}
+        {...popoverProps}
+      >
+        {children}
+      </Popover>
+    </>
   )
 }
 
