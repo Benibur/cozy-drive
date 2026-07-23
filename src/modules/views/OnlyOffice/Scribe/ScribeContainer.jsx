@@ -83,10 +83,16 @@ const ScribeAnchoredContainer = ({
   }, [open, onEntered])
 
   // The menu changes size while it is open — a submenu's parent row, a prompt
-  // growing to several lines — and popper.js v1 watches scroll and window resize
-  // but NOT the size of its own popper. Without this the menu grows downwards
-  // past the bottom of the window with nothing to catch it. Observing is cheaper
-  // and more honest than guessing a maximum height.
+  // growing to several lines, the whole menu SNAPPING WIDER once the prompt has
+  // content — and popper.js v1 watches scroll and window resize but NOT the size
+  // of its own popper. Without re-running the layout, a wider menu near the right
+  // edge overflows the window instead of shifting its left anchor back in.
+  //
+  // Gated on `arrowEl`, not just `open`: on the render where `open` flips true
+  // popper hasn't built its instance yet (popperRef.current.popper is null), so
+  // a `[open]`-only effect bailed and never re-attached — the observer silently
+  // never fired. `arrowEl` is set by a ref callback once the popper subtree is
+  // mounted, which is exactly when `.popper` is available.
   useEffect(() => {
     if (!open || typeof ResizeObserver === 'undefined') return
     const instance = popperRef.current
@@ -98,7 +104,7 @@ const ScribeAnchoredContainer = ({
     })
     observer.observe(popperEl)
     return () => observer.disconnect()
-  }, [open])
+  }, [open, arrowEl])
 
   // The veil is NOT rendered here: this component unmounts the instant the anchor
   // is lost (a click in the document clears the selection), which would yank the
