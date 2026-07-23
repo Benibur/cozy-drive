@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useCallback, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import ClickAwayListener from 'cozy-ui/transpiled/react/ClickAwayListener'
 import Drawer from 'cozy-ui/transpiled/react/Drawer'
@@ -16,9 +17,15 @@ const SWIPE_THRESHOLD = 60
 const ANCHOR_OFFSET = 12
 // Keep the menu off the very edge of the window when it is pushed back into view.
 const VIEWPORT_PADDING = 8
-// Above the floating buttons (100000): the menu they open must cover them, and
-// the whole point of dropping the modal was that nothing dims the document.
+// Above the floating buttons (100000): the menu they open must cover them.
 const ANCHORED_Z_INDEX = 100001
+// A dimming veil sits one layer below the menu to make it stand out. It is
+// pointer-events:none ON PURPOSE: wheel and clicks pass straight through to the
+// document, so scroll-follow still works and a click in the document still
+// clears the selection (which closes the menu — see the lost-anchor effect). It
+// only darkens; it captures nothing.
+const VEIL_Z_INDEX = ANCHORED_Z_INDEX - 1
+const VEIL_COLOR = 'rgba(0, 0, 0, 0.24)'
 
 /**
  * Anchored, NON-modal container: the menu hangs off the selection with an arrow
@@ -89,13 +96,35 @@ const ScribeAnchoredContainer = ({
     return () => observer.disconnect()
   }, [open])
 
+  // The menu is mounted but invisible during the deferred keyboard-open window
+  // (paperStyle.opacity === 0); the veil must not flash on before it. Gate both
+  // on the same signal.
+  const revealed = !(paperStyle && paperStyle.opacity === 0)
+
   return (
-    <Popper
-      open={open}
-      anchorEl={anchorEl}
-      popperRef={popperRef}
-      placement="bottom-start"
-      style={{ zIndex: ANCHORED_Z_INDEX }}
+    <>
+      {open &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            aria-hidden
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: revealed ? VEIL_COLOR : 'transparent',
+              pointerEvents: 'none',
+              zIndex: VEIL_Z_INDEX,
+              transition: 'background-color 120ms ease'
+            }}
+          />,
+          document.body
+        )}
+      <Popper
+        open={open}
+        anchorEl={anchorEl}
+        popperRef={popperRef}
+        placement="bottom-start"
+        style={{ zIndex: ANCHORED_Z_INDEX }}
       modifiers={{
         offset: { enabled: true, offset: `0, ${ANCHOR_OFFSET}` },
         // BASE placements, without the variation: popper compares each entry
@@ -130,7 +159,8 @@ const ScribeAnchoredContainer = ({
           </div>
         </ClickAwayListener>
       )}
-    </Popper>
+      </Popper>
+    </>
   )
 }
 

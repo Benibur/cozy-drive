@@ -43,13 +43,20 @@ const PanelIcon = () => (
 // floating over the document it reads as if a zoom factor had been applied.
 // Kept here so the main rows and the flyout rows cannot drift apart.
 const ICON_GUTTER = 32
-const LABEL_FONT_SIZE = 13
+const LABEL_FONT_SIZE = 14
 // FIXED, not a minimum: the menu is anchored to the selection, and a placement is
 // only valid for the size it was computed with. A menu that grows after the fact
 // (the prompt pill used to snap wider on the first keystroke) drifts off the right
 // edge of the window with nothing to catch it. One width, decided here.
 const MENU_WIDTH = 280
 const SUBMENU_MIN_WIDTH = 164
+// The flyout is a DETACHED card, like the reference menu: a small transparent
+// gap separates it from the main panel. The gap is padding on the flyout's
+// wrapper, which stays a DOM descendant of the hovered row, so crossing it does
+// not fire the row's mouseLeave and the submenu keeps open (no hover bridge to
+// build). Kept modest so the corner arithmetic below still reads.
+const SUBMENU_GAP = 6
+const MENU_CORNER = 10
 // Below this much free space on the right, the flyout opens to the LEFT instead.
 // Submenus are absolutely positioned, so they escape the menu's box entirely —
 // popper never sees them and cannot keep them in the window on our behalf.
@@ -229,6 +236,30 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
 
   const handleKeyDown = useCallback(
     e => {
+      // Type-ahead: a printable key pressed with the menu chrome focused (not an
+      // input) jumps to the prompt and CARRIES that first character, so the user
+      // can just start typing a free prompt without clicking the pill first.
+      // Space is excluded — it still selects the focused row. The event target
+      // guard leaves real inputs (the prompt, the custom-lang field) alone.
+      const targetTag = e.target && e.target.tagName
+      const intoInput = targetTag === 'INPUT' || targetTag === 'TEXTAREA'
+      if (
+        !intoInput &&
+        e.key.length === 1 &&
+        e.key !== ' ' &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey
+      ) {
+        e.preventDefault()
+        if (activeSubmenu) setActiveSubmenu(null)
+        setFocusIndex(PROMPT_INDEX)
+        if (promptRef.current && promptRef.current.insertText) {
+          promptRef.current.insertText(e.key)
+        }
+        return
+      }
+
       // Ignore keydown events from the prompt input (it handles its own arrows)
       if (focusIndex === PROMPT_INDEX) return
 
@@ -503,7 +534,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
       <Paper
         ref={paperRef}
         tabIndex={-1}
-        style={{ width: isMobile ? '100%' : MENU_WIDTH, boxSizing: 'border-box', outline: 'none', borderRadius: isMobile ? 0 : 8, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)' }}
+        style={{ width: isMobile ? '100%' : MENU_WIDTH, boxSizing: 'border-box', outline: 'none', borderRadius: isMobile ? 0 : MENU_CORNER, boxShadow: isMobile ? 'none' : '0 4px 20px rgba(0,0,0,0.15)' }}
         elevation={0}
         onKeyDown={handleKeyDown}
       >
@@ -601,7 +632,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                   // First action keeps the top corners; the bottom corners now
                   // belong to the open-panel entry (or the prompt) at the end of
                   // the list, so actions never take the last-item radius.
-                  ...(index === 0 ? { borderRadius: '8px 8px 0 0' } : {})
+                  ...(index === 0 ? { borderRadius: '10px 10px 0 0' } : {})
                 }}
                 onClick={
                   !action.children
@@ -620,15 +651,25 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
               </MenuRow>
 
               {action.children && activeSubmenu === action.id && (
-                <Paper
+                <div
                   style={{
                     position: 'absolute',
                     ...(submenuOnLeft ? { right: '100%' } : { left: '100%' }),
                     top: 0,
-                    minWidth: SUBMENU_MIN_WIDTH,
+                    ...(submenuOnLeft
+                      ? { paddingRight: SUBMENU_GAP }
+                      : { paddingLeft: SUBMENU_GAP }),
                     zIndex: 1
                   }}
-                  elevation={4}
+                >
+                <Paper
+                  style={{
+                    minWidth: SUBMENU_MIN_WIDTH,
+                    borderRadius: MENU_CORNER,
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+                  }}
+                  elevation={0}
                 >
                   {action.children.map((child, childIndex) =>
                     child.type === 'input' ? (
@@ -703,6 +744,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                     )
                   )}
                 </Paper>
+                </div>
               )}
             </div>
           ))
@@ -720,7 +762,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
                 backgroundColor: focusIndex === PROMPT_INDEX ? focusedBg : undefined,
                 // When the prompt is the last item (no open-panel entry), it
                 // takes the bottom corners.
-                ...(hasOpenPanel ? {} : { borderRadius: '0 0 8px 8px' })
+                ...(hasOpenPanel ? {} : { borderRadius: '0 0 10px 10px' })
               }}
               onMouseEnter={() => { if (!mouseMoveEnabledRef.current) return; updateFocus(PROMPT_INDEX) }}
             >
@@ -736,7 +778,7 @@ const ScribeActionMenu = forwardRef(({ onSelect, onClose, onOpenPanel, selectedT
               <MenuRow
                 data-scribe-open-panel
                 selected={focusIndex === OPEN_PANEL_INDEX && !activeSubmenu}
-                style={{ borderRadius: '0 0 8px 8px' }}
+                style={{ borderRadius: '0 0 10px 10px' }}
                 onClick={openPanelWithDraft}
                 onMouseEnter={() => { if (!mouseMoveEnabledRef.current) return; setFocusIndex(OPEN_PANEL_INDEX); focusMenu() }}
               >

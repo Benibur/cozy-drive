@@ -140,6 +140,51 @@ describe('ScribeActionMenu', () => {
     expect(onSelect).toHaveBeenCalledWith('free-prompt', 'do a thing', 'do a thing')
   })
 
+  // Type-ahead: start typing with the menu (not the pill) focused and the first
+  // keystroke must LAND in the prompt — it was preventDefault'd, so without the
+  // insertText hand-off it would be lost.
+  it('type-ahead: a printable key on the menu chrome lands in the prompt and focuses it', () => {
+    renderMenu()
+    const prompt = screen.getByPlaceholderText('Scribe.prompt.placeholder')
+    expect(prompt.value).toBe('')
+    // Fire on an action row (a descendant of the menu Paper, NOT an input).
+    fireEvent.keyDown(screen.getByText('Scribe.menu.correct_grammar'), {
+      key: 'h'
+    })
+    expect(prompt.value).toBe('h')
+    expect(document.activeElement).toBe(prompt)
+  })
+
+  // Space is deliberately excluded from type-ahead: it still activates the
+  // focused row, so a leading space cannot start a prompt.
+  it('type-ahead: space is not typed — it still selects the focused row', () => {
+    const { onSelect } = renderMenu()
+    fireEvent.keyDown(screen.getByText('Scribe.menu.correct_grammar'), {
+      key: ' '
+    })
+    expect(
+      screen.getByPlaceholderText('Scribe.prompt.placeholder').value
+    ).toBe('')
+    // The action id (not its label) is the first onSelect argument.
+    expect(onSelect).toHaveBeenCalledWith(
+      'correct-grammar',
+      'Scribe.menu.correct_grammar',
+      'Scribe.menu.correct_grammar'
+    )
+  })
+
+  // A keystroke already inside an input (the prompt, or the custom-lang field)
+  // must NOT be hijacked — the guard checks the event target tag.
+  it('type-ahead: a key typed inside the prompt is left alone', () => {
+    renderMenu()
+    const prompt = screen.getByPlaceholderText('Scribe.prompt.placeholder')
+    // Target is the textarea, so type-ahead's insertText hand-off is skipped;
+    // a raw keyDown does not itself mutate the value, so it stays empty (i.e.
+    // the character was not ALSO appended).
+    fireEvent.keyDown(prompt, { key: 'x' })
+    expect(prompt.value).toBe('')
+  })
+
   describe('keyboard roving (desktop)', () => {
     const getMenuPaper = ref => {
       // The menu Paper is the element exposing focus() via the imperative ref.
