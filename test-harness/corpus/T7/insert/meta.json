@@ -1,0 +1,19 @@
+{
+  "caseId": "T7",
+  "mode": "insert",
+  "spec": "T1.C(0,0)@start..P2@end",
+  "fixture": "[TABLE:0]\n[CELL:0,0]AA[/CELL][CELL:0,1]BB[/CELL][CELL:1,0]CC[/CELL][CELL:1,1]DD[/CELL]\n[/TABLE]\n\nZZZtail",
+  "source": "table-plain.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "comment": "Insert d'une sélection {tableau ENTIER + ¶ suivant} (T1 + Outro). Règle spec §Convention (ligne 59) : Insérer = au point d'insertion = FIN DE LA SÉLECTION → attendu {T1, Outro, F}. BUG REPRODUIT sur build .9 : docElementOrder = [Intro, TABLE(Alpha), TABLE(AA), ZZZtail, Outro] → F inséré ENTRE le tableau et Outro ({T,F,P}). Cause : code.js repositionnait le curseur après le DERNIER tableau de la réponse, sans tenir compte que la sélection dépasse le tableau. FIX (build .10, commit à suivre) : curseur = fin de sélection (bump après un tableau seulement si la sélection s'y termine — préserve T3/T2a). APRÈS FIX : docElementOrder = [Intro, TABLE(Alpha), Outro, TABLE(AA), ZZZtail] = {T1, Outro, F} ✅ ; after.docx confirme l'ordre (Outro avant AA/ZZZtail). NB : T5 (T1.C(1,0)..P2@mid) avait le même défaut latent (golden notait 'insérées après le tableau' alors que l'attendu = après la fin de sélection) → golden T5/insert à re-capturer.",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
+}

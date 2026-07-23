@@ -1,0 +1,37 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "XXX"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Jumps over the dog"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Lazy river flows"
+        }
+      ]
+    }
+  ],
+  "selText": "XXX",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "«XXX»"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro p"
+        },
+        {
+          "t": "Head edit"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "AA"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "BB"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "Head edit\nAABB\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "Intro p«Head edit»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«AA»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BB»"
+    }
+  ]
+}

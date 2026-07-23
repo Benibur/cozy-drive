@@ -1,0 +1,100 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-07-22T11:40:00.000Z",
+  "phase": "30",
+  "phase_name": "Menu Scribe inline ancré à la sélection",
+  "phase_dir": ".planning/phases/30-menu-inline-ancre-selection",
+  "plan": 1,
+  "task": 3,
+  "total_tasks": 3,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Retouches UI + géométrie du bouton panneau (DOCUMENT_GEOMETRY)",
+      "status": "done",
+      "commit": "d308f1520 + db3c398a2",
+      "note": "UAT Ben OK. Tooltips temporisés 500ms ; menu compacté (dense/13px) ; bouton panneau placé dans la zone document via l'intent DOCUMENT_GEOMETRY poussé par le plugin (build 2026-07-22.1)."
+    },
+    {
+      "id": 2,
+      "name": "4 corrections UX (clic≠sélection, menu ancré, toggle, bouton panneau permanent)",
+      "status": "done",
+      "commit": "d308f1520 + db3c398a2",
+      "note": "UAT Ben OK (« c'est nickel »). Builds plugin 2026-07-22.2 et .3."
+    },
+    {
+      "id": 3,
+      "name": "Phase 30 — menu ancré à la sélection (Popper + flèche, sans overlay)",
+      "status": "in_progress",
+      "progress": "Code + tests + docs GSD terminés, itération 2 des retours Ben appliquée, COMMITÉ (db3c398a2 code, f22cf7df4 docs). UAT Ben PAS ENCORE FAITE."
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": 4,
+      "name": "UAT Ben de la Phase 30 (checklist 30-UAT.md, 14 points)",
+      "status": "not_started"
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Le rendu ancré (flip, recadrage latéral, flèche, bascule des sous-menus) n'a JAMAIS été vu en live — aucun navigateur piloté cette session",
+      "type": "human_action",
+      "workaround": "Checklist 30-UAT.md ; Ben mène les UAT (cf. mémoire feedback_ben_drives_uat)"
+    }
+  ],
+  "human_actions_pending": [
+    {
+      "action": "Dérouler .planning/phases/30-menu-inline-ancre-selection/30-UAT.md",
+      "context": "14 points, dont 4 ajoutés à l'itération 2 (bouton masqué, largeur constante en tapant, sous-menu près du bord droit, prompt multi-ligne)",
+      "blocking": true
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Aucune modification de l'addon pour la Phase 30",
+      "rationale": "L'API de géométrie de la Phase 29 satisfait déjà le besoin — audit des sources dans 30-RESEARCH.md §1",
+      "phase": "30"
+    },
+    {
+      "decision": "Popper (MUI v4 / popper.js v1) plutôt que @floating-ui/react",
+      "rationale": "Déjà dans l'arbre via cozy-ui et déjà utilisé dans le repo ; flip + preventOverflow + arrow couvrent le besoin. Éviter 2 moteurs de positionnement",
+      "phase": "30"
+    },
+    {
+      "decision": "L'ancre est la partie VISIBLE de la sélection, pas le bouton",
+      "rationale": "Ancrer au bouton cumulait ses offsets (gap 4px + disque + gap menu) et se lisait « poussé en bas à droite »",
+      "phase": "30"
+    },
+    {
+      "decision": "Largeur du menu FIXE (280) + pilule de prompt qui remplit son hôte",
+      "rationale": "Une décision de placement n'est valide que pour la taille avec laquelle elle a été calculée ; la pilule s'élargissait au 1er caractère APRÈS le calcul",
+      "phase": "30"
+    },
+    {
+      "decision": "Provenance de l'intent (INTENT_SOURCES.SELECTION_BUTTON) portée par les données de l'intent",
+      "rationale": "L'hôte doit traiter AI_TEXT_ASSISTANT différemment selon la source : clavier = ferme le panneau, bouton = ouvre le menu par-dessus le panneau",
+      "phase": "30"
+    }
+  ],
+  "uncommitted_files": [],
+  "next_action": "Ben déroule 30-UAT.md dans oo-dev (hard-reload d'abord). Selon le verdict : corriger (les 3 commits sont révocables indépendamment), puis pousser.",
+  "context_notes": "Arbre PROPRE. 3 commits atomiques par COUCHE (contrat+plugin / UI / docs) et non par ordre chronologique : les lots se recouvraient fichier par fichier, un découpage chronologique aurait produit des commits intermédiaires cassés. Tout est buildé et servi : build/ à jour, oo-dev sert le plugin build 2026-07-22.3 depuis CE worktree. 359 tests / 21 suites passent. Le plugin n'a PAS changé pendant la Phase 30 (seul Drive a bougé) => hard-reload suffit, pas de restart OO.",
+  "commits": [
+    {
+      "hash": "d308f1520",
+      "subject": "feat(scribe): expose la geometrie de l'editeur au host, et en isole le contrat",
+      "note": "plugin (3 builds) + protocol + bridge + le module contrat. Aucun consommateur : commit autonome."
+    },
+    {
+      "hash": "db3c398a2",
+      "subject": "feat(scribe): pose les surfaces inline sur ce qu'elles designent",
+      "note": "toute l'UI Drive (menu ancré, boutons, tooltips, compaction, flèche)."
+    },
+    {
+      "hash": "f22cf7df4",
+      "subject": "docs(gsd): Phase 30 + Phase 999.9 au backlog"
+    }
+  ]
+}

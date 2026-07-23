@@ -1,0 +1,23 @@
+{
+  "caseId": "A8",
+  "mode": "insert",
+  "spec": "P1@start..P120@end",
+  "fixture": "A8 tail line",
+  "source": "a8-large.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "comment": "Sélection TRÈS GRANDE (A8) — garde de perf VÉRIFIÉE (était 'assumé'). Fixture = 120 ¶ 'Para 001'..'Para 120' (P2 en gras = témoin de richesse). Sélection P1@start..P120@end (120 ¶). EXTRACTION : la garde code.js:2993 (paragraphs.length > 100) renvoie {text: range.GetText(), md: ''} → extMd VIDE, extText=1198 (texte brut), guardFired=true → 'perte du riche' confirmée (le gras de P2 disparaît, md enrichi supprimé). Seuil EXACT = >100 ¶ (100 ¶ → md enrichi 1002 ; 101 ¶ → md vide + text 1008). C'est le chemin d'extraction PROD (pas test-only). L'inject lui-même reste un multi-¶ normal : 120 originaux intacts, 'A8 tail line' fusionné inline en fin de P120 (smart-spacing), blockCount=120. Sélection via branche cross (build .8).",
+  "captureVersion": "v5",
+  "afterPngRecapturedAt": "2026-07-20",
+  "afterPngNote": "backlog 999.3 : after.png RE-CAPTURE scrolle en bas (canvas OO -> m_oScrollVerApi.scrollToY(max)). L'ancien after.png cadrait le HAUT du doc (120 ¶) -> la post-selection «A8 tail line» (¶120, tout en bas) etait HORS CADRAGE = le KO screenshot remonte par Ben (l'oracle selMarkup etait deja correct). Le nouveau after.png montre la post-selection surlignee sous 'Para 120'. capture.json/model.json INCHANGES (comportement identique, build 2026-07-19.4 = 2026-07-17.9 sur ce chemin).",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "behaviour": "règle A1/A5 « bord de ¶ -> nouveau ¶ » (build .2) que le golden précède",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
+    "screenshotFix": "après le re-cadrage 2026-07-20, l'artefact KO de Ben (« il manque la sélection dans le after ») est resolu — la post-selection est desormais visible"
+  }
+}

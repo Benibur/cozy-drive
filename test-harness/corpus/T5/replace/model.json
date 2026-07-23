@@ -1,0 +1,111 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Alpha"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "GG"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "DD"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Tail edit"
+        },
+        {
+          "t": "aragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "GGDD\nTail edit",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2
+      },
+      "text": "«Tail edit»aragraph"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GG»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
+}

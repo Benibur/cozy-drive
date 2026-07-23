@@ -1,0 +1,203 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Alpha"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "AA"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "BB"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "CC"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "DD"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "ZZZtail"
+        }
+      ]
+    }
+  ],
+  "selText": "AABB\nCCDD\nZZZtail\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 4
+      },
+      "text": "«ZZZtail»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«AA»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BB»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«CC»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
+}

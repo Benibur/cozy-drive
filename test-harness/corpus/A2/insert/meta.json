@@ -1,0 +1,21 @@
+{
+  "caseId": "A2",
+  "mode": "insert",
+  "spec": "P1@mid..P1@mid",
+  "fixture": "XXX",
+  "source": "a-family.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "comment": "Post-selection = injecte + espace(s) de collage adjacent(s) (A2: ' XXX' espace avant ; A4: 'XXX ' espace apres). DECISION Ben (option 1, 2026-07-17) : la selection INCLUT l'espace de collage auto-insere, par COHERENCE avec A6 beni. Ancien golden (build .1 : A2 9->15 / A4 4->10) etait PERIME (la post-sel inline a change au build .2) ; ce n'etait PAS une regression du chantier intra-cellule (verifie sur code committe .9). Re-capture build .12 : A2 9->17, A4/insert 4->12, A4/replace 0->8. Preuves fraiches (before=selection, after=post-sel, after.docx forcesave).",
+  "captureVersion": "v5",
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-17",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
+}

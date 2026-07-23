@@ -1,0 +1,74 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "The "
+        },
+        {
+          "t": "quick",
+          "b": 1
+        },
+        {
+          "t": " brown "
+        },
+        {
+          "t": "fox",
+          "i": 1
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Jumps over the dog"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Lazy riv"
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "First"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Second"
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "er flows"
+        }
+      ]
+    }
+  ],
+  "selText": " First\nSecond ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2
+      },
+      "text": "Lazy riv« First»"
+    },
+    {
+      "at": {
+        "block": 3
+      },
+      "text": "«Second »er flows"
+    }
+  ]
+}

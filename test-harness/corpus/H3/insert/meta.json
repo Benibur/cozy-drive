@@ -1,0 +1,24 @@
+{
+  "caseId": "H3",
+  "mode": "insert",
+  "spec": "T1.C(0,0)@start..T1.C(0,0)@end",
+  "fixture": "XXX",
+  "source": "table-header.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "claudeAnalysis": "pass",
+  "comment": "intra-cellule (0,0) : 'AlphaXXX' — chemin paragraphe, aucune autre cellule touchee. Comme T1.",
+  "afterDocxPending": true,
+  "screenshotsPending": true,
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "behaviour": "règle A1/A5 « bord de ¶ -> nouveau ¶ » (build .2) que le golden précède, intra-cellule",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection",
+    "blessedOnSelection": "Ben 2026-07-20 (console gen_blessing, baseline blessed-2026-07-20) — axe H 10/10 OK, 0 KO ; verdict pass désormais sur selMarkup ET blocks"
+  }
+}

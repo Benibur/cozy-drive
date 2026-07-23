@@ -1,0 +1,129 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "The quick brown fox"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Replaced one"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Replaced two"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Replaced three"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "Replaced one\nReplaced two\nReplaced three\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«Replaced one»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 1
+      },
+      "text": "«Replaced two»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 2
+      },
+      "text": "«Replaced three»"
+    }
+  ]
+}

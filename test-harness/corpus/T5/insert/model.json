@@ -1,0 +1,161 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Alpha"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro p"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "GG"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "DD"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Tail edit"
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "aragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "GGDD\nTail edit ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 4
+      },
+      "text": "«Tail edit »aragraph"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GG»"
+    },
+    {
+      "at": {
+        "block": 3,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DD»"
+    }
+  ]
+}

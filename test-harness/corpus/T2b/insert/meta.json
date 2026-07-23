@@ -1,0 +1,23 @@
+{
+  "caseId": "T2b",
+  "mode": "insert",
+  "spec": "T1.C(3,0)@start..T1.C(3,1)@end",
+  "fixture": "[CELL:3,0]Hi[/CELL][CELL:3,1]Hj[/CELL]",
+  "source": "table-merged.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "inline word-replace driver (Chrome DevTools MCP) — build 2026-07-20.1",
+  "capturedAt": "2026-07-20",
+  "verdict": "pass",
+  "comment": "Insert cellules partielles, fusion H (ligne C(3,0)..C(3,1)) : §4bis#2 -> clone COMPLET (4 lignes, fusions preservees) insere APRES, ligne 3 du clone = [Hi,Hj] ; original intact. blockCount=4, 2 tableaux. POST-SEL CORRIGEE (build 2026-07-20.1, bug (5a) du blessing Ben) : la post-selection couvre desormais les CELLULES EDITEES du clone («Hi»«Hj») et non plus le HAUT du tableau. Fix band-aid (a) : reselect element-based du rectangle min/max r,c via ExpandTo. Le clone reste COMPLET (reduction sous fusion = chantier T-reduc separe).",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "a benir — post-selection CORRIGEE (bug (5a)) : selMarkup couvre les cellules editees du clone",
+    "behaviour": "band-aid (a) : clone COMPLET (§4bis, non reduit) + post-sel = rectangle des cellules editees ; la NON-REDUCTION du clone fusionne (bug (5b) / T-reduc) reste OUVERTE, chantier separe",
+    "verdictScope": "blocks inchanges (etaient pass) ; c'est la SELECTION qui est neuve/corrigee",
+    "blessedScope": "post-selection corrigee (bug (5a)) benie par Ben le 2026-07-20 : selMarkup couvre les cellules editees du clone. Clone COMPLET assume (T-reduc / (5b) = chantier separe ouvert)."
+  },
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-20"
+}

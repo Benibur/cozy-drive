@@ -1,0 +1,120 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": []
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "BetaX"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "GammaX"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "DeltaX"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "BetaX\nGammaXDeltaX\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": ""
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BetaX»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GammaX»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DeltaX»"
+    }
+  ]
+}

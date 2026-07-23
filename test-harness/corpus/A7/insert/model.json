@@ -1,0 +1,49 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": []
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Middle paragraph"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Added line"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "Added line",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 3
+      },
+      "text": "«Added line»"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "New middle"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": []
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "New middle",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«New middle»"
+    }
+  ]
+}

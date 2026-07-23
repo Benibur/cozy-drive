@@ -1,0 +1,46 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "The "
+        },
+        {
+          "t": "XXX"
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "quick brown fox"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Jumps over the dog"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Lazy river flows"
+        }
+      ]
+    }
+  ],
+  "selText": "XXX ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "The «XXX »quick brown fox"
+    }
+  ]
+}

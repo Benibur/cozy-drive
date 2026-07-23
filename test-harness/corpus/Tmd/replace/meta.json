@@ -1,0 +1,23 @@
+{
+  "caseId": "Tmd",
+  "spec": "P1@start..P1@end",
+  "fixture": "| A | B | C |\n| --- | --- | --- |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n| 7 | 8 | 9 |",
+  "source": "a-family.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "test hook injectAtSelection (Chrome DevTools MCP) — build 2026-07-21.4",
+  "capturedAt": "2026-07-21",
+  "verdict": "pass",
+  "captureVersion": "v5",
+  "mode": "replace",
+  "comment": "NOUVEAU cas (2026-07-21) — miroir replace du premier golden markdown-pipe. Attendu : le ¶ selectionne ('The quick brown fox') est REMPLACE par le tableau 4L x 3C ; 'Jumps over the dog' et 'Lazy river flows' intacts. Meme motivation que Tmd/insert : couvrir Api.CreateTable, non couvert par les 25 goldens [CELL:] existants.",
+  "blessing": {
+    "selection": "a benir — post-selection sur le tableau qui remplace le ¶",
+    "behaviour": "chemin markdown-pipe (Api.CreateTable) — NOUVEAU dans le corpus",
+    "note": "cas NEUF : benir blocks ET selMarkup.",
+    "blessedOnSelection": "Ben 2026-07-21 (console gen_blessing, baseline blessed-2026-07-20-H) — premier golden du chemin markdown-pipe Api.CreateTable, tableau NON CARRE 3 colonnes x 4 lignes ; blocks + selMarkup benis"
+  },
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-21"
+}

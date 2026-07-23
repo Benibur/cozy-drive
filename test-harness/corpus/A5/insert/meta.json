@@ -1,0 +1,19 @@
+{
+  "caseId": "A5",
+  "mode": "insert",
+  "spec": "P1@start..P3@end",
+  "fixture": "XXX",
+  "source": "a-family.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "comment": "REGLE D'INSERTION UAT (2026-07-16, build 2026-07-16.2) : collage en FIN de ¶ (bord) -> le contenu injecte devient un NOUVEAU ¶ (au lieu de fusionner inline en fin de ligne). Conforme a l'attendu deja documente. Fix: detection curseur en fin de ¶ non-vide -> chemin bloc + spacer, suppression de l'espace de tete. Style du nouveau ¶ = md injecte (Normal pour plain). Non-regression A2/A4/A0 (inline) + styled (nouveau ¶ Normal apres titre) verifiee.",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
+}

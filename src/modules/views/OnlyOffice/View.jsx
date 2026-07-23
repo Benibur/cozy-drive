@@ -1,12 +1,41 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
 
+import flag from 'cozy-flags'
 import Spinner from 'cozy-ui/transpiled/react/Spinner'
 
+import { INTENT_SOURCES } from '@/lib/cozy-bridge/protocol'
 import Error from '@/modules/views/OnlyOffice/Error'
 import OnlyOfficeAIAssistantPanel from '@/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel'
 import { useOnlyOfficeContext } from '@/modules/views/OnlyOffice/OnlyOfficeProvider'
+import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
+import { ScribePanel } from '@/modules/views/OnlyOffice/Scribe/ScribePanel'
+import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
+import { ScribeFloatingZone } from '@/modules/views/OnlyOffice/Scribe/ScribeFloatingButton'
+import { ScribeSelectionButton } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButton'
+import { ScribePopover } from '@/modules/views/OnlyOffice/Scribe/ScribePopover'
 import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
+import { useCozyBridge } from '@/modules/views/OnlyOffice/useCozyBridge'
+
+// Strip <p>...</p> wrapper when HTML is a single paragraph,
+// so PasteHtml inserts inline without creating extra line breaks.
+// Multi-paragraph, lists, headings etc. are left untouched.
+const unwrapSingleParagraph = html => {
+  const match = html.match(/^<p>(.*)<\/p>$/s)
+  if (match && !match[1].includes('<p>')) return match[1]
+  return html
+}
+
+// Delay before the inline Scribe popover is revealed on a keyboard open. The
+// popover is mounted hidden (prepared) immediately and revealed after this
+// delay. Tune here. Lives host-side because the plugin's background iframe
+// throttles setTimeout to hundreds of ms (see handleCtrlShiftI in code.js).
+const SCRIBE_REVEAL_DELAY_MS = 150
+
+// Max time to wait for the plugin's full-document extraction reply before giving
+// up. On timeout extractFullDocument resolves { md:'', error:'timeout' } so a
+// dead/missing plugin yields the 'unavailable' notice instead of hanging the send.
+const EXTRACT_DOCUMENT_TIMEOUT_MS = 8000
 
 const forceIframeHeight = value => {
   const iframe = document.getElementsByName(FRAME_EDITOR_NAME)[0]
@@ -17,6 +46,422 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
   const [isError, setIsError] = useState(false)
 
   const { isEditorReady } = useOnlyOfficeContext()
+  const isScribeEnabled = flag('drive.scribe.enabled')
+  const scribe = useScribe()
+  const isPanelOpen = scribe ? scribe.isPanelOpen : false
+  const togglePanel = scribe ? scribe.togglePanel : undefined
+  const openPanel = scribe ? scribe.openPanel : undefined
+  const setCurrentSelection = scribe ? scribe.setCurrentSelection : undefined
+  const setPanelActions = scribe ? scribe.setPanelActions : undefined
+  const setExtractFullDocument = scribe ? scribe.setExtractFullDocument : undefined
+
+  // cozy-bridge: listen for Scribe intents from OO plugin
+  // In dev, allow all origins. In production, derive from serverUrl/instance.
+  const allowedOrigins = useMemo(() => ['*'], []) // TODO: restrict in production
+  // Update selection in ScribeContext whenever the plugin reports a change
+  const handleSelectionChanged = useCallback(data => {
+    if (setCurrentSelection) {
+      setCurrentSelection(data.text || null, data.html || null, data.enrichedMd || null, data.tableSnapshots || null)
+    }
+    partialTableInfoRef.current = data.partialTableInfo || null
+    tableSnapshotsRef.current = data.tableSnapshots || null
+  }, [setCurrentSelection])
+
+  // Geometry of the current selection (editor-window px) for the under-selection
+  // floating button. Fed by the plugin's lightweight SELECTION_GEOMETRY intent,
+  // independent of the panel-gated SELECTION_CHANGED flow.
+  const [selectionGeometry, setSelectionGeometry] = useState({ rect: null, hasText: false })
+  const handleSelectionGeometry = useCallback(data => {
+    setSelectionGeometry({
+      rect: (data && data.hasText && data.rect) || null,
+      hasText: !!(data && data.hasText)
+    })
+  }, [])
+
+  // Where the document area (and the page inside it) sit, in editor-window px.
+  // The side-panel button is placed from this instead of from a guessed offset:
+  // OO's ribbon and right-hand icon strip are unmeasurable from Drive, and their
+  // sizes change with the user's compact-ribbon setting.
+  const [documentGeometry, setDocumentGeometry] = useState(null)
+  const handleDocumentGeometry = useCallback(data => {
+    setDocumentGeometry(data && data.viewer ? data : null)
+  }, [])
+
+  const { pendingIntent, respond, castPanelAction } = useCozyBridge(
+    allowedOrigins,
+    {
+      onTogglePanel: togglePanel,
+      isPanelOpen,
+      onSelectionChanged: handleSelectionChanged,
+      onSelectionGeometry: handleSelectionGeometry,
+      onDocumentGeometry: handleDocumentGeometry
+    }
+  )
+
+  // Scribe shows ONE surface at a time — the popover yields to the panel — with a
+  // single exception: a popover opened FROM THE UNDER-SELECTION BUTTON. That button
+  // is how the menu actions are reached, and it stays available while the panel is
+  // open, so its menu has to be able to show over the panel.
+  const fromSelectionButton =
+    pendingIntent?.data?.source === INTENT_SOURCES.SELECTION_BUTTON
+  const popoverOpen = !!pendingIntent && (!isPanelOpen || fromSelectionButton)
+
+  // The panel button is shown whether the panel is open or not: it is the way OUT
+  // of the panel as much as the way in (togglePanel closes it when open). Hiding
+  // it while the panel was open left the panel with no affordance of its own.
+  const showFloatingZone = isScribeEnabled
+  // Under-selection button: only while Scribe is on and the plugin reports a
+  // non-empty selection with a usable rect.
+  // Shown whether the panel is open or not: reaching the menu actions on a fresh
+  // selection should not cost a panel close first. Hidden while its own menu is
+  // open, though — the menu is anchored to the selection and would cover it, and
+  // a trigger for something already on screen is just clutter.
+  const showSelectionButton =
+    isScribeEnabled &&
+    !popoverOpen &&
+    selectionGeometry.hasText &&
+    !!selectionGeometry.rect
+
+  const partialTableInfoRef = useRef(null)
+  const tableSnapshotsRef = useRef(null)
+  // Snapshots ToJSON des tableaux renvoyes par la DERNIERE extraction de contexte
+  // (document entier). Le flux chat pur n'a pas de selection, donc pas de
+  // tableSnapshotsRef : sans ceux-ci, un fragment portant des marqueurs [TABLE:N]
+  // ne pouvait etre reinjecte qu'en tableau "a plat" (fusions perdues).
+  const docTableSnapshotsRef = useRef(null)
+
+  // Feed selection data from pendingIntent into ScribeContext
+  useEffect(() => {
+    if (!setCurrentSelection || !pendingIntent?.data) return
+    setCurrentSelection(
+      pendingIntent.data.text || null,
+      pendingIntent.data.html || null,
+      pendingIntent.data.enrichedMd || null,
+      pendingIntent.data.tableSnapshots || null
+    )
+    partialTableInfoRef.current = pendingIntent.data.partialTableInfo || null
+    tableSnapshotsRef.current = pendingIntent.data.tableSnapshots || null
+  }, [pendingIntent, setCurrentSelection])
+
+  // Broadcast a message to all descendant iframes (reaches plugin inside OO editor iframe)
+  const broadcastToFrames = useCallback(msg => {
+    const walk = win => {
+      try {
+        for (let i = 0; i < win.frames.length; i++) {
+          try {
+            win.frames[i].postMessage(msg, '*')
+            walk(win.frames[i])
+          } catch (e) {
+            // cross-origin frame, skip
+          }
+        }
+      } catch (e) {
+        // access denied
+      }
+    }
+    walk(window)
+  }, [])
+
+  // Tell plugin to start/stop sending SELECTION_CHANGED based on panel state
+  useEffect(() => {
+    broadcastToFrames({
+      type: 'cozy-bridge:selection-subscribe',
+      subscribe: isPanelOpen
+    })
+  }, [isPanelOpen, broadcastToFrames])
+
+  // Re-send the subscribe state when the plugin announces it's ready. If the
+  // panel was already open at page load, the broadcast above fired before the
+  // plugin iframe existed (message lost), so selections never synced. The
+  // plugin posts 'cozy-bridge:plugin-ready' on load; we answer with the
+  // current state. A ref avoids re-registering the listener on every toggle.
+  const isPanelOpenRef = useRef(isPanelOpen)
+  useEffect(() => {
+    isPanelOpenRef.current = isPanelOpen
+  }, [isPanelOpen])
+  useEffect(() => {
+    const handler = e => {
+      if (e.data && e.data.type === 'cozy-bridge:plugin-ready') {
+        broadcastToFrames({
+          type: 'cozy-bridge:selection-subscribe',
+          subscribe: isPanelOpenRef.current
+        })
+      }
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [broadcastToFrames])
+
+  // Request a full-document extraction from the OO plugin and resolve its markdown.
+  // Mirrors the dev-test reqId round-trip (code.js): broadcast a dedicated
+  // 'cozy-bridge:extract-document' message with a fresh reqId, register a one-shot
+  // listener that resolves on the correlated 'cozy-bridge:document-extracted' reply
+  // (matching BOTH type AND reqId), and resolve { md, error }. The listener is
+  // removed on success AND on timeout (no leak). An ~8s timeout resolves
+  // { md:'', error:'timeout' } so a dead/missing plugin yields the DEC-UI-03
+  // 'unavailable' notice instead of hanging the send. Uses a DEDICATED message type
+  // (NOT cozy-bridge:intent) so the payload bypasses the 1 MB validateIntent cap.
+  const extractFullDocument = useCallback(
+    () =>
+      new Promise(resolve => {
+        const reqId =
+          (window.crypto &&
+            window.crypto.randomUUID &&
+            window.crypto.randomUUID()) ||
+          String(Date.now())
+        let timeoutId
+        const onMsg = e => {
+          const m = e.data
+          if (
+            !m ||
+            m.type !== 'cozy-bridge:document-extracted' ||
+            m.reqId !== reqId
+          )
+            return
+          clearTimeout(timeoutId)
+          window.removeEventListener('message', onMsg)
+          docTableSnapshotsRef.current = m.tableSnapshots || null
+          resolve({ md: m.md || '', error: m.error || null })
+        }
+        window.addEventListener('message', onMsg)
+        timeoutId = setTimeout(() => {
+          window.removeEventListener('message', onMsg)
+          resolve({ md: '', error: 'timeout' })
+        }, EXTRACT_DOCUMENT_TIMEOUT_MS)
+        broadcastToFrames({ type: 'cozy-bridge:extract-document', reqId })
+      }),
+    [broadcastToFrames]
+  )
+
+  // Send trigger-intent to plugin iframe. `source` travels to the plugin and comes
+  // back inside the intent data (the plugin just echoes it), so the host can tell
+  // a button press from a keyboard press — they must not do the same thing when
+  // the side panel is open.
+  const triggerScribe = useCallback(
+    source => {
+      broadcastToFrames({
+        type: 'cozy-bridge:trigger-intent',
+        action: 'AI_TEXT_ASSISTANT',
+        source
+      })
+    },
+    [broadcastToFrames]
+  )
+
+  const focusEditor = useCallback(() => {
+    const iframe = document.getElementsByName(FRAME_EDITOR_NAME)[0]
+    if (iframe) iframe.focus()
+  }, [])
+
+  // #1: inline Scribe reveal gating. Keyboard opens cast AI_TEXT_ASSISTANT with
+  // data.deferReveal=true, so the popover mounts hidden (prepared) and is only
+  // revealed when the plugin's 200ms timer fires 'cozy-bridge:reveal-scribe'.
+  // Button/context-menu opens cast without the flag and reveal immediately.
+  // #1: inline Scribe prepare-then-reveal. Keyboard opens cast AI_TEXT_ASSISTANT
+  // with data.deferReveal=true: mount the popover hidden (prepared), then reveal
+  // after SCRIBE_REVEAL_DELAY_MS so it appears in one clean step. The timer is
+  // host-side (see the constant) because the plugin's background iframe throttles
+  // its own timers. Re-running on each new intent clears the prior timer, so a
+  // rapid re-press can't flash the still-preparing popover. Button/context-menu
+  // opens cast without the flag and reveal immediately.
+  const [scribeVisible, setScribeVisible] = useState(false)
+  useEffect(() => {
+    if (!pendingIntent) {
+      setScribeVisible(false)
+      return
+    }
+    if (!pendingIntent.data?.deferReveal) {
+      setScribeVisible(true)
+      return
+    }
+    setScribeVisible(false)
+    const id = setTimeout(() => setScribeVisible(true), SCRIBE_REVEAL_DELAY_MS)
+    return () => clearTimeout(id)
+  }, [pendingIntent])
+
+  // Snapshots a joindre a une reinjection. Priorite a la SELECTION (flux inline) ;
+  // a defaut, ceux du contexte document, FILTRES aux seuls [TABLE:N] presents dans le
+  // fragment — le canal retour PANEL_ACTION est plafonne a 1 Mo (validateIntent),
+  // contrairement au canal d'extraction qui le contourne.
+  const snapshotsForFragment = useCallback(text => {
+    if (tableSnapshotsRef.current) return tableSnapshotsRef.current
+    const all = docTableSnapshotsRef.current
+    if (!all || !text) return undefined
+    const out = []
+    let found = false
+    const re = /\[TABLE:(\d+)\]/g
+    let m
+    while ((m = re.exec(text)) !== null) {
+      const n = Number(m[1])
+      if (all[n]) {
+        out[n] = all[n]
+        found = true
+      }
+    }
+    return found ? out : undefined
+  }, [])
+
+  // Track pendingIntent in a ref so handleReplace/handleInsert can decide
+  // at call time whether to respond() to an inline popover intent or cast
+  // a one-way PANEL_ACTION for a pure panel chat flow — without causing
+  // MessageActions (which uses panelActions) to rebuild its handlers on
+  // every selection change.
+  const pendingIntentRef = useRef(pendingIntent)
+  useEffect(() => {
+    pendingIntentRef.current = pendingIntent
+  }, [pendingIntent])
+
+  const handleReplace = useCallback(
+    text => {
+      const html = unwrapSingleParagraph(markdownToHtml(text).trim())
+      const snaps = snapshotsForFragment(text)
+      const data = { text, html, md: text }
+      if (partialTableInfoRef.current) {
+        data.partialTableInfo = partialTableInfoRef.current
+      }
+      if (snaps) {
+        data.tableSnapshots = snaps
+      }
+      if (pendingIntentRef.current) {
+        // Inline popover flow: answer the pending AI_TEXT_ASSISTANT intent.
+        respond({ status: 'ok', action: 'replace', data })
+      } else {
+        // Pure panel chat flow: no pending intent exists, so cast a one-way
+        // PANEL_ACTION directly to the plugin.
+        castPanelAction({
+          action: 'replace',
+          text,
+          html,
+          md: text,
+          partialTableInfo: partialTableInfoRef.current || undefined,
+          tableSnapshots: snaps
+        })
+      }
+      setTimeout(focusEditor, 100)
+    },
+    [respond, castPanelAction, focusEditor, snapshotsForFragment]
+  )
+
+  const handleInsert = useCallback(
+    text => {
+      const html = unwrapSingleParagraph(markdownToHtml(text).trim())
+      const snaps = snapshotsForFragment(text)
+      const data = { text, html, md: text }
+      if (partialTableInfoRef.current) {
+        data.partialTableInfo = partialTableInfoRef.current
+      }
+      if (snaps) {
+        data.tableSnapshots = snaps
+      }
+      if (pendingIntentRef.current) {
+        respond({ status: 'ok', action: 'insert', data })
+      } else {
+        castPanelAction({
+          action: 'insert',
+          text,
+          html,
+          md: text,
+          partialTableInfo: partialTableInfoRef.current || undefined,
+          tableSnapshots: snaps
+        })
+      }
+      setTimeout(focusEditor, 100)
+    },
+    [respond, castPanelAction, focusEditor, snapshotsForFragment]
+  )
+
+  // Wire respond-based handlers into ScribeContext so MessageActions can call them
+  useEffect(() => {
+    if (!setPanelActions) return
+    setPanelActions({ replace: handleReplace, insert: handleInsert })
+    return () => setPanelActions(null)
+  }, [setPanelActions, handleReplace, handleInsert])
+
+  // Inject the full-document extractor into ScribeContext so sendMessage can await
+  // it at send time, mirroring the setPanelActions wiring above.
+  useEffect(() => {
+    if (!setExtractFullDocument) return
+    setExtractFullDocument(extractFullDocument)
+    return () => setExtractFullDocument(null)
+  }, [setExtractFullDocument, extractFullDocument])
+
+  const handleCancel = useCallback(() => {
+    respond({ status: 'ok', action: 'cancel', data: {} })
+    setTimeout(focusEditor, 100)
+  }, [respond, focusEditor])
+
+  // The under-selection button TOGGLES: a second click closes the menu it opened.
+  // It can be clicked while the menu is open because it sits above the popover's
+  // backdrop (z-index 100000 vs MUI's 1300), so the click lands on the button and
+  // never on the backdrop — without this it re-cast the intent and the menu just
+  // stayed open.
+  const toggleScribe = useCallback(() => {
+    if (popoverOpen) {
+      handleCancel()
+      return
+    }
+    triggerScribe(INTENT_SOURCES.SELECTION_BUTTON)
+  }, [popoverOpen, handleCancel, triggerScribe])
+
+  // Close popover when panel opens while popover is active — except the button's
+  // own menu, which is allowed to coexist with the panel (see popoverOpen).
+  // Use respond() directly instead of handleCancel to avoid focusEditor
+  // stealing focus from the panel.
+  useEffect(() => {
+    if (isPanelOpen && pendingIntent && !fromSelectionButton) {
+      respond({ status: 'ok', action: 'cancel', data: {} })
+    }
+  }, [isPanelOpen, pendingIntent, fromSelectionButton, respond])
+
+  // Focus management: return focus to editor when panel closes
+  const prevPanelOpenRef = useRef(isPanelOpen)
+  useEffect(() => {
+    const wasOpen = prevPanelOpenRef.current
+    prevPanelOpenRef.current = isPanelOpen
+
+    if (!isPanelOpen && wasOpen) {
+      setTimeout(focusEditor, 100)
+    }
+  }, [isPanelOpen, focusEditor])
+
+  // Ctrl+Shift+I single-press from open popover: open panel and close popover
+  useEffect(() => {
+    if (!popoverOpen) return
+
+    const handler = e => {
+      const isCtrlShiftI =
+        (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')
+      if (!isCtrlShiftI) return
+      e.preventDefault()
+      if (openPanel) openPanel()
+      // Dismiss the popover intent WITHOUT handleCancel: handleCancel refocuses
+      // the editor (setTimeout focusEditor), which would steal focus from the
+      // panel input we're opening. respond() just clears the pending intent.
+      respond({ status: 'ok', action: 'cancel', data: {} })
+    }
+
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [popoverOpen, openPanel, respond])
+
+  // Ctrl+Shift+I when focus is inside the Drive app (e.g. the side panel input)
+  // never reaches the plugin's keydown listener — that one is registered on the
+  // OO editor iframe document. Without a handler here the browser's default
+  // devtools shortcut fires. Catch it at the Drive level, preventDefault, and
+  // toggle the panel. The popover-open case is handled by the effect above, so
+  // we skip it here to avoid double handling.
+  useEffect(() => {
+    const handler = e => {
+      const isCtrlShiftI =
+        (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')
+      if (!isCtrlShiftI) return
+      if (popoverOpen) return
+      e.preventDefault()
+      if (togglePanel) togglePanel()
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [togglePanel, popoverOpen])
 
   const initEditor = useCallback(() => {
     new window.DocsAPI.DocEditor('onlyOfficeEditor', docEditorConfig)
@@ -58,10 +503,43 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
           <Spinner size="xxlarge" />
         </div>
       )}
-      <div className="u-flex u-flex-grow-1">
-        <div id="onlyOfficeEditor" />
+      <div className="u-flex u-flex-grow-1" style={{ minHeight: 0, overflow: 'hidden' }}>
+        <div id="onlyOfficeEditor" style={{ flex: '1 1 auto', minWidth: 0 }} />
         <OnlyOfficeAIAssistantPanel />
+        {isScribeEnabled && isPanelOpen && <ScribePanel />}
       </div>
+      {isScribeEnabled && (
+        <>
+          <ScribeFloatingZone
+            visible={showFloatingZone}
+            geometry={documentGeometry}
+            onTogglePanel={togglePanel}
+          />
+          {showSelectionButton && (
+            <ScribeSelectionButton
+              rect={selectionGeometry.rect}
+              onTriggerScribe={toggleScribe}
+            />
+          )}
+          <ScribePopover
+            open={popoverOpen}
+            visible={scribeVisible}
+            selectedText={pendingIntent?.data?.text || ''}
+            selectedHtml={pendingIntent?.data?.html || ''}
+            enrichedMd={pendingIntent?.data?.enrichedMd || ''}
+            tableAmbiguity={pendingIntent?.data?.tableAmbiguity || null}
+            selectionRect={selectionGeometry.rect}
+            partialTableInfo={pendingIntent?.data?.partialTableInfo || null}
+            onReplace={handleReplace}
+            onInsert={handleInsert}
+            onCancel={handleCancel}
+            onOpenPanel={openPanel ? draft => {
+              openPanel(draft)
+              respond({ status: 'ok', action: 'cancel', data: {} })
+            } : undefined}
+          />
+        </>
+      )}
     </>
   )
 }

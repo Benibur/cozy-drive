@@ -1,0 +1,23 @@
+{
+  "caseId": "A2w",
+  "mode": "insert",
+  "spec": "P1@10..P1@15",
+  "fixture": "XXX",
+  "source": "a-family.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "inline word-replace driver (Chrome DevTools MCP) — build 2026-07-19.4",
+  "capturedAt": "2026-07-20",
+  "verdict": "pass",
+  "comment": "NOUVEAU cas (backlog 999.3) — comble la degenerescence A2/replace (sel. @mid..@mid = curseur vide). Ici un MOT ENTIER interieur est selectionne (brown, offsets 10..15). INSERT = colle au bout de la selection (offset 15, apres 'brown') avec smart-spacing -> 'The quick brown XXX fox' ; post-sel = injecte + espace de collage (' XXX'), coherent avec A2/A4/A6. Distinct de A2/insert (qui colle a offset 9 -> 'The quick XXX brown fox'). Aucun changement code.js (offsets numeriques = grammaire parseSelSpec existante).",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "a benir — selMarkup 'The quick brown« XXX» fox'",
+    "behaviour": "insert au bout de selection + smart-spacing (regle A2/A4)",
+    "note": "cas NEUF (pas de golden anterieur) — benir blocks ET selection",
+    "blessedScope": "blocks + selMarkup (post-selection) benis par Ben le 2026-07-20 dans la console gen_blessing"
+  },
+  "blessedBy": "Ben",
+  "blessedAt": "2026-07-20"
+}

@@ -1,0 +1,173 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": []
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Delta"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": []
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "BetaI"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "GammaI"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "DeltaI"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": "BetaI\nGammaIDeltaI\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": ""
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«BetaI»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«GammaI»"
+    },
+    {
+      "at": {
+        "block": 2,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«DeltaI»"
+    }
+  ]
+}

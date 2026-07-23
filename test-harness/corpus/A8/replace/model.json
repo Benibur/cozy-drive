@@ -1,0 +1,21 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "A8 replaced all"
+        }
+      ]
+    }
+  ],
+  "selText": "A8 replaced all",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "«A8 replaced all»"
+    }
+  ]
+}

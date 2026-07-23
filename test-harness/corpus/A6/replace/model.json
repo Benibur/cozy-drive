@@ -1,0 +1,51 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "The "
+        },
+        {
+          "t": "quick",
+          "b": 1
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "First"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Second"
+        },
+        {
+          "t": " "
+        },
+        {
+          "t": "er flows"
+        }
+      ]
+    }
+  ],
+  "selText": " First\nSecond ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0
+      },
+      "text": "The quick« First»"
+    },
+    {
+      "at": {
+        "block": 1
+      },
+      "text": "«Second »er flows"
+    }
+  ]
+}

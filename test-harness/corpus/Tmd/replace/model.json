@@ -1,0 +1,271 @@
+{
+  "blocks": [
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "A",
+                    "b": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "B",
+                    "b": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "C",
+                    "b": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "5"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "6"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "7"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "9"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Jumps over the dog"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Lazy river flows"
+        }
+      ]
+    }
+  ],
+  "selText": "ABC\n123\n456\n789\n",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 0,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«A»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 0,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«B»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 0,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«C»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 1,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«1»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«2»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 1,
+          "c": 2
+        },
+        "cellBlock": 0
+      },
+      "text": "«3»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 2,
+          "c": 0
+        },
+        "cellBlock": 0
+      },
+      "text": "«4»"
+    },
+    {
+      "at": {
+        "block": 0,
+        "cell": {
+          "r": 2,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "«5»"
+    }
+  ]
+}

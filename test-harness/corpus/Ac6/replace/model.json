@@ -1,0 +1,122 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Intro paragraph"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "The quick brown fox"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Beta"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Gamma"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "blocks": [
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "The quick"
+                  },
+                  {
+                    "t": " "
+                  },
+                  {
+                    "t": "First"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "runs": [
+                  {
+                    "t": "Second"
+                  },
+                  {
+                    "t": " "
+                  },
+                  {
+                    "t": "er flows"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "t": "Outro paragraph"
+        }
+      ]
+    }
+  ],
+  "selText": " First\nSecond ",
+  "selMarkup": [
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 0
+      },
+      "text": "The quick« First»"
+    },
+    {
+      "at": {
+        "block": 1,
+        "cell": {
+          "r": 1,
+          "c": 1
+        },
+        "cellBlock": 1
+      },
+      "text": "«Second »er flows"
+    }
+  ]
+}

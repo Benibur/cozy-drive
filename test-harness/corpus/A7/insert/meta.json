@@ -1,0 +1,19 @@
+{
+  "caseId": "A7",
+  "mode": "insert",
+  "spec": "P2@start..P4@end",
+  "fixture": "Added line",
+  "source": "a7-empty.docx",
+  "statusFromCsv": "pass",
+  "stable": true,
+  "setSelectionOk": true,
+  "capturedVia": "capture-driver.js two-phase (Chrome DevTools MCP) — build 2026-07-17.9",
+  "capturedAt": "2026-07-17",
+  "verdict": "pass",
+  "comment": "Insert sur sélection à ¶ VIDES en bord (A7). Fixture = Intro / VIDE / Middle / VIDE / Outro ; sélection P2@start..P4@end = [¶vide, Middle, ¶vide] (vide à CHAQUE bord). EXTRACTION préserve les vides : extMd = '\\n\\nMiddle paragraph\\n\\n' (split sur double-newline avant lexer — cœur du cas). Insert au point (fin de sélection = P4 vide) → 'Added line' remplit ce ¶ vide cible ; le ¶ vide de tête (P2) est PRÉSERVÉ ; Intro/Outro intacts. blockCount=5 stable. Sélection multi-¶ via branche cross (build .8).",
+  "captureVersion": "v5",
+  "blessing": {
+    "selection": "à bénir — selMarkup/selText sont NEUFS dans le golden (le corpus n'avait aucun oracle de sélection avant cette passe)",
+    "verdictScope": "le champ `verdict` ci-dessus a été posé sur les `blocks` SEULS, avant l'existence de l'oracle de sélection"
+  }
+}
