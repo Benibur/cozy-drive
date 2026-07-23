@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react'
 
 import useBreakpoints from 'cozy-ui/transpiled/react/providers/Breakpoints'
@@ -244,13 +244,14 @@ describe('ScribeContainer', () => {
   // The dimming veil makes the anchored menu stand out again, WITHOUT the
   // behaviour the modal backdrop used to break: it is pointer-events:none, so
   // scroll and clicks pass through to the document underneath.
-  const findVeil = () =>
-    [...document.body.querySelectorAll('div[aria-hidden]')].find(
-      d =>
-        d.style.position === 'fixed' && d.style.pointerEvents === 'none'
-    )
+  const findVeil = () => document.body.querySelector('[data-scribe-veil]')
+  const veilColoured = () => {
+    const v = findVeil()
+    // transparent shows as '' or 'transparent' inline; coloured is the rgba.
+    return !!v && v.style.backgroundColor !== '' && v.style.backgroundColor !== 'transparent'
+  }
 
-  it('renders a pointer-events:none dimming veil in the anchored mode', () => {
+  it('darkens a pointer-events:none veil while the anchored menu is shown', () => {
     useBreakpoints.mockReturnValue({ isMobile: false })
     render(
       <ScribeContainer
@@ -261,11 +262,28 @@ describe('ScribeContainer', () => {
         <div>Content</div>
       </ScribeContainer>
     )
-    expect(findVeil()).toBeTruthy()
+    const veil = findVeil()
+    expect(veil).toBeTruthy()
+    expect(veil.style.pointerEvents).toBe('none')
+    expect(veilColoured()).toBe(true)
   })
 
-  it('renders NO veil in the centred (unanchored) fallback', () => {
+  // The veil element is PERSISTENT on desktop (so it can fade both ways); in the
+  // centred fallback it is present but transparent, not coloured.
+  it('leaves the veil transparent in the centred (unanchored) fallback', () => {
     useBreakpoints.mockReturnValue({ isMobile: false })
+    render(
+      <ScribeContainer open={true} onClose={jest.fn()}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(findVeil()).toBeTruthy()
+    expect(veilColoured()).toBe(false)
+  })
+
+  // On mobile there is no veil at all (the Drawer has its own backdrop).
+  it('renders no veil on mobile', () => {
+    useBreakpoints.mockReturnValue({ isMobile: true })
     render(
       <ScribeContainer open={true} onClose={jest.fn()}>
         <div>Content</div>
@@ -274,11 +292,11 @@ describe('ScribeContainer', () => {
     expect(findVeil()).toBeFalsy()
   })
 
-  // On close the veil must FADE OUT, not vanish in one frame (that read as a
-  // flicker). It stays mounted (colouring itself transparent, the CSS
-  // transition does the fade) and only unmounts once the fade has run.
-  it('keeps the veil mounted briefly after close so it can fade out', () => {
-    jest.useFakeTimers()
+  // The close must FADE, not yank: the veil is the SAME persistent node before
+  // and after close (so CSS can transition its colour) — it just goes
+  // transparent. This holds even when the close also drops the anchor (a click
+  // in the document), which unmounts the anchored container but NOT the veil.
+  it('fades the veil to transparent on close without removing the node', () => {
     useBreakpoints.mockReturnValue({ isMobile: false })
     const anchorEl = { getBoundingClientRect: () => ({}) }
 
@@ -287,23 +305,19 @@ describe('ScribeContainer', () => {
         <div>Content</div>
       </ScribeContainer>
     )
-    expect(findVeil()).toBeTruthy()
+    const before = findVeil()
+    expect(veilColoured()).toBe(true)
 
-    // Menu closes: the veil is still in the DOM (fading), not yanked.
+    // Close that also drops the anchor (document click): container switches to
+    // the centred branch, but the veil node stays and merely goes transparent.
     rerender(
-      <ScribeContainer open={false} onClose={jest.fn()} anchorEl={anchorEl}>
+      <ScribeContainer open={false} onClose={jest.fn()} anchorEl={undefined}>
         <div>Content</div>
       </ScribeContainer>
     )
-    expect(findVeil()).toBeTruthy()
-
-    // After the fade window it unmounts.
-    act(() => {
-      jest.advanceTimersByTime(400)
-    })
-    expect(findVeil()).toBeFalsy()
-
-    jest.useRealTimers()
+    const after = findVeil()
+    expect(after).toBe(before) // same DOM node -> the transition can run
+    expect(veilColoured()).toBe(false)
   })
 
   // popper.js v1 matches every `behavior` entry against
