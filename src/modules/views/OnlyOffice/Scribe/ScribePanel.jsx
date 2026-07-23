@@ -5,12 +5,12 @@ import IconButton from 'cozy-ui/transpiled/react/IconButton'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 
-import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
-import { ResizeHandle } from '@/modules/views/OnlyOffice/Scribe/ResizeHandle'
-import { ChatMessageList } from '@/modules/views/OnlyOffice/Scribe/ChatMessageList'
 import { ChatInput } from '@/modules/views/OnlyOffice/Scribe/ChatInput'
-import { isScribeDevMd } from '@/modules/views/OnlyOffice/Scribe/scribeDevMode'
+import { ChatMessageList } from '@/modules/views/OnlyOffice/Scribe/ChatMessageList'
+import { ResizeHandle } from '@/modules/views/OnlyOffice/Scribe/ResizeHandle'
+import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ProbeMetricsPanel } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
+import { isScribeDevMd } from '@/modules/views/OnlyOffice/Scribe/scribeDevMode'
 
 export const PANEL_WIDTH = 400
 
@@ -74,7 +74,15 @@ export const ScribePanel = () => {
       }}
     >
       <ResizeHandle />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          minWidth: 0
+        }}
+      >
         {/* Header */}
         <div
           style={{
@@ -86,10 +94,7 @@ export const ScribePanel = () => {
           }}
         >
           <SparkleSvg size={20} />
-          <Typography
-            variant="h6"
-            style={{ marginLeft: 8, flex: 1 }}
-          >
+          <Typography variant="h6" style={{ marginLeft: 8, flex: 1 }}>
             Scribe
           </Typography>
           {devMode && (
@@ -104,7 +109,9 @@ export const ScribePanel = () => {
                 padding: '2px 8px',
                 borderRadius: 4,
                 border: `1px solid ${theme.palette.divider}`,
-                background: showProbe ? theme.palette.action.selected : 'transparent',
+                background: showProbe
+                  ? theme.palette.action.selected
+                  : 'transparent',
                 color: theme.palette.text.secondary
               }}
             >
@@ -117,14 +124,27 @@ export const ScribePanel = () => {
         </div>
 
         {/* Chat body (kept mounted; probe view overlays it so chat state is preserved) */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0, position: 'relative' }}>
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            minHeight: 0,
+            position: 'relative'
+          }}
+        >
           <ChatMessageList
             ref={listRef}
-            returnFocusToInput={() => inputRef.current && inputRef.current.focus()}
+            returnFocusToInput={() =>
+              inputRef.current && inputRef.current.focus()
+            }
           />
           <ChatInput
             ref={inputRef}
-            onArrowUp={() => listRef.current && listRef.current.focusMostRecentCardInsert()}
+            onArrowUp={() =>
+              listRef.current && listRef.current.focusMostRecentCardInsert()
+            }
           />
           {devMode && showProbe && (
             <div
@@ -139,7 +159,13 @@ export const ScribePanel = () => {
                 padding: 12
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: 8
+                }}
+              >
                 <Typography variant="subtitle2" style={{ flex: 1 }}>
                   Sonde de conformité
                 </Typography>

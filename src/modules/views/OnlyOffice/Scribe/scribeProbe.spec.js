@@ -69,10 +69,9 @@ describe('scribeProbe', () => {
     })
 
     it('scores ~0 for fully disjoint text', () => {
-      const score = maxFragmentDuplication(
-        'alpha beta gamma delta epsilon',
-        ['nothing whatsoever shared here friend']
-      )
+      const score = maxFragmentDuplication('alpha beta gamma delta epsilon', [
+        'nothing whatsoever shared here friend'
+      ])
       expect(score).toBeLessThan(0.1)
     })
 
@@ -228,7 +227,10 @@ describe('scribeProbe', () => {
     })
 
     it('guards non-array fragments and non-string fields defensively', () => {
-      const m = computeSampleMetrics({ discussion: null, fragments: null }, null)
+      const m = computeSampleMetrics(
+        { discussion: null, fragments: null },
+        null
+      )
       expect(m.fragCount).toBe(0)
       expect(m.duplication).toBe(0)
       expect(m.preamble).toBe(false)
@@ -247,8 +249,14 @@ describe('scribeProbe', () => {
       expect(deriveContentTags('trial[^scribe-fn-1] done').hasRef).toBe(true)
     })
     it('is false on plain prose and tolerates non-strings', () => {
-      expect(deriveContentTags('just text')).toEqual({ hasTable: false, hasRef: false })
-      expect(deriveContentTags(undefined)).toEqual({ hasTable: false, hasRef: false })
+      expect(deriveContentTags('just text')).toEqual({
+        hasTable: false,
+        hasRef: false
+      })
+      expect(deriveContentTags(undefined)).toEqual({
+        hasTable: false,
+        hasRef: false
+      })
     })
   })
 
@@ -271,8 +279,12 @@ describe('scribeProbe', () => {
     })
 
     it('records a sample and returns the new count', () => {
-      expect(recordProbeSample(sample(), { surface: 'chat', inputMd: '' })).toBe(1)
-      expect(recordProbeSample(sample(), { surface: 'popover', inputMd: '' })).toBe(2)
+      expect(
+        recordProbeSample(sample(), { surface: 'chat', inputMd: '' })
+      ).toBe(1)
+      expect(
+        recordProbeSample(sample(), { surface: 'popover', inputMd: '' })
+      ).toBe(2)
     })
 
     it('auto-derives hasTable/hasRef tags from inputMd (live IHM capture coverage)', () => {
@@ -345,9 +357,33 @@ describe('scribeProbe', () => {
 
     it('aggregate yields rates for duplication/preamble and counts for splitTable/refBroken', () => {
       const samples = [
-        { metrics: { fragCount: 1, duplication: 0.9, preamble: true, splitTable: true, refBroken: false } },
-        { metrics: { fragCount: 0, duplication: 0.1, preamble: false, splitTable: false, refBroken: true } },
-        { metrics: { fragCount: 3, duplication: 0.2, preamble: false, splitTable: false, refBroken: false } }
+        {
+          metrics: {
+            fragCount: 1,
+            duplication: 0.9,
+            preamble: true,
+            splitTable: true,
+            refBroken: false
+          }
+        },
+        {
+          metrics: {
+            fragCount: 0,
+            duplication: 0.1,
+            preamble: false,
+            splitTable: false,
+            refBroken: true
+          }
+        },
+        {
+          metrics: {
+            fragCount: 3,
+            duplication: 0.2,
+            preamble: false,
+            splitTable: false,
+            refBroken: false
+          }
+        }
       ]
       const a = aggregate(samples)
       expect(a.total).toBe(3)
@@ -362,9 +398,36 @@ describe('scribeProbe', () => {
 
     it('aggregate coverage counts per-locale, table and ref cases from tags', () => {
       const samples = [
-        { metrics: { fragCount: 1, duplication: 0, preamble: false, splitTable: false, refBroken: false }, tags: { locale: 'fr', hasTable: true, hasRef: false } },
-        { metrics: { fragCount: 1, duplication: 0, preamble: false, splitTable: false, refBroken: false }, tags: { locale: 'fr', hasTable: false, hasRef: true } },
-        { metrics: { fragCount: 1, duplication: 0, preamble: false, splitTable: false, refBroken: false }, tags: { locale: 'en', hasTable: true, hasRef: true } }
+        {
+          metrics: {
+            fragCount: 1,
+            duplication: 0,
+            preamble: false,
+            splitTable: false,
+            refBroken: false
+          },
+          tags: { locale: 'fr', hasTable: true, hasRef: false }
+        },
+        {
+          metrics: {
+            fragCount: 1,
+            duplication: 0,
+            preamble: false,
+            splitTable: false,
+            refBroken: false
+          },
+          tags: { locale: 'fr', hasTable: false, hasRef: true }
+        },
+        {
+          metrics: {
+            fragCount: 1,
+            duplication: 0,
+            preamble: false,
+            splitTable: false,
+            refBroken: false
+          },
+          tags: { locale: 'en', hasTable: true, hasRef: true }
+        }
       ]
       const a = aggregate(samples)
       expect(a.coverage.perLocale.fr).toBe(2)
@@ -384,7 +447,11 @@ describe('scribeProbe', () => {
 
     it('ring-buffer keeps at most MAX_SAMPLES, dropping oldest', () => {
       // Record a tagged marker first, then overflow; oldest (the marker) must drop.
-      recordProbeSample(sample({ discussion: 'OLDEST' }), { surface: 'chat', inputMd: '', tags: { marker: true } })
+      recordProbeSample(sample({ discussion: 'OLDEST' }), {
+        surface: 'chat',
+        inputMd: '',
+        tags: { marker: true }
+      })
       for (let i = 0; i < 205; i++) {
         recordProbeSample(sample(), { surface: 'chat', inputMd: '' })
       }

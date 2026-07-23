@@ -96,13 +96,16 @@ export function markerPreservationClauses(md) {
   const s = typeof md === 'string' ? md : ''
   let out = ''
   if (s.includes('[TABLE:') || s.includes('[CELL:')) {
-    out += ' Inside the fragment string(s) (never in `discussion`), preserve all [TABLE:N]...[/TABLE] and [CELL:r,c]...[/CELL] markers exactly as-is. Only modify the text content between the opening [CELL:r,c] and closing [/CELL] tags. Do not add, remove, or reorder [TABLE:N] or [CELL:r,c] markers. Keep each [TABLE:N]...[/TABLE] block WHOLE inside a SINGLE fragment — never split one table across several fragments, and never place any table or cell content in `discussion`.'
+    out +=
+      ' Inside the fragment string(s) (never in `discussion`), preserve all [TABLE:N]...[/TABLE] and [CELL:r,c]...[/CELL] markers exactly as-is. Only modify the text content between the opening [CELL:r,c] and closing [/CELL] tags. Do not add, remove, or reorder [TABLE:N] or [CELL:r,c] markers. Keep each [TABLE:N]...[/TABLE] block WHOLE inside a SINGLE fragment — never split one table across several fragments, and never place any table or cell content in `discussion`.'
   }
   if (s.includes('[^scribe-fn-')) {
-    out += ' Inside the fragment string(s) (never in `discussion`), preserve all [^scribe-fn-N] footnote reference markers exactly as-is. Do NOT add footnote definitions ([^N]: text). The footnote content is managed separately — only preserve the inline reference markers.'
+    out +=
+      ' Inside the fragment string(s) (never in `discussion`), preserve all [^scribe-fn-N] footnote reference markers exactly as-is. Do NOT add footnote definitions ([^N]: text). The footnote content is managed separately — only preserve the inline reference markers.'
   }
   if (s.includes('{{REF:')) {
-    out += ' Inside the fragment string(s) (never in `discussion`), preserve all {{REF:scribe-ref-N:visible text}} cross-reference markers. Keep the {{REF:scribe-ref-N: and closing }} delimiters intact. You may modify the visible text inside the marker to match your changes (e.g. translation), but never remove or alter the scribe-ref-N identifier.'
+    out +=
+      ' Inside the fragment string(s) (never in `discussion`), preserve all {{REF:scribe-ref-N:visible text}} cross-reference markers. Keep the {{REF:scribe-ref-N: and closing }} delimiters intact. You may modify the visible text inside the marker to match your changes (e.g. translation), but never remove or alter the scribe-ref-N identifier.'
   }
   return out
 }
@@ -164,8 +167,7 @@ function contextSourceFraming({
       'use what is relevant to their request and ignore the rest.'
   }
   if (includeDiscussion) {
-    out +=
-      ' Earlier turns of this conversation are provided above for context.'
+    out += ' Earlier turns of this conversation are provided above for context.'
   }
   // D-04: when both the full document and a selection are present, state their
   // relationship in ONE combined clause (the selection is the focus WITHIN the doc).
@@ -338,8 +340,7 @@ export async function callScribeAI(client, messages, { signal } = {}) {
   )
 
   // Defensive double-check pattern from AIAssistantPanel
-  const content =
-    response?.content || response?.choices?.[0]?.message?.content
+  const content = response?.content || response?.choices?.[0]?.message?.content
 
   if (!content) {
     throw new Error('Empty response from AI')
@@ -449,7 +450,10 @@ export function deriveLoadingMessage(actionId, label) {
 
   // Translate actions: use interpolated "Translating to %{language}..." pattern
   if (actionId.startsWith('translate-')) {
-    return { key: 'Scribe.translate.translating_to', params: { language: label } }
+    return {
+      key: 'Scribe.translate.translating_to',
+      params: { language: label }
+    }
   }
 
   // Known action IDs: map to i18n loading key

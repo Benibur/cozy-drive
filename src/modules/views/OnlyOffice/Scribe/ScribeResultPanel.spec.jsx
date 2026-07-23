@@ -86,9 +86,9 @@ describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
       const card = container.querySelector('[data-scribe-result-card]')
       expect(card).not.toBeNull()
       const style = (card.getAttribute('style') || '').toLowerCase()
-      expect(
-        style.includes('7c3aed') || style.includes('124, 58, 237')
-      ).toBe(true)
+      expect(style.includes('7c3aed') || style.includes('124, 58, 237')).toBe(
+        true
+      )
     })
   })
 
@@ -123,18 +123,10 @@ describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
   describe('footer + popover-specific surfaces preserved', () => {
     it('keeps the Insert and Replace footer buttons', () => {
       render(
-        <ScribeResultPanel
-          {...baseProps}
-          resultText="x"
-          rawFragment="x"
-        />
+        <ScribeResultPanel {...baseProps} resultText="x" rawFragment="x" />
       )
-      expect(
-        screen.getByText('Scribe.button.insert')
-      ).toBeInTheDocument()
-      expect(
-        screen.getByText('Scribe.button.replace')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Scribe.button.insert')).toBeInTheDocument()
+      expect(screen.getByText('Scribe.button.replace')).toBeInTheDocument()
     })
 
     it('renders the cellWarning banner above the card when set', () => {

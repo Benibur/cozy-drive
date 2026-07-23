@@ -18,7 +18,7 @@ export const ResizeHandle = () => {
     e.preventDefault()
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
-    } catch (err) {
+    } catch (_err) {
       // ignore — setPointerCapture may throw on unsupported pointer types
     }
     pointerIdRef.current = e.pointerId
@@ -28,17 +28,20 @@ export const ResizeHandle = () => {
     document.body.style.cursor = 'col-resize'
   }, [])
 
-  const onPointerMove = useCallback(e => {
-    if (!isDraggingRef.current) return
-    const newWidth = window.innerWidth - e.clientX
-    setPanelWidth(newWidth)
-  }, [setPanelWidth])
+  const onPointerMove = useCallback(
+    e => {
+      if (!isDraggingRef.current) return
+      const newWidth = window.innerWidth - e.clientX
+      setPanelWidth(newWidth)
+    },
+    [setPanelWidth]
+  )
 
   const onPointerUp = useCallback(e => {
     if (!isDraggingRef.current) return
     try {
       e.currentTarget.releasePointerCapture(e.pointerId)
-    } catch (err) {
+    } catch (_err) {
       // already released or not captured — safe to ignore
     }
     pointerIdRef.current = null

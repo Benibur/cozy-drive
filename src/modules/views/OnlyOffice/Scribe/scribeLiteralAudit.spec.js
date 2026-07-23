@@ -55,7 +55,8 @@ const FORBIDDEN_SENTENCES = [
 // out-of-scope dev-panel French prose. Scope the check to hard-coded
 // aria-label="/title=" PROP literals only — this matches a regression like
 // `title="Copier"` but NOT `t('Scribe.button.copy')` and NOT free prose.
-const FORBIDDEN_PROP_LITERAL = /(?:aria-label|title)="(?:Copier|Description)[^"]*"/
+const FORBIDDEN_PROP_LITERAL =
+  /(?:aria-label|title)="(?:Copier|Description)[^"]*"/
 
 describe('Scribe literal audit (criterion-2 gate)', () => {
   const sources = SURFACE_FILES.map(file => ({ file, text: readSurface(file) }))
@@ -88,7 +89,9 @@ describe('Scribe literal audit (criterion-2 gate)', () => {
 
   it('confirms the extracted literals are wired through t() in ScribeResultPanel', () => {
     const text = readSurface('ScribeResultPanel.jsx')
-    expect(text).toContain("t('Scribe.result.table_partial_insert_unavailable')")
+    expect(text).toContain(
+      "t('Scribe.result.table_partial_insert_unavailable')"
+    )
     expect(text).toContain("t('Scribe.panel.description')")
     expect(text).toContain("t('Scribe.button.copy')")
   })

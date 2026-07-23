@@ -7,10 +7,10 @@ import React, {
   useMemo,
   useRef
 } from 'react'
-import { useI18n } from 'twake-i18n'
 
 import { useClient } from 'cozy-client'
 import flag from 'cozy-flags'
+import { useI18n } from 'twake-i18n'
 
 import {
   callScribeAIWithReask,
@@ -41,7 +41,7 @@ const ScribeContext = createContext(null)
 const readStorage = () => {
   try {
     return localStorage.getItem(STORAGE_KEY) === 'true'
-  } catch (e) {
+  } catch (_e) {
     return false
   }
 }
@@ -49,7 +49,7 @@ const readStorage = () => {
 const writeStorage = value => {
   try {
     localStorage.setItem(STORAGE_KEY, String(value))
-  } catch (e) {
+  } catch (_e) {
     // localStorage unavailable
   }
 }
@@ -207,7 +207,8 @@ export const ScribeProvider = ({ children }) => {
       const includeDocument = includeDocumentRef.current
       // D-02/D-04: « sélection » gates ONLY the current turn. It is included iff the
       // box is live-checked AND there actually is a current selection.
-      const selectionIncluded = includeSelectionRef.current && !!selectionContext
+      const selectionIncluded =
+        includeSelectionRef.current && !!selectionContext
 
       // Snapshot the PRIOR history NOW, before the user bubble is pushed and before
       // the (newly async) document extraction below can let React flush a render and

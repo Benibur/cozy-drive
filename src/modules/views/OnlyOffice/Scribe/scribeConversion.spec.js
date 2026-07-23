@@ -1,4 +1,8 @@
-import { htmlToMarkdown, markdownToHtml, normalizeHtml } from './scribeConversion'
+import {
+  htmlToMarkdown,
+  markdownToHtml,
+  normalizeHtml
+} from './scribeConversion'
 
 describe('scribeConversion', () => {
   describe('htmlToMarkdown', () => {
@@ -65,7 +69,9 @@ describe('scribeConversion', () => {
       expect(md).toContain('- ')
       expect(md).toContain('a')
       expect(md).toContain('b')
-      expect(md.split('\n').filter(l => l.trim().startsWith('-'))).toHaveLength(2)
+      expect(md.split('\n').filter(l => l.trim().startsWith('-'))).toHaveLength(
+        2
+      )
     })
 
     it('preserves underline tags through htmlToMarkdown', () => {

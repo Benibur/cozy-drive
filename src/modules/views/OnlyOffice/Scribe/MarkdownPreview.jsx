@@ -1,11 +1,13 @@
 import React from 'react'
 import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
+
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 
-import { transformCellMarkersForPreview } from '@/modules/views/OnlyOffice/Scribe/tableCellMarkers'
 import styles from '@/modules/views/OnlyOffice/Scribe/scribe.styl'
+
+import { transformCellMarkersForPreview } from '@/modules/views/OnlyOffice/Scribe/tableCellMarkers'
 
 /**
  * MarkdownPreview - Renders Markdown text as formatted HTML.
@@ -23,7 +25,7 @@ const MarkdownPreview = ({ children }) => {
   const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
 
   const components = {
-    table: ({ node, children: tableChildren }) => (
+    table: ({ children: tableChildren }) => (
       <div style={{ overflowX: 'auto' }}>
         <table
           style={{
@@ -36,21 +38,19 @@ const MarkdownPreview = ({ children }) => {
         </table>
       </div>
     ),
-    th: ({ node, children: thChildren }) => (
+    th: ({ children: thChildren }) => (
       <th
         style={{
           border: `1px solid ${theme.palette.divider}`,
           padding: '6px 10px',
-          background: isDark
-            ? theme.palette.grey[800]
-            : theme.palette.grey[50],
+          background: isDark ? theme.palette.grey[800] : theme.palette.grey[50],
           textAlign: 'left'
         }}
       >
         {thChildren}
       </th>
     ),
-    td: ({ node, children: tdChildren }) => (
+    td: ({ children: tdChildren }) => (
       <td
         style={{
           border: `1px solid ${theme.palette.divider}`,
@@ -65,7 +65,7 @@ const MarkdownPreview = ({ children }) => {
         {aChildren}
       </a>
     ),
-    blockquote: ({ node, children: bqChildren }) => (
+    blockquote: ({ children: bqChildren }) => (
       <blockquote
         style={{
           borderLeft: `3px solid ${theme.palette.divider}`,
@@ -77,31 +77,31 @@ const MarkdownPreview = ({ children }) => {
         {bqChildren}
       </blockquote>
     ),
-    p: ({ node, children: pChildren }) => (
+    p: ({ children: pChildren }) => (
       <p style={{ margin: '4px 0' }}>{pChildren}</p>
     ),
-    h1: ({ node, children: hChildren }) => (
+    h1: ({ children: hChildren }) => (
       <h1 style={{ margin: '4px 0' }}>{hChildren}</h1>
     ),
-    h2: ({ node, children: hChildren }) => (
+    h2: ({ children: hChildren }) => (
       <h2 style={{ margin: '4px 0' }}>{hChildren}</h2>
     ),
-    h3: ({ node, children: hChildren }) => (
+    h3: ({ children: hChildren }) => (
       <h3 style={{ margin: '4px 0' }}>{hChildren}</h3>
     ),
-    h4: ({ node, children: hChildren }) => (
+    h4: ({ children: hChildren }) => (
       <h4 style={{ margin: '4px 0' }}>{hChildren}</h4>
     ),
-    h5: ({ node, children: hChildren }) => (
+    h5: ({ children: hChildren }) => (
       <h5 style={{ margin: '4px 0' }}>{hChildren}</h5>
     ),
-    h6: ({ node, children: hChildren }) => (
+    h6: ({ children: hChildren }) => (
       <h6 style={{ margin: '4px 0' }}>{hChildren}</h6>
     ),
-    ul: ({ node, children: ulChildren }) => (
+    ul: ({ children: ulChildren }) => (
       <ul style={{ margin: '4px 0', paddingLeft: '2em' }}>{ulChildren}</ul>
     ),
-    ol: ({ node, children: olChildren }) => (
+    ol: ({ children: olChildren }) => (
       <ol style={{ margin: '4px 0', paddingLeft: '2em' }}>{olChildren}</ol>
     ),
     img: ({ node, alt, src, ...props }) => {
@@ -180,7 +180,11 @@ const MarkdownPreview = ({ children }) => {
         fontFamily: 'inherit'
       }}
     >
-      <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
+      <Markdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={components}
+      >
         {preprocessed}
       </Markdown>
     </div>

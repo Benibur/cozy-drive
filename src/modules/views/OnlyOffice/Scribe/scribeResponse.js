@@ -169,7 +169,7 @@ function tolerantParse(str) {
 
   try {
     return JSON.parse(text)
-  } catch (e) {
+  } catch (_e) {
     // fall through to balanced-object extraction
   }
 
@@ -177,7 +177,7 @@ function tolerantParse(str) {
   if (extracted !== null) {
     try {
       return JSON.parse(extracted)
-    } catch (e) {
+    } catch (_e) {
       return JSON.parse(repairTrailingCommas(extracted))
     }
   }
@@ -327,7 +327,7 @@ export function parseScribeResponse(raw, { surface } = {}) {
       warnings,
       raw: rawStr
     }
-  } catch (e) {
+  } catch (_e) {
     return buildFallback(rawStr, surface, [])
   }
 }

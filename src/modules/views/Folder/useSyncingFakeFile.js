@@ -13,10 +13,7 @@ export const useSyncingFakeFile = ({ isEmpty, queryResults }) => {
     AcceptingSharingContext
   )
 
-  const sharingIds = useMemo(
-    () => Object.keys(sharingsValue),
-    [sharingsValue]
-  )
+  const sharingIds = useMemo(() => Object.keys(sharingsValue), [sharingsValue])
 
   const isSharingContextEmpty = sharingIds.length <= 0
 

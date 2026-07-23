@@ -467,7 +467,9 @@ describe('ScribeContext.sendMessage — deterministic gated composition (v3.2-02
       expect(ai).toHaveLength(4)
 
       // every source-framing sentence is present in the system prompt
-      expect(ai[0].content).toMatch(/full document is provided below for reference/i)
+      expect(ai[0].content).toMatch(
+        /full document is provided below for reference/i
+      )
       expect(ai[0].content).toMatch(/selection from the document/i)
       expect(ai[0].content).toMatch(/Earlier turns of this conversation/i)
       // the combined doc+selection focus clause (D-04)
@@ -504,7 +506,9 @@ describe('ScribeContext.sendMessage — deterministic gated composition (v3.2-02
       const ai = captured[0]
       // discussion OFF => system + current user ONLY
       expect(ai).toHaveLength(2)
-      expect(ai[0].content).toMatch(/full document is provided below for reference/i)
+      expect(ai[0].content).toMatch(
+        /full document is provided below for reference/i
+      )
       // selection OFF => no selection framing, no combined focus clause
       expect(ai[0].content).not.toMatch(/selection from the document/i)
       expect(ai[0].content).not.toMatch(/focus within that document/i)

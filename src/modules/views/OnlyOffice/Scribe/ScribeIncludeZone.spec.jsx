@@ -107,10 +107,7 @@ describe('ScribeIncludeZone — static « Inclure » zone', () => {
     expect(sel).toBeInTheDocument()
     expect(sel).toBeChecked()
     // aria-live wrapper still present alongside the now-mounted checkbox.
-    const { baseElement } = screen
-    expect(
-      document.querySelector('[aria-live="polite"]')
-    ).toBeInTheDocument()
+    expect(document.querySelector('[aria-live="polite"]')).toBeInTheDocument()
   })
 
   it('toggling « sélection » calls setIncludeSelection (context setter), NOT dismissSelection', () => {

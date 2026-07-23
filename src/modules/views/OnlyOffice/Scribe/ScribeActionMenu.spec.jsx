@@ -137,7 +137,11 @@ describe('ScribeActionMenu', () => {
     const input = screen.getByPlaceholderText('Scribe.prompt.placeholder')
     fireEvent.change(input, { target: { value: 'do a thing' } })
     fireEvent.keyDown(input, { key: 'Enter' })
-    expect(onSelect).toHaveBeenCalledWith('free-prompt', 'do a thing', 'do a thing')
+    expect(onSelect).toHaveBeenCalledWith(
+      'free-prompt',
+      'do a thing',
+      'do a thing'
+    )
   })
 
   // The menu snaps to a wider width once the prompt has content, then back to
@@ -146,7 +150,8 @@ describe('ScribeActionMenu', () => {
   it('widens the menu while the prompt has content, and narrows back when cleared', () => {
     const { container } = renderMenu()
     const menuPaper = [...container.querySelectorAll('*')].find(
-      el => el.style && (el.style.width === '280px' || el.style.width === '380px')
+      el =>
+        el.style && (el.style.width === '280px' || el.style.width === '380px')
     )
     expect(menuPaper).toBeTruthy()
     expect(menuPaper.style.width).toBe('280px') // compact when empty
@@ -181,9 +186,9 @@ describe('ScribeActionMenu', () => {
     fireEvent.keyDown(screen.getByText('Scribe.menu.correct_grammar'), {
       key: ' '
     })
-    expect(
-      screen.getByPlaceholderText('Scribe.prompt.placeholder').value
-    ).toBe('')
+    expect(screen.getByPlaceholderText('Scribe.prompt.placeholder').value).toBe(
+      ''
+    )
     // The action id (not its label) is the first onSelect argument.
     expect(onSelect).toHaveBeenCalledWith(
       'correct-grammar',

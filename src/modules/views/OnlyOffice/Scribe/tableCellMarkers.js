@@ -104,7 +104,9 @@ export function validateTableCounts(extractedMd, responseMd) {
     details.push({ tableIndex: t.index, expected, actual })
     if (actual < expected) {
       valid = false
-      warnings.push(`Table ${t.index}: expected ${expected} cells, got ${actual}`)
+      warnings.push(
+        `Table ${t.index}: expected ${expected} cells, got ${actual}`
+      )
     }
   }
 

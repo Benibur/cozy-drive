@@ -248,7 +248,11 @@ describe('ScribeContainer', () => {
   const veilColoured = () => {
     const v = findVeil()
     // transparent shows as '' or 'transparent' inline; coloured is the rgba.
-    return !!v && v.style.backgroundColor !== '' && v.style.backgroundColor !== 'transparent'
+    return (
+      !!v &&
+      v.style.backgroundColor !== '' &&
+      v.style.backgroundColor !== 'transparent'
+    )
   }
 
   it('darkens a pointer-events:none veil while the anchored menu is shown', () => {

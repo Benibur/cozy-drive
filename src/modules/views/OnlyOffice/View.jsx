@@ -9,11 +9,11 @@ import Error from '@/modules/views/OnlyOffice/Error'
 import OnlyOfficeAIAssistantPanel from '@/modules/views/OnlyOffice/OnlyOfficeAIAssistantPanel'
 import { useOnlyOfficeContext } from '@/modules/views/OnlyOffice/OnlyOfficeProvider'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
-import { ScribePanel } from '@/modules/views/OnlyOffice/Scribe/ScribePanel'
-import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
 import { ScribeFloatingZone } from '@/modules/views/OnlyOffice/Scribe/ScribeFloatingButton'
-import { ScribeSelectionButton } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButton'
+import { ScribePanel } from '@/modules/views/OnlyOffice/Scribe/ScribePanel'
 import { ScribePopover } from '@/modules/views/OnlyOffice/Scribe/ScribePopover'
+import { ScribeSelectionButton } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButton'
+import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
 import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
 import { useCozyBridge } from '@/modules/views/OnlyOffice/useCozyBridge'
 
@@ -53,24 +53,37 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
   const openPanel = scribe ? scribe.openPanel : undefined
   const setCurrentSelection = scribe ? scribe.setCurrentSelection : undefined
   const setPanelActions = scribe ? scribe.setPanelActions : undefined
-  const setExtractFullDocument = scribe ? scribe.setExtractFullDocument : undefined
+  const setExtractFullDocument = scribe
+    ? scribe.setExtractFullDocument
+    : undefined
 
   // cozy-bridge: listen for Scribe intents from OO plugin
   // In dev, allow all origins. In production, derive from serverUrl/instance.
   const allowedOrigins = useMemo(() => ['*'], []) // TODO: restrict in production
   // Update selection in ScribeContext whenever the plugin reports a change
-  const handleSelectionChanged = useCallback(data => {
-    if (setCurrentSelection) {
-      setCurrentSelection(data.text || null, data.html || null, data.enrichedMd || null, data.tableSnapshots || null)
-    }
-    partialTableInfoRef.current = data.partialTableInfo || null
-    tableSnapshotsRef.current = data.tableSnapshots || null
-  }, [setCurrentSelection])
+  const handleSelectionChanged = useCallback(
+    data => {
+      if (setCurrentSelection) {
+        setCurrentSelection(
+          data.text || null,
+          data.html || null,
+          data.enrichedMd || null,
+          data.tableSnapshots || null
+        )
+      }
+      partialTableInfoRef.current = data.partialTableInfo || null
+      tableSnapshotsRef.current = data.tableSnapshots || null
+    },
+    [setCurrentSelection]
+  )
 
   // Geometry of the current selection (editor-window px) for the under-selection
   // floating button. Fed by the plugin's lightweight SELECTION_GEOMETRY intent,
   // independent of the panel-gated SELECTION_CHANGED flow.
-  const [selectionGeometry, setSelectionGeometry] = useState({ rect: null, hasText: false })
+  const [selectionGeometry, setSelectionGeometry] = useState({
+    rect: null,
+    hasText: false
+  })
   const handleSelectionGeometry = useCallback(data => {
     setSelectionGeometry({
       rect: (data && data.hasText && data.rect) || null,
@@ -151,11 +164,11 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
           try {
             win.frames[i].postMessage(msg, '*')
             walk(win.frames[i])
-          } catch (e) {
+          } catch (_e) {
             // cross-origin frame, skip
           }
         }
-      } catch (e) {
+      } catch (_e) {
         // access denied
       }
     }
@@ -430,7 +443,9 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
 
     const handler = e => {
       const isCtrlShiftI =
-        (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        (e.key === 'I' || e.key === 'i')
       if (!isCtrlShiftI) return
       e.preventDefault()
       if (openPanel) openPanel()
@@ -453,7 +468,9 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
   useEffect(() => {
     const handler = e => {
       const isCtrlShiftI =
-        (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        (e.key === 'I' || e.key === 'i')
       if (!isCtrlShiftI) return
       if (popoverOpen) return
       e.preventDefault()
@@ -503,7 +520,10 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
           <Spinner size="xxlarge" />
         </div>
       )}
-      <div className="u-flex u-flex-grow-1" style={{ minHeight: 0, overflow: 'hidden' }}>
+      <div
+        className="u-flex u-flex-grow-1"
+        style={{ minHeight: 0, overflow: 'hidden' }}
+      >
         <div id="onlyOfficeEditor" style={{ flex: '1 1 auto', minWidth: 0 }} />
         <OnlyOfficeAIAssistantPanel />
         {isScribeEnabled && isPanelOpen && <ScribePanel />}
@@ -533,10 +553,14 @@ const View = ({ id, apiUrl, docEditorConfig }) => {
             onReplace={handleReplace}
             onInsert={handleInsert}
             onCancel={handleCancel}
-            onOpenPanel={openPanel ? draft => {
-              openPanel(draft)
-              respond({ status: 'ok', action: 'cancel', data: {} })
-            } : undefined}
+            onOpenPanel={
+              openPanel
+                ? draft => {
+                    openPanel(draft)
+                    respond({ status: 'ok', action: 'cancel', data: {} })
+                  }
+                : undefined
+            }
           />
         </>
       )}

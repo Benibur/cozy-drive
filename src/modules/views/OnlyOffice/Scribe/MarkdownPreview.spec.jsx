@@ -22,7 +22,9 @@ describe('MarkdownPreview — D-02 cosmetic marker transforms', () => {
   describe('REF markers → visible text only', () => {
     it('renders only the visible text of a REF marker, never the literal marker', () => {
       const { container } = render(
-        <MarkdownPreview>{'See {{REF:scribe-ref-3:Figure 7}} here'}</MarkdownPreview>
+        <MarkdownPreview>
+          {'See {{REF:scribe-ref-3:Figure 7}} here'}
+        </MarkdownPreview>
       )
       expect(container.textContent).toContain('Figure 7')
       expect(container.textContent).not.toContain('{{REF:scribe-ref-3')
@@ -44,7 +46,7 @@ describe('MarkdownPreview — D-02 cosmetic marker transforms', () => {
   describe('footnote markers → discreet superscript', () => {
     it('renders a <sup> containing the footnote number, not the literal marker', () => {
       const { container } = render(
-        <MarkdownPreview>{'Claim[^scribe-fn-2]'}</MarkdownPreview>
+        <MarkdownPreview>Claim[^scribe-fn-2]</MarkdownPreview>
       )
       const sup = container.querySelector('sup')
       expect(sup).not.toBeNull()
@@ -83,7 +85,7 @@ describe('MarkdownPreview — D-02 cosmetic marker transforms', () => {
   describe('GATE §8 passthrough — unmatched/partial markers never throw', () => {
     it('renders surrounding text when a footnote marker is unclosed', () => {
       expect(() =>
-        render(<MarkdownPreview>{'before [^scribe-fn- after'}</MarkdownPreview>)
+        render(<MarkdownPreview>before [^scribe-fn- after</MarkdownPreview>)
       ).not.toThrow()
       expect(screen.getByText(/before/)).toBeInTheDocument()
       expect(screen.getByText(/after/)).toBeInTheDocument()
@@ -106,7 +108,9 @@ describe('MarkdownPreview — D-02 cosmetic marker transforms', () => {
       // Strings are immutable in JS, but assert identity/equality explicitly:
       // the displayed DOM must differ from the verbatim source while `src` is unchanged.
       expect(src).toBe(before)
-      expect(src).toBe('See {{REF:scribe-ref-3:Figure 7}} and Claim[^scribe-fn-2]')
+      expect(src).toBe(
+        'See {{REF:scribe-ref-3:Figure 7}} and Claim[^scribe-fn-2]'
+      )
     })
 
     it('produces cleaned DOM that differs from the verbatim raw source', () => {

@@ -17,7 +17,11 @@
  * @returns {string} The mock-transformed text
  */
 
-import { SCRIBE_ACTIONS, FREE_PROMPT_CONFIG, buildTranslateChildren } from '@/modules/views/OnlyOffice/Scribe/scribeActions'
+import {
+  SCRIBE_ACTIONS,
+  FREE_PROMPT_CONFIG,
+  buildTranslateChildren
+} from '@/modules/views/OnlyOffice/Scribe/scribeActions'
 
 const MOCK_PREFIX = '$ '
 
@@ -109,13 +113,17 @@ function applyMockResult(mockResult, text, extra) {
     return lines
       .map(l => {
         const words = l.split(' ')
-        return MOCK_PREFIX + words.slice(0, Math.ceil(words.length / 2)).join(' ')
+        return (
+          MOCK_PREFIX + words.slice(0, Math.ceil(words.length / 2)).join(' ')
+        )
       })
       .join('\n')
   }
 
   if (result === 'emojify') {
-    return lines.map(l => MOCK_PREFIX + '\u2728 ' + l + ' \uD83C\uDF89').join('\n')
+    return lines
+      .map(l => MOCK_PREFIX + '\u2728 ' + l + ' \uD83C\uDF89')
+      .join('\n')
   }
 
   if (result === 'bullets') {

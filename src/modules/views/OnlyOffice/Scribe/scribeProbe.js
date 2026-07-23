@@ -355,7 +355,11 @@ export function refIntegrity(inputMd, fragments) {
   for (const f of frags) for (const id of refIds(f)) outIds.add(id)
   const missing = [...inIds].filter(id => !outIds.has(id)) // dropped REF
   const fabricated = [...outIds].filter(id => !inIds.has(id)) // invented REF
-  return { broken: missing.length > 0 || fabricated.length > 0, missing, fabricated }
+  return {
+    broken: missing.length > 0 || fabricated.length > 0,
+    missing,
+    fabricated
+  }
 }
 
 /* ------------------------------------------------------------------------- *
@@ -505,7 +509,10 @@ export function importCorpus(json) {
 export function replay(corpus) {
   const c = corpus || readCorpus()
   const samples = Array.isArray(c.samples) ? c.samples : []
-  return samples.map(s => ({ ...s, metrics: computeSampleMetrics(s, s.inputMd) }))
+  return samples.map(s => ({
+    ...s,
+    metrics: computeSampleMetrics(s, s.inputMd)
+  }))
 }
 
 /* ------------------------------------------------------------------------- *

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, {
   useState,
   useCallback,
@@ -7,7 +8,6 @@ import React, {
   forwardRef,
   useImperativeHandle
 } from 'react'
-import PropTypes from 'prop-types'
 
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
@@ -35,7 +35,12 @@ const GRAD_TRANSITION =
   '--scribe-g1 220ms ease, --scribe-g2 220ms ease, --scribe-g3 220ms ease, --scribe-g4 220ms ease'
 const gradVars = focused => {
   const [g1, g2, g3, g4] = focused ? GRAD_VIVID : GRAD_MUTED
-  return { '--scribe-g1': g1, '--scribe-g2': g2, '--scribe-g3': g3, '--scribe-g4': g4 }
+  return {
+    '--scribe-g1': g1,
+    '--scribe-g2': g2,
+    '--scribe-g3': g3,
+    '--scribe-g4': g4
+  }
 }
 const VIEWPORT_MARGIN = 24 // keep the popover off the very edge of the screen
 
@@ -48,7 +53,8 @@ const VIEWPORT_MARGIN = 24 // keep the popover off the very edge of the screen
 // static — still a multicolor border, graceful degradation.
 const STYLE_ID = 'scribe-prompt-input-styles'
 const injectStyles = () => {
-  if (typeof document === 'undefined' || document.getElementById(STYLE_ID)) return
+  if (typeof document === 'undefined' || document.getElementById(STYLE_ID))
+    return
   const el = document.createElement('style')
   el.id = STYLE_ID
   el.textContent = `
@@ -83,276 +89,284 @@ const injectStyles = () => {
   document.head.appendChild(el)
 }
 
-const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape, onActiveChange }, ref) => {
-  const { t } = useI18n()
-  const theme = useTheme()
-  const [value, setValue] = useState('')
-  const [focused, setFocused] = useState(false)
-  const [maxHeight, setMaxHeight] = useState(LINE_HEIGHT * 6 + TEXTAREA_VPAD)
-  const inputRef = useRef(null)
-  const wrapperRef = useRef(null)
-  // Pending caret position to restore after a controlled-value newline insert.
-  const pendingCaretRef = useRef(null)
+const ScribePromptInput = forwardRef(
+  ({ onSubmit, onArrow, onEscape, onActiveChange }, ref) => {
+    const { t } = useI18n()
+    const theme = useTheme()
+    const [value, setValue] = useState('')
+    const [focused, setFocused] = useState(false)
+    const [maxHeight, setMaxHeight] = useState(LINE_HEIGHT * 6 + TEXTAREA_VPAD)
+    const inputRef = useRef(null)
+    const wrapperRef = useRef(null)
+    // Pending caret position to restore after a controlled-value newline insert.
+    const pendingCaretRef = useRef(null)
 
-  const palette = theme.palette || {}
-  const isDark = (palette.type || palette.mode) === 'dark'
-  const innerBg = (palette.background && palette.background.paper) || (isDark ? '#1e1e1e' : '#fff')
-  const textColor = (palette.text && palette.text.primary) || (isDark ? '#fff' : '#000')
-  const placeholderColor = '#9aa0a6'
+    const palette = theme.palette || {}
+    const isDark = (palette.type || palette.mode) === 'dark'
+    const innerBg =
+      (palette.background && palette.background.paper) ||
+      (isDark ? '#1e1e1e' : '#fff')
+    const textColor =
+      (palette.text && palette.text.primary) || (isDark ? '#fff' : '#000')
+    const placeholderColor = '#9aa0a6'
 
-  useEffect(() => { injectStyles() }, [])
+    useEffect(() => {
+      injectStyles()
+    }, [])
 
-  // Tell the host menu when the pill goes from empty to non-empty, so it can
-  // WIDEN to give the prompt room (and back when cleared). The menu is anchored,
-  // so popper repositions on the resize (its ResizeObserver -> scheduleUpdate,
-  // then preventOverflow shifts the left anchor to keep it on screen and the
-  // arrow on the selection). A snap between two widths, like the original.
-  const hasContent = value.length > 0
-  useEffect(() => {
-    if (onActiveChange) onActiveChange(hasContent)
-  }, [hasContent, onActiveChange])
+    // Tell the host menu when the pill goes from empty to non-empty, so it can
+    // WIDEN to give the prompt room (and back when cleared). The menu is anchored,
+    // so popper repositions on the resize (its ResizeObserver -> scheduleUpdate,
+    // then preventOverflow shifts the left anchor to keep it on screen and the
+    // arrow on the selection). A snap between two widths, like the original.
+    const hasContent = value.length > 0
+    useEffect(() => {
+      if (onActiveChange) onActiveChange(hasContent)
+    }, [hasContent, onActiveChange])
 
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      if (inputRef.current) inputRef.current.focus()
-    },
-    // Lets the menu carry the in-progress prompt over to the side panel.
-    getValue: () => value,
-    // Type-ahead: when the user starts typing with the menu (not the pill)
-    // focused, the menu jumps here and hands over that first keystroke — which
-    // was preventDefault'd upstream and would otherwise be lost. Append it and
-    // focus; the caret lands at the end via pendingCaretRef.
-    insertText: text => {
-      setValue(v => {
-        const next = v + text
-        pendingCaretRef.current = next.length
-        return next
-      })
-      if (inputRef.current) inputRef.current.focus()
-    }
-  }))
-
-  // Max textarea height = space the popover actually has below the input, with
-  // a viewport-fraction ceiling. Measured from the pill's own position so it is
-  // a function of the available modal height, not a fixed line count.
-  const computeMaxHeight = useCallback(() => {
-    if (typeof window === 'undefined') return LINE_HEIGHT * 6 + TEXTAREA_VPAD
-    const rect = wrapperRef.current
-      ? wrapperRef.current.getBoundingClientRect()
-      : null
-    const top = rect ? rect.top : 0
-    const avail = window.innerHeight - top - VIEWPORT_MARGIN
-    const ceil = window.innerHeight * 0.6
-    return Math.max(LINE_HEIGHT + TEXTAREA_VPAD, Math.min(avail, ceil))
-  }, [])
-
-  // Width is fixed (set on mount/resize), so the value only drives HEIGHT:
-  // auto-grow the textarea up to the available popover space, then it scrolls.
-  useLayoutEffect(() => {
-    const mh = computeMaxHeight()
-    setMaxHeight(mh)
-
-    const ta = inputRef.current
-    if (ta) {
-      ta.style.height = 'auto'
-      ta.style.height = Math.min(ta.scrollHeight, mh) + 'px'
-    }
-  }, [value, computeMaxHeight])
-
-  // Restore the caret after a controlled newline insertion (Ctrl/Shift+Enter).
-  useLayoutEffect(() => {
-    if (pendingCaretRef.current != null && inputRef.current) {
-      const pos = pendingCaretRef.current
-      pendingCaretRef.current = null
-      inputRef.current.selectionStart = pos
-      inputRef.current.selectionEnd = pos
-    }
-  }, [value])
-
-  useEffect(() => {
-    const onResize = () => {
-      setMaxHeight(computeMaxHeight())
-    }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [computeMaxHeight])
-
-  const handleSubmit = useCallback(() => {
-    const trimmed = value.trim()
-    if (trimmed) {
-      onSubmit(trimmed)
-      setValue('')
-    }
-  }, [value, onSubmit])
-
-  const insertNewline = useCallback(() => {
-    const el = inputRef.current
-    const start = el ? el.selectionStart : value.length
-    const end = el ? el.selectionEnd : value.length
-    const next = value.slice(0, start) + '\n' + value.slice(end)
-    pendingCaretRef.current = start + 1
-    setValue(next)
-  }, [value])
-
-  const handleKeyDown = useCallback(
-    e => {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        e.stopPropagation()
-        // Ctrl/Cmd/Shift+Enter inserts a line break; plain Enter submits.
-        if (e.ctrlKey || e.metaKey || e.shiftKey) {
-          insertNewline()
-        } else {
-          handleSubmit()
-        }
-      } else if (e.key === 'ArrowUp') {
-        // Shift+Arrow extends the text selection — leave that to the browser.
-        if (e.shiftKey) return
-        // Hand off to the menu only at the first line; otherwise let the caret
-        // move up within a multi-line draft.
-        const el = inputRef.current
-        const atFirstLine =
-          !el || value.lastIndexOf('\n', el.selectionStart - 1) === -1
-        if (atFirstLine) {
-          e.preventDefault()
-          e.stopPropagation()
-          if (onArrow) onArrow('up')
-        }
-      } else if (e.key === 'ArrowDown') {
-        if (e.shiftKey) return
-        const el = inputRef.current
-        const atLastLine = !el || value.indexOf('\n', el.selectionStart) === -1
-        if (atLastLine) {
-          e.preventDefault()
-          e.stopPropagation()
-          if (onArrow) onArrow('down')
-        }
-      } else if (e.key === 'Escape') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (onEscape) onEscape()
+    useImperativeHandle(ref, () => ({
+      focus: () => {
+        if (inputRef.current) inputRef.current.focus()
+      },
+      // Lets the menu carry the in-progress prompt over to the side panel.
+      getValue: () => value,
+      // Type-ahead: when the user starts typing with the menu (not the pill)
+      // focused, the menu jumps here and hands over that first keystroke — which
+      // was preventDefault'd upstream and would otherwise be lost. Append it and
+      // focus; the caret lands at the end via pendingCaretRef.
+      insertText: text => {
+        setValue(v => {
+          const next = v + text
+          pendingCaretRef.current = next.length
+          return next
+        })
+        if (inputRef.current) inputRef.current.focus()
       }
-    },
-    [handleSubmit, insertNewline, onArrow, onEscape, value]
-  )
+    }))
 
-  const canSend = value.trim().length > 0
+    // Max textarea height = space the popover actually has below the input, with
+    // a viewport-fraction ceiling. Measured from the pill's own position so it is
+    // a function of the available modal height, not a fixed line count.
+    const computeMaxHeight = useCallback(() => {
+      if (typeof window === 'undefined') return LINE_HEIGHT * 6 + TEXTAREA_VPAD
+      const rect = wrapperRef.current
+        ? wrapperRef.current.getBoundingClientRect()
+        : null
+      const top = rect ? rect.top : 0
+      const avail = window.innerHeight - top - VIEWPORT_MARGIN
+      const ceil = window.innerHeight * 0.6
+      return Math.max(LINE_HEIGHT + TEXTAREA_VPAD, Math.min(avail, ceil))
+    }, [])
 
-  return (
-    <div style={{ padding: '4px 8px 4px 12px', display: 'flex' }}>
-      <div
-        ref={wrapperRef}
-        className="scribe-prompt-pill"
-        style={{
-          '--scribe-bw': '2px',
-          '--scribe-inner': innerBg,
-          ...gradVars(focused),
-          position: 'relative',
-          // The pill FILLS its host — the action menu, its only caller, owns the
-          // width. It used to size itself, snapping from a compact width to a
-          // wide one on the first keystroke; inside a menu anchored to the
-          // selection that snap resized the menu AFTER its position had been
-          // computed, and pushed it off the right edge of the window. A constant
-          // footprint is what keeps a placement decision valid.
-          width: '100%',
-          borderRadius: PILL_RADIUS,
-          boxSizing: 'border-box',
-          boxShadow: focused ? '0 0 0 3px rgba(139, 92, 246, 0.18)' : 'none',
-          transition: `box-shadow 150ms ease, ${GRAD_TRANSITION}`
-        }}
-      >
+    // Width is fixed (set on mount/resize), so the value only drives HEIGHT:
+    // auto-grow the textarea up to the available popover space, then it scrolls.
+    useLayoutEffect(() => {
+      const mh = computeMaxHeight()
+      setMaxHeight(mh)
+
+      const ta = inputRef.current
+      if (ta) {
+        ta.style.height = 'auto'
+        ta.style.height = Math.min(ta.scrollHeight, mh) + 'px'
+      }
+    }, [value, computeMaxHeight])
+
+    // Restore the caret after a controlled newline insertion (Ctrl/Shift+Enter).
+    useLayoutEffect(() => {
+      if (pendingCaretRef.current != null && inputRef.current) {
+        const pos = pendingCaretRef.current
+        pendingCaretRef.current = null
+        inputRef.current.selectionStart = pos
+        inputRef.current.selectionEnd = pos
+      }
+    }, [value])
+
+    useEffect(() => {
+      const onResize = () => {
+        setMaxHeight(computeMaxHeight())
+      }
+      window.addEventListener('resize', onResize)
+      return () => window.removeEventListener('resize', onResize)
+    }, [computeMaxHeight])
+
+    const handleSubmit = useCallback(() => {
+      const trimmed = value.trim()
+      if (trimmed) {
+        onSubmit(trimmed)
+        setValue('')
+      }
+    }, [value, onSubmit])
+
+    const insertNewline = useCallback(() => {
+      const el = inputRef.current
+      const start = el ? el.selectionStart : value.length
+      const end = el ? el.selectionEnd : value.length
+      const next = value.slice(0, start) + '\n' + value.slice(end)
+      pendingCaretRef.current = start + 1
+      setValue(next)
+    }, [value])
+
+    const handleKeyDown = useCallback(
+      e => {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          e.stopPropagation()
+          // Ctrl/Cmd/Shift+Enter inserts a line break; plain Enter submits.
+          if (e.ctrlKey || e.metaKey || e.shiftKey) {
+            insertNewline()
+          } else {
+            handleSubmit()
+          }
+        } else if (e.key === 'ArrowUp') {
+          // Shift+Arrow extends the text selection — leave that to the browser.
+          if (e.shiftKey) return
+          // Hand off to the menu only at the first line; otherwise let the caret
+          // move up within a multi-line draft.
+          const el = inputRef.current
+          const atFirstLine =
+            !el || value.lastIndexOf('\n', el.selectionStart - 1) === -1
+          if (atFirstLine) {
+            e.preventDefault()
+            e.stopPropagation()
+            if (onArrow) onArrow('up')
+          }
+        } else if (e.key === 'ArrowDown') {
+          if (e.shiftKey) return
+          const el = inputRef.current
+          const atLastLine =
+            !el || value.indexOf('\n', el.selectionStart) === -1
+          if (atLastLine) {
+            e.preventDefault()
+            e.stopPropagation()
+            if (onArrow) onArrow('down')
+          }
+        } else if (e.key === 'Escape') {
+          e.preventDefault()
+          e.stopPropagation()
+          if (onEscape) onEscape()
+        }
+      },
+      [handleSubmit, insertNewline, onArrow, onEscape, value]
+    )
+
+    const canSend = value.trim().length > 0
+
+    return (
+      <div style={{ padding: '4px 8px 4px 12px', display: 'flex' }}>
         <div
+          ref={wrapperRef}
+          className="scribe-prompt-pill"
           style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: 8,
-            padding: '2px 8px 2px 14px'
+            '--scribe-bw': '2px',
+            '--scribe-inner': innerBg,
+            ...gradVars(focused),
+            position: 'relative',
+            // The pill FILLS its host — the action menu, its only caller, owns the
+            // width. It used to size itself, snapping from a compact width to a
+            // wide one on the first keystroke; inside a menu anchored to the
+            // selection that snap resized the menu AFTER its position had been
+            // computed, and pushed it off the right edge of the window. A constant
+            // footprint is what keeps a placement decision valid.
+            width: '100%',
+            borderRadius: PILL_RADIUS,
+            boxSizing: 'border-box',
+            boxShadow: focused ? '0 0 0 3px rgba(139, 92, 246, 0.18)' : 'none',
+            transition: `box-shadow 150ms ease, ${GRAD_TRANSITION}`
           }}
         >
-          <textarea
-            ref={inputRef}
-            rows={1}
-            placeholder={t('Scribe.prompt.placeholder')}
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+          <div
             style={{
-              '--scribe-ph': placeholderColor,
-              flex: 1,
-              minWidth: 0,
-              display: 'block',
-              boxSizing: 'border-box',
-              verticalAlign: 'bottom',
-              border: 'none',
-              background: 'transparent',
-              color: textColor,
-              fontFamily: 'inherit',
-              fontSize: FONT_SIZE,
-              lineHeight: `${LINE_HEIGHT}px`,
-              resize: 'none',
-              outline: 'none',
-              margin: 0,
-              padding: `${TEXTAREA_VPAD / 2}px 0`,
-              minHeight: SINGLE_LINE,
-              maxHeight,
-              overflowY: 'auto',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word'
-            }}
-          />
-          <button
-            type="button"
-            className="scribe-prompt-send"
-            onClick={handleSubmit}
-            aria-label="Send"
-            style={{
-              '--scribe-bw': '2px',
-              '--scribe-inner': innerBg,
-              ...gradVars(focused),
-              width: SEND_BUTTON,
-              height: SEND_BUTTON,
-              borderRadius: '50%',
-              boxSizing: 'border-box',
-              flexShrink: 0,
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 0,
-              cursor: canSend ? 'pointer' : 'default',
-              opacity: canSend ? 1 : 0.55,
-              marginBottom: 1,
-              transition: `opacity 150ms ease, ${GRAD_TRANSITION}`
+              alignItems: 'flex-end',
+              gap: 8,
+              padding: '2px 8px 2px 14px'
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <defs>
-                <linearGradient
-                  id="scribe-send-grad"
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="1"
-                >
-                  <stop offset="0" stopColor="#ff5fa2" />
-                  <stop offset="1" stopColor="#ff9d4d" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M4 12h13M12 6l6 6-6 6"
-                stroke="url(#scribe-send-grad)"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <textarea
+              ref={inputRef}
+              rows={1}
+              placeholder={t('Scribe.prompt.placeholder')}
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              style={{
+                '--scribe-ph': placeholderColor,
+                flex: 1,
+                minWidth: 0,
+                display: 'block',
+                boxSizing: 'border-box',
+                verticalAlign: 'bottom',
+                border: 'none',
+                background: 'transparent',
+                color: textColor,
+                fontFamily: 'inherit',
+                fontSize: FONT_SIZE,
+                lineHeight: `${LINE_HEIGHT}px`,
+                resize: 'none',
+                outline: 'none',
+                margin: 0,
+                padding: `${TEXTAREA_VPAD / 2}px 0`,
+                minHeight: SINGLE_LINE,
+                maxHeight,
+                overflowY: 'auto',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word'
+              }}
+            />
+            <button
+              type="button"
+              className="scribe-prompt-send"
+              onClick={handleSubmit}
+              aria-label="Send"
+              style={{
+                '--scribe-bw': '2px',
+                '--scribe-inner': innerBg,
+                ...gradVars(focused),
+                width: SEND_BUTTON,
+                height: SEND_BUTTON,
+                borderRadius: '50%',
+                boxSizing: 'border-box',
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
+                cursor: canSend ? 'pointer' : 'default',
+                opacity: canSend ? 1 : 0.55,
+                marginBottom: 1,
+                transition: `opacity 150ms ease, ${GRAD_TRANSITION}`
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <defs>
+                  <linearGradient
+                    id="scribe-send-grad"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
+                    <stop offset="0" stopColor="#ff5fa2" />
+                    <stop offset="1" stopColor="#ff9d4d" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M4 12h13M12 6l6 6-6 6"
+                  stroke="url(#scribe-send-grad)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 ScribePromptInput.displayName = 'ScribePromptInput'
 

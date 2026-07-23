@@ -12,26 +12,6 @@ import {
 } from '@linagora/twake-icons'
 
 /**
- * Map language codes to display names.
- */
-const LANG_NAMES = {
-  en: 'English',
-  fr: 'Français',
-  de: 'Deutsch',
-  es: 'Español',
-  it: 'Italiano',
-  pt: 'Português',
-  nl: 'Nederlands',
-  pl: 'Polski',
-  ru: 'Русский',
-  ja: '日本語',
-  ko: '한국어',
-  ar: 'العربية',
-  zh: '中文',
-  vi: 'Tiếng Việt'
-}
-
-/**
  * Sort translate children using 'by-language-frequency' strategy:
  * 1. English always first
  * 2. Account language second (if not English)
@@ -43,26 +23,41 @@ const LANG_NAMES = {
  * @returns {Array} Sorted translate sub-actions
  */
 export function buildTranslateChildren(accountLang) {
-  var translateAction = SCRIBE_ACTIONS.find(function (a) { return a.id === 'translate' })
+  var translateAction = SCRIBE_ACTIONS.find(function (a) {
+    return a.id === 'translate'
+  })
   var all = translateAction.children
   var acctCode = (accountLang || '').slice(0, 2).toLowerCase()
 
-  var langs = all.filter(function (c) { return c.type !== 'input' })
-  var other = all.filter(function (c) { return c.type === 'input' })
-
-  var enChild = langs.find(function (c) { return c.id === 'translate-en' })
-  var acctChild = acctCode && acctCode !== 'en'
-    ? langs.find(function (c) { return c.id === 'translate-' + acctCode })
-    : null
-
-  var remaining = langs.filter(function (c) {
-    return c !== enChild && c !== acctChild
-  }).sort(function (a, b) {
-    return a.label.localeCompare(b.label)
+  var langs = all.filter(function (c) {
+    return c.type !== 'input'
+  })
+  var other = all.filter(function (c) {
+    return c.type === 'input'
   })
 
+  var enChild = langs.find(function (c) {
+    return c.id === 'translate-en'
+  })
+  var acctChild =
+    acctCode && acctCode !== 'en'
+      ? langs.find(function (c) {
+          return c.id === 'translate-' + acctCode
+        })
+      : null
+
+  var remaining = langs
+    .filter(function (c) {
+      return c !== enChild && c !== acctChild
+    })
+    .sort(function (a, b) {
+      return a.label.localeCompare(b.label)
+    })
+
   var sorted = [enChild]
-  if (acctChild) { sorted.push(acctChild) }
+  if (acctChild) {
+    sorted.push(acctChild)
+  }
   sorted = sorted.concat(remaining).concat(other)
 
   return sorted
@@ -88,7 +83,8 @@ export const SCRIBE_ACTIONS = [
     labelKey: 'Scribe.menu.correct_grammar',
     icon: CheckIcon,
     children: null,
-    prompt: 'Correct the grammar and spelling of the following text:\n\n{selectedText}',
+    prompt:
+      'Correct the grammar and spelling of the following text:\n\n{selectedText}',
     mockResult: 'capitalize'
   },
   {
@@ -162,21 +158,24 @@ export const SCRIBE_ACTIONS = [
         id: 'tone-professional',
         labelKey: 'Scribe.tone.professional',
         icon: CompanyIcon,
-        prompt: 'Rewrite the following text in a more professional tone:\n\n{selectedText}',
+        prompt:
+          'Rewrite the following text in a more professional tone:\n\n{selectedText}',
         mockResult: 'wrap:Dear Sir/Madam,:Best regards.'
       },
       {
         id: 'tone-casual',
         labelKey: 'Scribe.tone.casual',
         icon: CocktailIcon,
-        prompt: 'Rewrite the following text in a more casual, friendly tone:\n\n{selectedText}',
+        prompt:
+          'Rewrite the following text in a more casual, friendly tone:\n\n{selectedText}',
         mockResult: 'wrap:Hey!:Cheers!'
       },
       {
         id: 'tone-polite',
         labelKey: 'Scribe.tone.polite',
         icon: HandIcon,
-        prompt: 'Rewrite the following text in a more polite and courteous tone:\n\n{selectedText}',
+        prompt:
+          'Rewrite the following text in a more polite and courteous tone:\n\n{selectedText}',
         mockResult: 'wrap:If I may,:Thank you kindly.'
       }
     ]
@@ -192,28 +191,32 @@ export const SCRIBE_ACTIONS = [
         id: 'improve-shorter',
         labelKey: 'Scribe.improve.shorter',
         icon: ContractIcon,
-        prompt: 'Make the following text shorter and more concise while preserving the key meaning:\n\n{selectedText}',
+        prompt:
+          'Make the following text shorter and more concise while preserving the key meaning:\n\n{selectedText}',
         mockResult: 'truncate-half'
       },
       {
         id: 'improve-expand',
         labelKey: 'Scribe.improve.expand',
         icon: ExpandIcon,
-        prompt: 'Expand the following text with additional context, detail and explanation:\n\n{selectedText}',
+        prompt:
+          'Expand the following text with additional context, detail and explanation:\n\n{selectedText}',
         mockResult: 'suffix: (expanded with additional context and detail)'
       },
       {
         id: 'improve-emojify',
         labelKey: 'Scribe.improve.emojify',
         icon: 'emoji',
-        prompt: 'Add relevant emojis to the following text to make it more expressive:\n\n{selectedText}',
+        prompt:
+          'Add relevant emojis to the following text to make it more expressive:\n\n{selectedText}',
         mockResult: 'emojify'
       },
       {
         id: 'improve-bullets',
         labelKey: 'Scribe.improve.bullets',
         icon: ListIcon,
-        prompt: 'Transform the following text into a bullet-point list:\n\n{selectedText}',
+        prompt:
+          'Transform the following text into a bullet-point list:\n\n{selectedText}',
         mockResult: 'bullets'
       }
     ]

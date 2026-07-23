@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- intentional protocol-validation diagnostics */
 /**
  * cozy-bridge protocol constants, message factories, and validators.
  *
@@ -100,10 +101,24 @@ export function createResponseMessage(intentId, status, action, data) {
  * @param {{action: 'replace'|'insert', text: string, html?: string, md?: string}} payload
  * @returns {import('./types').IntentMessage}
  */
-export function createPanelActionIntent({ action, text, html, md, partialTableInfo, tableSnapshots }) {
+export function createPanelActionIntent({
+  action,
+  text,
+  html,
+  md,
+  partialTableInfo,
+  tableSnapshots
+}) {
   return createIntentMessage(
     INTENT_ACTIONS.PANEL_ACTION,
-    { action: action, text: text, html: html, md: md, partialTableInfo: partialTableInfo, tableSnapshots: tableSnapshots },
+    {
+      action: action,
+      text: text,
+      html: html,
+      md: md,
+      partialTableInfo: partialTableInfo,
+      tableSnapshots: tableSnapshots
+    },
     'cozy-drive-panel'
   )
 }
@@ -156,7 +171,7 @@ export function validateIntent(msg) {
       )
       return false
     }
-  } catch (e) {
+  } catch (_e) {
     console.warn('[cozy-bridge] Invalid intent: data is not serializable')
     return false
   }
@@ -188,9 +203,7 @@ export function validateResponse(msg) {
     return false
   }
   if (typeof msg.intentId !== 'string' || !msg.intentId) {
-    console.warn(
-      '[cozy-bridge] Invalid response: missing or invalid intentId'
-    )
+    console.warn('[cozy-bridge] Invalid response: missing or invalid intentId')
     return false
   }
   if (msg.status !== 'ok' && msg.status !== 'error') {
@@ -210,7 +223,7 @@ export function validateResponse(msg) {
         )
         return false
       }
-    } catch (e) {
+    } catch (_e) {
       console.warn('[cozy-bridge] Invalid response: data is not serializable')
       return false
     }

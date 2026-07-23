@@ -1,10 +1,10 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
-import { useI18n } from 'twake-i18n'
 import Buttons from 'cozy-ui/transpiled/react/Buttons'
 import { ConfirmDialog } from 'cozy-ui/transpiled/react/CozyDialogs'
 import Typography from 'cozy-ui/transpiled/react/Typography'
+import { useI18n } from 'twake-i18n'
 
 /**
  * Placeholder modal for AI_TEXT_ASSISTANT intent display and action.
@@ -54,7 +54,11 @@ const ScribeModal = ({ open, selectedText, onReplace, onInsert, onCancel }) => {
       }
       actions={
         <>
-          <Buttons variant="secondary" label={t('Scribe.button.cancel')} onClick={onCancel} />
+          <Buttons
+            variant="secondary"
+            label={t('Scribe.button.cancel')}
+            onClick={onCancel}
+          />
           <Buttons
             variant="secondary"
             label={t('Scribe.button.insert_after')}

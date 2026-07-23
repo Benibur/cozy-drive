@@ -27,7 +27,10 @@ describe('assistantSegments', () => {
     })
 
     it('(FRAG-01) is 0-indexed: {{fragment:0}} resolves to fragments[0]', () => {
-      const segments = buildAssistantSegments('{{fragment:0}}', ['first', 'second'])
+      const segments = buildAssistantSegments('{{fragment:0}}', [
+        'first',
+        'second'
+      ])
       const cards = segments.filter(s => s.type === 'card')
       // first card encountered is the inline {{fragment:0}} → fragments[0]
       expect(cards[0]).toEqual({ type: 'card', index: 0, raw: 'first' })
@@ -44,7 +47,10 @@ describe('assistantSegments', () => {
     })
 
     it('(D-04) mixes an inline referenced card with an orphan card appended at the end', () => {
-      const segments = buildAssistantSegments('see {{fragment:1}} here', ['a', 'b'])
+      const segments = buildAssistantSegments('see {{fragment:1}} here', [
+        'a',
+        'b'
+      ])
       // inline card for index 1, then orphan card for index 0 appended at the end
       const cards = segments.filter(s => s.type === 'card')
       expect(cards).toEqual([
@@ -89,7 +95,9 @@ describe('assistantSegments', () => {
     // Out-of-range skip — a dangling {{fragment:5}} with only 1 fragment is stripped from
     // prose and never resolved to a card.
     it('(out-of-range) strips a dangling {{fragment:5}} marker and emits no card for it', () => {
-      const segments = buildAssistantSegments('before {{fragment:5}} after', ['only'])
+      const segments = buildAssistantSegments('before {{fragment:5}} after', [
+        'only'
+      ])
       const proseMds = segments
         .filter(s => s.type === 'prose')
         .map(s => s.md)
@@ -97,7 +105,11 @@ describe('assistantSegments', () => {
       expect(proseMds).not.toContain('{{fragment:5}}')
       expect(segments.some(s => s.type === 'card' && s.index === 5)).toBe(false)
       // the lone fragment is unreferenced → appended as an orphan card
-      expect(segments.some(s => s.type === 'card' && s.index === 0 && s.raw === 'only')).toBe(true)
+      expect(
+        segments.some(
+          s => s.type === 'card' && s.index === 0 && s.raw === 'only'
+        )
+      ).toBe(true)
     })
 
     it('(card.raw verbatim) keeps card.raw === fragments[index] with markers intact', () => {

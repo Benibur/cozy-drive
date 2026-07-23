@@ -115,6 +115,7 @@ export function useCozyBridge(
 
   const respond = useCallback(responsePayload => {
     if (!respondRef.current) {
+      // eslint-disable-next-line no-console -- bridge diagnostic
       console.warn('[useCozyBridge] No pending intent to respond to')
       return
     }
@@ -150,11 +151,11 @@ export function useCozyBridge(
           try {
             win.frames[i].postMessage(intent, '*')
             walk(win.frames[i])
-          } catch (e) {
+          } catch (_e) {
             // cross-origin frame, skip
           }
         }
-      } catch (e) {
+      } catch (_e) {
         // access denied
       }
     }

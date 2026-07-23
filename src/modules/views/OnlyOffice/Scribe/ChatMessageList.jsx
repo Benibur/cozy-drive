@@ -1,3 +1,8 @@
+import {
+  Cross as CrossIcon,
+  Icon,
+  Info as InfoIcon
+} from '@linagora/twake-icons'
 import React, {
   useRef,
   useState,
@@ -7,12 +12,6 @@ import React, {
   useImperativeHandle
 } from 'react'
 import { createPortal } from 'react-dom'
-
-import {
-  Cross as CrossIcon,
-  Icon,
-  Info as InfoIcon
-} from '@linagora/twake-icons'
 
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
 import Spinner from 'cozy-ui/transpiled/react/Spinner'

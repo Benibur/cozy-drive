@@ -68,10 +68,12 @@ export function buildAssistantSegments(discussion, fragments) {
   // matching the prior tail-strip behavior). This is a
   // strip-only operation; it can never consume {{REF:...}} markers because the
   // pattern is anchored on the literal `fragment` channel name.
-  const cleanTail = disc.slice(cursor).replace(/\{\{fragment:(\d+)\}\}/g, (m, d) => {
-    const i = parseInt(d, 10)
-    return i < 0 || i >= frags.length ? '' : m
-  })
+  const cleanTail = disc
+    .slice(cursor)
+    .replace(/\{\{fragment:(\d+)\}\}/g, (m, d) => {
+      const i = parseInt(d, 10)
+      return i < 0 || i >= frags.length ? '' : m
+    })
   if (cleanTail) segments.push({ type: 'prose', md: cleanTail })
 
   // D-04: append orphan (unreferenced) fragments as cards at the end, in order.

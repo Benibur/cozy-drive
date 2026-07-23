@@ -119,40 +119,43 @@ const ScribeAnchoredContainer = ({
         popperRef={popperRef}
         placement="bottom-start"
         style={{ zIndex: ANCHORED_Z_INDEX }}
-      modifiers={{
-        offset: { enabled: true, offset: `0, ${ANCHOR_OFFSET}` },
-        // BASE placements, without the variation: popper compares each entry
-        // against `data.placement.split('-')[0]`, so a behavior of
-        // ['bottom-start', 'top-start'] never matches 'bottom' and flip returns
-        // on its first line — silently disabling itself. The menu then only got
-        // pushed back into the window by preventOverflow, which slid it up OVER
-        // the selection with the arrow left pointing at an unrelated line.
-        // Popper re-applies the variation itself (placement + '-' + variation).
-        flip: { enabled: true, behavior: ['bottom', 'top'] },
-        preventOverflow: {
-          enabled: true,
-          boundariesElement: 'viewport',
-          padding: VIEWPORT_PADDING
-        },
-        arrow: { enabled: true, element: arrowEl }
-      }}
-    >
-      {({ placement }) => (
-        <ClickAwayListener onClickAway={onClose}>
-          <div
-            data-scribe-placement={placement}
-            style={{
-              // The arrow is painted in the menu's own paper colour, which only
-              // the theme knows and a stylesheet cannot read.
-              '--scribe-arrow-bg': theme.palette.background.paper,
-              ...paperStyle
-            }}
-          >
-            <span className={styles['scribe-anchor-arrow']} ref={setArrowEl} />
-            {children}
-          </div>
-        </ClickAwayListener>
-      )}
+        modifiers={{
+          offset: { enabled: true, offset: `0, ${ANCHOR_OFFSET}` },
+          // BASE placements, without the variation: popper compares each entry
+          // against `data.placement.split('-')[0]`, so a behavior of
+          // ['bottom-start', 'top-start'] never matches 'bottom' and flip returns
+          // on its first line — silently disabling itself. The menu then only got
+          // pushed back into the window by preventOverflow, which slid it up OVER
+          // the selection with the arrow left pointing at an unrelated line.
+          // Popper re-applies the variation itself (placement + '-' + variation).
+          flip: { enabled: true, behavior: ['bottom', 'top'] },
+          preventOverflow: {
+            enabled: true,
+            boundariesElement: 'viewport',
+            padding: VIEWPORT_PADDING
+          },
+          arrow: { enabled: true, element: arrowEl }
+        }}
+      >
+        {({ placement }) => (
+          <ClickAwayListener onClickAway={onClose}>
+            <div
+              data-scribe-placement={placement}
+              style={{
+                // The arrow is painted in the menu's own paper colour, which only
+                // the theme knows and a stylesheet cannot read.
+                '--scribe-arrow-bg': theme.palette.background.paper,
+                ...paperStyle
+              }}
+            >
+              <span
+                className={styles['scribe-anchor-arrow']}
+                ref={setArrowEl}
+              />
+              {children}
+            </div>
+          </ClickAwayListener>
+        )}
       </Popper>
     </>
   )

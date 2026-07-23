@@ -53,7 +53,10 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
     const trimmed = text.trim()
     if (!trimmed || isLoading) return
     if (currentSelection) {
-      sendMessage(trimmed, { text: currentSelection.text, markdown: currentSelection.markdown })
+      sendMessage(trimmed, {
+        text: currentSelection.text,
+        markdown: currentSelection.markdown
+      })
     } else {
       sendMessage(trimmed)
     }
@@ -63,20 +66,23 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
     }
   }, [text, isLoading, sendMessage, currentSelection])
 
-  const handleKeyDown = useCallback(e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSend()
-      return
-    }
-    // KBD-01: ArrowUp from an EMPTY draft leaves the input and hands focus to
-    // the thread controller (most-recent card). The text.length === 0 guard
-    // keeps ArrowUp editing a multi-line draft when text is present.
-    if (e.key === 'ArrowUp' && text.length === 0 && onArrowUp) {
-      e.preventDefault()
-      onArrowUp()
-    }
-  }, [handleSend, text, onArrowUp])
+  const handleKeyDown = useCallback(
+    e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
+        handleSend()
+        return
+      }
+      // KBD-01: ArrowUp from an EMPTY draft leaves the input and hands focus to
+      // the thread controller (most-recent card). The text.length === 0 guard
+      // keeps ArrowUp editing a multi-line draft when text is present.
+      if (e.key === 'ArrowUp' && text.length === 0 && onArrowUp) {
+        e.preventDefault()
+        onArrowUp()
+      }
+    },
+    [handleSend, text, onArrowUp]
+  )
 
   const handleChange = useCallback(e => {
     setText(e.target.value)
@@ -121,7 +127,11 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
       if (!el) return
       if (document.activeElement !== el) {
         if (document.activeElement) {
-          try { document.activeElement.blur() } catch (e) { /* cross-origin */ }
+          try {
+            document.activeElement.blur()
+          } catch (_e) {
+            /* cross-origin */
+          }
         }
         el.focus()
       }
@@ -169,58 +179,57 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
         )}
       </div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-      <textarea
-        ref={textareaRef}
-        value={text}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        placeholder={t('Scribe.prompt.placeholder')}
-        disabled={isLoading}
-        rows={1}
-        style={{
-          flex: 1,
-          border: 'none',
-          background: 'transparent',
-          color: theme.palette.text.primary,
-          fontFamily: 'inherit',
-          fontSize: 14,
-          lineHeight: `${LINE_HEIGHT}px`,
-          resize: 'none',
-          outline: 'none',
-          padding: '8px 0',
-          minHeight: LINE_HEIGHT + 16,
-          maxHeight: LINE_HEIGHT * MAX_ROWS + 16
-        }}
-      />
-      <button
-        onClick={handleSend}
-        disabled={!canSend}
-        style={{
-          width: 32,
-          height: 32,
-          borderRadius: '50%',
-          border: 'none',
-          background: canSend ? SCRIBE_PURPLE : theme.palette.action.disabledBackground,
-          color: canSend ? '#fff' : theme.palette.action.disabled,
-          cursor: canSend ? 'pointer' : 'default',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          fontSize: 16,
-          lineHeight: 1,
-          padding: 0,
-          transition: 'background 150ms ease'
-        }}
-        aria-label="Send"
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M2 14l12-6L2 2v5l8 1-8 1v5z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder={t('Scribe.prompt.placeholder')}
+          disabled={isLoading}
+          rows={1}
+          style={{
+            flex: 1,
+            border: 'none',
+            background: 'transparent',
+            color: theme.palette.text.primary,
+            fontFamily: 'inherit',
+            fontSize: 14,
+            lineHeight: `${LINE_HEIGHT}px`,
+            resize: 'none',
+            outline: 'none',
+            padding: '8px 0',
+            minHeight: LINE_HEIGHT + 16,
+            maxHeight: LINE_HEIGHT * MAX_ROWS + 16
+          }}
+        />
+        <button
+          onClick={handleSend}
+          disabled={!canSend}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: '50%',
+            border: 'none',
+            background: canSend
+              ? SCRIBE_PURPLE
+              : theme.palette.action.disabledBackground,
+            color: canSend ? '#fff' : theme.palette.action.disabled,
+            cursor: canSend ? 'pointer' : 'default',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            fontSize: 16,
+            lineHeight: 1,
+            padding: 0,
+            transition: 'background 150ms ease'
+          }}
+          aria-label="Send"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 14l12-6L2 2v5l8 1-8 1v5z" fill="currentColor" />
+          </svg>
+        </button>
       </div>
     </div>
   )

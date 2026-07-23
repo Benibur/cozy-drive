@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types'
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react'
-import { useI18n } from 'twake-i18n'
 
 import { useClient } from 'cozy-client'
-import Alert from 'cozy-ui/transpiled/react/Alert'
 import Paper from 'cozy-ui/transpiled/react/Paper'
 import Spinner from 'cozy-ui/transpiled/react/Spinner'
 import Typography from 'cozy-ui/transpiled/react/Typography'
+import { useI18n } from 'twake-i18n'
 
 import styles from '@/modules/views/OnlyOffice/Scribe/scribe.styl'
 
@@ -14,10 +13,6 @@ import { ScribeActionMenu } from '@/modules/views/OnlyOffice/Scribe/ScribeAction
 import { ScribeContainer } from '@/modules/views/OnlyOffice/Scribe/ScribeContainer'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ScribeResultPanel } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
-import {
-  createVirtualAnchor,
-  getVisibleSelectionBox
-} from '@/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry'
 import {
   callScribeAIWithReask,
   buildMessages,
@@ -34,6 +29,10 @@ import {
   formatMessagesForDisplay
 } from '@/modules/views/OnlyOffice/Scribe/scribeDevMode'
 import { recordProbeSample } from '@/modules/views/OnlyOffice/Scribe/scribeProbe'
+import {
+  createVirtualAnchor,
+  getVisibleSelectionBox
+} from '@/modules/views/OnlyOffice/Scribe/scribeSelectionGeometry'
 import { transformCellMarkersForPreview } from '@/modules/views/OnlyOffice/Scribe/tableCellMarkers'
 
 /**
@@ -87,7 +86,7 @@ const ScribePopover = ({
   const [cellWarning, setCellWarning] = useState(null)
 
   // Ambiguity message for partial table selections (TBL-02)
-  const [ambiguityMessage, setAmbiguityMessage] = useState(null)
+  const [, setAmbiguityMessage] = useState(null)
 
   // Drag offset for result panel repositioning
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
@@ -242,7 +241,11 @@ const ScribePopover = ({
 
         // Dev diagnostic: dump the exact prompt + raw response + parsed contract so
         // the popover path can be compared against the chat (surface-divergence).
-        logScribeExchange('popover', { messages, rawResponse: text, parsed })
+        logScribeExchange('popover', {
+          messages,
+          rawResponse: parsed.raw,
+          parsed
+        })
 
         // PROBE-01 (D-11): feed the conformance probe the parsed popover response.
         // Dev-mode only (isScribeDevMd guard) => zero production cost. `inputMd`
@@ -298,7 +301,7 @@ const ScribePopover = ({
         const devExchange = isScribeDevMd()
           ? {
               messages,
-              rawResponse: text,
+              rawResponse: parsed.raw,
               parsed,
               devData: {
                 html: selectedHtml || '',
@@ -419,7 +422,10 @@ const ScribePopover = ({
   const selectionRectRef = useRef(selectionRect)
   selectionRectRef.current = selectionRect
   const menuAnchor = useMemo(
-    () => createVirtualAnchor(() => getVisibleSelectionBox(selectionRectRef.current)),
+    () =>
+      createVirtualAnchor(() =>
+        getVisibleSelectionBox(selectionRectRef.current)
+      ),
     []
   )
 

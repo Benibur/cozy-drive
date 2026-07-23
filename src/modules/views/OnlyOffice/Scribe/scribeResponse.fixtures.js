@@ -117,8 +117,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
   preamble: [
     {
       name: 'preamble (fr): French prose before the JSON object',
-      raw:
-        'Bien sûr, voici la réponse demandée :\n{"discussion":"Reformulé.","fragments":["Le texte corrigé."]}',
+      raw: 'Bien sûr, voici la réponse demandée :\n{"discussion":"Reformulé.","fragments":["Le texte corrigé."]}',
       surface: 'chat',
       expect: {
         fellBack: false,
@@ -129,8 +128,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
     },
     {
       name: 'preamble (en): English prose before the JSON object',
-      raw:
-        'Sure! Here is the structured result you asked for:\n{"discussion":"Rewritten.","fragments":["The corrected text."]}',
+      raw: 'Sure! Here is the structured result you asked for:\n{"discussion":"Rewritten.","fragments":["The corrected text."]}',
       surface: 'chat',
       expect: {
         fellBack: false,
@@ -141,8 +139,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
     },
     {
       name: 'preamble (en): prose before AND after the JSON object',
-      raw:
-        'Here you go: {"discussion":"d","fragments":["frag"]} Let me know if you want changes!',
+      raw: 'Here you go: {"discussion":"d","fragments":["frag"]} Let me know if you want changes!',
       surface: 'popover',
       expect: {
         fellBack: false,
@@ -220,8 +217,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
     },
     {
       name: 'splitTable: a cell opened but its table never closed',
-      raw:
-        '{"discussion":"d","fragments":["[TABLE:1][CELL:0,0]x[/CELL]"]}',
+      raw: '{"discussion":"d","fragments":["[TABLE:1][CELL:0,0]x[/CELL]"]}',
       surface: 'popover',
       expect: {
         fellBack: false,
@@ -241,8 +237,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
   brokenRef: [
     {
       name: 'brokenRef: {{REF:scribe-ref-3 …}} missing its closing }} — preserved verbatim',
-      raw:
-        '{"discussion":"see the note","fragments":["voir {{REF:scribe-ref-3:la section"]}',
+      raw: '{"discussion":"see the note","fragments":["voir {{REF:scribe-ref-3:la section"]}',
       surface: 'chat',
       expect: {
         fellBack: false,
@@ -252,8 +247,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
     },
     {
       name: 'brokenRef: a footnote marker [^scribe-fn-2 missing its closing ] — preserved verbatim',
-      raw:
-        '{"discussion":"d","fragments":["a claim[^scribe-fn-2 with no closing bracket"]}',
+      raw: '{"discussion":"d","fragments":["a claim[^scribe-fn-2 with no closing bracket"]}',
       surface: 'chat',
       expect: {
         fellBack: false,
@@ -263,8 +257,7 @@ export const SCRIBE_RESPONSE_FIXTURES = {
     },
     {
       name: 'brokenRef: a well-formed {{REF:scribe-ref-7:link}} is preserved untouched (control)',
-      raw:
-        '{"discussion":"d","fragments":["see {{REF:scribe-ref-7:link}} here"]}',
+      raw: '{"discussion":"d","fragments":["see {{REF:scribe-ref-7:link}} here"]}',
       surface: 'popover',
       expect: {
         fellBack: false,

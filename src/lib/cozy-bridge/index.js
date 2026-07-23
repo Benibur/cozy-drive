@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- intentional host-side bridge diagnostics */
 /**
  * CozyBridge -- host-side message bridge for intent-based communication.
  *
@@ -98,7 +99,11 @@ export class CozyBridge {
     const msg = event.data
 
     // 2. Check message type and version for intents
-    if (!msg || msg.type !== MSG_TYPE_INTENT || msg.version !== PROTOCOL_VERSION)
+    if (
+      !msg ||
+      msg.type !== MSG_TYPE_INTENT ||
+      msg.version !== PROTOCOL_VERSION
+    )
       return
 
     // 3. Validate intent schema
@@ -121,9 +126,7 @@ export class CozyBridge {
     // 6. Create respond function
     const respond = ({ status, action, data }) => {
       if (!source) {
-        console.error(
-          '[cozy-bridge] Cannot respond: event.source is null'
-        )
+        console.error('[cozy-bridge] Cannot respond: event.source is null')
         return
       }
       const response = createResponseMessage(msg.intentId, status, action, data)

@@ -1,6 +1,6 @@
+import { marked } from 'marked'
 import TurndownService from 'turndown'
 import { gfm } from 'turndown-plugin-gfm'
-import { marked } from 'marked'
 
 /**
  * Normalize rich-text HTML to clean semantic markup that Turndown understands.
@@ -62,9 +62,18 @@ export function normalizeHtml(html) {
       const brs = Array.from(cell.querySelectorAll('br'))
       for (const br of brs) {
         const next = br.nextSibling
-        if (next && next.nodeType === 3 && next.textContent.trim() === '\u00a0') {
+        if (
+          next &&
+          next.nodeType === 3 &&
+          next.textContent.trim() === '\u00a0'
+        ) {
           next.remove()
-        } else if (next && next.nodeType === 1 && next.tagName === 'SPAN' && next.textContent.trim() === '\u00a0') {
+        } else if (
+          next &&
+          next.nodeType === 1 &&
+          next.tagName === 'SPAN' &&
+          next.textContent.trim() === '\u00a0'
+        ) {
           next.remove()
         }
       }
@@ -91,15 +100,7 @@ export function normalizeHtml(html) {
 
   // Merge adjacent siblings with identical tag+style. Office-style editors
   // often fragment runs of same formatting (e.g. <b>foo</b><b>bar</b>).
-  const mergeableTags = new Set([
-    'STRONG',
-    'EM',
-    'B',
-    'I',
-    'U',
-    'S',
-    'SPAN'
-  ])
+  const mergeableTags = new Set(['STRONG', 'EM', 'B', 'I', 'U', 'S', 'SPAN'])
   let merged = true
   while (merged) {
     merged = false
@@ -128,9 +129,7 @@ export function normalizeHtml(html) {
   // to indicate depth. Margin values are mapped to nesting levels per-list.
   const lists = Array.from(doc.body.querySelectorAll('ul, ol'))
   for (const list of lists) {
-    const items = Array.from(list.children).filter(
-      c => c.tagName === 'LI'
-    )
+    const items = Array.from(list.children).filter(c => c.tagName === 'LI')
     if (items.length === 0) continue
 
     // Extract margin-left from the <p> inside each <li>
@@ -142,8 +141,9 @@ export function normalizeHtml(html) {
     })
 
     // Build depth map from sorted unique margin values
-    const uniqueMargins = [...new Set(margins.filter(m => m > 0))]
-      .sort((a, b) => a - b)
+    const uniqueMargins = [...new Set(margins.filter(m => m > 0))].sort(
+      (a, b) => a - b
+    )
     if (uniqueMargins.length <= 1) continue
 
     const getDepth = margin => {
@@ -177,8 +177,7 @@ export function normalizeHtml(html) {
 
       while (currentDepth > targetDepth) {
         // Go up: parent <li> → parent <ul/ol>
-        currentParent =
-          currentParent.parentElement?.parentElement || newList
+        currentParent = currentParent.parentElement?.parentElement || newList
         currentDepth--
       }
 

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useCallback } from 'react'
-import { useI18n } from 'twake-i18n'
 
 import Tooltip from 'cozy-ui/transpiled/react/Tooltip'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
+import { useI18n } from 'twake-i18n'
 
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
@@ -14,28 +14,87 @@ const SCRIBE_PURPLE = '#7C3AED'
 
 // Inline SVG icons (small, 16x16)
 const CopyIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
-    <path d="M10.5 5.5V3.5C10.5 2.67 9.83 2 9 2H3.5C2.67 2 2 2.67 2 3.5V9C2 9.83 2.67 10.5 3.5 10.5H5.5" stroke="currentColor" strokeWidth="1.2" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      x="5.5"
+      y="5.5"
+      width="8"
+      height="8"
+      rx="1.5"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <path
+      d="M10.5 5.5V3.5C10.5 2.67 9.83 2 9 2H3.5C2.67 2 2 2.67 2 3.5V9C2 9.83 2.67 10.5 3.5 10.5H5.5"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
   </svg>
 )
 
 const InsertIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 3v10M3 8h10"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
   </svg>
 )
 
 const ReplaceIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 6l2-2 2 2M6 4v6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 10l-2 2-2-2M10 12V6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4 6l2-2 2 2M6 4v6"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 10l-2 2-2-2M10 12V6"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )
 
 const CheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 8.5l3 3 7-7" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M3 8.5l3 3 7-7"
+      stroke="#22c55e"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )
 
@@ -71,7 +130,7 @@ const MessageActions = ({ content, hasSelection }) => {
         await navigator.clipboard.writeText(content)
       }
       showConfirmation('copy')
-    } catch (e) {
+    } catch (_e) {
       // Clipboard write failed silently
     }
   }, [content, showConfirmation])
@@ -125,7 +184,11 @@ const MessageActions = ({ content, hasSelection }) => {
 
   return (
     <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
-      <Tooltip title={t('Scribe.button.copy')} enterDelay={600} enterNextDelay={600}>
+      <Tooltip
+        title={t('Scribe.button.copy')}
+        enterDelay={600}
+        enterNextDelay={600}
+      >
         <button
           style={btnStyle}
           onClick={handleCopy}
@@ -135,7 +198,11 @@ const MessageActions = ({ content, hasSelection }) => {
           {confirmedAction === 'copy' ? <CheckIcon /> : <CopyIcon />}
         </button>
       </Tooltip>
-      <Tooltip title={t('Scribe.button.insert')} enterDelay={600} enterNextDelay={600}>
+      <Tooltip
+        title={t('Scribe.button.insert')}
+        enterDelay={600}
+        enterNextDelay={600}
+      >
         <button
           style={btnStyle}
           onClick={handleInsert}
@@ -146,7 +213,11 @@ const MessageActions = ({ content, hasSelection }) => {
         </button>
       </Tooltip>
       {hasSelection && (
-        <Tooltip title={t('Scribe.button.replace')} enterDelay={600} enterNextDelay={600}>
+        <Tooltip
+          title={t('Scribe.button.replace')}
+          enterDelay={600}
+          enterNextDelay={600}
+        >
           <button
             style={btnStyle}
             onClick={handleReplace}

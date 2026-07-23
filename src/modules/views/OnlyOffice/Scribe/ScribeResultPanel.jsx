@@ -5,7 +5,6 @@ import {
 } from '@linagora/twake-icons'
 import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useCallback, useState } from 'react'
-import { useI18n } from 'twake-i18n'
 
 import Buttons from 'cozy-ui/transpiled/react/Buttons'
 import Checkbox from 'cozy-ui/transpiled/react/Checkbox'
@@ -13,6 +12,7 @@ import IconButton from 'cozy-ui/transpiled/react/IconButton'
 import Paper from 'cozy-ui/transpiled/react/Paper'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
+import { useI18n } from 'twake-i18n'
 
 import styles from '@/modules/views/OnlyOffice/Scribe/scribe.styl'
 
@@ -991,7 +991,6 @@ ScribeDevPanels.defaultProps = {
 
 const ScribeResultPanel = ({
   breadcrumb,
-  resultText,
   rawFragment,
   error,
   canRetry,
@@ -1228,7 +1227,9 @@ const ScribeResultPanel = ({
             data-scribe-result-card
             style={{
               border: `1px solid ${SCRIBE_PURPLE}`,
-              background: isDark ? 'rgba(124, 58, 237, 0.12)' : SCRIBE_PURPLE_08,
+              background: isDark
+                ? 'rgba(124, 58, 237, 0.12)'
+                : SCRIBE_PURPLE_08,
               borderRadius: 8,
               padding: '8px 10px',
               margin: '4px 0'

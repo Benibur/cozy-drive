@@ -1,3 +1,4 @@
+/* global __webpack_public_path__: writable -- webpack magic global for dynamic publicPath */
 /**
  * Scribe Dev MD Mode
  *
@@ -94,13 +95,11 @@ var _beautifyPromise = null
 export function loadBeautify() {
   if (_beautifyPromise) return _beautifyPromise
 
-  // eslint-disable-next-line camelcase, no-undef
   var saved =
     typeof __webpack_public_path__ !== 'undefined'
       ? __webpack_public_path__
       : undefined
   if (saved) {
-    // eslint-disable-next-line camelcase, no-undef
     __webpack_public_path__ = '/'
   }
 
@@ -109,14 +108,12 @@ export function loadBeautify() {
   )
     .then(function (mod) {
       if (saved) {
-        // eslint-disable-next-line camelcase, no-undef
         __webpack_public_path__ = saved
       }
       return mod.default || mod
     })
     .catch(function (err) {
       if (saved) {
-        // eslint-disable-next-line camelcase, no-undef
         __webpack_public_path__ = saved
       }
       throw err
@@ -139,7 +136,6 @@ var _hljsPromise = null
 export function loadHighlightJs() {
   if (_hljsPromise) return _hljsPromise
 
-  // eslint-disable-next-line camelcase, no-undef
   var savedPublicPath =
     typeof __webpack_public_path__ !== 'undefined'
       ? __webpack_public_path__
@@ -147,7 +143,6 @@ export function loadHighlightJs() {
 
   // Point chunk loading at the actual page origin
   if (typeof window !== 'undefined' && savedPublicPath) {
-    // eslint-disable-next-line camelcase, no-undef
     __webpack_public_path__ = '/'
   }
 
@@ -161,7 +156,6 @@ export function loadHighlightJs() {
     .then(function (modules) {
       // Restore original public path for HMR
       if (savedPublicPath) {
-        // eslint-disable-next-line camelcase, no-undef
         __webpack_public_path__ = savedPublicPath
       }
 
@@ -199,7 +193,6 @@ export function loadHighlightJs() {
     .catch(function (err) {
       // Restore on error too
       if (savedPublicPath) {
-        // eslint-disable-next-line camelcase, no-undef
         __webpack_public_path__ = savedPublicPath
       }
       throw err

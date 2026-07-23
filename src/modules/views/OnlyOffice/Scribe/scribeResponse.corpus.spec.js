@@ -138,8 +138,7 @@ describe('fellBack rate — code-fence reliquat re-measure (D-08)', () => {
   it('measures a 0% fallback rate across the entire fence corpus', () => {
     const fenceFixtures = SCRIBE_RESPONSE_FIXTURES.fence
     const fellBackCount = fenceFixtures.filter(
-      f =>
-        parseScribeResponse(f.raw, { surface: f.surface }).fellBack === true
+      f => parseScribeResponse(f.raw, { surface: f.surface }).fellBack === true
     ).length
     expect(fellBackCount).toBe(0)
   })
