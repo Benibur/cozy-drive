@@ -26,6 +26,10 @@ const ANCHORED_Z_INDEX = 100001
 // only darkens; it captures nothing.
 const VEIL_Z_INDEX = ANCHORED_Z_INDEX - 1
 const VEIL_COLOR = 'rgba(0, 0, 0, 0.24)'
+// Fade the veil in AND out. The out matters: gating render on `open` alone tore
+// the veil out of the DOM the instant the menu closed, so the dim vanished in
+// one frame — a flicker. We keep it mounted through this fade, then unmount.
+const VEIL_FADE_MS = 160
 
 /**
  * Anchored, NON-modal container: the menu hangs off the selection with an arrow
@@ -101,9 +105,25 @@ const ScribeAnchoredContainer = ({
   // on the same signal.
   const revealed = !(paperStyle && paperStyle.opacity === 0)
 
+  // Keep the veil in the DOM across a close so it can fade OUT instead of being
+  // yanked. When `open` flips false we colour it transparent (the transition
+  // does the fade) and only unmount once the fade has run. A re-open cancels the
+  // pending unmount. (This covers the common dismissals — Escape, re-click,
+  // click-away — that keep the container mounted; a close that also drops the
+  // anchor unmounts the whole container and is instantaneous by nature.)
+  const [veilMounted, setVeilMounted] = useState(false)
+  useEffect(() => {
+    if (open) {
+      setVeilMounted(true)
+      return
+    }
+    const id = setTimeout(() => setVeilMounted(false), VEIL_FADE_MS + 40)
+    return () => clearTimeout(id)
+  }, [open])
+
   return (
     <>
-      {open &&
+      {veilMounted &&
         typeof document !== 'undefined' &&
         createPortal(
           <div
@@ -111,10 +131,10 @@ const ScribeAnchoredContainer = ({
             style={{
               position: 'fixed',
               inset: 0,
-              backgroundColor: revealed ? VEIL_COLOR : 'transparent',
+              backgroundColor: open && revealed ? VEIL_COLOR : 'transparent',
               pointerEvents: 'none',
               zIndex: VEIL_Z_INDEX,
-              transition: 'background-color 120ms ease'
+              transition: `background-color ${VEIL_FADE_MS}ms ease`
             }}
           />,
           document.body

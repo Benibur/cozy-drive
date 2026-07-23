@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import React from 'react'
 
 import useBreakpoints from 'cozy-ui/transpiled/react/providers/Breakpoints'
@@ -272,6 +272,38 @@ describe('ScribeContainer', () => {
       </ScribeContainer>
     )
     expect(findVeil()).toBeFalsy()
+  })
+
+  // On close the veil must FADE OUT, not vanish in one frame (that read as a
+  // flicker). It stays mounted (colouring itself transparent, the CSS
+  // transition does the fade) and only unmounts once the fade has run.
+  it('keeps the veil mounted briefly after close so it can fade out', () => {
+    jest.useFakeTimers()
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    const anchorEl = { getBoundingClientRect: () => ({}) }
+
+    const { rerender } = render(
+      <ScribeContainer open={true} onClose={jest.fn()} anchorEl={anchorEl}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(findVeil()).toBeTruthy()
+
+    // Menu closes: the veil is still in the DOM (fading), not yanked.
+    rerender(
+      <ScribeContainer open={false} onClose={jest.fn()} anchorEl={anchorEl}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(findVeil()).toBeTruthy()
+
+    // After the fade window it unmounts.
+    act(() => {
+      jest.advanceTimersByTime(400)
+    })
+    expect(findVeil()).toBeFalsy()
+
+    jest.useRealTimers()
   })
 
   // popper.js v1 matches every `behavior` entry against
