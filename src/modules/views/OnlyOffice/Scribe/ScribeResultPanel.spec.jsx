@@ -43,17 +43,9 @@ jest.mock('cozy-ui/transpiled/react/IconButton', () => ({
     </button>
   ))
 }))
-jest.mock('cozy-ui/transpiled/react/Icon', () => ({
-  __esModule: true,
-  default: () => <span data-icon />
-}))
-jest.mock('cozy-ui/transpiled/react/Icons/Cross', () => ({
-  __esModule: true,
-  default: 'cross'
-}))
-jest.mock('cozy-ui/transpiled/react/Icons/Sync', () => ({
-  __esModule: true,
-  default: 'sync'
+jest.mock('@linagora/twake-icons', () => ({
+  ...jest.requireActual('@linagora/twake-icons'),
+  Icon: () => <span data-icon />
 }))
 jest.mock('cozy-ui/transpiled/react/Checkbox', () => ({
   __esModule: true,

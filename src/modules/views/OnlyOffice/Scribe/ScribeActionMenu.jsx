@@ -2,12 +2,15 @@ import React, { useState, useCallback, useRef, useMemo, useEffect, useLayoutEffe
 import PropTypes from 'prop-types'
 
 import { useI18n } from 'twake-i18n'
+import {
+  BugReport as BugIcon,
+  Icon,
+  Left as LeftIcon,
+  Right as RightIcon
+} from '@linagora/twake-icons'
+
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import useBreakpoints from 'cozy-ui/transpiled/react/providers/Breakpoints'
-import Icon from 'cozy-ui/transpiled/react/Icon'
-import BugIcon from 'cozy-ui/transpiled/react/Icons/BugReport'
-import LeftIcon from 'cozy-ui/transpiled/react/Icons/Left'
-import RightIcon from 'cozy-ui/transpiled/react/Icons/Right'
 import InputBase from 'cozy-ui/transpiled/react/InputBase'
 import ListItem from 'cozy-ui/transpiled/react/ListItem'
 import ListItemIcon from 'cozy-ui/transpiled/react/ListItemIcon'

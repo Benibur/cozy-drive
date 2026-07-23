@@ -1,13 +1,15 @@
-import CheckIcon from 'cozy-ui/transpiled/react/Icons/Check'
-import GlobeIcon from 'cozy-ui/transpiled/react/Icons/Globe'
-import PenIcon from 'cozy-ui/transpiled/react/Icons/Pen'
-import MagicTrickIcon from 'cozy-ui/transpiled/react/Icons/MagicTrick'
-import ContractIcon from 'cozy-ui/transpiled/react/Icons/Contract'
-import ExpandIcon from 'cozy-ui/transpiled/react/Icons/Expand'
-import ListIcon from 'cozy-ui/transpiled/react/Icons/List'
-import CompanyIcon from 'cozy-ui/transpiled/react/Icons/Company'
-import CocktailIcon from 'cozy-ui/transpiled/react/Icons/Cocktail'
-import HandIcon from 'cozy-ui/transpiled/react/Icons/Hand'
+import {
+  Check as CheckIcon,
+  Cocktail as CocktailIcon,
+  Company as CompanyIcon,
+  Contract as ContractIcon,
+  Expand as ExpandIcon,
+  Globe as GlobeIcon,
+  Hand as HandIcon,
+  List as ListIcon,
+  MagicTrick as MagicTrickIcon,
+  Pen as PenIcon
+} from '@linagora/twake-icons'
 
 /**
  * Map language codes to display names.

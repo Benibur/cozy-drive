@@ -1,13 +1,15 @@
+import {
+  Cross as CrossIcon,
+  Icon,
+  Sync as SyncIcon
+} from '@linagora/twake-icons'
 import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useCallback, useState } from 'react'
 import { useI18n } from 'twake-i18n'
 
 import Buttons from 'cozy-ui/transpiled/react/Buttons'
 import Checkbox from 'cozy-ui/transpiled/react/Checkbox'
-import Icon from 'cozy-ui/transpiled/react/Icon'
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
-import CrossIcon from 'cozy-ui/transpiled/react/Icons/Cross'
-import SyncIcon from 'cozy-ui/transpiled/react/Icons/Sync'
 import Paper from 'cozy-ui/transpiled/react/Paper'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'

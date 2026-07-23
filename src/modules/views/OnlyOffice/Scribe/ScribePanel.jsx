@@ -1,8 +1,7 @@
+import { Cross as CrossIcon, Icon } from '@linagora/twake-icons'
 import React, { useState, useRef } from 'react'
 
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
-import Icon from 'cozy-ui/transpiled/react/Icon'
-import CrossIcon from 'cozy-ui/transpiled/react/Icons/Cross'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 

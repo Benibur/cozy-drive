@@ -8,10 +8,13 @@ import React, {
 } from 'react'
 import { createPortal } from 'react-dom'
 
-import Icon from 'cozy-ui/transpiled/react/Icon'
+import {
+  Cross as CrossIcon,
+  Icon,
+  Info as InfoIcon
+} from '@linagora/twake-icons'
+
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
-import CrossIcon from 'cozy-ui/transpiled/react/Icons/Cross'
-import InfoIcon from 'cozy-ui/transpiled/react/Icons/Info'
 import Spinner from 'cozy-ui/transpiled/react/Spinner'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
