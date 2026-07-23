@@ -107,7 +107,19 @@ const ScribePromptInput = forwardRef(({ onSubmit, onArrow, onEscape }, ref) => {
       if (inputRef.current) inputRef.current.focus()
     },
     // Lets the menu carry the in-progress prompt over to the side panel.
-    getValue: () => value
+    getValue: () => value,
+    // Type-ahead: when the user starts typing with the menu (not the pill)
+    // focused, the menu jumps here and hands over that first keystroke — which
+    // was preventDefault'd upstream and would otherwise be lost. Append it and
+    // focus; the caret lands at the end via pendingCaretRef.
+    insertText: text => {
+      setValue(v => {
+        const next = v + text
+        pendingCaretRef.current = next.length
+        return next
+      })
+      if (inputRef.current) inputRef.current.focus()
+    }
   }))
 
   // Max textarea height = space the popover actually has below the input, with

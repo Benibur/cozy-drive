@@ -241,6 +241,39 @@ describe('ScribeContainer', () => {
     expect(handleClose).toHaveBeenCalledTimes(1)
   })
 
+  // The dimming veil makes the anchored menu stand out again, WITHOUT the
+  // behaviour the modal backdrop used to break: it is pointer-events:none, so
+  // scroll and clicks pass through to the document underneath.
+  const findVeil = () =>
+    [...document.body.querySelectorAll('div[aria-hidden]')].find(
+      d =>
+        d.style.position === 'fixed' && d.style.pointerEvents === 'none'
+    )
+
+  it('renders a pointer-events:none dimming veil in the anchored mode', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    render(
+      <ScribeContainer
+        open={true}
+        onClose={jest.fn()}
+        anchorEl={{ getBoundingClientRect: () => ({}) }}
+      >
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(findVeil()).toBeTruthy()
+  })
+
+  it('renders NO veil in the centred (unanchored) fallback', () => {
+    useBreakpoints.mockReturnValue({ isMobile: false })
+    render(
+      <ScribeContainer open={true} onClose={jest.fn()}>
+        <div>Content</div>
+      </ScribeContainer>
+    )
+    expect(findVeil()).toBeFalsy()
+  })
+
   // popper.js v1 matches every `behavior` entry against
   // `data.placement.split('-')[0]`, i.e. the BASE placement. Listing
   // 'bottom-start' there never matches 'bottom', so flip returns on its first
