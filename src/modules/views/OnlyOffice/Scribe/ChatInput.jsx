@@ -13,8 +13,12 @@ import { useI18n } from 'twake-i18n'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ScribeIncludeZone } from '@/modules/views/OnlyOffice/Scribe/ScribeIncludeZone'
 import { SelectionChip } from '@/modules/views/OnlyOffice/Scribe/SelectionChip'
+import {
+  SCRIBE_BLUE,
+  SCRIBE_BLUE_SOFT,
+  SURFACE_RADIUS
+} from '@/modules/views/OnlyOffice/Scribe/scribeSurface'
 
-const SCRIBE_PURPLE = '#7C3AED'
 const MAX_ROWS = 4
 const LINE_HEIGHT = 20
 
@@ -148,11 +152,13 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
   const canSend = text.trim().length > 0 && !isLoading
 
   return (
+    // No top rule. The composer is separated from the thread by being a drawn
+    // BOX, not by a line across the card — a full-width divider inside a rounded
+    // card reads as a seam between two panels stuck together.
     <div
       style={{
         flexShrink: 0,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        padding: '8px 12px',
+        padding: '4px 12px 12px',
         display: 'flex',
         flexDirection: 'column'
       }}
@@ -168,7 +174,18 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
           <SelectionChip selection={currentSelection} />
         )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: 8,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: SURFACE_RADIUS,
+          padding: '2px 6px 2px 12px',
+          background: theme.palette.background.paper,
+          transition: 'border-color 150ms ease'
+        }}
+      >
       <textarea
         ref={textareaRef}
         value={text}
@@ -200,8 +217,10 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
           height: 32,
           borderRadius: '50%',
           border: 'none',
-          background: canSend ? SCRIBE_PURPLE : theme.palette.action.disabledBackground,
-          color: canSend ? '#fff' : theme.palette.action.disabled,
+          // Full accent when armed, a soft wash of it at rest — the plane stays
+          // white on both so the icon never disappears.
+          background: canSend ? SCRIBE_BLUE : SCRIBE_BLUE_SOFT,
+          color: '#fff',
           cursor: canSend ? 'pointer' : 'default',
           display: 'flex',
           alignItems: 'center',

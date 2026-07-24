@@ -5,6 +5,8 @@ import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
 
 import { ScribeHoverTooltip } from '@/modules/views/OnlyOffice/Scribe/ScribeHoverTooltip'
+import { ScribeLottie } from '@/modules/views/OnlyOffice/Scribe/ScribeLottie'
+import buttonAnimation from '@/modules/views/OnlyOffice/Scribe/assets/scribeButtonAnimation.json'
 import { FRAME_EDITOR_NAME } from '@/modules/views/OnlyOffice/config'
 
 // Fallback placement, used only when the plugin reports no geometry (older
@@ -65,7 +67,9 @@ const getButtonStyle = isDark => ({
   borderRadius: 20,
   width: BUTTON_WIDTH,
   boxSizing: 'border-box',
-  padding: '8px 16px',
+  // The animated mark is the whole content now, so it takes nearly the full
+  // 48px button — only a hair of padding keeps it off the rounded corners.
+  padding: '5px 2px',
   background: isDark ? '#2d2d2d' : 'white',
   boxShadow: isDark
     ? '0 2px 8px rgba(0,0,0,0.4)'
@@ -79,34 +83,6 @@ const getButtonStyle = isDark => ({
   color: isDark ? '#e0e0e0' : '#333',
   transition: 'opacity 200ms ease'
 })
-
-const PanelIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      x="1.5"
-      y="2.5"
-      width="13"
-      height="11"
-      rx="1.5"
-      stroke="currentColor"
-      strokeWidth="1.2"
-    />
-    <line
-      x1="10"
-      y1="2.5"
-      x2="10"
-      y2="13.5"
-      stroke="currentColor"
-      strokeWidth="1.2"
-    />
-  </svg>
-)
 
 /**
  * Floating zone holding the "open side panel" button (translucent by default,
@@ -172,7 +148,11 @@ export const ScribeFloatingZone = ({ visible, geometry, onTogglePanel }) => {
             placement={position ? 'bottom' : 'top'}
           />
         )}
-        <PanelIcon />
+        <ScribeLottie
+          animationData={buttonAnimation}
+          width={44}
+          height={33}
+        />
       </button>
     </div>,
     document.body

@@ -28,10 +28,11 @@ import {
 } from '@/modules/views/OnlyOffice/Scribe/scribeProbe'
 import { transformCellMarkersForPreview } from '@/modules/views/OnlyOffice/Scribe/tableCellMarkers'
 
-// Scribe accent (matches FragmentCard / ChatMessageList SCRIBE_PURPLE so the
-// popover result card frame is byte-for-byte aligned with the chat card — D-01).
-const SCRIBE_PURPLE = '#7C3AED'
-const SCRIBE_PURPLE_08 = 'rgba(124, 58, 237, 0.08)'
+// Scribe accent — the brand blue. The popover result card wears the accent as a
+// blue frame (the standalone inline result is not nested inside another surface,
+// so a coloured frame reads cleanly here — D-01).
+const SCRIBE_BLUE = '#0A84FF'
+const SCRIBE_BLUE_08 = 'rgba(10, 132, 255, 0.08)'
 
 const DEV_PANELS_STORAGE_KEY = 'SCRIBE_DEV_MD_PANELS'
 
@@ -1213,7 +1214,8 @@ const ScribeResultPanel = ({
             </div>
           )}
           {/* D-01/D-02: render the single normalized fragment inside a
-              Scribe-violet card frame aligned with the chat FragmentCard.
+              Scribe-blue card frame (the inline result is standalone, so it
+              wears the accent, unlike the chat FragmentCard nested in a surface).
               MarkdownPreview is fed the RAW fragment (markers intact) — it is
               the ONLY cosmetic cleanup step, never mutating the raw value the
               footer Insert/Replace route on (D-02 / T-v3.1-05-03). We reuse a
@@ -1225,8 +1227,8 @@ const ScribeResultPanel = ({
           <div
             data-scribe-result-card
             style={{
-              border: `1px solid ${SCRIBE_PURPLE}`,
-              background: isDark ? 'rgba(124, 58, 237, 0.12)' : SCRIBE_PURPLE_08,
+              border: `1px solid ${SCRIBE_BLUE}`,
+              background: isDark ? 'rgba(10, 132, 255, 0.12)' : SCRIBE_BLUE_08,
               borderRadius: 8,
               padding: '8px 10px',
               margin: '4px 0'

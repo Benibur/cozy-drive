@@ -5,7 +5,6 @@ import { useI18n } from 'twake-i18n'
 import { useClient } from 'cozy-client'
 import Alert from 'cozy-ui/transpiled/react/Alert'
 import Paper from 'cozy-ui/transpiled/react/Paper'
-import Spinner from 'cozy-ui/transpiled/react/Spinner'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 
 import styles from '@/modules/views/OnlyOffice/Scribe/scribe.styl'
@@ -13,6 +12,8 @@ import styles from '@/modules/views/OnlyOffice/Scribe/scribe.styl'
 import { ScribeActionMenu } from '@/modules/views/OnlyOffice/Scribe/ScribeActionMenu'
 import { ScribeContainer } from '@/modules/views/OnlyOffice/Scribe/ScribeContainer'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
+import { ScribeLottie } from '@/modules/views/OnlyOffice/Scribe/ScribeLottie'
+import loaderAnimation from '@/modules/views/OnlyOffice/Scribe/assets/scribeLoaderAnimation.json'
 import { ScribeResultPanel } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
 import {
   createVirtualAnchor,
@@ -518,7 +519,7 @@ const ScribePopover = ({
           elevation={0}
           style={{ outline: 'none' }}
         >
-          <Spinner size="large" />
+          <ScribeLottie animationData={loaderAnimation} width={40} height={40} />
           <Typography
             variant="body2"
             color="textSecondary"

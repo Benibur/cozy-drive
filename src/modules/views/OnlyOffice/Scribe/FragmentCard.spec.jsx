@@ -101,14 +101,15 @@ describe('FragmentCard', () => {
     })
   })
 
-  describe('D-01 — bordered Scribe-purple card', () => {
-    it('renders a card root with a Scribe-purple border', () => {
+  describe('D-01 — bordered neutral card', () => {
+    it('renders a card root with a quiet neutral border (no accent fill)', () => {
       const { container } = render(<FragmentCard raw="hello" hasSelection />)
       const root = container.firstChild
-      const border = (root.getAttribute('style') || '').toLowerCase()
-      // Accept hex or rgb form of #7C3AED.
-      expect(border.includes('7c3aed') || border.includes('124, 58, 237')).toBe(
-        true
+      const style = (root.getAttribute('style') || '').toLowerCase()
+      // Neutral grey border, and NOT the old Scribe-purple accent.
+      expect(style.includes('20, 20, 45')).toBe(true)
+      expect(style.includes('7c3aed') || style.includes('124, 58, 237')).toBe(
+        false
       )
     })
   })

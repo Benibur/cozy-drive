@@ -119,6 +119,7 @@
     "leaflet": "1.9.4",
     "localforage": "1.10.0",
     "lodash": "4.17.21",
+    "lottie-react": "^2.4.1",
     "marked": "^17.0.4",
     "mime-types": "2.1.35",
     "node-fetch": "2.6.7",

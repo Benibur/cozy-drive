@@ -82,8 +82,8 @@ const baseProps = {
 }
 
 describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
-  describe('D-01 — Scribe-violet card frame', () => {
-    it('renders the fragment inside a #7C3AED-bordered card container', () => {
+  describe('D-01 — Scribe-blue card frame', () => {
+    it('renders the fragment inside a #0A84FF-bordered card container', () => {
       const { container } = render(
         <ScribeResultPanel
           {...baseProps}
@@ -95,7 +95,7 @@ describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
       expect(card).not.toBeNull()
       const style = (card.getAttribute('style') || '').toLowerCase()
       expect(
-        style.includes('7c3aed') || style.includes('124, 58, 237')
+        style.includes('0a84ff') || style.includes('10, 132, 255')
       ).toBe(true)
     })
   })
