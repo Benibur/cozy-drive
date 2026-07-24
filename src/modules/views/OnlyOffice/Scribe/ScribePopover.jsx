@@ -243,7 +243,7 @@ const ScribePopover = ({
 
         // Dev diagnostic: dump the exact prompt + raw response + parsed contract so
         // the popover path can be compared against the chat (surface-divergence).
-        logScribeExchange('popover', { messages, rawResponse: text, parsed })
+        logScribeExchange('popover', { messages, rawResponse: parsed.raw, parsed })
 
         // PROBE-01 (D-11): feed the conformance probe the parsed popover response.
         // Dev-mode only (isScribeDevMd guard) => zero production cost. `inputMd`
@@ -299,7 +299,7 @@ const ScribePopover = ({
         const devExchange = isScribeDevMd()
           ? {
               messages,
-              rawResponse: text,
+              rawResponse: parsed.raw,
               parsed,
               devData: {
                 html: selectedHtml || '',
