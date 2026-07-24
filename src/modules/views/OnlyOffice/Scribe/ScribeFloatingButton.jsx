@@ -24,6 +24,21 @@ const PAGE_GAP = 12 // between the page and the button, when the margin is wide 
 // is actually rendered.
 const BUTTON_WIDTH = 48
 
+// Enlarge ONLY the animated mark inside the button, WITHOUT touching the button
+// box. The mark is a 334×334 region centred at (585,387) of the 1200×900 canvas,
+// so shown whole it renders tiny (~12px). Keep the ORIGINAL 44×33 Lottie slot —
+// that landscape slot is what gives the button its oval outline — as a clip
+// window, and render the canvas oversized + offset inside it so the mark alone
+// shows, bigger and centred. MARK is the one knob: the visible mark size in px.
+const MARK = 22
+const MARK_SLOT_W = 44 // original Lottie slot width — keep so the button stays oval
+const MARK_SLOT_H = 33 // original Lottie slot height
+const markScale = MARK / 334
+const markRenderW = Math.round(1200 * markScale)
+const markRenderH = Math.round(900 * markScale)
+const markOffsetX = Math.round(MARK_SLOT_W / 2 - 585 * markScale)
+const markOffsetY = Math.round(MARK_SLOT_H / 2 - 387 * markScale)
+
 /**
  * Where to put the button, in viewport px, from the geometry the plugin reports.
  *
@@ -148,11 +163,29 @@ export const ScribeFloatingZone = ({ visible, geometry, onTogglePanel }) => {
             placement={position ? 'bottom' : 'top'}
           />
         )}
-        <ScribeLottie
-          animationData={buttonAnimation}
-          width={44}
-          height={33}
-        />
+        {/* The original 44×33 slot, kept as a clip window so the button outline
+            is unchanged (oval); the oversized canvas render is offset so the
+            enlarged mark alone shows, centred. Only the mark SIZE changed. */}
+        <div
+          style={{
+            position: 'relative',
+            width: MARK_SLOT_W,
+            height: MARK_SLOT_H,
+            overflow: 'hidden'
+          }}
+        >
+          <ScribeLottie
+            animationData={buttonAnimation}
+            width={markRenderW}
+            height={markRenderH}
+            play={hoveredPanel}
+            style={{
+              position: 'absolute',
+              left: markOffsetX,
+              top: markOffsetY
+            }}
+          />
+        </div>
       </button>
     </div>,
     document.body

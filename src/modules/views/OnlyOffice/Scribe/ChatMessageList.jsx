@@ -18,10 +18,11 @@ import { useI18n } from 'twake-i18n'
 
 import { FragmentCard } from '@/modules/views/OnlyOffice/Scribe/FragmentCard'
 import { MarkdownPreview } from '@/modules/views/OnlyOffice/Scribe/MarkdownPreview'
+import { ScribeColoredIcon } from '@/modules/views/OnlyOffice/Scribe/ScribeColoredIcon'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ScribeLottie } from '@/modules/views/OnlyOffice/Scribe/ScribeLottie'
-import loaderAnimation from '@/modules/views/OnlyOffice/Scribe/assets/scribeLoaderAnimation.json'
 import { ScribeDevPanels } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
+import loaderAnimation from '@/modules/views/OnlyOffice/Scribe/assets/scribeLoaderAnimation.json'
 import { buildAssistantSegments } from '@/modules/views/OnlyOffice/Scribe/assistantSegments'
 import {
   isScribeDevMd,
@@ -33,7 +34,6 @@ import {
   SURFACE_RADIUS,
   isDarkTheme
 } from '@/modules/views/OnlyOffice/Scribe/scribeSurface'
-import { ScribeColoredIcon } from '@/modules/views/OnlyOffice/Scribe/ScribeColoredIcon'
 
 const SCRIBE_BLUE_08 = 'rgba(10, 132, 255, 0.08)'
 
@@ -90,7 +90,7 @@ const UserBubble = ({ content, selection }) => (
 // thread reads as one measured column with the user's replies stepping out of it.
 const assistantSurfaceStyle = isDark => ({
   alignSelf: 'stretch',
-  background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(20,20,45,0.035)',
+  background: isDark ? 'rgba(255,255,255,0.05)' : '#15212e05',
   border: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(20,20,45,0.05)'}`,
   padding: 12,
   borderRadius: SURFACE_RADIUS,
@@ -552,7 +552,11 @@ export const ChatMessageList = forwardRef(
               fontSize: 13
             }}
           >
-            <ScribeLottie animationData={loaderAnimation} width={20} height={20} />
+            <ScribeLottie
+              animationData={loaderAnimation}
+              width={20}
+              height={20}
+            />
             <span>{t('Scribe.chat.typing')}</span>
           </div>
         )}
