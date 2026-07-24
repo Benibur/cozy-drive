@@ -44,8 +44,10 @@ jest.mock('cozy-ui/transpiled/react/IconButton', () => ({
   ))
 }))
 jest.mock('@linagora/twake-icons', () => ({
-  ...jest.requireActual('@linagora/twake-icons'),
-  Icon: () => <span data-icon />
+  __esModule: true,
+  Icon: () => <span data-icon />,
+  Cross: 'cross',
+  Sync: 'sync'
 }))
 jest.mock('cozy-ui/transpiled/react/Checkbox', () => ({
   __esModule: true,
@@ -74,8 +76,8 @@ const baseProps = {
 }
 
 describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
-  describe('D-01 — Scribe-violet card frame', () => {
-    it('renders the fragment inside a #7C3AED-bordered card container', () => {
+  describe('D-01 — Scribe-blue card frame', () => {
+    it('renders the fragment inside a #0A84FF-bordered card container', () => {
       const { container } = render(
         <ScribeResultPanel
           {...baseProps}
@@ -86,7 +88,7 @@ describe('ScribeResultPanel — popover result card (v3.1-05-01)', () => {
       const card = container.querySelector('[data-scribe-result-card]')
       expect(card).not.toBeNull()
       const style = (card.getAttribute('style') || '').toLowerCase()
-      expect(style.includes('7c3aed') || style.includes('124, 58, 237')).toBe(
+      expect(style.includes('0a84ff') || style.includes('10, 132, 255')).toBe(
         true
       )
     })

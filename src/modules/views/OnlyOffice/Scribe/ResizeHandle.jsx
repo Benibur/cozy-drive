@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
+import { PANEL_GUTTER } from '@/modules/views/OnlyOffice/Scribe/scribeSurface'
 
 export const ResizeHandle = () => {
   const { setPanelWidth } = useScribe()
@@ -70,8 +71,13 @@ export const ResizeHandle = () => {
       onPointerCancel={onPointerUp}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      // The handle IS the gutter between the editor and the panel card: it fills
+      // the whole air gap rather than sitting on a 6px seam, which both makes it
+      // a real grab target and leaves nothing between the two surfaces that is
+      // not draggable. The visible grip stays a thin pill — a 12px slab of
+      // accent colour on hover would read as a third surface.
       style={{
-        width: 6,
+        width: PANEL_GUTTER,
         flexShrink: 0,
         cursor: 'col-resize',
         display: 'flex',
@@ -84,9 +90,9 @@ export const ResizeHandle = () => {
       {showAccent && (
         <div
           style={{
-            width: 2,
-            height: '100%',
-            borderRadius: 1,
+            width: 3,
+            height: '32%',
+            borderRadius: 2,
             backgroundColor: primaryColor,
             opacity: accentOpacity,
             transition: 'opacity 150ms ease'

@@ -5,12 +5,16 @@ import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { MarkdownPreview } from '@/modules/views/OnlyOffice/Scribe/MarkdownPreview'
 import MessageActions from '@/modules/views/OnlyOffice/Scribe/MessageActions'
 
-// Scribe accent (matches ChatMessageList SCRIBE_PURPLE / SCRIBE_PURPLE_08).
-const SCRIBE_PURPLE = '#7C3AED'
-const SCRIBE_PURPLE_08 = 'rgba(124, 58, 237, 0.08)'
+// The card frame is a quiet neutral, not an accent. It is nested INSIDE the
+// assistant surface, and a coloured box within a box read as a mis-click; the
+// border only has to BOUND the fragment. The accent (blue) lives in the quote
+// bars and the send action, never in this frame.
+const CARD_BORDER = isDark =>
+  isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(20, 20, 45, 0.12)'
+const CARD_BG = isDark => (isDark ? 'rgba(255, 255, 255, 0.04)' : 'transparent')
 
 /**
- * FragmentCard - a bordered Scribe-purple card for a single LLM response
+ * FragmentCard - a bordered, neutral card for a single LLM response
  * fragment (FRAG-01/D-01). It renders the fragment as rich markdown via
  * MarkdownPreview and carries its own Copy / Insert / Replace actions.
  *
@@ -37,11 +41,11 @@ const FragmentCard = ({ raw, hasSelection }) => {
     <div
       data-fragment-card
       style={{
-        border: `1px solid ${SCRIBE_PURPLE}`,
-        background: isDark ? 'rgba(124, 58, 237, 0.12)' : SCRIBE_PURPLE_08,
-        borderRadius: 8,
-        padding: '8px 10px',
-        margin: '4px 0'
+        border: `1px solid ${CARD_BORDER(isDark)}`,
+        background: CARD_BG(isDark),
+        borderRadius: 10,
+        padding: '10px 12px',
+        margin: '6px 0'
       }}
     >
       <MarkdownPreview>{raw}</MarkdownPreview>

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 
-const SCRIBE_PURPLE = '#7C3AED'
+const SCRIBE_BLUE = '#0A84FF'
 
 // Deterministic fixed height so the chip slot never shifts the discussion
 // (live UX review 2026-06-24). Single line, vertically centred via lineHeight;
@@ -37,7 +37,7 @@ export const SelectionChip = ({ selection }) => {
           minWidth: 0,
           height: CHIP_BODY_HEIGHT,
           lineHeight: `${CHIP_BODY_HEIGHT}px`,
-          borderLeft: `3px solid ${SCRIBE_PURPLE}`,
+          borderLeft: `3px solid ${SCRIBE_BLUE}`,
           background: theme.palette.action.hover,
           borderRadius: '0 4px 4px 0',
           padding: '0 8px',

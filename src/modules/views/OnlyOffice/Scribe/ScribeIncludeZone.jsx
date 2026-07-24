@@ -49,10 +49,10 @@ export const ScribeIncludeZone = () => {
     setIncludeSelection
   } = useScribe()
 
-  // Deliberately quiet (CTX-UX-05): use the lighter `text.disabled` token (not
-  // `text.secondary`) and small type so the zone stays well below the prompt's
-  // visual weight. Live UX review (2026-06-24) asked for lighter + smaller.
-  const muted = theme.palette.text.disabled
+  // Quiet but LEGIBLE: small type keeps the zone below the prompt's weight, but
+  // the caption + labels use `text.secondary` (not the fainter `text.disabled`)
+  // so they stay readable — the 2026-07-24 recolor asked for darker Inclure text.
+  const muted = theme.palette.text.secondary
 
   const labelStyle = {
     display: 'inline-flex',
@@ -72,8 +72,11 @@ export const ScribeIncludeZone = () => {
     <div
       role="group"
       aria-label={t('Scribe.include.label')}
+      // Flush with the composer box below it (the card owns the 12px side
+      // padding now), so the caption, the checkboxes and the input's left edge
+      // all sit on one line.
       style={{
-        padding: '8px 12px',
+        padding: '6px 0 8px',
         display: 'flex',
         flexDirection: 'column',
         gap: 4

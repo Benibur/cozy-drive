@@ -7,10 +7,10 @@ import { useI18n } from 'twake-i18n'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { markdownToHtml } from '@/modules/views/OnlyOffice/Scribe/scribeConversion'
 
-// Scribe accent (matches ChatMessageList SCRIBE_PURPLE) — used for the
-// keyboard focus ring (D-09) so the FragmentCard keyboard controller (Plan 05)
-// can show a visible accent outline on the focused action button.
-const SCRIBE_PURPLE = '#7C3AED'
+// Scribe accent (the brand blue) — used for the keyboard focus ring (D-09) so
+// the FragmentCard keyboard controller (Plan 05) can show a visible accent
+// outline on the focused action button.
+const SCRIBE_BLUE = '#0A84FF'
 
 // Inline SVG icons (small, 16x16)
 const CopyIcon = () => (
@@ -174,7 +174,7 @@ const MessageActions = ({ content, hasSelection }) => {
     // keyboard controller's focus target is unmistakable. Inline-style handlers
     // keep this consistent with the file's inline-style convention.
     onFocus: e => {
-      e.currentTarget.style.outline = `2px solid ${SCRIBE_PURPLE}`
+      e.currentTarget.style.outline = `2px solid ${SCRIBE_BLUE}`
       e.currentTarget.style.outlineOffset = '1px'
     },
     onBlur: e => {

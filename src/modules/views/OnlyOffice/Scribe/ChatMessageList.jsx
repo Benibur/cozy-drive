@@ -1,6 +1,6 @@
 import {
-  Cross as CrossIcon,
   Icon,
+  Cross as CrossIcon,
   Info as InfoIcon
 } from '@linagora/twake-icons'
 import React, {
@@ -14,53 +14,39 @@ import React, {
 import { createPortal } from 'react-dom'
 
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
-import Spinner from 'cozy-ui/transpiled/react/Spinner'
 import Typography from 'cozy-ui/transpiled/react/Typography'
 import { useTheme } from 'cozy-ui/transpiled/react/styles'
 import { useI18n } from 'twake-i18n'
 
 import { FragmentCard } from '@/modules/views/OnlyOffice/Scribe/FragmentCard'
 import { MarkdownPreview } from '@/modules/views/OnlyOffice/Scribe/MarkdownPreview'
+import { ScribeColoredIcon } from '@/modules/views/OnlyOffice/Scribe/ScribeColoredIcon'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
+import { ScribeLottie } from '@/modules/views/OnlyOffice/Scribe/ScribeLottie'
 import { ScribeDevPanels } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
+import loaderAnimation from '@/modules/views/OnlyOffice/Scribe/assets/scribeLoaderAnimation.json'
 import { buildAssistantSegments } from '@/modules/views/OnlyOffice/Scribe/assistantSegments'
 import {
   isScribeDevMd,
   formatMessagesForDisplay
 } from '@/modules/views/OnlyOffice/Scribe/scribeDevMode'
+import {
+  SCRIBE_BLUE,
+  USER_BUBBLE_BG,
+  SURFACE_RADIUS,
+  isDarkTheme
+} from '@/modules/views/OnlyOffice/Scribe/scribeSurface'
 
-const SCRIBE_PURPLE = '#7C3AED'
+const SCRIBE_BLUE_08 = 'rgba(10, 132, 255, 0.08)'
 
-const SparkleSvg = ({ size = 20 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z"
-      fill={SCRIBE_PURPLE}
-      stroke={SCRIBE_PURPLE}
-      strokeWidth="0.5"
-    />
-    <path
-      d="M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z"
-      fill={SCRIBE_PURPLE}
-      stroke={SCRIBE_PURPLE}
-      strokeWidth="0.3"
-    />
-  </svg>
-)
-
-const SCRIBE_PURPLE_08 = 'rgba(124, 58, 237, 0.08)'
-
+// The quote is the one accent inside the user's turn: a blue bar and a faint
+// blue wash. It reads the same whether it sits inside the grey user bubble or
+// (rarely) on its own — grey bubble, white panel, both hold a blue-on-light quote.
 const SelectionQuote = ({ selection }) => (
   <div
     style={{
-      borderLeft: `3px solid ${SCRIBE_PURPLE}`,
-      background: SCRIBE_PURPLE_08,
+      borderLeft: `3px solid ${SCRIBE_BLUE}`,
+      background: SCRIBE_BLUE_08,
       padding: '4px 8px',
       marginBottom: 6,
       borderRadius: '0 4px 4px 0',
@@ -78,13 +64,17 @@ const SelectionQuote = ({ selection }) => (
   </div>
 )
 
-const UserBubble = ({ content, selection, theme }) => (
+// What the USER said is set apart by a filled, right-hugging bubble — but in a
+// cool neutral grey with dark ink, not an accent fill. The grey gives the thread
+// its rhythm without competing with the blue reserved for actions and quotes.
+const UserBubble = ({ content, selection }) => (
   <div
     style={{
       alignSelf: 'flex-end',
-      background: theme.palette.action.selected,
-      padding: '8px 12px',
-      borderRadius: '12px 4px 12px 12px',
+      background: USER_BUBBLE_BG,
+      color: '#1a1a2e',
+      padding: '9px 13px',
+      borderRadius: `${SURFACE_RADIUS + 2}px 6px ${SURFACE_RADIUS + 2}px ${SURFACE_RADIUS + 2}px`,
       maxWidth: '85%',
       wordBreak: 'break-word',
       fontSize: 14,
@@ -96,26 +86,26 @@ const UserBubble = ({ content, selection, theme }) => (
   </div>
 )
 
-const AssistantBubble = ({ content, theme }) => {
-  const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
+// The assistant's block. Not a chat bubble hugging its text: it routinely holds
+// a table or a fragment card, and a right edge that moved with the prose left
+// those sitting in a ragged column. It is a full-width card, and the whole
+// thread reads as one measured column with the user's replies stepping out of it.
+const assistantSurfaceStyle = isDark => ({
+  alignSelf: 'stretch',
+  background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(20,20,45,0.035)',
+  border: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(20,20,45,0.05)'}`,
+  padding: 12,
+  borderRadius: SURFACE_RADIUS,
+  fontSize: 14,
+  lineHeight: 1.5,
+  wordBreak: 'break-word'
+})
 
-  return (
-    <div
-      style={{
-        alignSelf: 'flex-start',
-        background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
-        padding: '8px 12px',
-        borderRadius: '4px 12px 12px 12px',
-        maxWidth: '85%',
-        fontSize: 14,
-        lineHeight: 1.5,
-        wordBreak: 'break-word'
-      }}
-    >
-      <MarkdownPreview>{content}</MarkdownPreview>
-    </div>
-  )
-}
+const AssistantBubble = ({ content, theme }) => (
+  <div style={assistantSurfaceStyle(isDarkTheme(theme))}>
+    <MarkdownPreview>{content}</MarkdownPreview>
+  </div>
+)
 
 const ErrorBubble = ({ content, theme, t }) => (
   <div
@@ -124,7 +114,7 @@ const ErrorBubble = ({ content, theme, t }) => (
       background: `${theme.palette.error.main}1A`,
       color: theme.palette.error.main,
       padding: '8px 12px',
-      borderRadius: '4px 12px 12px 12px',
+      borderRadius: SURFACE_RADIUS,
       maxWidth: '85%',
       fontSize: 13,
       lineHeight: 1.5,
@@ -170,12 +160,15 @@ const WelcomeMessage = ({ t }) => (
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
-      opacity: 0.6
+      justifyContent: 'center'
     }}
   >
-    <SparkleSvg size={48} />
-    <Typography variant="body2" color="textSecondary" style={{ marginTop: 16 }}>
+    <ScribeColoredIcon size={52} />
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      style={{ marginTop: 16, opacity: 0.7 }}
+    >
       {t('Scribe.chat.welcome')}
     </Typography>
   </div>
@@ -446,10 +439,10 @@ export const ChatMessageList = forwardRef(
         style={{
           flex: 1,
           overflowY: 'auto',
-          padding: 16,
+          padding: '4px 12px 8px',
           display: 'flex',
           flexDirection: 'column',
-          gap: 8
+          gap: 10
         }}
       >
         {/* Spacer: pushes the conversation to the bottom (most-recent message
@@ -466,11 +459,7 @@ export const ChatMessageList = forwardRef(
             // callback returns a single node, so wrap them in a keyed Fragment.
             return (
               <React.Fragment key={msg.id}>
-                <UserBubble
-                  content={msg.content}
-                  selection={msg.selection}
-                  theme={theme}
-                />
+                <UserBubble content={msg.content} selection={msg.selection} />
                 {msg.documentNotice === 'truncated' && (
                   <DocumentTruncatedNotice
                     key={`${msg.id}-notice`}
@@ -508,12 +497,11 @@ export const ChatMessageList = forwardRef(
 
           if (!hasContractFields) {
             return (
-              <div
+              <AssistantBubble
                 key={msg.id}
-                style={{ alignSelf: 'flex-start', maxWidth: '85%' }}
-              >
-                <AssistantBubble content={msg.content} theme={theme} />
-              </div>
+                content={msg.content}
+                theme={theme}
+              />
             )
           }
 
@@ -534,23 +522,8 @@ export const ChatMessageList = forwardRef(
             (segments[0].md == null || segments[0].md.trim() === '')
           if (isEmpty) return null
 
-          const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
           return (
-            <div
-              key={msg.id}
-              style={{
-                alignSelf: 'flex-start',
-                maxWidth: '85%',
-                background: isDark
-                  ? 'rgba(255,255,255,0.04)'
-                  : 'rgba(0,0,0,0.02)',
-                padding: '8px 12px',
-                borderRadius: '4px 12px 12px 12px',
-                fontSize: 14,
-                lineHeight: 1.5,
-                wordBreak: 'break-word'
-              }}
-            >
+            <div key={msg.id} style={assistantSurfaceStyle(isDarkTheme(theme))}>
               {segments.map((seg, i) =>
                 seg.type === 'card' ? (
                   <FragmentCard
@@ -581,7 +554,11 @@ export const ChatMessageList = forwardRef(
               fontSize: 13
             }}
           >
-            <Spinner size="small" />
+            <ScribeLottie
+              animationData={loaderAnimation}
+              width={20}
+              height={20}
+            />
             <span>{t('Scribe.chat.typing')}</span>
           </div>
         )}

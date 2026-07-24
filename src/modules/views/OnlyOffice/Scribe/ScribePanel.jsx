@@ -1,4 +1,4 @@
-import { Cross as CrossIcon, Icon } from '@linagora/twake-icons'
+import { Icon, Cross as CrossIcon } from '@linagora/twake-icons'
 import React, { useState, useRef } from 'react'
 
 import IconButton from 'cozy-ui/transpiled/react/IconButton'
@@ -10,34 +10,17 @@ import { ChatMessageList } from '@/modules/views/OnlyOffice/Scribe/ChatMessageLi
 import { ResizeHandle } from '@/modules/views/OnlyOffice/Scribe/ResizeHandle'
 import { useScribe } from '@/modules/views/OnlyOffice/Scribe/ScribeContext'
 import { ProbeMetricsPanel } from '@/modules/views/OnlyOffice/Scribe/ScribeResultPanel'
+import { ScribeSparkleGlyph } from '@/modules/views/OnlyOffice/Scribe/ScribeSelectionButtonIcon'
 import { isScribeDevMd } from '@/modules/views/OnlyOffice/Scribe/scribeDevMode'
+import {
+  PANEL_GUTTER,
+  PANEL_RADIUS,
+  isDarkTheme,
+  panelShadow,
+  canvasBackground
+} from '@/modules/views/OnlyOffice/Scribe/scribeSurface'
 
 export const PANEL_WIDTH = 400
-
-const SCRIBE_PURPLE = '#7C3AED'
-
-const SparkleSvg = ({ size = 20 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8 1l1.796 4.204L14 7l-4.204 1.796L8 13l-1.796-4.204L2 7l4.204-1.796L8 1z"
-      fill={SCRIBE_PURPLE}
-      stroke={SCRIBE_PURPLE}
-      strokeWidth="0.5"
-    />
-    <path
-      d="M12.5 1l.898 2.102L15.5 4l-2.102.898L12.5 7l-.898-2.102L9.5 4l2.102-.898L12.5 1z"
-      fill={SCRIBE_PURPLE}
-      stroke={SCRIBE_PURPLE}
-      strokeWidth="0.3"
-    />
-  </svg>
-)
 
 export const ScribePanel = () => {
   const theme = useTheme()
@@ -55,46 +38,67 @@ export const ScribePanel = () => {
   const inputRef = useRef(null)
   const listRef = useRef(null)
 
-  const isDark = (theme.palette.type || theme.palette.mode) === 'dark'
+  const isDark = isDarkTheme(theme)
 
   return (
+    // Two boxes, and the split is the whole point of the redesign. The OUTER one
+    // is the panel's slot in the editor row: it still measures exactly
+    // `panelWidth`, because that is the distance from the window's right edge
+    // that ResizeHandle drags (see its onPointerMove) — so the gutter has to be
+    // PADDING taken out of the slot, never margin added to it, or every drag
+    // would fight a widening panel. Its background is the application canvas
+    // showing through that padding. The INNER one is the card.
     <div
       data-scribe-panel
       style={{
         width: panelWidth,
         flexShrink: 0,
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'row',
         height: '100%',
-        boxShadow: isDark
-          ? '-4px 0 12px rgba(0, 0, 0, 0.5)'
-          : '-2px 0 8px rgba(0, 0, 0, 0.1)',
-        background: theme.palette.background.paper,
-        overflow: 'hidden'
+        padding: `${PANEL_GUTTER}px ${PANEL_GUTTER}px ${PANEL_GUTTER}px 0`,
+        background: canvasBackground(isDark)
       }}
     >
       <ResizeHandle />
       <div
+        data-scribe-panel-card
         style={{
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          minWidth: 0
+          minWidth: 0,
+          borderRadius: PANEL_RADIUS,
+          background: theme.palette.background.paper,
+          boxShadow: panelShadow(isDark)
         }}
       >
-        {/* Header */}
+        {/* Header — no rule under it. A divider here cut the card into two
+            stacked panes; the card's own edge is already the boundary, and the
+            thread below carries its own separation by being a list of tinted
+            blocks on white. */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            padding: '12px 16px',
-            borderBottom: `1px solid ${theme.palette.divider}`
+            padding: '14px 14px 8px',
+            flexShrink: 0
           }}
         >
-          <SparkleSvg size={20} />
-          <Typography variant="h6" style={{ marginLeft: 8, flex: 1 }}>
+          <ScribeSparkleGlyph size={22} />
+          <Typography
+            variant="h6"
+            style={{
+              marginLeft: 9,
+              flex: 1,
+              fontSize: 15,
+              fontWeight: 650,
+              letterSpacing: '-0.1px'
+            }}
+          >
             Scribe
           </Typography>
           {devMode && (
