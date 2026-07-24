@@ -28,7 +28,7 @@ export const SCRIBE_BLUE_SOFT = '#A2D0FF'
  * turn is set apart by TONE, not by an accent fill: the accent (blue) is
  * reserved for the send action and the thin quote/selection bars.
  */
-export const USER_BUBBLE_BG = '#D3D8DC'
+export const USER_BUBBLE_BG = '#F3F6F9'
 
 /** Air between the panel card and the window / the editor, in px. */
 export const PANEL_GUTTER = 12
@@ -53,8 +53,8 @@ export const isDarkTheme = theme =>
  */
 export const panelShadow = isDark =>
   isDark
-    ? '0 1px 2px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.45)'
-    : '0 1px 2px rgba(20,20,45,0.06), 0 8px 24px rgba(20,20,45,0.09)'
+    ? '0 2px 4px rgba(0,0,0,0.55), 0 16px 40px rgba(0,0,0,0.55)'
+    : '0 2px 4px rgba(20,20,45,0.10), 0 14px 34px rgba(20,20,45,0.16)'
 
 /**
  * The gutter colour — the application canvas the card floats on. Composited

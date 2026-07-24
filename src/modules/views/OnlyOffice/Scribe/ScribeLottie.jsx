@@ -1,6 +1,6 @@
 import Lottie from 'lottie-react'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 
 /**
  * A Scribe Lottie animation, sized for a specific slot.
@@ -20,19 +20,39 @@ export const ScribeLottie = ({
   height,
   loop = true,
   autoplay = true,
+  play,
   className,
   style
-}) => (
-  <Lottie
-    animationData={animationData}
-    loop={loop}
-    autoplay={autoplay}
-    className={className}
-    style={{ width, height, ...style }}
-    rendererSettings={{ preserveAspectRatio: 'xMidYMid meet' }}
-    aria-hidden="true"
-  />
-)
+}) => {
+  const lottieRef = useRef(null)
+
+  // When `play` is passed the animation is driven imperatively (e.g. play only
+  // while the button is hovered): run it on `true`, and on `false` rewind to the
+  // first frame and hold there so the resting state is a clean static mark.
+  const controlled = play !== undefined
+  useEffect(() => {
+    const anim = lottieRef.current
+    if (!anim || !controlled) return
+    if (play) {
+      anim.play()
+    } else {
+      anim.goToAndStop(0, true)
+    }
+  }, [play, controlled])
+
+  return (
+    <Lottie
+      lottieRef={lottieRef}
+      animationData={animationData}
+      loop={loop}
+      autoplay={controlled ? false : autoplay}
+      className={className}
+      style={{ width, height, ...style }}
+      rendererSettings={{ preserveAspectRatio: 'xMidYMid meet' }}
+      aria-hidden="true"
+    />
+  )
+}
 
 ScribeLottie.propTypes = {
   animationData: PropTypes.object.isRequired,
@@ -40,6 +60,8 @@ ScribeLottie.propTypes = {
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   loop: PropTypes.bool,
   autoplay: PropTypes.bool,
+  // Optional imperative gate: when defined, the animation plays only while true.
+  play: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.object
 }

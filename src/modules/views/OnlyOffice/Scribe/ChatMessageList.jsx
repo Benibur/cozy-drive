@@ -92,7 +92,7 @@ const UserBubble = ({ content, selection }) => (
 // thread reads as one measured column with the user's replies stepping out of it.
 const assistantSurfaceStyle = isDark => ({
   alignSelf: 'stretch',
-  background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(20,20,45,0.035)',
+  background: isDark ? 'rgba(255,255,255,0.05)' : '#15212e05',
   border: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(20,20,45,0.05)'}`,
   padding: 12,
   borderRadius: SURFACE_RADIUS,

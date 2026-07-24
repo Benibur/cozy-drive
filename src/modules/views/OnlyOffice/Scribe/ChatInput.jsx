@@ -174,16 +174,16 @@ export const ChatInput = forwardRef(({ onArrowUp } = {}, ref) => {
       }}
     >
       <ScribeIncludeZone />
-      {/* Permanently-reserved fixed-height selection-chip slot (always rendered,
-          even with no selection) so that selecting/deselecting text — or
-          checking/unchecking « sélection » — NEVER shifts the discussion above.
-          The user accepted the permanent reserved band (live UX review
-          2026-06-24). The chip itself is a fixed single line (32px footprint). */}
-      <div style={{ height: 32, marginBottom: 4 }}>
-        {currentSelection && includeSelection && (
+      {/* Selection-chip slot. It used to be a permanently-reserved 32px band (to
+          keep the composer from moving when a selection's chip appears), but that
+          left a large empty gap under « Inclure » whenever nothing was selected.
+          Per Ben's 2026-07-24 polish pass it now collapses when there is no chip;
+          the composer shifts by the chip's height when a selection is included. */}
+      {currentSelection && includeSelection && (
+        <div style={{ marginBottom: 4 }}>
           <SelectionChip selection={currentSelection} />
-        )}
-      </div>
+        </div>
+      )}
       <div
         style={{
           display: 'flex',
